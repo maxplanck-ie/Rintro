@@ -1,2 +1,2 @@
 # Rintro
-material for R-Course
+this repository contains the material for an R-Course
