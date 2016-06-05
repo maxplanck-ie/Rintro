@@ -1,0 +1,188 @@
+---
+title: "Data Types"
+author: "Thomas Manke"
+date: "31 May 2016"
+output: html_document
+---
+
+# From Vectors to Matrices
+
+```{r}
+v=1:20
+str(v)    # str helps to understand the structure of an object
+
+M=matrix(v, ncol=5)
+M         # show the whole object.
+str(M)    # more concise summary, especially for large objects
+class(M)  # class helps to understand which functions maybe used
+typeof(M) # matrix entries always have a single data type
+
+```
+# Added information for matrices
+```{r, eval=FALSE}
+dim(M)  
+nrow(M)
+ncol(M)
+length(M)
+```
+
+# Matrices != Vectors
+```{r}
+is.vector(M)
+is.vector(M[,1]) # matrix is a collection of vectors
+
+is.vector(v)
+dim(v)           # dim() is not defined for vectors
+nrow(v)          # nrow() is not defined for vectors
+dim(v)=c(4,5)    # another way to convert vector to matrix
+v
+is.vector(v)
+class(v)
+nrow(v)
+
+dim(v)=c(2,10)  # dim can be redefined to change shape of matrix
+```
+
+**Task**: Try to understand what happens here:
+```{r}
+# try: dim(v)=c(3,7)
+M=matrix(v,ncol=7) 
+dim(v)=c(2,2,5)
+class(v)
+```
+
+**Task**: Convert the first 9 square numbers into a 3x3 matrix:
+
+```{r, echo=FALSE}
+M=(1:9)^2
+dim(M)=c(3,3)
+M
+```
+
+***
+
+# Combining and appending matrices
+```{r}
+M=matrix(v,nrow=4)
+M
+Mr=rbind(M,1:5)
+Mr
+Mc=cbind(M,1:4)
+Mc
+```
+
+# Naming Matrices
+What are the following commands doing? Inspect matrix $M$ before and after.
+```{r}
+rownames(M)=letters[1:nrow(M)]
+colnames(M)=LETTERS[1:ncol(M)]
+```
+
+# Powerful Subsetting
+R has a number of ways to access subsets of data very efficiently:
+```{r}
+M
+M[1:2,c(2,4)]                  # subsetting by index
+M[c("c","a"),c("D","A","E")]   # subsetting by name
+M[,-3]                         # subsetting by exclusion
+```
+**Task**: Extract the submatrix of M where the second column has only even entries.  
+**Tip**: Look at an example of the modulo operator first; example("%%")
+```{r, echo=FALSE}
+i=M[,2]%%2==0
+M[i,]
+```
+
+# New functionalities for matrices
+Execute and understand the following expressions
+```{r, eval=F}
+t(M)
+v=as.vector(M)
+summary(v)
+summary(M)
+
+det(M)
+det(M[1:2,3:4])
+```
+
+
+# Matrix Magic
+```{r}
+S=outer(1:3, 4:6)  # what is this function doing?
+S
+diag(S)
+upper.tri(S)       # what type/class of matrix is this ?
+S[upper.tri(S)]=0  # subsetting by truth values. What will be the result?
+```
+
+***
+
+# Data Frames
+Data frames superseed matrices. They relax the requirement of having  the same data type for all entries.
+This can be considered the R-equivalent of an EXCEL table. Data frames collect nrow *observations* for ncol *variables*
+```{r}
+D=data.frame(x=1:9,l=letters[1:9], b=1:9<5)
+class(D)
+str(D)   # structure of object D
+head(D)  # a very useful first glance at the data frame
+tail(D,n=3)
+rownames(D)
+colnames(D)
+
+
+dim(D)            # similar to matrices
+length(D)         # = ncol(D)
+as.data.frame(M)  # yet another conversion: matrix --> data.frame
+
+```
+
+
+# Accessing Data Frames
+The general access to elements is as for vectors, but there are also new ways
+```{r}
+D
+D[1:3, ]
+D[6:9, -2]
+D$x          # access by column name
+typeof(D$x)
+typeof(D$l)
+D$b[3:6]
+```
+
+# Lists
+List extends the data frame: different "columns" can have different length
+```{r}
+L=list(x=1:9,l=letters[1:3], b=1:20<10)
+class(L)
+str(L)  
+head(L,2)
+summary(L)
+
+dim(L)
+length(L)
+names(L)
+```
+
+## List can be recursive
+**Task**: Describe the items in the following list. What is the length of L? How many names does L have?
+```{r, eval=FALSE}
+L=list(x=1:9,l=list(i=1,v=c(10,20,30),m=outer(1:3,1:3)), b=1:20<10)
+```
+
+## List Access: Options and Confusions
+```{r, eval=FALSE}
+L$x
+L[[1]]  
+L[["x"]]
+L[["x"]][3]
+L$l$v[2]
+```
+
+**Task**: what happens with "which"?
+```{r}
+which(L[[1]]!=2)
+which(L[[3]])
+```
+# Summary: Data Types
+![Image adopted from Michael Stadler](../images/DataTypes.png) 
+This image is adopted from Michael Stadler (FMI).

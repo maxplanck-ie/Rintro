@@ -1,0 +1,90 @@
+---
+title: "Image Power: Vizualizing Matrices"
+author: "Thomas Manke"
+date: "31 May 2016"
+output: html_document
+---
+
+
+# Image:
+Rather than looking at all pairwise correlation coefficients, it is often easier to visualize them as a colour-coded matrix image.
+```{r}
+niris=iris[,-5]
+C=cor(niris)
+C
+image(C)
+```
+
+**Task**: Another famous and pretty example. Who is volcano?
+```{r}
+image(volcano, axes=FALSE)
+```
+
+**Task**:
+Using the image() call, try to reproduce the following image for the full iris data (not just its correlation matrix)
+```{r, echo=FALSE}
+M=as.matrix(niris)
+image(M)
+```
+
+Be aware:
+
+* Columns (=variables) appear as rows in image(). How could this be changed?
+* the axes are meaningless. Default: $0 \ldots 1$
+* there is a large difference in scales for the different variables
+* there is an implicit color-scheme: which one?
+
+Below we are re-scaling the iris-matrix
+```{r}
+S=scale(M)            # scales column-wise
+br=seq(-5,7,by=0.5)   # set common break points for the histograms below
+myblue=rgb(0,0,1,0.5) # define custom-made colour: transparent blue
+hist(M[,"Sepal.Width"], breaks = br)
+hist(S[,"Sepal.Width"], breaks = br, add=TRUE, col=myblue)      # add histogram to current plot
+legend("topright", c("orig","scaled"), fill=c("white", myblue))
+
+op=par(no.readonly=TRUE)
+par(mar=c(1,1,3,7)) # set margins to make room for axis labels
+image(S,main="Normalized IRIS data", axes=FALSE)                  # as before, suppress axes
+axis(4,at=seq(0,1,length.out=ncol(S)), labels=colnames(S), las=2) # Understand this command
+par(op)  # reset graphical parameters
+```
+
+## Heatmaps
+Heatmaps are advanced images in which rows and columns are re-ordered according
+to some distance measure (default: Euclidean) and hierarchical clustering method (default: complete) 
+```{r}
+heatmap(M)
+```
+
+Notice that:
+
+* unlike image(), the heatmap is already in the "canonical" orientation
+* the heatmap is usually scaled by rows (columns more useful)
+* frequently needs many customizations: label size, remove row-names, ...
+* there is an implicit colour scheme: "numerical value $\to$ colour"
+* there are multiple extensions of this in other R-packages: e.g. gplots::heatmap.2
+```{r}
+cols <- rainbow(3)[iris$Species]  # understand how color is defined
+heatmap(M,scale="col", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
+```
+
+# Sending plots to files
+In Rstudio, we can export figures from the "Plots" tab. On the console we can define a pdf file as a new device for all subsequent figures. This is usually done only *after* the image is sufficiently optimized
+```{r}
+pdf("../data/heatmap.pdf") # similar for jpeg, png, ...
+heatmap(M,scale="col", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
+dev.off()  # close device = pdf file
+```
+
+
+***
+
+# Review:
+* use image() and heatmap() to visualize matrices
+* customization of plots again: colours, legends
+* fallacies of colour-scaling
+* controlling figures with par()
+* exporting figures as publication-ready files
+
+

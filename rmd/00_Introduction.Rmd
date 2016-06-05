@@ -1,0 +1,74 @@
+---
+title: "Introduction"
+author: "Thomas Manke"
+date: "15 May 2016"
+output: html_document
+---
+# Overview of R-course
+
+## Day 1: Groundwork
+* Intro to RStudio: a GUI for R
+* The Basics: data types and classes
+* function structures (understanding output)
+* summarizing data: descriptive statistics
+* simple plotting and correlation analysis
+
+
+## Day 2: Visualization, Statistics and Scripts
+* getting data in and out
+* advanced visualization: heatmaps
+* case studies and some statistics
+* programming simple scripts
+
+## Day 3: Open the universe
+* installing and using packages
+* manipulating data: cleaning, filtering, merging
+* from interactive use to scripting
+
+***
+
+# Goals: 
+After the course you will be able to
+
+* understand the basic syntax of R
+* find help for more nifty problems
+* install and use packages for your specific questions
+* see the limitations of EXCEL
+* understand the importance of structured data
+* understand some bioinformatics jargon
+* understand common difficulties in data analysis
+* increase the value of your CV
+* produce figures such as
+
+![Typical examples from R.](../images/sample_plots.png)
+
+[//]: # http://www.r-graph-gallery.com/all-graphs/
+
+# Non-Goals:
+This course does *not* teach 
+
+* programming new tools: focus on existing tools
+* bioinformatics: BSc course (3 yrs ++)
+* NGS analysis: other programs (Linux, Galaxy, deepTools)
+
+***
+
+# Why R ?
+* Standard software for data analysis, statistics, and visualization
+* free and community support
+* many packages available (for data I/O, manipulation, high-end: expression analysis)
+* good compromise between flexibility (programming) and box-solutions (packages)
+* suitable for very large dataset (filtering, merging)
+* interactive and scripting
+* not the best solution for everything (e.g. mapping)
+* frequent requirement during (bioinformatics) hiring
+
+# First hurdles
+* its a new language: vocabulary & grammar
+* computers are stuborn and stupid: they do not think along
+* case sensitivity: $a \ne A$
+* choices: many ways to say (to program) things
+* more choices: 3000 (redundant) packages
+* learning curve: steep (but rewarding)
+
+# Start Rstudio

@@ -1,0 +1,103 @@
+---
+title: "Distributions and Tests"
+author: "T. Manke"
+date: "7 Mar 2016"
+output:
+  html_document: default
+  pdf_document:
+    includes:
+      in_header: header.tex
+---
+# Fair and Unfair coinst
+
+```{r}
+coins=c(0,1)
+N=100  # number of throws
+
+# two experiments
+fair=sample(coins,N,replace=TRUE)
+unfair=sample(coins,N,replace=TRUE, prob=c(0.4,0.6))
+```
+Based on our two experiments, how can we test if coin was fair/unfair?
+
+# Define a statistics 
+```{r}
+fair_head=sum(fair)
+unfair_head=sum(unfair)
+```
+
+# Define Null-Hypthesis
+Define the expected distribution for a fair coin
+```{r}
+x=0:100
+y=dbinom(x,size=N, prob=0.5)
+plot(x,y, main="Binomial Distribution")
+abline(v=fair_head, col="green")
+abline(v=unfair_head, col="red")
+```
+
+# Fisher P-value
+Evaluate surprise to observe a given number of heads (or larger)
+```{r}
+cat("fair=", fair_head, "unfair=", unfair_head)
+1-pbinom(fair_head,size=100,prob=0.5)
+1-pbinom(unfair_head,size=100,prob=0.5)
+```
+
+**Task**: Report the two p-values to the class.
+
+Simulation:
+```{r}
+NR=200  # number of random samples
+p=matrix(nrow=NR,ncol=2, dimnames = list(c(),c("fair","unfair"))) # initialize matrix for p-values
+for (i in 1:NR){
+  sf=sum(sample(coins,N,replace=TRUE))
+  su=sum(sample(coins,N,replace=TRUE, prob=c(0.4, 0.6)))
+  p[i,"fair"]   = 1 - pbinom(sf,size=N,prob=0.5)
+  p[i,"unfair"] = 1 - pbinom(su,size=N,prob=0.5)
+}
+head(p)
+```
+**Lesson**: P-values are random variables
+
+# Neyman-Pearson Procedure
+Each individual experiment yields a (random) p-value.
+Can the decision on acceptance/rejectance be formalized?
+
+```{r}
+apply(p<0.05,2,table)
+```
+Each decision strategy is a compromise between false positives and false negatives
+
+# Distributions:
+R has numerous ways to (a) generate random numbers fron different distributions, (b) return the density function and (c) return the cummulative distribution function (CDF).
+
+$p(x) = 1 - \mbox{CDF} = Pr (X \ge x)$
+
+```{r}
+n=100
+size=10
+p=0.5
+region=-1:15
+
+# n random numbers from distribution
+x=rbinom(n,size,p)
+# density in range
+d=dbinom(region, size,p)
+# p-values (cummulative distribution function)
+p=pbinom(region, size,p)
+```
+
+```{r}
+plot(x,xlab="n",ylab="x",main="rbinom(size,p)",cex=0.5)
+par(mfcol=c(1,2))
+plot(region,d,xlab="x",ylab="density",main="dbinom(size,p)",col="red")
+plot(region,p,xlab="q",ylab="pvalue", main="pbinom(size,p)",col="red")
+```
+
+**Task**: generate 1000 numbers from a normal distribution centered at $\mu=1$ with a variance of $\sigma^2=9$. Plot the histogram.
+
+```{r, echo=FALSE}
+r=rnorm(1000,mean=1,sd=3)
+hist(r, col="red")
+```

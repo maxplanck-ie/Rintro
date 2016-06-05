@@ -1,0 +1,114 @@
+---
+title: "Sampling: Monty Hall Problem"
+author: "T. Manke"
+date: "24 Feb 2016"
+output: html_document
+css: ../css/test.css
+---
+
+# The Game:
+A showmaster presents three closed doors (1,2,3) to a candidate. Only behind one random door is a price (i.e a car).
+The canddiate is asked to pick one of the doors. Afterwards, the showmaster opens one of the other two doors which does not contain the price.
+Now two doors are still closed and the candidate has the choice to *either stick* to the original choice, *or switch* to the other closed door.
+Question: which strategy is more likely to succeed in winning the price?
+
+
+# Simulation in R
+Define the three doors, only one of which hides a price - the winning door "W". The other two doors are loosers (L1 and L2)
+```{r}
+doors=c("W","L1","L2")
+```
+
+First assume that the doors are shuffled randomly
+```{r}
+doors=sample(doors) # Why does this amount to shuffling?
+```
+
+Now the candidate picks a random door "pick" (hoping that it might be the winning door)
+```{r}
+pick=sample(doors,1)
+pick
+```
+
+Only the show master knows the winning door. Depending on the picked door, the show master will reveal one door that does _not_ contain the price, and _not_ the picked door. 
+```{r}
+cs=which(doors != "W" & doors != pick) # depending on pick this could be one or two elements
+open=sample(doors[cs],1)
+open
+```
+Notice that the showmaster does not really have a choice when the candidate has picked a loosing door (2/3 of the time).
+Now the candidate has the choice to switch to the other remaining door (not open, not previously picked).
+The question is: Will the switching strategy be more successful?
+```{r}
+cc=which(doors != open & doors != pick)
+swit=sample(doors[cc],1)
+swit
+```
+
+With three doors, the candidate has only two choices to stay with "pick" or to switch to "swit"
+
+Now let's play this game N times
+```{r}
+N=10000
+success_stay=0
+success_swit=0
+for (i in 1:N) {
+  doors=sample(doors)
+
+  pick=sample(doors,1)
+
+  open=sample(doors[doors!="W" & doors != pick],1)
+  swit=sample(doors[doors!=open & doors !=pick],1)
+
+ # cat(pick, " " , swit, " ", open,"\n")
+  
+  if (pick=="W") { success_stay=success_stay+1 }
+  if (swit=="W") { success_swit=success_swit+1 }
+}
+
+cat("N= ",N, "successes with stay= ", success_stay, " successes with switching= ",success_swit,"\n")
+```
+
+**Task**: save the above lines in a file called Monty.R.
+
+
+Congratulations! You have just written your first "R script".
+You can share it easily with all people -- especially those who don't like to switch.
+
+# Bayesian Treatment:
+If you prefer paper and pencil, this is how to solve this problem analytically.
+
+* **prior probailities**: Pr(1=car)=Pr(2=car)=Pr(3=car)=$\frac{1}{3}$
+
+Assume that the candidate picks door 1 and the showmaster opens door 2 (up to relabeling). Now the candidate would like to know
+
+* **posterior probability**: Pr(3=car|2=shown)= ?
+
+* **Bayes Theorem** (on updating probabilities): Pr(A,B)=Pr(A|B)Pr(B)=Pr(B|A)Pr(A)
+
+* Pr(3=car|2=shown)=$\frac{\mbox{Pr(2=shown|3=car)Pr(3=car)} }{\mbox{Pr(2=shown)}}$
+
+* **law of total probability (marginalization):**
+* Pr(2=shown)=Pr(2=shown|1=car)Pr(1=car) + Pr(2=shown|2=car)Pr(2=car) + Pr(2=shown|3=car)Pr(3=car) 
+* Pr(2=shown)=$\frac{1}{2} \cdot \frac{1}{3}   + 0 \cdot \frac{1}{3} + 1 \cdot \frac{1}{3} = \frac{1}{2}$
+* Pr(3=car|2=shown)=$\frac{ 1 \cdot \frac{1}{3} }{ \frac{1}{2} } = \frac{2}{3}$
+* Pr(1=car|2=shown)= 1 - Pr(2=car|2=shown)-Pr(3=car|2=shown)= 1 - 0 - $\frac{2}{3}=\frac{1}{3}$
+
+
+
+
+<div class="important blue">
+<br>
+Pr(3=car|2=shown) = 2 $\times$ Pr(1=car|2=shown)
+<br> <br>
+</div>
+
+# Did you understand?
+* solving problems (in R) with simulations
+* loops (for) and conditionals (if)
+* which()
+* selection/exclusion in vector
+* sample()
+* writing and sharing R-scripts.
+* prior and posterior (conditional) probabilities
+* Bayes Theorem and updating probabilities 

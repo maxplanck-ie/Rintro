@@ -1,0 +1,72 @@
+---
+title: "Correlation Coefficient"
+author: "T. Manke"
+date: "19 Feb 2016"
+output: html_document
+---
+
+[//]: # Adopted from http://www-users.york.ac.uk/~mb55/meas/ba.pdf
+
+# Simulating Data
+Let's generate two numeric vectors (variables) of measurements: x1 and x2
+```{r}
+x1=1:100                          # vector
+eps=rnorm(n=100, mean=-0.5, sd=5) # noise
+x2 = x1 + eps 
+```
+
+We would like to assess the agreement between these two measurements.
+
+# First attempt: visualize data
+```{r}
+plot(x1,x2)
+smoothScatter(x1,x2)
+```
+
+We can add a regression line (linear model)
+
+```{r, echo=FALSE}
+cc=cor(x1,x2)
+title=paste("cc=",round(cc,5))
+plot(x1,x2,main=title)
+abline(lm(x2~x1),col="red",lwd=2)
+```
+
+We may even test the significance. Null hypothesis: There is no linear relation between variables.
+```{r}
+cor.test(x1,x2)
+```
+Notice: if the variables come from same (or similar) experiements, the significance test is useless because we already know there will be a relation. Neither the CC nor the p-value can serve as a measure of agreement
+
+```{r}
+x3=rnorm(100,0,1)
+x4=rnorm(100,0,1)
+```
+
+**Task**: How does these vectors look like? (--> plot,hist, summary)
+
+# Scatterplot
+```{r, echo=FALSE}
+smoothScatter(x3,x4)
+cor(x3,x4)
+```
+
+#Adding Outliers
+```{r}
+plot(c(x3,20),c(x4,100))
+```
+
+```{r}
+cor(c(x3,20),c(x4,100), method="pearson")
+cor(c(x3,20),c(x4,100), method="spearman")
+```
+
+Correlation Coefficient: 
+
+* do not measure agreement
+* single number *tries* to summarize whole correlation structure
+* depends on method
+* Spearman more robust against outliers
+* significance is useless for many observations (most variables have $C \ne 0$)
+
+**Homework**: Have a look at anscombe data set: ?anscombe

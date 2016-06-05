@@ -1,0 +1,113 @@
+---
+title: "Data Managment: Objects and Files"
+author: "Thomas Manke"
+date: "31 May 2016"
+output: html_document
+---
+
+# Saving objects as Rdat files
+In the process of data exploration we often generate many new data objects. Just as with figures, we may also save data objects for later use. 
+
+The following call saves an "image" of all data obejcts in a compressed file format (conventional: *.Rdat)
+```{r, eval=FALSE}
+save.image(file="04.Rdat") 
+```
+
+**Task**: What happens if the "file=" parameter is omitted? Saving all data can be an overkill. Find out how to save only selected or single objects, e.g. S.
+
+# Saving objects as text files
+Rdat files are most convenient for future processing with R.
+Sometimes we need to save objects in (tab-separated) text files:
+```{r, eval=FALSE}
+write.table(iris, file="iris.tsv", sep="\t", row.names=FALSE, quote=FALSE)
+```
+
+# Tracking objects
+In RStudio, explore the "Environment" tab. On the console there are also many convenient commands to track (and delte) objects from memory.
+```{r, eval=FALSE}
+ls()     # list all obejct
+rm(x)    # remove object x
+# rm(list=ls()) # Careful: This removes all objects
+```
+
+# Navigation: Where am I, where are my files?
+In Rstudio, explore the "Files" tab. On the console:
+```{r, eval= FALSE}
+getwd()         # get the full path of the current working directory
+list.files()    # list all files in working directory
+setwd("~")      # change working directory to new directory (here: "~" = home)
+list.files(pattern=".Rdat") # list all ".Rdat files in working directory  
+```
+
+# The theory of I/O
+Reading external data into R is easy, but it is crucial to have a very clean and well-defined data structure. 
+```{r, eval=TRUE}
+# load("04.Rdat")  # easiest and fastest for previously generated Rdat files
+iris_f=read.table(file="../data/iris.tsv", sep="\t", header=TRUE)
+str(iris_f)
+head(iris_f)
+```
+
+# The reality of I/O
+In reality, many external data is badly formatted, leading to much wasted time - before analysis. The following code fragments took ~2 hours of trial and error
+```{r}
+# consider file from one of the first large scale ChIP-studies (R.Young lab: yeast)
+# this file contains more the binding data (p-values and ratios) for more than 
+# 6000 yeast genes and 113 yeast transcription factors
+chip="http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_gene.tsv"
+
+# first problem: quote symbols in names (')
+D=read.table(chip, header=TRUE,  skip=1, sep="\t")
+nrow(D)  # 511 << 6000 !!!???
+cf=count.fields(chip,sep="\t") # many NA --> quoted fields got missing
+                
+# second problem: two headers. need information from both
+D=read.table(chip, header=TRUE,  sep="\t", quote="\"", skip=1)
+H=read.table(chip, header=FALSE, sep="\t", quote="\"", nrows=1, stringsAsFactors = FALSE)
+colnames(D)[1:4]=H[1,1:4]
+rownames(D)=D[,1]
+ic=c(1:4,seq(6,230,by=2))
+P=D[,-ic]         # data-frame of p-values, exclude superfluous columns and ratios
+which(is.na(P))   # make sure everything is properly defined
+which(P<0 || P>1) # make sure p-values are all between 0 and 1
+```
+
+# Appendix
+Only now we can start looking at something more interesting
+```{r}
+# defined boolean matrix of TF-gene interactions (based on p-value threshold)
+B=P<1e-3  
+
+Bn=B[rowSums(B)>2, colSums(B)>40] # reduce the problem size
+Bn[Bn]=1                          # boolean -> numeric
+heatmap(Bn,scale="none",labRow=FALSE, cexCol=0.6)
+
+# compare binding p-values for two TF 
+smoothScatter(log(P[,"FHL1"]),log(D[,"RAP1"]),main="smoothScatter of p-values")
+
+table(B[,"FHL1"])               # 194 genes bound by FHL1
+tb=table(B[,"FHL1"],B[,"RAP1"]) # contingency table: 119 genes bound by FHL1 and RAP1
+tb
+
+# fourfoldplot(tb)
+# mosaicplot(tb, color = TRUE)
+fisher.test(tb)                 # the overlap is highly unexpected
+chisq.test(tb)
+
+
+# create a Venn Diagram of target gene overlaps (with package gplots)
+library(gplots)
+L=list(FHL1=which(B[,"FHL1"]),RAP1=which(B[,"RAP1"]),MCM1=which(B[,"MCM1"]), STE12=which(B[,"STE12"]) )
+vn=venn(L)
+```
+
+***
+
+# Review:
+
+* exporting objects as Rdat or text-file
+* navigate in directories, know where you are working
+* keep data clean and well structured !
+* appendix: a (semi-)real-life example
+* smoothScatter(), contigency tables, tests, venn (package)
+
