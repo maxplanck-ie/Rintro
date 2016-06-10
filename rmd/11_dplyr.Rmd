@@ -1,0 +1,274 @@
+---
+title: "Manipulating datasets with dplyr"
+author: "Devon P. Ryan"
+date: '`r Sys.Date()`'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Initial setup
+
+If you've started a new session, please first do the following:
+
+```{r}
+library("readr")
+library("tidyr")
+library("dplyr", warn.conflicts = FALSE)
+
+blah = locale("en", decimal_mark=",") # stupid commas
+d = read_csv("foodIntake.csv", skip=1, locale=blah)
+colnames(d)[c(1,20)] = c("Week", "Skip")
+d2 = d %>% select(-Skip) %>% gather(Cage, Value, -Week)
+d2$Group = c(rep(rep("Control", 33), 18), rep(rep("Treatment", 33), 17))
+```
+
+This is the messy "food intake in two groups of mice over time" dataset from the tidyr section.
+
+# What dplyr can do
+
+- subset
+    - columns
+    - rows
+- summarization
+- Grouping
+- Variable creation
+- Combining datasets
+
+# dplyr: Subset columns
+
+It's common to want to temporarily want to ignore columns (e.g., excluding an outlier sample). **`select()`** can be used for this.
+
+```{r}
+d2 %>% select(Cage, Group) %>% head()
+```
+
+You can also exclude columns:
+
+```{r}
+d2 %>% select(-Cage, -Group) %>% head()
+```
+
+# dplyr: Fancy column selection
+
+Specifying columns manually can get annoying.
+
+```{r}
+d2 %>% select(matches(".a."))  %>% head()
+```
+
+".a." means "match any name with an 'a' in the middle".
+
+Other options:
+
+- Range (by number or name)
+- Starts with
+- Ends with
+- Contains a string
+
+# dplyr: Subset rows
+
+We did a bit of this previously in the tidyr section.
+
+```{r}
+head(d2)
+d2 %>% filter(Group != "Control") %>% head()
+```
+
+Multiple filters can be applied
+
+```{r}
+head(d2)
+d2 %>% filter(Group != "Control", Value > 4.0) %>% head()
+```
+
+There are other options than simply **`filter()`**
+
+```{r}
+d2 %>% select(Cage, Group) %>% distinct() %>% head()
+```
+
+- Sample a fraction of rows: **`sample_frac()`**
+- Sample a number of rows: **`sample_n()`**
+- Select rows by position: **`slice()`**
+    - **`d2 %>% slice(10:20)`** == **`d2[c(10:20),]`**
+- Select the top N rows after sorting: **`top_n()`**
+
+```{r}
+d2 %>% top_n(5, Value)
+```
+
+# dplyr: Summarizing data
+
+Long tables are nice for plotting, but we often want means/medians/counts/etc. of columns.
+
+```{r}
+d2 %>% count(Cage, Group) %>% head()
+d2 %>% filter(is.na(Value)) %>% count(Cage, Group) %>% head()
+d2 %>% summarise(foo=n_distinct(Value))
+d2 %>% filter(!is.na(Value)) %>% summarise(foo=n_distinct(Value))
+d2 %>% filter(!is.na(Value)) %>% nrow() # or summarise(foo=n())
+d2 %>% filter(!is.na(Value)) %>% summarise(avg=median(Value))
+```
+
+# dplyr: Grouping data
+
+We can create group and then summarize within them.
+
+```{r}
+d2 %>% filter(!is.na(Value), Week < 10) %>% group_by(Group) %>% summarise(avg=mean(Value)) %>% head()
+```
+
+We can group by multiple things.
+
+```{r, echo=TRUE}
+d2 %>% filter(!is.na(Value)) %>% group_by(Group, Week) %>% summarise(avg=mean(Value)) %>% top_n(4, avg)
+```
+
+There are 8 results. Why? What happens if we swap the order of **Group** and **Week** in **`group_by`**?
+
+# dplyr: Adding variables
+
+It's often the case that we want to add on columns of summary variables. We can use **`mutate()`**.
+
+```{r, echo=TRUE}
+d2 %>% filter(!is.na(Value)) %>% mutate(blah=2*Value) %>% head()
+```
+
+We can alternatively drop the used columns with **`transmute()`**.
+
+```{r, echo=TRUE}
+d2 %>% filter(!is.na(Value)) %>% transmute(blah=2*Value) %>% head()
+```
+
+There are a lot of functions that could be applied.
+
+```{r, echo=T}
+d2 %>% filter(!is.na(Value)) %>% group_by(Cage) %>% mutate(blah=min_rank(desc(Value))) %>% head()
+```
+
+There are a bunch of functions that one can use. An interesting one is **`ntile`**, which is chunks things by value into **n** groups. Send the following through **`View()`** rather than **`head()`**.
+
+```{r, echo=TRUE}
+d2 %>% filter(!is.na(Value)) %>% group_by(Cage) %>% mutate(blah=ntile(Value, 3)) %>% head()
+```
+
+What's the per-tile median by group:
+
+```{r, echo=TRUE}
+d2 %>% filter(!is.na(Value)) %>% group_by(Cage) %>% mutate(blah=ntile(Value, 3)) %>% group_by(Group, blah) %>% summarise(avg=median(Value))
+```
+
+# dplyr: Combining datasets
+
+Needing to combine datasets ends up being really really common. dplyr gives a **bunch** of options for that that are really fast.
+
+A common use-case:
+
+- We had two groups of mice
+- Did some RNAseq
+- Mapped the reads, got some counts, and ran things through DESeq2
+- The output looks like this:
+
+```{r}
+tab = read_tsv("DESeq2_example.txt")
+head(tab[order(tab$padj),], n=3)
+```
+
+> - Raise your hand if you know which gene ENSMUSG00000037362 is.
+
+We can use biomart to gene Ensembl gene IDs and their associated symbols/descriptions.
+
+```{r, echo=TRUE}
+tab = read_tsv("DESeq2_example.txt")
+anno = read_tsv("DESeq2_annotation.txt")
+```
+
+Run **`head()`** or **`View()`** on these.
+
+```{r, echo=TRUE}
+tab2 = left_join(tab, anno, by=c("ENSEMBL" = "Ensembl Gene ID"))
+head(tab2[order(tab2$padj),])
+```
+
+> - Ah, ENSMUSG00000037362 is Nov, a gene involved in wound healing/oncogenesis/etc.
+
+There are a lot of different ways to combine datasets.
+
+```{r, echo=TRUE}
+t1 = data_frame(x1=c("A", "B", "C"), x2=c(1, 2, 3))
+t2 = data_frame(x1=c("A", "B", "D"), x3=c(T, F, T))
+```
+
+- Mutating joins
+- Filtering joins
+
+# dplyr: Mutating joins - left_join
+
+We've already seen **`left_join()`**
+
+```{r, echo=TRUE}
+left_join(t1, t2)
+```
+
+For a left join, the entire left table is output.
+
+# dplyr: Mutating joins - right_join
+
+If a left join joins to the left, guess what a right join does
+
+```{r, echo=TRUE}
+right_join(t1, t2)
+```
+
+# dplyr: Mutating joins - inner_join
+
+Sometimes we only want the overlaps in the tables
+
+```{r, echo=TRUE}
+inner_join(t1, t2)
+```
+
+# dplyr: Mutating joins - full_join
+
+But what if we want a single table with **everything**?
+
+```{r, echo=TRUE}
+full_join(t1, t2)
+```
+
+# dplyr: Filtering joins - semi_join
+
+What if we just want to filter a table for overlaps with another?
+
+```{r, echo=TRUE}
+semi_join(t1, t2)
+```
+
+Can we do the same with **`filter()`**?
+
+> - `t1 %>% filter(x1 %in% t2$x1)`
+
+The opposite is also possible
+
+```{r, echo=TRUE}
+anti_join(t1, t2)
+```
+
+# dplyr: Combining datasets
+
+You can get really fancy in your joins
+
+```{r, echo=TRUE}
+t3 = data_frame(a=rep(c("A", "B", "C"), 2),
+                b=rep(c(1,2), each=3),
+                c=runif(6))
+t4 = data_frame(d=rep(c("A", "B", "C"), 2),
+                e=rep(c(1,2), each=3),
+                f=runif(6))
+inner_join(t3, t4, by=c("a"="d", "b"="e"))
+```
+
+By default, joins occur on all columns with the same name across tables!

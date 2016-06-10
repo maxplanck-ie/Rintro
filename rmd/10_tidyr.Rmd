@@ -1,0 +1,264 @@
+---
+title: "Tidying a mess of data"
+author: "Devon P. Ryan"
+date: '`r Sys.Date()`'
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Initial setup
+
+Before continuing, please run the following:
+
+```{r install, echo=TRUE, eval=FALSE}
+install.packages(c("readr", "tidyr", "dplyr", "ggplot2", "devtools"))
+```
+
+# Real data is very messy
+
+- Typically not in a usable format
+- Random empty values
+- Poorly coded treatments
+
+This **always** happens with other's datasets.
+
+The process of correcting all of this is called "munging."
+
+# With great power comes great annoyance
+
+Congrats, you're now the R gal/guy. Everyone will now ask you for help and their data will be a total mess.
+
+- Everyone likes doing crazy stuff in Excel
+  - Missing values
+  - Random coding, like "--" for missing
+  - Multiple entries/column
+
+| | Day | Escape Time | Distance Traveled | Quadrant Occupancy |
+|-|:---:|:-----------:|:-----------------:|:------------------:|
+| Mouse 1 | 1 | 60 | 100 | 45 / 27 |
+| Mouse 2 | 1 | 50 | 110 | 45 / 27 |
+| Mouse 3 | 1 | 52 | 00 | 45 / 27 |
+| Mouse 1 | 2 | -- | -- | |
+
+# The Hadleyverse
+
+Much of modern data analysis relies heavily on packages from Hadley Wickham:
+
+- readr
+- tidyr
+- reshape2
+- dplyr (largely replaces reshape2)
+- ggplot2 (the next section)
+
+# readr
+
+- Alternatives for `read.delim`, `read.csv`, etc.
+- Handles remote files
+- Consistent option names
+- Only read some columns
+- Error tolerant
+- No automatic conversion of strings -> factors
+- dplyr integration
+- row names are never set
+
+# readr example
+
+```{r, echo=TRUE, warning=FALSE}
+library("readr")
+df = read_csv(col_types = "dd", col_names = c("x", "y"), skip = 1, "
+1,2
+a,b
+")
+```
+```{r, echo=TRUE}
+df
+problems(df)
+```
+
+# readr column types
+
+| Full name | Symbol | Example |
+|:----------|:------:|--------:|
+| `col_logical()` | l | `T`, `F`, `TRUE`, `FALSE` |
+| `col_integer()` | i | 0, 22, 45 |
+| `col_double()` | d | 3.1415926536 |
+| `col_character()` | c | "I'm what's called a string!" |
+| `col_skip()` | _ | |
+| `col_number()` | n | "500.25€" |
+
+>- N.B., there are more, see `vignette("column-types")`.
+
+# A real (ugly) dataset
+
+- Open the xlsx file in eXcel/Openoffice
+  - Multiple levels of headers?!?!
+  - Empty columns
+  - Missing values
+  - OMFG, there are commas instead of decimal points
+    - Computers are Americans, they're easily confused by your strange foreign ways
+
+The experiment:
+
+- Two groups of mice
+- 4/cage
+- Food intake / weight measured over time
+    
+# readr example
+
+File structure:
+
+- Two header lines (ignore)
+- 1 column of integers
+- 18 columns of measurements (group 1)
+- 1 blank column
+- 17 columns of measurements (group 2)
+
+# readr example
+
+```{r, echo=TRUE}
+blah = locale("en", decimal_mark=",") # stupid commas
+d = read_csv("foodIntake.csv", skip=1, locale=blah)
+head(d, n=1)
+tail(d, n=1)
+```
+
+`readr` figured out the types and converted blanks to `NA` for us! Let's fix the first column names:
+
+```{r}
+colnames(d)[c(1,20)] = c("Week", "Skip")
+```
+
+# Tidy all the things
+
+We loaded an ugly dataset, but how do we clean it.
+
+**tidyr** and **dplyr**!
+
+```{r, echo=TRUE}
+library("tidyr")
+library("dplyr", warn.conflicts = FALSE)
+```
+
+# tidyr/dplyr %>% 
+
+**%>%** is called a "pipe"
+
+- "Ctrl + shift + M" in RStudio
+- From dplyr
+
+
+Old school: **y = f(g(h(x)))**
+
+- Hard to read from the inside out
+
+New school: **x %>% h() %>% g() %>% f()**
+
+>- More typing...
+>- but more logical
+
+# tidyr/dplyr %>% 
+
+- **%>%** passes input as the first argument
+    - **x %>% f(y)** is the same as **f(x, y)**
+- This can be changed
+    - **y %>% f(x, ., z)** is the same as **f(x, y, z)**
+
+# tidyr gather()
+
+Let's gather everything together so we have something like:
+
+| Week | Cage | Group | Value |
+|:----:|:----:|------:|------:|
+| 1 | 528 | Control | 3.558 |
+| 1 | 535 | Control | 3.775 |
+| 1 | 525 | Treatment | 3.478 |
+
+```{r, echo=TRUE}
+d2 = d %>% select(-Skip) %>% gather(Cage, Value, -Week)
+head(d2) # or "d2 %>% head()"
+tail(d2)
+```
+
+Add the group
+
+```{r, echo=TRUE}
+d2$Group = c(rep(rep("Control", 33), 18), rep(rep("Treatment", 33), 17))
+```
+
+# Filtering
+
+There are a bunch of `NA`s, which it'd be nice to remove. We can use `filter()` for that.
+
+```{r, echo=TRUE}
+d2 = d2 %>% filter(!is.na(Value))
+tail(d2)
+dim(d2)
+```
+
+# Group-based summarization
+
+We'd like a group mean per week
+
+```{r, echo=TRUE}
+d3 = d2 %>% group_by(Week, Group) %>% summarise(Val=mean(Value))
+head(d3)
+```
+
+# tidyr Reshaping
+
+We can do more than **`gather()`**
+
+- spread()
+- separate()
+- unite()
+
+```{r, echo=TRUE}
+dem_polls = read_csv("http://elections.huffingtonpost.com/pollster/2016-iowa-presidential-democratic-caucus.csv")
+```
+
+```{r, echo=TRUE, eval=FALSE}
+View(dem_polls)
+```
+
+Borrowed from: https://github.com/datasciencelabs/2016/blob/master/lectures/wrangling/data-wrangling-with-tidyr.Rmd
+
+# tidyr spread()
+
+Sometimes you want a "wide-format" for saving as a file. This can be done with `spread()`
+
+```{r, echo=TRUE}
+dem_polls_gathered <- dem_polls %>% 
+                         gather(key = candidate, value = percentage, 
+                                Clinton:Undecided)
+```
+```{r, echo=TRUE, eval=FALSE}
+View(dem_polls_gathered %>% spread(key = candidate, value = percentage))
+```
+
+# tidyr separate()
+     
+Sometimes more than one value is present in each column. We can separate those:
+
+```{r, echo=TRUE}
+dem_polls_separate <- dem_polls %>% 
+                        separate(col = `End Date`, into = c("y", "m", "d"))
+```
+```{r, echo=TRUE, eval=FALSE}
+View(dem_polls_separate)
+```
+
+Note that the date is now split.
+
+# tidyr unite()
+
+Of course if you can split columns, you can unite them too:
+
+```{r, echo=TRUE}
+dem_polls_united = dem_polls_separate %>% unite(col = end_date, y, m, d, sep = "/")
+```
+```{r, echo=TRUE, eval=FALSE}
+View(dem_polls_united)
+```

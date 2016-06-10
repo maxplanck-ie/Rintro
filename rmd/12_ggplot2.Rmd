@@ -1,0 +1,363 @@
+---
+title: "Advanced plotting with ggplot2"
+author: "Devon P. Ryan"
+date: '`r Sys.Date()`'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Initial setup
+
+If you've started a new session, please first do the following:
+
+```{r}
+library("readr")
+library("tidyr")
+library("dplyr", warn.conflicts = FALSE)
+
+blah = locale("en", decimal_mark=",") # stupid commas
+d = read_csv("../data/foodIntake.csv", skip=1, locale=blah)
+colnames(d)[c(1,20)] = c("Week", "Skip")
+d2 = d %>% select(-Skip) %>% gather(Cage, Value, -Week)
+d2$Group = c(rep(rep("Control", 33), 18), rep(rep("Treatment", 33), 17))
+```
+
+This is the messy "food intake in two groups of mice over time" dataset from the tidyr section.
+
+Also, load/install ggplot2
+
+```{r}
+#install.packages("ggplot2") #If you need it
+library(ggplot2)
+```
+
+# Rationale
+
+> - R's base graphics have inconsistent naming/formatting
+>     - It can get difficult to do anything fancy
+> - The "grammar of graphics" better describes how most people think
+> - ggplot2 is extremely flexible and powerful
+>     - Consistent naming/formatting
+>     - Steeper learning curve
+> - There are a number of extensions built upon ggplot2 (e.g., ggbio, plotly)
+> - Many convenient themes
+>     - [ggthemes](https://github.com/jrnold/ggthemes)
+>     - [cowplot](https://github.com/wilkelab/cowplot), a nice default theme
+
+>- N.B.: In a couple years ggvis will likely replace ggplot2. It has similarish syntax, but is currently targeted toward interactive plots on the web.
+
+>- You can currently download the (not yet published) version of Hadley Wickham's ggplot2 book from [his dropbox account](https://www.dropbox.com/s/0lap7tr7zoryyjk/ggplot2-book.pdf?dl=0)
+
+N.B., this document is heavily influenced by the Data Carpentry [ggplot2 presentation](https://github.com/datacarpentry/R-ecology-lesson/blob/instructor_notes/05-visualization-ggplot2.Rmd)
+
+# The ggplot2 process
+
+ggplot2 uses dataframe with multiple columns to create complex plots. The defaults are generally more or less publication ready (see some of the themes above for improvements).
+
+Graphic are created step by stey by adding new elements (plots, axis labels, range changes, etc.).
+
+To build a ggplot we need to:
+
+- bind the plot to a specific data frame using the `data` argument
+
+```{r, eval=FALSE}
+ggplot(data = d2)
+```
+
+- define aesthetics (`aes`), that maps variables in the data to axes on the plot
+     or to plotting size, shape, color, etc.,
+
+```{r, eval=FALSE}
+ggplot(data = d2, aes(x = Week, y = Value))
+```
+
+- add `geoms` -- graphical representation of the data in the plot (points,
+     lines, bars). To add a geom to the plot use `+` operator:
+
+```{r}
+ggplot(data = d2, aes(x = Week, y = Value)) +
+  geom_point()
+```
+
+- These `geoms` often have additional aesthetics:
+
+Notes:
+
+- Anything you put in the `ggplot()` function can be seen by any geom layers that you add.
+i.e. these are universal plot settings
+- This includes the x and y axis you set up in `aes()`
+- The column names are used as the default axis labels!
+
+# Modifying plots
+
+One extremely useful feature is to be able to change aesthetics according to columns in a dataframe.
+
+```{r}
+ggplot(data = d2, aes(x = Week, y = Value)) +
+  geom_point(aes(color=Group, shape=Group))
+```
+
+- You can use `colour` if you prefer
+- Legends are automatically added
+
+Things such as transparency can also be added:
+
+```{r}
+ggplot(data = d2, aes(x = Week, y = Value)) +
+  geom_point(alpha=0.5, aes(color=Group, shape=Group))
+```
+
+- Since `alpha` isn't specified in an aesthetic, it can't see the dataframe columns
+- You **can** do this inside an aesthetic too.
+- This generates a legend, which you normally don't want.
+
+# Line plots
+
+There are, of course, more than just scatter plots. Line plots are also quite common.
+
+```{r}
+ggplot(data = d2, aes(x = Week, y = Value)) +
+  geom_line(aes(color=Cage))
+```
+
+- Note that `NA`s are not removed but produce a warning. If we filter them out then there won't be a gap in the graph (I wouldn't recommend that, since it's hiding the gap).
+
+```{r}
+d3 = d2 %>% filter(!is.na(Value))
+ggplot(data = d3, aes(x = Week, y = Value)) +
+  geom_line(aes(color=Cage))
+```
+
+# Labels
+
+As noted previously, column names are used for things like axis and legend titles. Since we typically keep these short but want the displayed labels to be rather longer, these typically need to be replaced.
+
+```{r}
+ggplot(data = d2, aes(x = Week, y = Value)) +
+  geom_point(alpha=0.5, aes(color=Group, shape=Group)) +
+  labs(x="Measurement week", y="Food intake (g)")
+```
+
+If you're the type of person that likes graph titles, then you can add them as well (either with `title="something"` or adding a `ggtitle("something")` layer).
+
+- N.B., you can use symbols in your labels and such as well if you need to:
+
+```{r}
+ggplot(data = d2, aes(x = Week, y = Value)) +
+  geom_point(alpha=0.5, aes(color=Group, shape=Group)) +
+  labs(x="Measurement week", y=expression(paste(mu, "A/", mu, "F", sep="")))
+```
+
+- You can do superscripts and basically anything else as well, though at some point it's faster to just modify things in Adobe Illustrator than to google how to do that.
+
+# Summarization plots: geom_smooth
+
+Lines and pounts show literally all of the information...which is really hard to interpret. Sure, we could summarize all of this ourselves:
+
+```{r, eval=FALSE}
+d3 = d2 %>% filter(!is.na(Value)) %>% group_by(Group, Week) %>% mutate(avg=mean(Value))
+ggplot(data = d3, aes(x = Week, y = avg)) +
+  geom_point(alpha=0.5, aes(color=Group, shape=Group)) +
+  labs(x="Measurement week", y="Food intake (g)")
+```
+
+But really what's the fun of that when we can have ggplot do it for us:
+
+```{r}
+ggplot(data = d2, aes(x = Week, y = Value)) +
+  geom_smooth(aes(color=Group, fill=Group)) +
+  labs(x="Measurement week", y="Food intake (g)")
+```
+
+The shaded regions are the 95% confidence intervals. The amount of smoothing is controlled by the `span` parameter to `geom_smooth()` and defaults to 0.75. Try spans of 0.1 or 0.3.
+
+- N.B., the smoothing ends up filling the gap in the plot around week 28.
+- N.B., if you ever really need to, note that the smoothing is highly customizable (e.g., you can use GLMs, logistic regression, etc.)
+
+# Creating facets
+
+Let's look again at the line plot:
+
+```{r}
+ggplot(data = d2, aes(x = Week, y = Value, group=Cage)) +
+  geom_line(aes(color=Group)) +
+  labs(x="Measurement week", y="Food intake (g)")
+```
+
+I've grouped each cage into its own line and then colored by group. That's nice, but the overlapping groups are really messy. Ideally we'd just plot the groups independently.
+
+```{r}
+g = ggplot(data = d2, aes(x = Week, y = Value, group=c(Group)))
+g = g + geom_line(aes(color=Cage, group=Cage))
+g = g + labs(x="Measurement week", y="Food intake (g)")
+g = g + facet_grid(Group~.)
+g
+```
+
+- You can facet things into columns or rows.
+
+# Bar, box, violin and dot plots.
+
+The mouse food intake dataset isn't so useful for bar/box plots. Let's use a different one:
+
+```{r}
+head(mpg)
+```
+
+The `mpg` package has fuel economy statistics for 38 car models for the years 1999-2008. Let's look at number of cars by class.
+
+```{r}
+g = ggplot(data=mpg, aes(x=class))
+g = g + geom_bar()
+g
+```
+
+If you have a value that you'd like to use as the bar height, you can use that instead, but you must then use the "identity" statistic instead of count.
+
+```{r}
+mpg2 = mpg %>% group_by(class) %>% summarise(avg=mean(displ))
+g = ggplot(data=mpg2, aes(x=class, y=avg))
+g = g + geom_bar(stat="identity")
+g
+```
+
+With multiple values per-class like this it'd be nicer to just make a box plot.
+
+```{r}
+g = ggplot(data=mpg, aes(x=class, y=displ))
+g = g + geom_boxplot()
+g
+```
+
+- N.B., the plotted point are vaguely defined as outliers.
+
+Sometimes people want the points layered on top of the box plots (mostly for seeing the number of observations). Layering is easy with ggplot2.
+
+```{r}
+g = ggplot(data=mpg, aes(x=class, y=displ))
+g = g + geom_boxplot()
+g = g + geom_point(position="jitter", color="tomato")
+g
+```
+
+- N.B., since ggplot builds images in layers in the order given, what happens if you add the points and then the boxplot?
+
+The downside to box plots is that they hide the underlying data (e.g., the `n`). For that reason, violin and dot (sometimes call "beehive") plots are increasingly popular.
+
+```{r}
+g = ggplot(data=mpg, aes(x=class, y=displ))
+g = g + geom_violin()
+g
+```
+
+By default, everything is scaled to the same area, but that can be changed (so the `n` is apparent).
+
+```{r}
+g = ggplot(data=mpg, aes(x=class, y=displ))
+g = g + geom_violin(scale="count")
+g
+```
+
+Now the 2 seater class is put in better perspective.
+
+Of course black and white graphs are rather boring, so we tend to color things and tweak the smoothing:
+
+```{r}
+g = ggplot(data=mpg, aes(x=class, y=displ))
+g = g + geom_violin(scale="count", adjust=0.5, aes(color=class, fill=class))
+g
+```
+
+Often violin plots and dot plots are combined.
+
+```{r}
+g = ggplot(data=mpg, aes(x=class, y=displ))
+g = g + geom_violin(scale="count", adjust=0.5)
+g = g + geom_dotplot(binaxis="y", stackdir="center", dotsize=0.3, binwidth=0.1, aes(color=class, fill=class))
+g
+```
+
+# Changing the order/labels and general tweaking
+
+When R makes factors, it orders them alphabetically. Inevitably that will produce an order that will drive your PI mad.
+
+```{r}
+g = ggplot(data=mpg, aes(x=class, y=displ))
+g = g + geom_violin(scale="count", aes(color=class, fill=class))
+g = g + scale_x_discrete(limits=c("subcompact", "compact", "midsize", "minivan", "pickup", "suv", "2seater"))
+g
+```
+
+Similarly, group names are often chosen for ease of entry, not how they should be displayed.
+
+```{r}
+g = ggplot(data=mpg, aes(x=class, y=displ))
+g = g + geom_violin(scale="count", aes(color=class, fill=class))
+g = g + scale_x_discrete(limits=c("subcompact", "compact", "midsize", "minivan", "pickup", "suv", "2seater"),
+                         labels=c("Subcompact", "Compact", "Midsize", "Minivan", "Pickup Truck", "SUV", "Sports Car"))
+g = g + labs(x="", y="Engine Displacement (liters)")
+g
+```
+
+And half the time you'll decide you don't need the legend:
+
+```{r}
+g = ggplot(data=mpg, aes(x=class, y=displ))
+g = g + geom_violin(scale="count", aes(color=class, fill=class))
+g = g + scale_x_discrete(limits=c("subcompact", "compact", "midsize", "minivan", "pickup", "suv", "2seater"),
+                         labels=c("Subcompact", "Compact", "Midsize", "Minivan", "Pickup Truck", "SUV", "Sports Car"))
+g = g + labs(x="", y="Engine Displacement (liters)")
+g = g + guides(fill="none", color="none")
+g
+```
+
+Or alternatively you just want to adjust the legend:
+
+```{r}
+g = ggplot(data=mpg, aes(x=class, y=displ))
+g = g + geom_violin(scale="count", aes(fill=class))
+g = g + scale_x_discrete(limits=c("subcompact", "compact", "midsize", "minivan", "pickup", "suv", "2seater"),
+                         labels=c("Subcompact", "Compact", "Midsize", "Minivan", "Pickup Truck", "SUV", "Sports Car"))
+g = g + labs(x="", y="Engine Displacement (liters)")
+g = g + guides(fill="none", color="none")
+g = g + scale_fill_discrete(name="Class",
+                            limits=c("subcompact", "compact", "midsize", "minivan", "pickup", "suv", "2seater"),
+                            labels=c("Subcompact", "Compact", "Midsize", "Minivan", "Pickup Truck", "SUV", "Sports Car"))
+g
+```
+
+- N.B., if the outline colors are kept, then they should to be reordered with `scale_color_discrete()` to match that of `scale_fill_discrete()`.
+
+The other common annoying task is changing the colors. Inevitably either you or your PI will want consistent colors used across different figures, with each having vey different data.
+
+```{r}
+g2 = g + scale_fill_manual(name="Class",
+                           limits=c("subcompact", "compact", "midsize", "minivan", "pickup", "suv", "2seater"),
+                           labels=c("Subcompact", "Compact", "Midsize", "Minivan", "Pickup Truck", "SUV", "Sports Car"),
+                           values=c("#FFFFFF", "skyblue", "indianred", "chocolate", "turquoise", "darkorchid", "aquamarine"))
+g2
+```
+
+You can use either names or hex values (e.g., "#FFFFFF"), with the latter more useful for consistency across programs.
+
+Some people hate the background grid, even though it helps in comparing values, so you can always remove it. Compare the following:
+
+```{r}
+g2 + theme_bw()
+g2 + theme_classic()
+g2 + theme(panel.background=element_blank(),
+           axis.line.x=element_line(color="black"),
+           axis.line.y=element_line(color="black"),
+           axis.text.x=element_text(angle=-90, hjust=0, vjust=0.5))
+```
+
+Themes are just functions, so if you really want to you can write one and then ` + theme_foo()` it on all of your plots.
+
+# There are many additional possibilities
+
+This is just scratching the surface of what you can do with ggplot2. As noted earlier, there's a whole book on this if you really want. From polar coordinates, to heatmaps to geographic maps, you can do pretty much anything in ggplot2. Have a look at [the online manual](http://docs.ggplot2.org/current/) for many more details.
+
+Note that while you can change everything in ggplot, somethings are probably simpler to do in Adobe Illustrator (or similar), since you're saving everything as a PDF anyway.
