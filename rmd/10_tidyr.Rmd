@@ -2,7 +2,7 @@
 title: "Tidying a mess of data"
 author: "Devon P. Ryan"
 date: '`r Sys.Date()`'
-output: slidy_presentation
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -89,9 +89,7 @@ problems(df)
 | `col_skip()` | _ | |
 | `col_number()` | n | "500.25€" |
 
->- N.B., there are more, see `vignette("column-types")`.
-
-# A real (ugly) dataset
+> - N.B., there are more, see `vignette("column-types")`.
 
 - Open the xlsx file in eXcel/Openoffice
   - Multiple levels of headers?!?!
@@ -116,11 +114,9 @@ File structure:
 - 1 blank column
 - 17 columns of measurements (group 2)
 
-# readr example
-
 ```{r, echo=TRUE}
 blah = locale("en", decimal_mark=",") # stupid commas
-d = read_csv("foodIntake.csv", skip=1, locale=blah)
+d = read_csv("../data/foodIntake.csv", skip=1, locale=blah)
 head(d, n=1)
 tail(d, n=1)
 ```
@@ -207,7 +203,7 @@ d3 = d2 %>% group_by(Week, Group) %>% summarise(Val=mean(Value))
 head(d3)
 ```
 
-# tidyr Reshaping
+# tidyr: Reshaping
 
 We can do more than **`gather()`**
 
@@ -225,7 +221,7 @@ View(dem_polls)
 
 Borrowed from: https://github.com/datasciencelabs/2016/blob/master/lectures/wrangling/data-wrangling-with-tidyr.Rmd
 
-# tidyr spread()
+# tidyr: spread()
 
 Sometimes you want a "wide-format" for saving as a file. This can be done with `spread()`
 
@@ -238,7 +234,7 @@ dem_polls_gathered <- dem_polls %>%
 View(dem_polls_gathered %>% spread(key = candidate, value = percentage))
 ```
 
-# tidyr separate()
+# tidyr: separate()
      
 Sometimes more than one value is present in each column. We can separate those:
 
@@ -252,7 +248,7 @@ View(dem_polls_separate)
 
 Note that the date is now split.
 
-# tidyr unite()
+# tidyr: unite()
 
 Of course if you can split columns, you can unite them too:
 

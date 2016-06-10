@@ -19,7 +19,7 @@ library("tidyr")
 library("dplyr", warn.conflicts = FALSE)
 
 blah = locale("en", decimal_mark=",") # stupid commas
-d = read_csv("foodIntake.csv", skip=1, locale=blah)
+d = read_csv("../data/foodIntake.csv", skip=1, locale=blah)
 colnames(d)[c(1,20)] = c("Week", "Skip")
 d2 = d %>% select(-Skip) %>% gather(Cage, Value, -Week)
 d2$Group = c(rep(rep("Control", 33), 18), rep(rep("Treatment", 33), 17))
@@ -173,7 +173,7 @@ A common use-case:
 - The output looks like this:
 
 ```{r}
-tab = read_tsv("DESeq2_example.txt")
+tab = read_tsv("../data/DESeq2_example.txt")
 head(tab[order(tab$padj),], n=3)
 ```
 
@@ -182,8 +182,7 @@ head(tab[order(tab$padj),], n=3)
 We can use biomart to gene Ensembl gene IDs and their associated symbols/descriptions.
 
 ```{r, echo=TRUE}
-tab = read_tsv("DESeq2_example.txt")
-anno = read_tsv("DESeq2_annotation.txt")
+anno = read_tsv("../data/DESeq2_annotation.txt")
 ```
 
 Run **`head()`** or **`View()`** on these.
