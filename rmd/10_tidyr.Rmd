@@ -87,7 +87,7 @@ problems(df)
 | `col_double()` | d | 3.1415926536 |
 | `col_character()` | c | "I'm what's called a string!" |
 | `col_skip()` | _ | |
-| `col_number()` | n | "500.25€" |
+| `col_number()` | n | "500.25???" |
 
 > - N.B., there are more, see `vignette("column-types")`.
 

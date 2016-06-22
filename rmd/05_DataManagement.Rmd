@@ -83,11 +83,14 @@ Bn[Bn]=1                          # boolean -> numeric
 heatmap(Bn,scale="none",labRow=FALSE, cexCol=0.6)
 
 # compare binding p-values for two TF 
-smoothScatter(log(P[,"FHL1"]),log(D[,"RAP1"]),main="smoothScatter of p-values")
+smoothScatter(log(P[,"FHL1"]),log(P[,"RAP1"]),main="smoothScatter of p-values")
 
 table(B[,"FHL1"])               # 194 genes bound by FHL1
 tb=table(B[,"FHL1"],B[,"RAP1"]) # contingency table: 119 genes bound by FHL1 and RAP1
 tb
+
+# Which genes are bound by FHL1 and RAP1?
+common_genes=names(which(B[,"FHL1"] & B[,"RAP1"]))
 
 # fourfoldplot(tb)
 # mosaicplot(tb, color = TRUE)
