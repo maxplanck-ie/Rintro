@@ -94,28 +94,36 @@ swit=sample(doors[cc],1)
 swit</code></pre>
 <pre><code>## [1] &quot;W&quot;</code></pre>
 <p>With three doors, the candidate has only two choices to stay with “pick” or to switch to “swit”</p>
-<p>Now let’s play this game N times</p>
-<pre class="r"><code>N=10000
-success_stay=0
+<p>The above results from sampling will vary (for each candiate and participant of the R-course). Now let’s play this game N times. The goal is to count the number of successes for the switching strategy.</p>
+<div id="the-first-r-script" class="section level2">
+<h2>The first R-script</h2>
+<p>We want to execute the commands above repeatedly. To this end the console is not very useful. Therefore we leave the console for a moment, and first collect the individual commands in a file (an Rscript). Thankfully Rstudio also has an editor for such purposes.</p>
+<p><strong>Task</strong>: Open (a new and empty) Rscript file and save the lines below in a file called MontyHall.R.</p>
+<p><strong>Tip</strong>: Almost all command lines are already in your history, where you have tested that they are working properly. In the history panel, you can select those lines and send them “To Source”, i.e the newly opened file. This should avoid redundant typing and errors. All you need to do is to wrap the commands into the <em>for</em> loop.</p>
+<pre class="r"><code>#Comment Line: An Rscript to simulate the Monty Hall Problem
+doors=c(&quot;W&quot;,&quot;L1&quot;,&quot;L2&quot;)
+N=10000
+
 success_swit=0
 for (i in 1:N) {
-  doors=sample(doors)
-
-  pick=sample(doors,1)
-
-  open=sample(doors[doors!=&quot;W&quot; &amp; doors != pick],1)
-  swit=sample(doors[doors!=open &amp; doors !=pick],1)
-
- # cat(pick, &quot; &quot; , swit, &quot; &quot;, open,&quot;\n&quot;)
-  
-  if (pick==&quot;W&quot;) { success_stay=success_stay+1 }
+  doors=sample(doors)                     # shuffle doors
+  pick=sample(doors,1)                    # candidate picks one door at random
+  cs=which(doors != &quot;W&quot; &amp; doors != pick)  # show master picks one other (non-win)
+  open=sample(doors[cs],1)                # content of this door   
+  cc=which(doors != open &amp; doors != pick) # candidates second choice
+  swit=sample(doors[cc],1)                # content of that door  
+ 
+  # if the switched door contains the win, increase the number of successes
   if (swit==&quot;W&quot;) { success_swit=success_swit+1 }
 }
 
+success_stay = N - success_swit
 cat(&quot;N= &quot;,N, &quot;successes with stay= &quot;, success_stay, &quot; successes with switching= &quot;,success_swit,&quot;\n&quot;)</code></pre>
-<pre><code>## N=  10000 successes with stay=  3399  successes with switching=  6601</code></pre>
-<p><strong>Task</strong>: save the above lines in a file called Monty.R.</p>
-<p>Congratulations! You have just written your first “R script”. You can share it easily with all people – especially those who don’t like to switch.</p>
+<p>Congratulations! You have just written your first “R script”. Save it with some suitable name. Return to the console and execute the script using the <em>source</em> command</p>
+<pre class="r"><code>source(&quot;MontyHall.R&quot;)</code></pre>
+<pre><code>## N=  10000 successes with stay=  3328  successes with switching=  6672</code></pre>
+<p>You can share the script easily with all people who speak R – especially those who don’t like to switch.</p>
+</div>
 </div>
 <div id="bayesian-treatment" class="section level1">
 <h1>Bayesian Treatment:</h1>
@@ -147,6 +155,7 @@ cat(&quot;N= &quot;,N, &quot;successes with stay= &quot;, success_stay, &quot; s
 <li>selection/exclusion in vector</li>
 <li>sample()</li>
 <li>writing and sharing R-scripts.</li>
+<li>source(“Rscript.R”)</li>
 <li>prior and posterior (conditional) probabilities</li>
 <li>Bayes Theorem and updating probabilities</li>
 </ul>

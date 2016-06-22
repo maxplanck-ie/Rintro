@@ -91,6 +91,7 @@ tb
 
 # Which genes are bound by FHL1 and RAP1?
 common_genes=names(which(B[,"FHL1"] & B[,"RAP1"]))
+common_genes
 
 # fourfoldplot(tb)
 # mosaicplot(tb, color = TRUE)
