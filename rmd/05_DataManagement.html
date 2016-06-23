@@ -118,10 +118,13 @@ str(iris_f)</code></pre>
 </div>
 <div id="the-reality-of-io" class="section level1">
 <h1>The reality of I/O</h1>
-<p>In reality, many external data is badly formatted, leading to much wasted time - before analysis. The following code fragments took ~2 hours of trial and error</p>
-<pre class="r"><code># consider file from one of the first large scale ChIP-studies (R.Young lab: yeast)
-# this file contains more the binding data (p-values and ratios) for more than 
-# 6000 yeast genes and 113 yeast transcription factors
+<p>In reality, many external data is badly formatted, leading to much wasted time - before analysis. The following code fragments took ~2 hours of trial and error. Notice: While R can conveniently read from URL, for slow network connections, it maybe easier to first download the file to local storage and work from there.</p>
+<pre class="r"><code># consider file from one of the first large scale ChIP-studies (Rick Young lab: yeast)
+# 1. Find their homepage (google) and go to the &quot;Data Download&quot;&quot; section.
+# 2. find the Publication by Lee et al. (2002) Transcriptional Regulatory Networks in Saccharomyces cerevisea.
+# 3. In the &quot;Download Raw Data&quot; section copy the second link (&quot;binding of regulators to genes (text file)&quot;
+# this file contains binding data (p-values and ratios) for more than 6000 yeast genes and 113 yeast transcription factors
+
 chip=&quot;http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_gene.tsv&quot;
 
 # first problem: quote symbols in names (')
