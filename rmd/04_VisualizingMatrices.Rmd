@@ -1,7 +1,7 @@
 ---
 title: "Image Power: Vizualizing Matrices"
 author: "Thomas Manke"
-date: "31 May 2016"
+date: "5 Dec 2016"
 output: html_document
 ---
 
@@ -13,11 +13,6 @@ niris=iris[,-5]
 C=cor(niris)
 C
 image(C)
-```
-
-**Task**: Another famous and pretty example. Who is volcano?
-```{r}
-image(volcano, axes=FALSE)
 ```
 
 **Task**:
@@ -38,16 +33,14 @@ Below we are re-scaling the iris-matrix
 ```{r}
 S=scale(M)            # scales column-wise
 br=seq(-5,7,by=0.5)   # set common break points for the histograms below
-myblue=rgb(0,0,1,0.5) # define custom-made colour: transparent blue
 hist(M[,"Sepal.Width"], breaks = br)
-hist(S[,"Sepal.Width"], breaks = br, add=TRUE, col=myblue)      # add histogram to current plot
-legend("topright", c("orig","scaled"), fill=c("white", myblue))
+hist(S[,"Sepal.Width"], breaks = br, add=TRUE, col="red")      # add histogram to current plot
+legend("topright", c("orig","scaled"), fill=c("white", "red"))
 
-op=par(no.readonly=TRUE)
-par(mar=c(1,1,3,7)) # set margins to make room for axis labels
-image(S,main="Normalized IRIS data", axes=FALSE)                  # as before, suppress axes
-axis(4,at=seq(0,1,length.out=ncol(S)), labels=colnames(S), las=2) # Understand this command
-par(op)  # reset graphical parameters
+image(S,main="Normalized IRIS data", axes=FALSE)              # as before, suppress axes
+
+#add axes flexibly
+#axis(4,at=seq(0,1,length.out=ncol(S)), labels=colnames(S), las=2) # Understand this command
 ```
 
 ## Heatmaps
@@ -77,6 +70,44 @@ heatmap(M,scale="col", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
 dev.off()  # close device = pdf file
 ```
 
+# Dimensional Reduction: PCA
+```{r}
+D=as.matrix(iris[,-5])     # numerical data, some operations below require matrices not data frames (%*%)
+s=iris[,5]                 # species attributes (factor)
+```
+
+# Goals:
+* simplify description of data matrix $D$: data reduction & extract most important information
+* maximal variance: look for direction in which data shows maximal variation
+* minimal error: allow accurate reconstruction of original data 
+
+```{r}
+pca=prcomp(D, scale=TRUE)
+```
+
+*Task*: What kind of object is pca?
+
+```{r}
+R=pca$rotation  # rotation matrix
+S=pca$x         # score matrix = rotated scaled data matrix = Ds %*% R
+pairs(S, col=s) # 
+plot(R[,1:2], main="Rotations")
+# covariance matrix of scores is diagonal (by design)
+# --> principal components are uncorrelated
+CS=cov(S)   # = t(S) %*% S / (nrow(S) - 1)
+CS
+```
+
+Notice that the higher components do not add much information, so we may as well represent the transformed data in only the first two dimensions:
+```{r}
+plot(S[,1:2],pch=21, bg=s)  # score-plot
+```
+
+A biplot represents both the observations and the old variables in a new coordinate system (up-to-rescaling)
+```{r}
+biplot(pca, pc.biplot = TRUE) 
+```
+
 
 ***
 
@@ -84,7 +115,7 @@ dev.off()  # close device = pdf file
 * use image() and heatmap() to visualize matrices
 * customization of plots again: colours, legends
 * fallacies of colour-scaling
-* controlling figures with par()
 * exporting figures as publication-ready files
+* dimensional reduction with PCA
 
 
