@@ -51,7 +51,9 @@ head(iris_f)
 # The reality of I/O
 In reality, many external data is badly formatted, leading to much wasted time - before analysis. The following code fragments took ~2 hours of trial and error.
 Notice: While R can conveniently read from URL, for slow network connections, it maybe easier to first download the file to local storage and work from there.
-```{r}
+
+Notice2: The following code is just for illustration, no need to execute.
+```{r, eval=FALSE}
 # consider a data file from one of the first large scale ChIP-studies (Rick Young lab: yeast)
 # 1. Find their homepage (google) and go to the "Data Download"" section.
 # 2. find the Publication by Lee et al. (2002) Transcriptional Regulatory Networks in Saccharomyces cerevisea.
@@ -72,6 +74,13 @@ colnames(D)[1:4]=H[1,1:4]
 rownames(D)=D[,1]
 ic=c(1:4,seq(6,230,by=2))
 P=D[,-ic]         # data-frame of p-values, exclude superfluous columns and ratios
+write.table(P,file="../data/chip.tsv", sep="\t", quote=FALSE)
+```
+
+
+So let's start with a cleaned-up data set "../data/chip.tsv"
+```{r}
+P=read.table(file="../data/chip.tsv", header=TRUE, sep="\t")
 which(is.na(P))   # make sure everything is properly defined
 which(P<0 || P>1) # make sure p-values are all between 0 and 1
 ```
@@ -93,12 +102,9 @@ table(B[,"FHL1"])               # 194 genes bound by FHL1
 tb=table(B[,"FHL1"],B[,"RAP1"]) # contingency table: 119 genes bound by FHL1 and RAP1
 tb
 
-# Which genes are bound by FHL1 and RAP1?
+# Which genes are commonly bound by FHL1 and RAP1?
 common_genes=names(which(B[,"FHL1"] & B[,"RAP1"]))
-common_genes
 
-# fourfoldplot(tb)
-# mosaicplot(tb, color = TRUE)
 fisher.test(tb)                 # the overlap is highly unexpected
 chisq.test(tb)
 
