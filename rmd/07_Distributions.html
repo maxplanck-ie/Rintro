@@ -126,12 +126,12 @@ $(document).ready(function () {
 <h1>Pseudo-Random Sampling (with replacement)</h1>
 <pre class="r"><code>coins=c(0,1)  # ~ (tail, head=&quot;success&quot;)
 
-sample(coins,10,replace=TRUE)   # throw coins 20 times</code></pre>
-<pre><code>##  [1] 0 1 1 0 0 0 0 0 1 0</code></pre>
-<pre class="r"><code>sample(coins,10,replace=TRUE)   # and again (pseudorandom number!)</code></pre>
-<pre><code>##  [1] 1 0 1 1 1 1 0 0 0 0</code></pre>
-<pre class="r"><code>sample(coins,10,replace=TRUE)   # and again (pseudorandom number!)</code></pre>
-<pre><code>##  [1] 0 1 1 0 1 0 0 1 1 0</code></pre>
+sample(coins,10,replace=TRUE)   # throw coins 10 times</code></pre>
+<pre><code>##  [1] 1 1 0 0 1 1 0 0 1 1</code></pre>
+<pre class="r"><code>sample(coins,10,replace=TRUE)   # and again (pseudorandom numbers)</code></pre>
+<pre><code>##  [1] 0 1 0 0 0 0 1 0 0 0</code></pre>
+<pre class="r"><code>sample(coins,10,replace=TRUE)   # and again (pseudorandom numbers)</code></pre>
+<pre><code>##  [1] 1 1 0 1 1 1 0 1 1 1</code></pre>
 <pre class="r"><code># random number generators need a seed variable
 # usually this is implicitly set by some time stamp and process ID: --&gt; ?set.seed
 # here we set it explicitly based on some fixed integer (123 is arbit)

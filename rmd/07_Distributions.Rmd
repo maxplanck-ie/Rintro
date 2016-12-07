@@ -9,9 +9,9 @@ output:
 ```{r}
 coins=c(0,1)  # ~ (tail, head="success")
 
-sample(coins,10,replace=TRUE)   # throw coins 20 times
-sample(coins,10,replace=TRUE)   # and again (pseudorandom number!)
-sample(coins,10,replace=TRUE)   # and again (pseudorandom number!)
+sample(coins,10,replace=TRUE)   # throw coins 10 times
+sample(coins,10,replace=TRUE)   # and again (pseudorandom numbers)
+sample(coins,10,replace=TRUE)   # and again (pseudorandom numbers)
 
 # random number generators need a seed variable
 # usually this is implicitly set by some time stamp and process ID: --> ?set.seed
