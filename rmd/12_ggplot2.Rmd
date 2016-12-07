@@ -18,8 +18,7 @@ library("readr")
 library("tidyr")
 library("dplyr", warn.conflicts = FALSE)
 
-blah = locale("en", decimal_mark=",") # stupid commas
-d = read_csv("../data/foodIntake.csv", skip=1, locale=blah)
+d = read_csv("../data/foodIntake2.csv", skip=1)
 colnames(d)[c(1,20)] = c("Week", "Skip")
 d2 = d %>% select(-Skip) %>% gather(Cage, Value, -Week)
 d2$Group = c(rep(rep("Control", 33), 18), rep(rep("Treatment", 33), 17))
