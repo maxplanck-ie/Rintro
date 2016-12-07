@@ -1,0 +1,5 @@
+- some packages do not install under (some) windows
+- localle() does not work with all versions readr
+- avoid extensive typing in the later parts of the course
+- some special characters ~, [], | are hard to find on some keyboards
+
