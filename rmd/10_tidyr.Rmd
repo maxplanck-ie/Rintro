@@ -43,7 +43,7 @@ Congrats, you're now the R gal/guy. Everyone will now ask you for help and their
 | Mouse 3 | 1 | 52 | 00 | 45 / 27 |
 | Mouse 1 | 2 | -- | -- | |
 
-# The Hadleyverse
+# The Tidyverse
 
 Much of modern data analysis relies heavily on packages from Hadley Wickham:
 
@@ -115,8 +115,10 @@ File structure:
 - 17 columns of measurements (group 2)
 
 ```{r, echo=TRUE}
-blah = locale("en", decimal_mark=",") # stupid commas
-d = read_csv("../data/foodIntake.csv", skip=1, locale=blah)
+#I've taken care of changing "," to ".", since this sometimes causes problems,
+#but note that you can handle different locales with locale=blah
+#blah = locale("en", decimal_mark=",") # stupid commas
+d = read_csv("../data/foodIntake2.csv", skip=1)
 head(d, n=1)
 tail(d, n=1)
 ```
