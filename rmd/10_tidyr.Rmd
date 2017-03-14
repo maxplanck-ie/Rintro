@@ -229,15 +229,17 @@ Sometimes you want a "wide-format" for saving as a file. This can be done with `
 
 ```{r, echo=TRUE}
 dem_polls_gathered <- dem_polls %>% 
-                         gather(key = candidate, value = percentage, 
-                                Clinton:Undecided)
+                      select(Pollster, `Start Date`, Sanders:Undecided) %>%
+                      gather(candidate, percentage, -`Start Date`, -Pollster)
 ```
 ```{r, echo=TRUE, eval=FALSE}
-View(dem_polls_gathered %>% spread(key = candidate, value = percentage))
+View(dem_polls_gathered %>% spread(candidate, percentage))
 ```
 
+This serves to show how to do a few things. Firstly, one can select a range of columns with `FirstName:SecondName`. Secondly, you can specify column names that have spaces by enclosing everything in graves (aka backticks), \`.
+
 # tidyr: separate()
-     
+
 Sometimes more than one value is present in each column. We can separate those:
 
 ```{r, echo=TRUE}
