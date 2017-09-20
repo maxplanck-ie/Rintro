@@ -186,11 +186,11 @@ ggplot(data = d2, aes(x = Week, y = Value, group=Cage)) +
   labs(x="Measurement week", y="Food intake (g)")
 ```
 
-I've grouped each cage into its own line and then colored by group. That's nice, but the overlapping groups are really messy. Ideally we'd just plot the groups independently.
+I've grouped each cage into its own line and then colored by group (Not sure why the grouping was needed? Replot that without `group=Cage`.). That's nice, but the overlapping groups are really messy. Ideally we'd just plot the groups independently.
 
 ```{r}
-g = ggplot(data = d2, aes(x = Week, y = Value, group=c(Group)))
-g = g + geom_line(aes(color=Cage, group=Cage))
+g = ggplot(data = d2, aes(x = Week, y = Value, group=Cage))
+g = g + geom_line(aes(color=Cage))
 g = g + labs(x="Measurement week", y="Food intake (g)")
 g = g + facet_grid(Group~.)
 g
