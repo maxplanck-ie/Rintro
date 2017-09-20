@@ -42,14 +42,17 @@ Boxplot understands data frames
 boxplot(iris) # What does the boxplot for Species mean?
 ```
 
-#Interlude: Factors = categorical variables
+#Interlude: Factors
 Factors denote a special class of R-objects that can be thought of as categories (here: species). They have a given number of *levels* which are internally represented as integers.
 ```{r}
 class(iris$Species)
 typeof(iris$Species)
-ts=table(iris$Species)  # returns a contigency table ~> histogram for categorical data
-barplot(ts, col=rainbow(3), ylab="observations", cex.names=0.9)
+ts=table(iris$Species)   # returns a contigency table
+op=par(no.readonly=TRUE) # save graphical parameters
+par(mfrow=c(1,2))        # prepare *device* for two plots
 pie(ts,col=rainbow(3))
+barplot(ts, col=rainbow(3), ylab="observations", cex.names=0.9)
+par(op)            # reset graphical parameters
 ```
 
 ***
@@ -114,10 +117,10 @@ fit$df.residual
 coefficients(fit)
 confint(fit)   # Try to change the confidence level: ?confint
 summary(fit)
+anova(fit)     # was already called as part of summary()
 ```
 
-This is a good fit - as suggested by the small p-value (and by visualization).  
-
+This is a good fit - as suggested by the small ANOVA p-value (and by visualization).  
 Here is an example of a poor fit (replace "Petal" with "Sepal)
 ```{r}
 plot(Sepal.Width ~ Sepal.Length, data=iris, col=cols)  

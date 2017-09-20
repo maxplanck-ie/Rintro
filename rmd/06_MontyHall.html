@@ -82,12 +82,12 @@ img {
 <p>Now the candidate picks a random door “pick” (hoping that it might be the winning door)</p>
 <pre class="r"><code>pick=sample(doors,1)
 pick</code></pre>
-<pre><code>## [1] &quot;L1&quot;</code></pre>
+<pre><code>## [1] &quot;L2&quot;</code></pre>
 <p>Only the show master knows the winning door. Depending on the picked door, the show master will reveal one door that does <em>not</em> contain the price, and <em>not</em> the picked door.</p>
 <pre class="r"><code>cs=which(doors != &quot;W&quot; &amp; doors != pick) # depending on pick this could be one or two elements
 open=sample(doors[cs],1)
 open</code></pre>
-<pre><code>## [1] &quot;L2&quot;</code></pre>
+<pre><code>## [1] &quot;L1&quot;</code></pre>
 <p>Notice that the showmaster does not really have a choice when the candidate has picked a loosing door (2/3 of the time). Now the candidate has the choice to switch to the other remaining door (not open, not previously picked). The question is: Will the switching strategy be more successful?</p>
 <pre class="r"><code>cc=which(doors != open &amp; doors != pick)
 swit=sample(doors[cc],1)
@@ -121,7 +121,7 @@ success_stay = N - success_swit
 cat(&quot;N= &quot;,N, &quot;successes with stay= &quot;, success_stay, &quot; successes with switching= &quot;,success_swit,&quot;\n&quot;)</code></pre>
 <p>Congratulations! You have just written your first “R script”. Save it with some suitable name. Return to the console and execute the script using the <em>source</em> command</p>
 <pre class="r"><code>source(&quot;MontyHall.R&quot;)</code></pre>
-<pre><code>## N=  10000 successes with stay=  3279  successes with switching=  6721</code></pre>
+<pre><code>## N=  10000 successes with stay=  3295  successes with switching=  6705</code></pre>
 <p>You can share the script easily with all people who speak R – especially those who don’t like to switch.</p>
 </div>
 </div>

@@ -31,6 +31,7 @@ Be aware:
 
 Below we are re-scaling the iris-matrix
 ```{r}
+M=as.matrix(niris)
 S=scale(M)            # scales column-wise
 br=seq(-5,7,by=0.5)   # set common break points for the histograms below
 hist(M[,"Sepal.Width"], breaks = br)
@@ -98,7 +99,7 @@ CS=cov(S)   # = t(S) %*% S / (nrow(S) - 1)
 CS
 ```
 
-Notice that the higher components do not add much information, so we may as well represent the transformed data in only the first two dimensions:
+Notice that the higher components do not add much to the variance, so we may as well represent the transformed data in only the first two dimensions:
 ```{r}
 plot(S[,1:2],pch=21, bg=s)  # score-plot
 ```
