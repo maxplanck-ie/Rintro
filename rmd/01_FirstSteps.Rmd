@@ -197,7 +197,9 @@ x+y     # elementwise addition
 x*y     # ... multiplication
 x^y     # ... exponentiation
 x > y   # ... comparisons
+x %% 2  # modulo operators: try y %% 2
 x %*% y # scalar product
+
 ```
 
 ### Vectors can be recycled. 
