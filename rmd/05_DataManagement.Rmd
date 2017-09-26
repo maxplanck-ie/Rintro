@@ -1,7 +1,7 @@
 ---
 title: "Data Managment: Objects and Files"
 author: "Thomas Manke"
-date: "31 May 2016"
+date: "22 Sept 2017"
 output: html_document
 ---
 
@@ -53,8 +53,8 @@ In reality, many external data is badly formatted, leading to much wasted time -
 
 
 ### Mock real
-```{r, eval=FALSE}
-file="~/Google Drive/talks/lectures/Rintro/data/GeneList.tsv"
+```{r, eval=TRUE, error=TRUE}
+file="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/GeneList.tsv"  # locate at github https://github.com/maxplanck-ie/Rintro
 read.table(file) 
 read.table(file, header=TRUE)                                            # watch out for headers
 read.table(file, header=TRUE, comment.char = "%")                        # comment lines
@@ -66,15 +66,14 @@ D=read.table(file, header=TRUE, comment.char = "%", sep="\t", quote="\"")
 
 is.na(D)  # any NA's?
 
-
 colSums(is.na(D))
 i=which(rowSums(is.na(D[,3:5]))==0)   # keep rows without NA
 j=which(colSums(is.na(D))==nrow(D))   # remove columns with all NA
-D=D[i,-j]
+D[i,-j]
 ```
 
 ### Real real
-Notice1: The following code fragments took ~2 hours of trial and error. It is kept here for reference. No need to execute
+Notice1: The following code fragments took ~2 hours of trial and error. It is kept only for reference. No need to execute
 
 Notice2: R can read from http. For slow network connections, it will be faster to first download the file to local storage and work from there.
 
@@ -88,74 +87,112 @@ Notice2: R can read from http. For slow network connections, it will be faster t
 
 chip="http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_gene.tsv"
 
-# first problem: quote symbols in names (')
+# first problem: two headers --> skip first --> skip line 1
 D=read.table(file=chip, header=TRUE,  skip=1, sep="\t")
 nrow(D)  # 511 << 6000 !!!???
+
+# second problem: quote symbols in names (')
 cf=count.fields(chip,sep="\t") # many NA --> quoted fields got missing
-                
-# second problem: two headers. need information from both
+
 D=read.table(chip, header=TRUE,  sep="\t", quote="\"", skip=1)
-H=read.table(chip, header=FALSE, sep="\t", quote="\"", nrows=1, stringsAsFactors = FALSE)
-colnames(D)[1:4]=H[1,1:4]  # the first 4 headers got skipped from D, use entries from H
-rownames(D)=D[,1]          # ORF-symbols
-ic=c(1:4,seq(6,230,by=2))  # define indices to be excluded
+rownames(D)=D[,1]          # ORF-symbols in column 1, keep them as rownames 
+ic=c(1:4,seq(6,230,by=2))  # define column indices to be excluded (only keep p-values)
 P=D[,-ic]                  # new data-frame of p-values, exclude superfluous columns and ratios
 write.table(P,file="../data/chip.tsv", sep="\t", quote=FALSE)  # write p-values to file
 ```
 
-
+### Cleaned Real
 Let's start with a cleaned-up data set. Now available at "https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/chip.tsv"
 (locate this *raw* file on https://github.com/maxplanck-ie/Rintro/)
 
 ```{r}
 fn="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/chip.tsv"  # remote filename
 P=read.table(file=fn, header=TRUE, sep="\t")
+```
 
-# some checks
+Describe data and sanity checks
+```{r, eval=FALSE}
 str(P)            # describe the data structure
 which(is.na(P))   # make sure everything is properly defined
 which(P<0 || P>1) # make sure p-values are all between 0 and 1
 ```
 
-Only now we can start looking at something more interesting
+Now we can start looking at something more interesting
 ```{r}
 # defined boolean matrix of TF-gene interactions (based on p-value threshold)
-B=P<1e-3  
+pt=1e-3
+B=P<pt  # result is matrix.
 
-Bn=B[rowSums(B)>2, colSums(B)>40] # reduce the problem size
-Bn[Bn]=1                          # boolean -> numeric
-heatmap(Bn,scale="none",labRow=FALSE, cexCol=0.6)
+# reduce problem size, heatmap slow
+i=rowSums(B)>1   # only genes with sufficient number of TF-binding
+j=colSums(B)>40  # only TF with sufficient number of targets
 
-# compare binding p-values for two TF 
-smoothScatter(log(P[,"FHL1"]),log(P[,"RAP1"]),main="smoothScatter of p-values")
+# heatmap needs numeric matrix ==> convert logical to integer 
+B=1*B  # equivalent tricks: B[B]=1; mode(B) = "integer", but _not_ as.integer(B)  # strips attributes, i.e. dimensionsas
 
+heatmap(B[i,j], scale="none", col=c("white","black"), labRow=FALSE)
+#d3heatmap(B[i,j], scale="none", col=c("white","black"), distfun = function(c) dist(c, method="binary"))
+```
+
+Explore relation between FHL1 and RAP1
+```{r}
+smoothScatter(log(P[,"FHL1"]),log(P[,"RAP1"]),main="smoothScatter of p-values")  # scatterplot of log(p-values) for two TF 
+abline(h=log(pt), v=log(pt), col="red")                                          # "arbitrary" thresholds
+cor(B[,"FHL1"],B[,"RAP1"])                                                       # Phi-coefficient = Pearson CC for binary variables
+```
+
+Contigency tables
+```{r}
 table(B[,"FHL1"])               # 194 genes bound by FHL1
 tb=table(B[,"FHL1"],B[,"RAP1"]) # contingency table: 119 genes bound by FHL1 and RAP1
 tb
 
-# Which genes are commonly bound by FHL1 and RAP1?
-common_genes=names(which(B[,"FHL1"] & B[,"RAP1"]))
-
 fisher.test(tb)                 # the overlap is highly unexpected
 chisq.test(tb)
+```
 
+Generalize: Find other groups of TF with common targets 
+```{r}
+C=cor(B[,j])                             # correlation matrix. Alternative: C=cor(log(P+eps))
+heatmap(C,col = rev(grey.colors(100)) ) 
+```
+
+### Packages
+Heatmaps can summarize overall data, but are often difficult to explore.
+Additional tools are needed. Enter the world of *R packages*.
+
+Explore CRAN "https://cran.r-project.org" orGoogle "interactive heatmaps in R"
+```{r}
+#install.packages("heatmaply")   # only need to install once (but takes some time: ~10min)
+library(heatmaply)               # only need once per session. notice messages and warnings
+heatmaply(C,col = rev(grey.colors(100)) ) 
+```
+
+Investigating overlaps:
+```{r}
+# Which genes are commonly bound by FHL1 and RAP1?
+names(which(B[,"FHL1"]==1 & B[,"RAP1"]==1))
 
 # create a Venn Diagram of target gene overlaps (with package gplots)
 library(gplots)
-L=list(FHL1=which(B[,"FHL1"]),RAP1=which(B[,"RAP1"]),MCM1=which(B[,"MCM1"]), STE12=which(B[,"STE12"]) )
+L=list(FHL1=which(B[,"FHL1"]==1),RAP1=which(B[,"RAP1"]==1),MCM1=which(B[,"MCM1"]==1), STE12=which(B[,"STE12"]==1) )
 vn=venn(L)
 
+# better than Venn
 library(UpSetR)
-
+upset( as.data.frame(B), sets = c("FHL1", "RAP1", "MCM1", "STE12"), empty.intersections = TRUE )
 ```
 
 ***
 
 # Review:
 
-* exporting objects as Rdat or text-file
-* navigate in directories, know where you are working
-* keep data clean and well structured !
-* appendix: a (semi-)real-life example
-* smoothScatter(), contigency tables, tests, venn (package)
+* exporting objects as Rdat (save.image) or text-file (write.table)
+* navigate in directories, know where you are working: ls
+* I/O pain: keep data clean and well structured !
+* data retyping: data.frame --> Boolean matrix --> Integer
+* data exploration and visualization heatmap(), smoothScatter()
+* quantitative data descriptions: cor(), table()
+* tests: fisher.test(), chi2.test()
+* packages: heatmaply, gplots (venn), UpSetR
 
