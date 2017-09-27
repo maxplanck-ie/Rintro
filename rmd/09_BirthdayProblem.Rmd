@@ -13,49 +13,62 @@ Sample uniformly (with replacement) from 365 days (no Feb 29)
 
 ```{r}
 n=40
-bds=sample(1:365, n, replace=TRUE)
+B=sample(1:365, n, replace=TRUE)  # sample n birthdays
 ```
 
 Are there any duplicated entries?
-
 ```{r}
-dups=duplicated(bds)
-```
-
-What sort of object is dups?
-
-```{r}
-str(dups)
-typeof(dups)
-summary(dups)
-sort(bds)
-bds[dups]
-sum(dups,na.rm=TRUE)
-any(dups)
-anyDuplicated(bds)
+B
+dups=duplicated(B) # What sort of object is dups?
+anyDuplicated(B)   # What does this function return? When is it zero?
 ```
 
 # Simulation in R
 With those ingedients, determine the expected fraction of $m=1000$ parties with one or more duplicated birthdays.
 ```{r}
+days=365
 m=1000
-bds=sample(365, n*m, replace=TRUE)
-A=matrix(bds,m,n,byrow=TRUE)
-x=apply(A,1,anyDuplicated)
-fract=sum(x>0)/m
+B=sample(days, m*n, replace=TRUE) # mxn birthdays
+dim(B)=c(m,n)                     # Birthday matrix: m parties x n participants
+x=apply(B,1,anyDuplicated)        # apply anyDuplicated() function to each row (1) of B
+fract=sum(x>0)/m                  # fraction of m parties with duplicates 
 fract
 ```
+
+### Functions
+Goal: Convert the above into a reusable piece of software. Write a R-function that returns this fraction of parties.
+
+Parameters: Number of days/year, Number of Participants, Number of parties
+
+Using the history write the following function to a source and save as file (e.g. myFract.R)
+```{r}
+myFract <- function (n,m=1000,days=365) {
+  B=sample(days, m*n, replace=TRUE)  # sample n*m birthdays
+  dim(B)=c(m,n)                      # convert to matrix
+  x=apply(B,1,anyDuplicated)         # return first duplicated index or zero if none
+  fract=sum(x>0)/m                   # fraction of entries in x bigger than zeros
+  return(fract)
+}
+```
+
+To invoke the newly defined function you will need to "source" the file.
+Use "source(file)" at the console, or use the appropriate button in Rstudio.
+
+If there are no errors in the script, you should be able to run some tests and examples.
+
+```{r}
+myFract(40)
+myFract(40,m=100)
+```
+
 
 Now plot the fraction against the size of the party $n \in [1,50]$
 ```{r}
 fract=vector("numeric",50)
-for (n in 1:50) {
-  A=matrix(sample(365,n*m,replace=TRUE), m,n,byrow=TRUE)
-  fract[n]=sum(apply(A,1,anyDuplicated)>0)/m
-}
+for (n in 1:50) { fract[n]=myFract(n) }
 plot(1:50, fract, main="Birthday Problem: numerical simulation", xlab="People", ylab="Fraction", 
      type="o", col="red", pch=21, bg="grey",lwd=2)
-#?plot
+
 abline(h=0.5, lty=3, col="blue", lwd=2)
 ```
 
@@ -64,28 +77,36 @@ With $n>23$ people we expect more than half of all parties to have matching birt
 # Analytical treatment
 For any given pair of people the probability of success (sharing a birthday) is small $p=1/365 \approx 0.0027$, but in the party setting 
 there are many such comparisons $N=n(n-1)/2 \propto n^2$. The total number of successes can be modelled by the **binomial distribution** with success probability $p$ and $N$ number of trials.
-Rather than simulating the process (above), we now draw $m$ random numbers from a binomial distribution
+Rather than simulating the process (above), we might have also sampled $m$ random numbers from a binomial distribution
 ```{r}
 m=100
 n=24
 p=1/365
-x=rbinom(m,size=n*(n-1)/2, prob=p)
-head(x)
-table(x)
-plot(x)
-barplot(table(x), xlab="x", ylab="frequency")
-plot(ecdf(x))
+x=rbinom(m,size=n*(n-1)/2, prob=p) # generate m random numbers = number of successes
 
-# understand dbinom
+#  distribution of number of successes
+table(x)
+barplot(table(x), xlab="x", ylab="frequency") 
+```
+
+The above is sampled with *rbinom*.  In R we can also invoke the theoretical density function *dbinom*.
+```{r}
+# same using dbinom. ?dbinom
 dbinom(0:10, size=n*(n-1)/2, prob=p)
 
-n = 1:50
-N = n*(n-1)/2
-#N is a vector!!!
-fa = 1 - dbinom(0,N,p)
+# the distribution function Pr[X<=x]
+pbinom(0:10, size=n*(n-1)/2, prob=p)
 
-plot(1:50, fract, main="Birthday Problem", xlab="People", ylab="Fraction", col="red", pch=21, bg="grey",lwd=2)
-points(n, fa, type="l", lwd=2)
+# fraction of no success (0) as function of size
+1 - dbinom(0, size=100:110, prob=p)
+
+n = 1:50
+N = n*(n-1)/2           # N is a vector!!!
+fa = 1 - dbinom(0,N,p)  # probability of success: 1-P[X=0]
+# fa = pbinom(0,N,p, lower.tail=FALSE)  # P[X>0]
+
+plot(n, fract, main="Birthday Problem", xlab="People", ylab="Fraction", col="red", pch=21, bg="grey",lwd=2) # as before
+points(n, fa, type="l", lwd=2)      # analytically using dbinom
 #?points
 legend("bottomright",inset=0.02, legend=c("simulation", "analytic"), 
        pch=c(21,NA), pt.bg=c("grey",NA), lty=c(NA,1), col=c("red","black"))
@@ -94,62 +115,12 @@ abline(v=24)
 
 Again we see that, for $n>23$, we expect that $>50\%$ of parties have matching birthdays.
 
-# Multiple Testing correction
-Now, let's consider statsitical testing. Statsitical tests are often phrased in terms of a null hypothesis
-and data is used to calculate a score (for which the distribution is known).
-Take again the binomial example. We may want to test the null hypothesis that a coin is fair ($p=0.5$)
-and we have $N=10$ observations that resulted in 9 heads.
-```{r}
-
-# null hypothesis: fair coin ==> binomial with p=0.5
-p=0.5
-# observed data (independent) H H L H H H .... => 10 throws, 9 heads
-# statistic 
-N=10
-S=9
-
-# probability of observing 9 or more heads if coin is fair
-# Notice that (S>=9) = (S>8)
-pvalue=pbinom(S-1,N,p,lower.tail=FALSE)
-pvalue
-
-# try with S=8
-# reject ?
-```
-
-In this case we would reject the null hypothesis of a fair coin.
-Now let's test 10000 **fair coins**, each with 10 throws and a criterion (S>8) to reject the null hypothesis. How many rejections (false positives)?
-```{r}
-m=10000
-x=rbinom(m,10,p)
-fp=sum(x>8)
-fp
-```
-
-Lets look more carefully at the  
-```{r}
-table(x)
-# adjust breakpoints, histogram is for continuous distributions
-hist(x,50,col="red")
-abline(v=8)
-```
-
-Plot two distribution: one for number of successes, one for associated p-values
-```{r}
-pvs=dbinom(x,10,p)
-par(mfcol=c(1,2))
-barplot(table(x), space=0.5)
-hist(pvs)
-```
 
 # Did you understand?
 * sample with replacement
 * queries on vectors: sum, sort, duplicated entires, any
 * matrix from vector
 * apply more efficient than loops
-* plotting options, points, legend, abline
-* analytical formalism more efficient than simulation
-* hist, ecdf
-* plot layout: par()
+* writing and invoking scripts (source)
+* sampling (simple) vs analytical treatment (fast)
 * binomial distribution and others: rbinom, dbinom, pbinom
-* multiple testing correction
