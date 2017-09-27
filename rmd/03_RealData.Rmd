@@ -168,25 +168,29 @@ example(anscombe)
 ```
 
 # Logistic regression
-Goal: predict species based on on features
+Goal: predict species based on features
 ```{r}
-plot(Species=="setosa" ~ Sepal.Length, data=iris)
-model=glm(Species=="setosa" ~ Sepal.Length, family=binomial,data=iris)
-points(iris$Sepal.Length,fitted(model),col="red", pch=20)
+x=iris
+x$setosa = (x$Species=="setosa")    # create new binary variable
+x$col="black"                       # default color for plot
+plot(setosa ~ Sepal.Length, data=x, col=x$col)
+
+model=glm(setosa ~ Sepal.Length, data=x, family=binomial(logit))     # generalized linear model --> logistic regression
+
+points(fitted(model) ~ Sepal.Length, data=x, col="red", pch=20)
+
+x$col="black"
+x$col[fitted(model)>0.5]="red"     # classify (and color red) if setosa is probable
+plot(setosa ~ Sepal.Length, data=x, col=x$col, main="Classification and Misclassification")
 ```
 
 ```{r}
-x=iris
-x$setosa=x$Species=="setosa"  # create new binary variable
-op=par(no.readonly=TRUE)
-par(mfrow=c(1,2))
-plot(setosa ~ Sepal.Length, data=x)
-plot(setosa ~ Petal.Length, data=x, main="Prefect Separation")
-par(op)
-plot(x, col=x$setosa+1)
+x$Species = NULL                                       # remove Species variable from x
+model=glm(setosa ~ ., family=binomial(logit), data=x)  # model with _all_ features/variables
 
-x$Species = NULL  # remove Species variable from x
-model=glm(setosa ~ ., family=binomial(logit), data=x)
+x$col="black"
+x$col[fitted(model)>0.5]="red"
+plot(setosa ~ Sepal.Length, data=x, col=x$col)         # perfect predictor
 ```
 
 
@@ -199,4 +203,5 @@ model=glm(setosa ~ ., family=binomial(logit), data=x)
 * customize arguments: line width, colours, ...
 * correlations: cor()
 * linear model lm(): fitting, summary and interpretation
+* generalized linear model glm()
 * Notice that the data used was extremely clean and structured: data()
