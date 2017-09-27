@@ -48,19 +48,19 @@ image(S,main="Normalized IRIS data", axes=FALSE)              # as before, suppr
 Heatmaps are advanced images in which rows and columns are re-ordered according
 to some distance measure (default: Euclidean) and hierarchical clustering method (default: complete) 
 ```{r}
-heatmap(M)
+heatmap(S)
 ```
 
 Notice that:
 
 * unlike image(), the heatmap is already in the "canonical" orientation
-* the heatmap is usually scaled by rows (columns more useful)
+* heatmap scales all rows by default (for visuzalization)
 * frequently needs many customizations: label size, remove row-names, ...
 * there is an implicit colour scheme: "numerical value $\to$ colour"
 * there are multiple extensions of this in other R-packages: e.g. gplots::heatmap.2
 ```{r}
 cols <- rainbow(3)[iris$Species]  # understand how color is defined
-heatmap(M,scale="col", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
+heatmap(S,scale="none", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
 ```
 
 # Sending plots to files
