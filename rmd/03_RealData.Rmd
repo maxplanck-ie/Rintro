@@ -128,12 +128,26 @@ summary(fit1)
 ```
 
 
+**Task**: Repeat the linear regression Petal.Width ~ Petal.Length with an *outlier* in the data 
+```{r}
+irisout=rbind(iris,list(5.8,3, 4, 20, "virginica"))
+```
+
+```{r, echo=FALSE}
+str(irisout)
+summary(irisout)
+plot(Petal.Width ~ Petal.Length, data=irisout, col=Species)
+fit2=lm(Petal.Width ~ Petal.Length, data=irisout)
+abline(fit2, lwd=3, lty=2)    
+summary(fit2)
+```
+
 # Diagnostic Plots
 "fit" is a large object of the lm-class which contains also lots of diagnostic informmation. Notice how the behaviour of "plot" changes.
 ```{r}
 op=par(no.readonly=TRUE)  # safe only resettable graphical parameters, avoids many warnings
 par(mfrow=c(2,2))         # change graphical parameters: 2x2 images on device
-plot(fit,col=cols)        # four plots rather than one
+plot(fit2,col=cols)       # four plots rather than one
 par(op)                   # reset graphical parameters
 ```
 more examples here: http://www.statmethods.net/stats/regression.html
@@ -144,11 +158,6 @@ Linear models $y_i=\beta_0 + \beta_1 * x_i + \epsilon_i$ make certain assumption
 * residuals are normally distributed
 * have equal variance $\sigma^2$ (homoscedascity)
 * are there outliers (large residuals) or observations with strong influence on fit
-
-**Task**: Repeat the analysis with an outlier in the data 
-```{r}
-irisout=rbind(iris,c(5.8,3, 4, 20, "virginica"))
-```
 
 # Comparing (nested) models
 ```{r}
