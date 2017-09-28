@@ -91,14 +91,18 @@ barplot(table(x), xlab="x", ylab="frequency")
 
 The above is sampled with *rbinom*.  In R we can also invoke the theoretical density function *dbinom*.
 ```{r}
-# same using dbinom. ?dbinom
-dbinom(0:10, size=n*(n-1)/2, prob=p)
+# same using dbinom() --> Pr[X=m] ?dbinom
 
-# the distribution function Pr[X<=x]
-pbinom(0:10, size=n*(n-1)/2, prob=p)
+# m = 0
+dbinom(0, size=n*(n-1)/2, prob=p)
 
-# fraction of no success (0) as function of size
-1 - dbinom(0, size=100:110, prob=p)
+# m=0:10
+dbinom(0:10, size=n*(n-1)/2, prob=p)  # density function P[X=x]
+
+pbinom(0:10, size=n*(n-1)/2, prob=p)  # cummulative distribution function Pr[X<=x]
+
+# probability of no success (X=0) as function of size
+dbinom(0, size=300:350, prob=p)
 
 n = 1:50
 N = n*(n-1)/2           # N is a vector!!!
