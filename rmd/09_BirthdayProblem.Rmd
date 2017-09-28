@@ -1,7 +1,7 @@
 ---
 title: "Simulated Data: The Birthday Problem"
 author: "T. Manke"
-date: "25 Feb 2016"
+date: "27 Sep 2017"
 output: html_document
 ---
 
@@ -52,6 +52,7 @@ myFract <- function (n,m=1000,days=365) {
 ```
 
 To invoke the newly defined function you will need to "source" the file.
+
 Use "source(file)" at the console, or use the appropriate button in Rstudio.
 
 If there are no errors in the script, you should be able to run some tests and examples.
@@ -66,10 +67,13 @@ Now plot the fraction against the size of the party $n \in [1,50]$
 ```{r}
 fract=vector("numeric",50)
 for (n in 1:50) { fract[n]=myFract(n) }
-plot(1:50, fract, main="Birthday Problem: numerical simulation", xlab="People", ylab="Fraction", 
-     type="o", col="red", pch=21, bg="grey",lwd=2)
 
-abline(h=0.5, lty=3, col="blue", lwd=2)
+plot(1:50, fract)
+
+#customized & beautified
+#plot(1:50, fract, main="Birthday Problem: numerical simulation", xlab="People", ylab="Fraction", type="o", col="red", pch=21, bg="grey",lwd=2)
+
+abline(h=0.5, col="red")
 ```
 
 With $n>23$ people we expect more than half of all parties to have matching birthdays.
@@ -77,7 +81,8 @@ With $n>23$ people we expect more than half of all parties to have matching birt
 # Analytical treatment
 For any given pair of people the probability of success (sharing a birthday) is small $p=1/365 \approx 0.0027$, but in the party setting 
 there are many such comparisons $N=n(n-1)/2 \propto n^2$. The total number of successes can be modelled by the **binomial distribution** with success probability $p$ and $N$ number of trials.
-Rather than simulating the process (above), we might have also sampled $m$ random numbers from a binomial distribution
+
+Insight: Rather than simulating the process (above), we might have also sampled $m$ random numbers from a binomial distribution. R can do that using rbinom().
 ```{r}
 m=100
 n=24
@@ -124,7 +129,7 @@ Again we see that, for $n>23$, we expect that $>50\%$ of parties have matching b
 * sample with replacement
 * queries on vectors: sum, sort, duplicated entires, any
 * matrix from vector
-* apply more efficient than loops
+* two ways to loop: for loop, apply (more efficient)
 * writing and invoking scripts (source)
 * sampling (simple) vs analytical treatment (fast)
 * binomial distribution and others: rbinom, dbinom, pbinom
