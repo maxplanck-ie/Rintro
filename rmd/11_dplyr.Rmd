@@ -116,18 +116,42 @@ d2 %>% filter(!is.na(Value)) %>% summarise(avg=median(Value))
 # Exercise
 
 Going back to the `msleep_ggplot2.txt` file that we loaded earlier, what's the average time (in hours) that primates spend sleeping?
-
-
-
-
-
-
-
-
-
-
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 ```{r}
 msleep %>% filter(order == 'Primates') %>% summarise(ave=mean(sleep_total))
 ```
@@ -151,15 +175,42 @@ There are 8 results. Why? What happens if we swap the order of **Group** and **W
 # Exercise
 
 Again, using the `msleep_ggplot2.txt` dataset, what is the average sleep time per order?
-
-
-
-
-
-
-
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 ```{r}
 msleep %>% group_by(order) %>% summarise(ave=mean(sleep_total))
 ```

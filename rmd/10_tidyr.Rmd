@@ -125,7 +125,7 @@ tail(d, n=1)
 
 `readr` figured out the types and converted blanks to `NA` for us! Let's fix the first column names:
 
-```{r}
+```{r, echo=TRUE}
 colnames(d)[c(1,20)] = c("Week", "Skip")
 ```
 

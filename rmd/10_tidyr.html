@@ -11,7 +11,7 @@
 
 <meta name="author" content="Devon P. Ryan" />
 
-<meta name="date" content="2017-03-14" />
+<meta name="date" content="2017-09-29" />
 
 <title>Tidying a mess of data</title>
 
@@ -119,7 +119,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Tidying a mess of data</h1>
 <h4 class="author"><em>Devon P. Ryan</em></h4>
-<h4 class="date"><em>2017-03-14</em></h4>
+<h4 class="date"><em>2017-09-29</em></h4>
 
 </div>
 
@@ -344,13 +344,15 @@ d = read_csv(&quot;../data/foodIntake2.csv&quot;, skip=1)</code></pre>
 ## #   `506` &lt;dbl&gt;, `518` &lt;dbl&gt;, `519` &lt;dbl&gt;, `523` &lt;dbl&gt;, `524` &lt;dbl&gt;,
 ## #   `525` &lt;dbl&gt;, `526` &lt;dbl&gt;</code></pre>
 <p><code>readr</code> figured out the types and converted blanks to <code>NA</code> for us! Let’s fix the first column names:</p>
+<pre class="r"><code>colnames(d)[c(1,20)] = c(&quot;Week&quot;, &quot;Skip&quot;)</code></pre>
 </div>
 <div id="tidy-all-the-things" class="section level1">
 <h1>Tidy all the things</h1>
 <p>We loaded an ugly dataset, but how do we clean it.</p>
 <p><strong>tidyr</strong> and <strong>dplyr</strong>!</p>
-<pre class="r"><code>library(&quot;tidyr&quot;)
-library(&quot;dplyr&quot;, warn.conflicts = FALSE)</code></pre>
+<pre class="r"><code>library(&quot;tidyr&quot;)</code></pre>
+<pre><code>## Warning: package 'tidyr' was built under R version 3.3.2</code></pre>
+<pre class="r"><code>library(&quot;dplyr&quot;, warn.conflicts = FALSE)</code></pre>
 </div>
 <div id="tidyrdplyr" class="section level1">
 <h1>tidyr/dplyr %&gt;%</h1>
@@ -438,6 +440,7 @@ head(d2) # or &quot;d2 %&gt;% head()&quot;</code></pre>
 ## 4    34   526    NA
 ## 5    35   526    NA
 ## 6    36   526    NA</code></pre>
+<p>The syntax for <code>gather()</code> is <code>d %&gt;% gather(Key, Value, ...)</code>. <code>Key</code> becomes a column containing the original column names. <code>Value</code> then becomes a column of the values, matched to their original columns. <code>...</code> defines columns for inclusion/exclusion. Excluding <code>Week</code> results in it being added as a new column.</p>
 <p>Add the group</p>
 <pre class="r"><code>d2$Group = c(rep(rep(&quot;Control&quot;, 33), 18), rep(rep(&quot;Treatment&quot;, 33), 17))</code></pre>
 </div>
@@ -475,58 +478,41 @@ head(d3)</code></pre>
 ## 5     6   Control 3.530000
 ## 6     6 Treatment 2.967765</code></pre>
 </div>
-<div id="tidyr-reshaping" class="section level1">
-<h1>tidyr: Reshaping</h1>
-<p>We can do more than <strong><code>gather()</code></strong></p>
-<ul>
-<li>spread()</li>
-<li>separate()</li>
-<li>unite()</li>
-</ul>
-<pre class="r"><code>dem_polls = read_csv(&quot;http://elections.huffingtonpost.com/pollster/2016-iowa-presidential-democratic-caucus.csv&quot;)</code></pre>
+<div id="quick-exercise" class="section level1">
+<h1>Quick exercise</h1>
+<p>Load the <code>msleep_ggplot2.txt</code> dataset that’s in the <code>data/</code> folder. This is a dataset containing various animals, their genus/order, eating habits (<code>vore</code>: herbivore, carnivore, omnivore) and various sleeping properties (<code>sleep_total</code>: total sleep time (hours), <code>sleep_rem</code>: REM sleep (hours), <code>sleep_cycle</code>: length of a sleep cycle (hours), <code>awake</code>: time awake (hours), <code>brainwt</code>/<code>bodywt</code>: brain and body weight (kg)). This is a standard tab-separated file with a single line header.</p>
+<p>Use <code>filter()</code> to select only primates. How many of the animals in the table are primates (try the <code>nrow()</code> function)?</p>
+<pre class="r"><code>msleep = read_tsv(&quot;../data/msleep_ggplot2.txt&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   .default = col_double(),
-##   Pollster = col_character(),
-##   `Start Date` = col_date(format = &quot;&quot;),
-##   `End Date` = col_date(format = &quot;&quot;),
-##   `Entry Date/Time (ET)` = col_datetime(format = &quot;&quot;),
-##   `Number of Observations` = col_integer(),
-##   Population = col_character(),
-##   Mode = col_character(),
-##   `Pollster URL` = col_character(),
-##   `Source URL` = col_character(),
-##   Partisan = col_character(),
-##   Affiliation = col_character(),
-##   `Question Text` = col_character(),
-##   `Question Iteration` = col_integer()
+##   name = col_character(),
+##   genus = col_character(),
+##   vore = col_character(),
+##   order = col_character(),
+##   conservation = col_character(),
+##   sleep_total = col_double(),
+##   sleep_rem = col_double(),
+##   sleep_cycle = col_double(),
+##   awake = col_double(),
+##   brainwt = col_double(),
+##   bodywt = col_double()
 ## )</code></pre>
-<pre><code>## See spec(...) for full column specifications.</code></pre>
-<pre class="r"><code>View(dem_polls)</code></pre>
-<p>Borrowed from: <a href="https://github.com/datasciencelabs/2016/blob/master/lectures/wrangling/data-wrangling-with-tidyr.Rmd" class="uri">https://github.com/datasciencelabs/2016/blob/master/lectures/wrangling/data-wrangling-with-tidyr.Rmd</a></p>
-</div>
-<div id="tidyr-spread" class="section level1">
-<h1>tidyr: spread()</h1>
-<p>Sometimes you want a “wide-format” for saving as a file. This can be done with <code>spread()</code></p>
-<pre class="r"><code>dem_polls_gathered &lt;- dem_polls %&gt;% 
-                      select(Pollster, `Start Date`, Sanders:Undecided) %&gt;%
-                      gather(candidate, percentage, -`Start Date`, -Pollster)</code></pre>
-<pre class="r"><code>View(dem_polls_gathered %&gt;% spread(candidate, percentage))</code></pre>
-<p>This serves to show how to do a few things. Firstly, one can select a range of columns with <code>FirstName:SecondName</code>. Secondly, you can specify column names that have spaces by enclosing everything in graves (aka backticks), `.</p>
-</div>
-<div id="tidyr-separate" class="section level1">
-<h1>tidyr: separate()</h1>
-<p>Sometimes more than one value is present in each column. We can separate those:</p>
-<pre class="r"><code>dem_polls_separate &lt;- dem_polls %&gt;% 
-                        separate(col = `End Date`, into = c(&quot;y&quot;, &quot;m&quot;, &quot;d&quot;))</code></pre>
-<pre class="r"><code>View(dem_polls_separate)</code></pre>
-<p>Note that the date is now split.</p>
-</div>
-<div id="tidyr-unite" class="section level1">
-<h1>tidyr: unite()</h1>
-<p>Of course if you can split columns, you can unite them too:</p>
-<pre class="r"><code>dem_polls_united = dem_polls_separate %&gt;% unite(col = end_date, y, m, d, sep = &quot;/&quot;)</code></pre>
-<pre class="r"><code>View(dem_polls_united)</code></pre>
+<pre class="r"><code>head(msleep)</code></pre>
+<pre><code>## # A tibble: 6 × 11
+##                         name      genus  vore        order conservation
+##                        &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;        &lt;chr&gt;
+## 1                    Cheetah   Acinonyx carni    Carnivora           lc
+## 2                 Owl monkey      Aotus  omni     Primates         &lt;NA&gt;
+## 3            Mountain beaver Aplodontia herbi     Rodentia           nt
+## 4 Greater short-tailed shrew    Blarina  omni Soricomorpha           lc
+## 5                        Cow        Bos herbi Artiodactyla domesticated
+## 6           Three-toed sloth   Bradypus herbi       Pilosa         &lt;NA&gt;
+## # ... with 6 more variables: sleep_total &lt;dbl&gt;, sleep_rem &lt;dbl&gt;,
+## #   sleep_cycle &lt;dbl&gt;, awake &lt;dbl&gt;, brainwt &lt;dbl&gt;, bodywt &lt;dbl&gt;</code></pre>
+<p>Now the filtering/counting:</p>
+<pre class="r"><code>msleep %&gt;% filter(order == 'Primates') %&gt;% nrow()</code></pre>
+<pre><code>## [1] 12</code></pre>
+<p>You can quickly get a lot of useful metrics by creating chains of simple commands like this.</p>
 </div>
 
 

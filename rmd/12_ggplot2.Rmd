@@ -385,20 +385,42 @@ Note that while you can change everything in ggplot, somethings are probably sim
 # Exercise
 
 Load the `hflights.txt` file from `data/`. This is another tab-separated dataset with a single header line. This is a dataset containing information on flights departing Houston in 2011. Of particular interest are the arrival times (`ArrTime`), arrival delays times (`ArrDelay`) and day of the week (`DayOfWeek`). Are you more likely to have a delay at any particular time of day or day of the week? We don't care about p-values, we want differences we can actually see (i.e., something that we'd notice as a passenger).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 ```{r}
 hflights = read_tsv("../data/hflights.txt")
 ggplot(hflights, aes(x=factor(DayOfWeek), y=ArrDelay)) +
@@ -412,7 +434,7 @@ No compelling difference in delay as a function of day. What about as a function
 ggplot(hflights, aes(x=ArrTime, y=ArrDelay)) + 
     geom_smooth(method="lm") +
     xlab("Time of day (HHMM)") + ylab("Delay (Minutes)")
-ggplot(hflights, aes(x=ArrTime) + 
+ggplot(hflights, aes(x=ArrTime)) + 
     geom_bar()
 ```
 
