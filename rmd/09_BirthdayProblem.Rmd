@@ -6,7 +6,7 @@ output: html_document
 ---
 
 # The Problem:
-Given $n$ people at a birthday party, how likely is it that at least two of them share a birthday?
+Given $n$ people at a party, how likely is it that at least two of them share a birthday?
 
 # Sampling Excerices
 Sample uniformly (with replacement) from 365 days (no Feb 29)
