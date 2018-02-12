@@ -61,6 +61,8 @@ read.table(file, header=TRUE, comment.char = "%")                        # comme
 read.table(file, header=TRUE, comment.char = "%", sep="\t")              # separators
 read.table(file, header=TRUE, comment.char = "%", sep="\t", quote="\"")  # quote character. What is the default?
 
+# read.delim(file, comment.char = "%")                                   # alternative with certain options in place
+
 # Now fill the data frame
 D=read.table(file, header=TRUE, comment.char = "%", sep="\t", quote="\"")
 

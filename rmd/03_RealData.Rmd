@@ -86,11 +86,11 @@ str(niris)
 
 ```{r}
 cor(niris)   # correlation matrix. Which correlation coefficient?
-plot(niris) # provide a visualization, try also pairs(iris)
+pairs(niris) # provide a visualization, try also plot(iris)
 
 # assign species-colors to each observation 
 cols = iris$Species                        # understand how color is defined
-plot(niris, col=cols, lower.panel=NULL)   # "cols" was defined in task above
+pairs(niris, col=cols, lower.panel=NULL)   # "cols" was defined in task above
 ```
 
 ***

@@ -1,7 +1,7 @@
 ---
 title: "Image Power: Vizualizing Matrices"
 author: "Thomas Manke"
-date: "5 Dec 2016"
+date: "12 Feb 2018"
 output: html_document
 ---
 
@@ -78,10 +78,12 @@ s=iris[,5]                 # species attributes (factor)
 ```
 
 # Goals:
-* simplify description of data matrix $D$: data reduction & extract most important information
+* simplify description of data matrix $M$: data reduction & extract most important information
 * maximal variance: look for direction in which data shows maximal variation
 * minimal error: allow accurate reconstruction of original data 
 
+![PCA goal](../images/PCA.gif)
+from amoeba @ https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues
 ```{r}
 pca=prcomp(M, scale=TRUE)
 ```
@@ -93,11 +95,17 @@ R=pca$rotation  # rotation matrix
 S=pca$x         # score matrix = rotated scaled data matrix = Ds %*% R
 pairs(S, col=s) # 
 plot(R[,1:2], main="Rotations")
+arrows(0,0,R[,1], R[,2], col="red")  # add arrows: ?arrows
 # covariance matrix of scores is diagonal (by design)
 # --> principal components are uncorrelated
 CS=cov(S)   # = t(S) %*% S / (nrow(S) - 1)
 CS
+
 ```
+
+Covariance: $Cov(X)= \frac{1}{N-1} X_c^T X_c~~~;~~~ X_c \equiv X-\bar X ~~~({\rm centered})$
+
+Correlation $Cor(X)=\frac{1}{N-1}X_s^T X_s~~~;~~~ X_s \equiv (X-\bar X)/\sigma ~~~({\rm scaled})$
 
 Notice that the higher components do not add much to the variance, so we may as well represent the transformed data in only the first two dimensions:
 ```{r}
