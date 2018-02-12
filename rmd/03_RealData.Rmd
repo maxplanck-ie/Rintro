@@ -96,6 +96,16 @@ pairs(niris, col=cols, lower.panel=NULL)   # "cols" was defined in task above
 ***
 
 # From Correlations to Models
+
+Goal: Model some dependent variables y as function of other explanatory variables x (features)
+
+$y = f(\theta, x) = \theta_1 x +  \theta_0$
+
+For $N$ data points, choose parameters $\theta$ by ordinary least squares: 
+
+$RSS=\sum_{i=1}^{N} (y_i - y(\theta, x_i))^2 \to min$
+
+
 ```{r}
 plot(Petal.Width ~ Petal.Length, data=iris, col=Species) # use model ("formula") notation
 fit=lm(Petal.Width ~ Petal.Length, data=iris)       # fit a linear model
@@ -116,7 +126,10 @@ confint(fit)   # Try to change the confidence level: ?confint
 summary(fit)
 ```
 
-This is a good fit - as suggested by the small p-value (and by visualization).  
+This is a good fit - as suggested by a large coefficient of variation $R^2 \in (0,1)$, a small p-value, (and by visualization).  
+
+$R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{\sum_i(y_i - y(\theta,x_i))^2}{\sum_i(y_i-\bar{y})^2}$
+
 
 Here is an example of a poor fit (replace "Petal" with "Sepal)
 ```{r}
