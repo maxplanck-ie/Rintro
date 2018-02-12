@@ -59,7 +59,7 @@ Notice that:
 * there is an implicit colour scheme: "numerical value $\to$ colour"
 * there are multiple extensions of this in other R-packages: e.g. gplots::heatmap.2
 ```{r}
-cols <- rainbow(3)[iris$Species]  # understand how color is defined
+cols = rainbow(3)[iris$Species]  # understand how color is defined
 heatmap(S,scale="none", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
 ```
 

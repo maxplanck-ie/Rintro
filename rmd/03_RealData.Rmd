@@ -86,18 +86,18 @@ str(niris)
 
 ```{r}
 cor(niris)   # correlation matrix. Which correlation coefficient?
-pairs(niris) # provide a visualization, try also plot(iris)
+plot(niris) # provide a visualization, try also pairs(iris)
 
 # assign species-colors to each observation 
-cols <- rainbow(3)[iris$Species]           # understand how color is defined
-pairs(niris, col=cols, lower.panel=NULL)   # "cols" was defined in task above
+cols = iris$Species                        # understand how color is defined
+plot(niris, col=cols, lower.panel=NULL)   # "cols" was defined in task above
 ```
 
 ***
 
 # From Correlations to Models
 ```{r}
-plot(Petal.Width ~ Petal.Length, data=iris, col=cols) # use model ("formula") notation
+plot(Petal.Width ~ Petal.Length, data=iris, col=Species) # use model ("formula") notation
 fit=lm(Petal.Width ~ Petal.Length, data=iris)       # fit a linear model
 abline(fit, lwd=3, lty=2)                           # add regression line
 ```
@@ -147,7 +147,7 @@ summary(fit2)
 ```{r}
 op=par(no.readonly=TRUE)  # safe only resettable graphical parameters, avoids many warnings
 par(mfrow=c(2,2))         # change graphical parameters: 2x2 images on device
-plot(fit2,col=cols)       # four plots rather than one
+plot(fit2,col=irisout$Species)       # four plots rather than one
 par(op)                   # reset graphical parameters
 ```
 more examples here: http://www.statmethods.net/stats/regression.html
