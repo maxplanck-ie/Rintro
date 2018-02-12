@@ -73,7 +73,7 @@ dev.off()  # close device = pdf file
 
 # Dimensional Reduction: PCA
 ```{r}
-D=as.matrix(iris[,-5])     # numerical data, some operations below require matrices not data frames (%*%)
+M=as.matrix(iris[,-5])     # numerical data, some operations below require matrices not data frames (%*%)
 s=iris[,5]                 # species attributes (factor)
 ```
 
@@ -83,7 +83,7 @@ s=iris[,5]                 # species attributes (factor)
 * minimal error: allow accurate reconstruction of original data 
 
 ```{r}
-pca=prcomp(D, scale=TRUE)
+pca=prcomp(M, scale=TRUE)
 ```
 
 *Task*: What kind of object is pca?

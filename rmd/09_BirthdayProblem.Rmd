@@ -69,9 +69,7 @@ fract=vector("numeric",50)
 for (n in 1:50) { fract[n]=myFract(n) }
 
 plot(1:50, fract)
-D=as.matrix(iris[,-5])     # numerical data, some operations below require matrices not data frames (%*%)
-s=iris[,5]                 # species attributes (factor)
-v
+
 #customized & beautified
 #plot(1:50, fract, main="Birthday Problem: numerical simulation", xlab="People", ylab="Fraction", type="o", col="red", pch=21, bg="grey",lwd=2)
 
