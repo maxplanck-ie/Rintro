@@ -131,6 +131,23 @@ This is a good fit - as suggested by a large coefficient of variation $R^2 \in (
 $R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{\sum_i(y_i - y(\theta,x_i))^2}{\sum_i(y_i-\bar{y})^2}$
 
 
+Plotting predictions with confidence intervals
+```{r}
+x=iris$Petal.Length                       # explanatory variable from fit (here:Petal.Length)
+xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
+ndf=data.frame(Petal.Length=xn)           # put them into new data frame
+
+p=predict(fit, ndf, interval = 'confidence' , level = 0.95)
+plot(Petal.Width ~ Petal.Length, data=iris, col=Species)
+lines(xn, p[,"lwr"] )
+lines(xn, p[,"upr"] )
+
+#some fancy filling
+#polygon(c(rev(xn), xn), c(rev(p[ ,"upr"]), p[ ,"lwr"]), col = rgb(1,0,0,0.5), border = NA)
+
+```
+
+
 Here is an example of a poor fit (replace "Petal" with "Sepal)
 ```{r}
 plot(Sepal.Width ~ Sepal.Length, data=iris, col=cols)  
@@ -138,6 +155,19 @@ fit1=lm(Sepal.Width ~ Sepal.Length, data=iris)
 abline(fit1, lwd=3, lty=2)    
 confint(fit1)  # the estimated slope is indistinguishable from zero
 summary(fit1)
+```
+
+Run predictions:
+```{r}
+x=iris$Sepal.Length                       # explanatory variable from fit (here:Sepal.Length)
+xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
+ndf=data.frame(Sepal.Length=xn)           # put them into data frame
+
+p=predict(fit1, ndf, interval = 'confidence' , level = 0.95)  # predict values
+
+plot(Sepal.Width ~ Sepal.Length, data=iris, col=Species)
+lines(xn, p[,"lwr"] )
+lines(xn, p[,"upr"] )
 ```
 
 

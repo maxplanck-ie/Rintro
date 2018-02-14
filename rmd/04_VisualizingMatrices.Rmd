@@ -67,7 +67,7 @@ heatmap(S,scale="none", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
 In Rstudio, we can export figures from the "Plots" tab. On the console we can define a pdf file as a new device for all subsequent figures. This is usually done only *after* the image is sufficiently optimized
 ```{r}
 pdf("../data/heatmap.pdf") # similar for jpeg, png, ...
-heatmap(M,scale="col", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
+heatmap(S,scale="none", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
 dev.off()  # close device = pdf file
 ```
 
