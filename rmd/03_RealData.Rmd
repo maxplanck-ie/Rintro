@@ -165,7 +165,7 @@ par(op)                   # reset graphical parameters
 ```
 more examples here: http://www.statmethods.net/stats/regression.html
 
-Linear models $y_i=\beta_0 + \beta_1 * x_i + \epsilon_i$ make certain assumptions ($\epsilon_i \propto N(0,\sigma^2)$)
+Linear models $y_i=\theta_0 + \theta_1  x_i + \epsilon_i$ make certain assumptions ($\epsilon_i \propto N(0,\sigma^2)$)
 
 * residuals $\epsilon_i$ are independent from each other (non-linear patterns?)
 * residuals are normally distributed
