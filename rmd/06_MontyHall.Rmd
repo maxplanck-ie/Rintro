@@ -26,26 +26,35 @@ doors=sample(doors) # Why does this amount to shuffling?
 
 Now the candidate picks a random door "pick" (hoping that it might be the winning door)
 ```{r}
-pick=sample(doors,1)
+pick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)
 pick
 ```
 
-Only the show master knows the winning door. Depending on the picked door, the show master will reveal one door that does _not_ contain the price, and _not_ the picked door. 
+Only the show master knows the winning door. Depending on the picked door, the show master will reveal one door that does _not_ contain the price, and _not_ the picked door. This is a more complex task than simple samping - so let's write a function that depends on "pick" and the doors content
+
 ```{r}
-cs=which(doors != "W" & doors != pick) # depending on pick this could be one or two elements
-open=sample(doors[cs],1)
-open
+open_door = function(pick, doors) {
+  # masters choices are limited: do not reveal "win" and do not reveal "pick"
+  choices = doors[ doors != "W" & doors != pick ]
+  return (sample(choices,1))
+}
+```
+
+Now let's use the function to open a door
+```{r}
+open = open_door(pick,doors)
+paste(open)
 ```
 Notice that the showmaster does not really have a choice when the candidate has picked a loosing door (2/3 of the time).
+
 Now the candidate has the choice to switch to the other remaining door (not open, not previously picked).
 The question is: Will the switching strategy be more successful?
 ```{r}
-cc=which(doors != open & doors != pick)
-swit=sample(doors[cc],1)
-swit
+switch=doors[ doors != pick & doors != open]  
+paste(switch)
 ```
 
-With three doors, the candidate has only two choices to stay with "pick" or to switch to "swit"
+With three doors, the candidate has only two choices to stay with "pick" or to switch to "switch"
 
 The above results from sampling will vary (for each candiate and participant of the R-course). Now let's play this game N times. The goal is to count the number of successes for the switching strategy. 
 
@@ -53,30 +62,24 @@ The above results from sampling will vary (for each candiate and participant of 
 We want to execute the commands above repeatedly.
 To this end the console is not very useful. Therefore we leave the console for a moment, and first collect the individual commands in a file (an Rscript). Thankfully Rstudio also has an editor for such purposes.
 
-**Task**: Open (a new and empty) Rscript file and save the lines below in a file called MontyHall.R.
+**Task**: Open (a new and empty) Rscript file. Include the definition of the function "open_door" and save the lines below in a file called MontyHall.R.
 
 **Tip**: Almost all command lines are already in your history, where you have tested that they are working properly. In the history panel, you can select those lines and send them "To Source", i.e the newly opened file. This should avoid redundant typing and errors. All you need to do is to wrap the commands into the *for* loop.
 
 ```{r, eval=FALSE}
-#Comment Line: An Rscript to simulate the Monty Hall Problem
+#Comment Line: A small Rscript to simulate the Monty Hall Problem
 doors=c("W","L1","L2")
 N=10000
-
-success_swit=0
-for (i in 1:N) {
-  doors=sample(doors)                     # shuffle doors
-  pick=sample(doors,1)                    # candidate picks one door at random
-  cs=which(doors != "W" & doors != pick)  # show master picks one other (non-win)
-  open=sample(doors[cs],1)                # content of this door   
-  cc=which(doors != open & doors != pick) # candidates second choice
-  swit=sample(doors[cc],1)                # content of that door  
- 
-  # if the switched door contains the win, increase the number of successes
-  if (swit=="W") { success_swit=success_swit+1 }
+success=0
+for (i in 1:N){
+  doors = sample(doors)                           # shuffle doors
+  pick  = sample(doors,1)                         # candidate picks one door at random
+  open  = open_door(pick,doors)                   # show master picks one other door (!= pick != win)
+  switch= doors[ doors != pick & doors != open]   # candidate has choice to switch
+  if (switch=="W") { success=success+1}           # count if switching strategy is successful (= "win")
 }
 
-success_stay = N - success_swit
-cat("N= ",N, "successes with stay= ", success_stay, " successes with switching= ",success_swit,"\n")
+cat("successes with switching= ",success, "success_rate: ", success/N, "\n")
 ```
 
 Congratulations! You have just written your first "R script".
@@ -117,6 +120,7 @@ Pr(3=car|2=shown) = 2 $\times$ Pr(1=car|2=shown)
 
 # Did you understand?
 * solving problems (in R) with simulations
+* writing functions to encapsulate more complex tasks
 * loops (for) and conditionals (if)
 * which()
 * selection/exclusion in vector
