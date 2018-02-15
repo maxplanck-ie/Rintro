@@ -143,6 +143,24 @@ abline(h=log(pt), v=log(pt), col="red")                                         
 cor(B[,"FHL1"],B[,"RAP1"])                                                       # Phi-coefficient = Pearson CC for binary variables
 ```
 
+Notice that some correlations may be undefined because all entries for certain TF (=columns) are zero
+```{r}
+cor(B[,"ABF1"], B[,"HAA1"]) 
+sum(B[,"HAA1"])
+```
+
+Find matrix elements with maximal correlations (ignore NA's and ignore diagonal=1)
+```{r}
+C=cor(B)
+m=max(C[upper.tri(C)], na.rm=TRUE)  # maximum of upper-triagonal matrix. Ignore NA for maximum
+idx=which(C==m, arr.ind = TRUE)     # return matrix indices. There are two index pairs  because C is symmetric.
+idx
+i1=idx[1,1]
+j1=idx[1,2]
+
+cat(colnames(C)[c(i1,j1)], C[i1,j1])
+```
+
 Contigency tables
 ```{r}
 table(B[,"FHL1"])               # 194 genes bound by FHL1
