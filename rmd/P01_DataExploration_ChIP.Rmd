@@ -1,0 +1,156 @@
+---
+title: "Data Exploration: Regulatory Modules from ChIP-seq"
+author: "Thomas Manke"
+date: "`r date()`"
+output: html_document
+---
+
+## Obtain and filter data
+Goal: Download data from one of the first large scale ChIP-studies from the Rick Young lab:
+Lee et al. (2002) Transcriptional Regulatory Networks in Saccharomyces cerevisea.
+
+Subgoals:
+1. Find Rick Young lab homepage (google), go to the "Data Download"" section, and find the relevant publication.
+
+2. In the "Download Raw Data" section copy the second link "binding of regulators to genes (text file)".
+This file contains binding data (intensity ratios and their p-values) for more than 6000 yeast genes and 113 yeast transcription factors
+
+3. filter data to obtain a matrix of p-values where (rows=genes) and (columns=TFs)
+
+```{r, eval=FALSE}
+# define a filename (notice that R can read from http)
+# Beware: For slow network connections it will be faster to first download the file to local storage and work from there.
+
+chip="http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_gene.tsv"
+
+###############################
+# Data munging: Trial and errors have been commented out 
+# first problem: two headers --> skip first --> skip line 1
+# D=read.table(file=chip, header=TRUE,  skip=1, sep="\t")
+# nrow(D)  # 511 << 6000 !!!???
+
+# second problem: quote symbols in names (')
+# cf=count.fields(chip,sep="\t") # many NA --> quoted fields got missing
+
+D=read.table(chip, header=TRUE,  sep="\t", quote="\"", skip=1)
+rownames(D)=D[,1]          # ORF-symbols in column 1, keep them as rownames 
+ic=c(1:4,seq(6,230,by=2))  # define column indices to be excluded (only keep p-values)
+P=D[,-ic]                  # new data-frame of p-values, exclude superfluous columns and ratios
+###############################
+
+# save cleaned data for future use
+write.table(P,file="../data/chip.tsv", sep="\t", quote=FALSE)  # write p-values to file
+```
+
+### Cleaned Real
+Let's start with a cleaned-up data set. Now available at "https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/chip.tsv"
+(locate this *raw* file on https://github.com/maxplanck-ie/Rintro/)
+
+```{r}
+fn="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/chip.tsv"  # remote filename
+P=read.table(file=fn, header=TRUE, sep="\t")
+```
+
+Describe data and sanity checks
+```{r, eval=FALSE}
+str(P)            # describe the data structure
+which(is.na(P))   # make sure everything is properly defined
+which(P<0 || P>1) # make sure p-values are all between 0 and 1
+```
+
+Now we can start looking at something more interesting
+```{r}
+# defined boolean matrix of TF-gene interactions (based on p-value threshold)
+pt=1e-3
+B=P<pt  # result is matrix.
+
+# reduce problem size for illustration purposes, since heatmap is slow 
+i=rowSums(B)>1   # only genes with sufficient number of TF-binding
+j=colSums(B)>40  # only TF with sufficient number of targets
+
+# heatmap needs numeric matrix ==> convert logical to integer 
+B=1*B  
+# equivalent tricks: B[B]=1; mode(B) = "integer", 
+# but _not_ as.integer(B)  nor as.numeric(B)  # this will strip attributes, i.e. dimensions
+# B[]=as.numeric(B) works as it fills a vector into the prexisting matrix B
+
+heatmap(B[i,j], scale="none", col=c("white","black"), labRow=FALSE)
+#d3heatmap(B[i,j], scale="none", col=c("white","black"), distfun = function(c) dist(c, method="binary"))
+```
+
+Explore relation between FHL1 and RAP1
+```{r}
+smoothScatter(log(P[,"FHL1"]),log(P[,"RAP1"]),main="smoothScatter of p-values")  # scatterplot of log(p-values) for two TF 
+abline(h=log(pt), v=log(pt), col="red")                                          # "arbitrary" thresholds
+cor(B[,"FHL1"],B[,"RAP1"])                                                       # Phi-coefficient = Pearson CC for binary variables
+```
+
+Notice that some correlations may be undefined because all entries for certain TF (=columns) are zero
+```{r}
+cor(B[,"ABF1"], B[,"HAA1"]) 
+sum(B[,"HAA1"])
+```
+
+Find matrix elements with maximal correlations (ignore NA's and ignore diagonal=1)
+```{r}
+C=cor(B)
+m=max(C[upper.tri(C)], na.rm=TRUE)  # maximum of upper-triagonal matrix. Ignore NA for maximum
+idx=which(C==m, arr.ind = TRUE)     # return matrix indices. There are two index pairs  because C is symmetric.
+idx
+i1=idx[1,1]
+j1=idx[1,2]
+
+cat(colnames(C)[c(i1,j1)], C[i1,j1])
+```
+
+Contigency tables
+```{r}
+table(B[,"FHL1"])               # 194 genes bound by FHL1
+tb=table(B[,"FHL1"],B[,"RAP1"]) # contingency table: 119 genes bound by FHL1 and RAP1
+tb
+
+fisher.test(tb)                 # the overlap is highly unexpected
+chisq.test(tb)
+```
+
+Generalize: Find other groups of TF with common targets 
+```{r}
+C=cor(B[,j])                             # correlation matrix. Alternative: C=cor(log(P+eps))
+heatmap(C,col = rev(grey.colors(100)) ) 
+```
+
+### Packages
+Heatmaps can summarize overall data, but are often difficult to explore.
+Additional tools are needed. Enter the world of *R packages*.
+
+Explore CRAN "https://cran.r-project.org" orGoogle "interactive heatmaps in R"
+```{r}
+#install.packages("heatmaply")   # only need to install once (but takes some time: ~10min)
+library(heatmaply)               # only need once per session. notice messages and warnings
+heatmaply(C,col = rev(grey.colors(100)) ) 
+```
+
+Investigating overlaps:
+```{r}
+# Which genes are commonly bound by FHL1 and RAP1?
+names(which(B[,"FHL1"]==1 & B[,"RAP1"]==1))
+
+# create a Venn Diagram of target gene overlaps (with package gplots)
+library(gplots)
+L=list(FHL1=which(B[,"FHL1"]==1),RAP1=which(B[,"RAP1"]==1),MCM1=which(B[,"MCM1"]==1), STE12=which(B[,"STE12"]==1) )
+vn=venn(L)
+
+# better than Venn
+library(UpSetR)
+upset( as.data.frame(B), sets = c("FHL1", "RAP1", "MCM1", "STE12"), empty.intersections = TRUE )
+```
+
+***
+
+# Review:
+* Data munging: import often requires basic processing and filtering ==> use clean data
+* data retyping: data.frame --> Boolean matrix --> Integer
+* data exploration and visualization heatmap(), smoothScatter()
+* quantitative data descriptions: cor(), table()
+* tests: fisher.test(), chi2.test()
+* packages: heatmaply, gplots (venn), UpSetR
