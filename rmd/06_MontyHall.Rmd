@@ -17,11 +17,13 @@ Question: which strategy is more likely to succeed in winning the price?
 Define the three doors, only one of which hides a price - the winning door "W". The other two doors are loosers (L1 and L2)
 ```{r}
 doors=c("W","L1","L2")
+doors
 ```
 
 First assume that the doors are shuffled randomly
 ```{r}
 doors=sample(doors) # Why does this amount to shuffling?
+doors
 ```
 
 Now the candidate picks a random door "pick" (hoping that it might be the winning door)
@@ -43,7 +45,7 @@ open_door = function(pick, doors) {
 Now let's use the function to open a door
 ```{r}
 open = open_door(pick,doors)
-paste(open)
+open
 ```
 Notice that the showmaster does not really have a choice when the candidate has picked a loosing door (2/3 of the time).
 
