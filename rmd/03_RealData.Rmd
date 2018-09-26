@@ -126,12 +126,12 @@ confint(fit)   # Try to change the confidence level: ?confint
 summary(fit)
 ```
 
-This is a good fit - as suggested by a large coefficient of variation $R^2 \in (0,1)$, a small p-value, (and by visualization).  
+This is a good fit - as suggested by a small residual standard error, a large coefficient of variation $R^2 \in (0,1)$, a small p-value, (and by visualization).  
 
 $R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{\sum_i(y_i - y(\theta,x_i))^2}{\sum_i(y_i-\bar{y})^2}$
 
 
-Plotting predictions with confidence intervals
+# Plotting predictions with confidence intervals
 ```{r}
 x=iris$Petal.Length                       # explanatory variable from fit (here:Petal.Length)
 xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
@@ -145,19 +145,23 @@ lines(xn, p[,"upr"] )
 #some fancy filling
 #polygon(c(rev(xn), xn), c(rev(p[ ,"upr"]), p[ ,"lwr"]), col = rgb(1,0,0,0.5), border = NA)
 
+## using ggplot2 - full introduction later
+library(ggplot2)
+g = ggplot(iris, aes(Petal.Length, Petal.Width, colour=Species))
+g + geom_point() + geom_smooth(method="lm", se=TRUE, color="red") + geom_smooth(method="loess", colour="blue")
 ```
 
-
-Here is an example of a poor fit (replace "Petal" with "Sepal)
+# Example of a poor fit (replace "Petal" with "Sepal)
 ```{r}
 plot(Sepal.Width ~ Sepal.Length, data=iris, col=cols)  
 fit1=lm(Sepal.Width ~ Sepal.Length, data=iris)     
 abline(fit1, lwd=3, lty=2)    
-confint(fit1)  # the estimated slope is indistinguishable from zero
+confint(fit1)                     # estimated slope is indistinguishable from zero
 summary(fit1)
 ```
+*Interpretation*: slope is not significantly distinct from 0.
 
-Run predictions:
+# Run predictions:
 ```{r}
 x=iris$Sepal.Length                       # explanatory variable from fit (here:Sepal.Length)
 xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
@@ -169,6 +173,57 @@ plot(Sepal.Width ~ Sepal.Length, data=iris, col=Species)
 lines(xn, p[,"lwr"] )
 lines(xn, p[,"upr"] )
 ```
+
+
+
+
+# Factorial variables as predictors
+In the iris example the "Species" variable is a factorial (categorical) variable with 3 levels.
+Other typical examples: different experimental conditions or treatments.
+
+```{r}
+plot(Petal.Width ~ Species, data=iris)
+fit=lm(Petal.Width ~ Species, data=iris)
+summary(fit)
+```
+*Interpretation*:
+
+"setosa" (1st species) has mean Petal.Width=0.246(29). This is significantly different from 0 (p-value small. useless)
+"versicolor" (2nd species) has mean Petal.Width = Petal.Width(setosa) + 1.08(4) which is significantly larger (t~26. tiny p-value). there is a stat. significant difference between groups/species.
+"virginica" (3rd species) has mean Petal.Width = Petal.Width(setosa) + 1.78(4)
+
+# More complicated models
+Determine residual standard error for different fits with various complexity
+```{r}
+fit=lm(Petal.Width ~ Petal.Length, data=iris)
+paste(toString(fit$call), sigma(fit))
+fit=lm(Petal.Width ~ Petal.Length + Sepal.Length, data=iris)  # function of more than one variable
+paste(toString(fit$call), sigma(fit))
+fit=lm(Petal.Width ~ Species, data=iris)                      # function of categorical variables
+paste(toString(fit$call), sigma(fit))
+fit=lm(Petal.Width ~ . , data=iris)                          # function of all other variable (numerical and categorical)
+paste(toString(fit$call), sigma(fit))
+```
+
+... more complex models tend to have smaller residual standard error -> "model selection" (AIC)
+
+
+# Anova
+summary(fit) contains information on the individual coefficients. They are difficult 
+
+```{r}
+fit = lm(Petal.Width ~ Petal.Length + Sepal.Width + Sepal.Length + Species , data=iris) 
+summary(fit)
+```
+
+Question: Rather than looking at differences between different factor levels. Does the factor "Species" as a whole account for variation in the observed Petal.Width. Sum-of-squared analysis: Anova  
+```{r}
+anova(fit) 
+
+# order of variable matters: the following is not the same
+# anova( lm(Petal.Width ~ . , data=iris) )
+```
+*Interpretation*: Species account for much variation in the data (F(2, 147)=960. p tiny)
 
 
 **Task**: Repeat the linear regression Petal.Width ~ Petal.Length with an *outlier* in the data 
