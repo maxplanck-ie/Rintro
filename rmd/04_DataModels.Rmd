@@ -105,8 +105,6 @@ lines(xn, p[,"upr"] )
 ```
 
 
-
-
 # Factorial variables as predictors
 In the iris example the "Species" variable is a factorial (categorical) variable with 3 levels.
 Other typical examples: different experimental conditions or treatments.
@@ -118,7 +116,7 @@ summary(fit)
 ```
 *Interpretation*:
 
-"setosa" (1st species) has mean Petal.Width=0.246(29). This is significantly different from 0 (p-value small. useless)
+"setosa" (1st species=reference) has mean Petal.Width=0.246(29). This is significantly different from 0 (p-value small. useless)
 "versicolor" (2nd species) has mean Petal.Width = Petal.Width(setosa) + 1.08(4) which is significantly larger (t~26. tiny p-value). there is a stat. significant difference between groups/species.
 "virginica" (3rd species) has mean Petal.Width = Petal.Width(setosa) + 1.78(4)
 
@@ -139,14 +137,14 @@ paste(toString(fit$call), sigma(fit))
 
 
 # Anova
-summary(fit) contains information on the individual coefficients. They are difficult 
+summary(fit) contains information on the individual coefficients. They are difficult to interpret
 
 ```{r}
 fit = lm(Petal.Width ~ Petal.Length + Sepal.Width + Sepal.Length + Species , data=iris) 
 summary(fit)
 ```
 
-Question: Rather than looking at differences between different factor levels. Does the factor "Species" as a whole account for variation in the observed Petal.Width. Sum-of-squared analysis: Anova  
+**Question**: Rather than looking at differences between different factor levels. Does the factor "Species" as a whole account for variation in the observed Petal.Width. Sum-of-squared analysis: Anova  
 ```{r}
 anova(fit) 
 
@@ -189,11 +187,8 @@ Linear models $y_i=\theta_0 + \theta_1  x_i + \epsilon_i$ make certain assumptio
 
 ***
 # Review:
-* use and understand frequently used data sets (iris)
-* summary  for descriptive statistics
-* plot() for X-Y plots and overloading for other classes (lm)
-* hist(), boxplot()
-* customize arguments: line width, colours, ...
-* correlations: cor()
+* dependencies between variable can often be modeled
 * linear model lm(): fitting, summary and interpretation
-* Notice that the data used was extremely clean and structured: data()
+* correlation coefficients can be misleading
+* linear models may not be appropriate.  >example(anscombe)
+
