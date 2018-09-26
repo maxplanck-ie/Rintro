@@ -1,0 +1,223 @@
+---
+title: "Distributions and Testing"
+author: "T. Manke"
+date: "7 Dec 2016"
+output:
+  html_document: default
+---
+# Pseudo-Random Sampling (with replacement)
+```{r}
+coins=c(0,1)  # ~ (tail, head="success")
+
+sample(coins,10,replace=TRUE)   # throw coins 10 times
+sample(coins,10,replace=TRUE)   # and again (pseudorandom numbers)
+sample(coins,10,replace=TRUE)   # and again (pseudorandom numbers)
+
+# random number generators need a seed variable
+# usually this is implicitly set by some time stamp and process ID: --> ?set.seed
+# here we set it explicitly based on some fixed integer (123 is arbit)
+set.seed(123)     # 123 is arbitrary
+sample(coins,10,replace=TRUE)   
+set.seed(123)    # use _identical_ seed
+sample(coins,10,replace=TRUE)   # deterministic result
+```
+
+
+# Fair and Unfair coins
+```{r}
+N=100         # number of throws
+# two coins, each thrown N times
+fair=sample(coins,N,replace=TRUE)                      # unbiased sampling (fair coin)
+unfair=sample(coins,N,replace=TRUE, prob=c(0.4,0.6))   # biased sampling
+
+# generate table of counts
+counts=cbind(fair=table(fair),unfair=table(unfair))
+
+# define some (non-default) colors for barplot
+myblue=rgb(0,0,1,0.5)
+myyell=rgb(1,1,0,0.5)
+barplot(counts, col=c(myblue,myyell), legend.text=TRUE)
+```
+
+Based on such sampling experiments (Bernoulli), how can we test if coin was fair (p=0.5) or unfair (p>0.5)?
+
+## 1. Define a "test statistics"
+Number of heads ("successes")
+```{r}
+fair_head=sum(fair)
+unfair_head=sum(unfair)
+cat("fair=", fair_head, "unfair=", unfair_head)
+```
+
+## 2. Define Fair Expectation
+Expected distribution of test-statistics. For $N$ coins (Bernoulli variables), the sum of heads ($k$) follows the *Binomial Density distribution*: 
+
+$B(k | N,p) = {N \choose k} p^k(1-p)^{(N-k)}$ 
+
+Null hypothesis (fair coin) $H_0: p=0.5$
+```{r}
+k=0:100
+y=dbinom(k, size=N, prob=0.5)
+title=paste("Binomial (",N,",",0.5,")")
+plot(k,y, main=title)
+abline(v=fair_head, col="green") # plot observation from fair coin
+abline(v=unfair_head, col="red") # plot observation from unfair coin
+
+# same for cummulative distribution function
+y=pbinom(k,size=N,prob=0.5)
+plot(k,y, main="Binomial Distribution Function")
+abline(v=fair_head, col="green") # plot observation from fair coin
+abline(v=unfair_head, col="red") # plot observation from unfair coin
+```
+
+## 3. Evaluate surprise: Fisher's P-value
+Assuming fair distribution ($H_0$), calculate probability for observing a given number of heads (or larger) = area under upper tail
+```{r}
+pf=pbinom(fair_head-1,   size=100, prob=0.5, lower.tail=FALSE)   # why "fair_head - 1" ?
+pu=pbinom(unfair_head-1, size=100, prob=0.5, lower.tail=FALSE) 
+cat("p(fair)=", pf, "p(unfair)=", pu)
+```
+**Task**: Report those p-values to the class.
+
+The same can be obtained by a binomial test. Notice different choices of "more extreme"
+```{r}
+# as above: is the number of heads greater than expected by chance
+bt=binom.test(unfair_head, 100, 0.5, alternative="greater")  
+bt$p.value
+
+# two.sided: is the number of heads higher or lower than expected by chance
+bt=binom.test(unfair_head, 100, 0.5, alternative="two.sided") 
+bt$p.value  # here: = 2 x one-sided (because of symmetry for prob=0.5)
+
+# binom.test() returns more information 
+# e.g. 95% confidence interval for success probability
+bt$conf.int  # does the confidence interval include p=0.5?
+```
+
+
+## 4. P-value Simulation
+Goal: sample larger number of p-values
+```{r}
+NR=200
+#1. generate number of heads from NR experiments
+H0 = rbinom(NR, size=N, prob=0.5)
+
+#2. convert vector H0 to vector of p-values
+p0 = pbinom(H0-1, size=N, prob=0.5, lower.tail=FALSE) 
+
+head(sort(p0)) # some p-values are small
+
+# discretization of surprisal (acceptance/rejection). R. Fisher would not have done this.
+table(p0 < 0.05)
+```
+
+
+**Lessons**: 
+
+* P-values are random variables
+* fair coins can produce small p-values (unfair coins can produce large p-values) 
+* Fisher significance testing relies on single hypothesis: $H_0$
+* test-statistics $\to$ null distribution $\to$ p-value
+* different ways to define "more extreme" events (e.g. one- or two-tailed)
+* P-value is not everything; report confidence interval
+
+***
+
+# Neyman-Pearson Procedure
+Formalize rejection and acceptance procedure. Introduce the *alternative hypothesis*.
+$N$ throws of a biased coin will also generate a certain number of heads.
+Repeating this experiment many times (NR) will generate a distribution of the number of heads:
+```{r}
+Ha=rbinom(NR, size=N, prob=0.6)
+```
+
+Goal: Based on $H_0$ and $H_a$, define a threshold to reject one or the other hypothesis.
+```{r}
+# set up some graphics parameters for convenience
+br=seq(30,80,2)
+
+# plot histograms
+hist(H0, breaks=br, col= myblue, xlim=c(30,80), ylim=c(0,50), xlab= "Score", main="H0 and Ha")
+hist(Ha, breaks=br, col= myyell, add=TRUE)
+legend("topright", c("H0","Ha"), fill=c(myblue,myyell))
+
+# illustrate some (arbitrary) threshold
+thresh=55
+abline(v=thresh,lwd=2,col="red")
+```
+
+## Contigency table (Confusion matrix) for given threshold
+Each decision is a compromise between false positives and false negatives
+```{r}
+d1 = data.frame(test=H0, coin="H0")
+d2 = data.frame(test=Ha, coin="Ha")
+df = rbind(d1,d2)
+
+contigencyTable = function(df,thresh) { 
+
+  df$test=ifelse(df$test<thresh, "H0", "Ha")
+  C=table(df)
+  
+  # Type1 = FPR = FP/[FP+TN] = 1 - Specificity = Pr (reject|H0)
+  Type1=C["Ha", "H0"] / (C["Ha", "H0"] + C["H0", "H0"])
+
+  # Type2 = FNR = FN/[TP+FN] = 1 - Sensitivity = 1 - power = 1 - recall = Pr(accept|Ha)
+  Type2=C["H0", "Ha"] / (C["H0", "Ha"] + C["Ha", "Ha"])
+
+  # PPV = TP/[TP + FP] = 1 - FDR = Pr(Ha|reject)
+  PPV=C["Ha", "Ha"] / (C["Ha", "Ha"] + C["Ha", "H0"])
+
+  # FDR = FP/[TP + FP] = 1 - PPV = Pr(H0|reject)
+  FDR=C["Ha", "H0"] / (C["Ha", "Ha"] + C["Ha", "H0"])
+  
+  show(C)
+  cat("thresh=",thresh,"Type1=",Type1,"Type2=",Type2,"power=",1-Type2,"FDR=",FDR)
+}
+
+contigencyTable(df,thresh=55)
+contigencyTable(df,thresh=65)
+
+# Increasing the bias (effect size)
+Ha=rbinom(NR, size=N, prob=0.7)
+d1 = data.frame(test=H0, coin="H0")
+d2 = data.frame(test=Ha, coin="Ha")
+hist(H0, xlim=c(30,80), col=myblue)
+hist(Ha, col=myyell,add=TRUE)
+contigencyTable(rbind(d1,d2), thresh=55)
+```
+
+**Lessons**: 
+
+* acceptance/rejection procedure requires two hypotheses: $H_0$ and $H_a$
+* decision thresholds are always a compromise between Type1 and Type2 errors
+* increasing effect size decreases Type2 errors (increases power)
+* increasing the number of samples decreases both Type1 and Type2
+
+# More Distributions:
+R has numerous ways to (a) generate random numbers from many different distributions, (b) return the density function and (c) return the cummulative distribution function (CDF).
+
+$p(x) = 1 - \mbox{CDF} = Pr (X \ge x)$
+
+```{r}
+x=rnorm(100)
+d=dnorm(-10:10)
+p=pnorm(-10:10)
+```
+
+**Task**: generate 1000 numbers from a normal distribution centered at $\mu=1$ with a variance of $\sigma^2=9$. Plot the histogram.
+
+```{r, echo=FALSE}
+r=rnorm(1000,mean=1,sd=3)
+hist(r, col="red")
+```
+
+***
+# Review:
+* weighted sampling
+* table(), barplot()
+* distributions: densities, p-values, random number generators
+* test statistics, null hypothesis and p-values
+* binom.test (various versions of tests)
+* function() to encapsulated pieces of code, sets of functions --> packages()
+* useful misc: paste(), cat(), rgb(), sort(), ifelse()
+* p.value, confidence interval and statisitical testing
