@@ -1,0 +1,105 @@
+---
+title: "Data and Descriptions"
+author: "Thomas Manke"
+date:  "`r date() `"
+output: html_document
+---
+
+# Famous Data Sets
+R has a large range of pre-defined data sets. They are frequently used to illustrate the functionality of code and software packages. Just type "data()" to get an overview. Let's first focus on the "iris" data set
+
+![Flower Measurements](../images/sepal_petal.jpeg) 
+(Image from blog of mathieu.guillame-bert.com)
+```{r}
+?iris
+str(iris)
+head(iris)
+```
+**Task**: explore this data set in terms of data structures and observables.
+How many rows and columns does this data frame have? Of which type and class. How do you access the data for all petal lengths?
+
+# Descriptive Statistics
+```{r}
+summary(iris)
+plot(iris$Petal.Length) # a plot at last. Simple, but many arguments: ?plot 
+hist(iris$Petal.Length) # and a histogram
+```
+
+**Task** hist() can have many arguments. Use help to find out how the histogram can be customized (e.g. number of break points, title, colors). Try some of it.
+
+# Boxplot: a more condensed summary
+```{r}
+boxplot(iris$Petal.Length)
+```
+
+**Task**: The boxplot above is for *all* data. Create a boxplot of petal length for species "setosa" only.
+```{r, echo=FALSE}
+boxplot(iris$Petal.Length[iris$Species=="setosa"], xlab="setosa", ylab="Petal Length", col="red")
+```
+
+Boxplot understands data frames
+```{r}
+boxplot(iris) # What does the boxplot for Species mean?
+```
+
+#Interlude: Factors = categorical variables
+Factors denote a special class of R-objects that can be thought of as categories (here: species). They have a given number of *levels* which are internally represented as integers.
+```{r}
+class(iris$Species)
+typeof(iris$Species)
+ts=table(iris$Species)  # returns a contigency table ~> histogram for categorical data
+barplot(ts, col=rainbow(3), ylab="observations", cex.names=0.9)
+pie(ts,col=rainbow(3))
+```
+
+***
+
+Boxplot understands factors in data frames
+```{r}
+boxplot( Petal.Length ~ Species, data = iris, las=2) # what does las=2 do ?
+```
+
+**Task**: Use help to add three different colors:
+```{r, echo=FALSE}
+# use help to determine how to add colors
+cols=c("red","yellow","blue")
+boxplot( Petal.Length ~ Species, data = iris, las=2,col=cols)
+```
+
+
+# Correlations
+If a data set has many numerical variables we often want to understand their correlations structure
+```{r}
+x=iris$Petal.Length
+y=iris$Petal.Width
+plot(x,y)                              # again: this can be customized
+abline(v=mean(x),h=mean(y),col="red")  # add vertical/horizontal lines
+cor(x,y)                               # a correlation coefficient: which one?
+```
+
+# All-Against-All Correlations
+**Task**: remove the Species variable from "iris" and store the result in a new data.frame "niris"
+```{r, echo=FALSE}
+niris=iris[,-5]  # generate new data frame without species variable
+str(niris)
+```
+
+```{r}
+cor(niris)   # correlation matrix. Which correlation coefficient?
+pairs(niris) # provide a visualization, try also plot(iris)
+
+# assign species-colors to each observation 
+cols = iris$Species                        # understand how color is defined
+pairs(niris, col=cols, lower.panel=NULL)   # "cols" was defined in task above
+```
+
+
+***
+# Review:
+* use and understand frequently used data sets (iris)
+* summary  for descriptive statistics
+* plot() for X-Y plots and overloading for other classes (lm)
+* hist(), boxplot()
+* customize arguments: line width, colours, ...
+* correlations: cor()
+* Notice that the data used was extremely clean and structured: data()
