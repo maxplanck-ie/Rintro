@@ -1,29 +1,31 @@
 ---
 title: "Introduction"
 author: "Thomas Manke"
-date: "5 Dec 2016"
+date: "`r date() `"
 output: html_document
 ---
 # Overview of R-course
 
-## Day 1: Groundwork
+## Block 1: Groundwork
 * Intro to RStudio: a GUI for R
 * The Basics: data types and classes
 * function structures (understanding output)
-* summarizing data: descriptive statistics
-* simple plotting and correlation analysis
 
+## Block 2: Basic 
+* Data Descriptions
+* Data Visualization: simple plots and advanced heatmaps
+* Data Models: linear models
+* Data Management: getting data in and out
 
-## Day 2: Visualization, Statistics and Scripts
-* getting data in and out
-* advanced visualization: heatmaps
-* case studies and some statistics
-* programming simple scripts
-
-## Day 3: Open the universe
+## Block 3: Open the universe
 * installing and using packages
 * manipulating data: cleaning, filtering, merging
-* from interactive use to scripting
+
+## Block 4: Advanced topics and case studies
+* from interactive use to programming and simple scripts
+* data exploration
+
+
 
 ***
 
