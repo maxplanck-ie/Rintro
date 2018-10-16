@@ -38,17 +38,13 @@ library(ggplot2)
 > - R's base graphics have inconsistent naming/formatting
 >     - It can get difficult to do anything fancy
 > - The "grammar of graphics" better describes how most people think
+>     - A dataset
+>     - A coordinate system (an X and maybe a Y)
+>     - Some sort of geometric object (lines, points, bars, etc.)
 > - ggplot2 is extremely flexible and powerful
 >     - Consistent naming/formatting
 >     - Steeper learning curve
 > - There are a number of extensions built upon ggplot2 (e.g., ggbio, plotly)
-> - Many convenient themes
->     - [ggthemes](https://github.com/jrnold/ggthemes)
->     - [cowplot](https://github.com/wilkelab/cowplot), a nice default theme
-
->- N.B.: In a couple years ggvis will likely replace ggplot2. It has similarish syntax, but is currently targeted toward interactive plots on the web.
-
->- You can currently download the (not yet published) version of Hadley Wickham's ggplot2 book from [his dropbox account](https://www.dropbox.com/s/0lap7tr7zoryyjk/ggplot2-book.pdf?dl=0)
 
 N.B., this document is heavily influenced by the Data Carpentry [ggplot2 presentation](https://github.com/datacarpentry/R-ecology-lesson/blob/instructor_notes/05-visualization-ggplot2.Rmd)
 
@@ -126,8 +122,25 @@ ggplot(data = d2, aes(x = Week, y = Value)) +
 
 ```{r}
 d3 = d2 %>% filter(!is.na(Value))
-ggplot(data = d3, aes(x = Week, y = Value)) +
+ggplot(data = d3, aes(x=Week, y=Value)) +
   geom_line(aes(color=Cage))
+```
+
+# Exercise
+
+Can you make a scatter plot that also includes lines?
+
+
+
+
+
+
+
+
+```{r}
+ggplot(d2, aes(x = Week, y = Value)) +
+  geom_line(aes(color = Cage)) +
+  geom_point(aes(color = Group, shape = Group))
 ```
 
 # Labels
@@ -154,7 +167,15 @@ ggplot(data = d2, aes(x = Week, y = Value)) +
 
 # Summarization plots: geom_smooth
 
-Lines and pounts show literally all of the information...which is really hard to interpret. Sure, we could summarize all of this ourselves:
+Lines and points show literally all of the information...which is really hard to interpret. How might you use dplyr to get rid of all the lines and plut the group average by week?
+
+
+
+
+
+
+
+
 
 ```{r, eval=FALSE}
 d3 = d2 %>% filter(!is.na(Value)) %>% group_by(Group, Week) %>% mutate(avg=mean(Value))
@@ -360,3 +381,61 @@ Themes are just functions, so if you really want to you can write one and then `
 This is just scratching the surface of what you can do with ggplot2. As noted earlier, there's a whole book on this if you really want. From polar coordinates, to heatmaps to geographic maps, you can do pretty much anything in ggplot2. Have a look at [the online manual](http://docs.ggplot2.org/current/) for many more details.
 
 Note that while you can change everything in ggplot, somethings are probably simpler to do in Adobe Illustrator (or similar), since you're saving everything as a PDF anyway.
+
+# Exercise
+
+Load the `hflights.txt` file from `data/`. This is another tab-separated dataset with a single header line. This is a dataset containing information on flights departing Houston in 2011. Of particular interest are the arrival times (`ArrTime`), arrival delays times (`ArrDelay`) and day of the week (`DayOfWeek`). Are you more likely to have a delay at any particular time of day or day of the week? We don't care about p-values, we want differences we can actually see (i.e., something that we'd notice as a passenger).
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+```{r}
+hflights = read_tsv("../data/hflights.txt")
+ggplot(hflights, aes(x=factor(DayOfWeek), y=ArrDelay)) +
+    geom_boxplot() + 
+    xlab("Day of week") + ylab("Arrival Delay (Minutes)")
+```
+
+No compelling difference in delay as a function of day. What about as a function of time of day?
+
+```{r}
+ggplot(hflights, aes(x=ArrTime, y=ArrDelay)) + 
+    geom_smooth(method="lm") +
+    xlab("Time of day (HHMM)") + ylab("Delay (Minutes)")
+ggplot(hflights, aes(x=ArrTime)) + 
+    geom_bar()
+```
+
+There also isn't really a delay according to time of day. Rather, you tend to see more delays later in the day because there are more flights then.

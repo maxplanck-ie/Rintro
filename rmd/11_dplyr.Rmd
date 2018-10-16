@@ -22,6 +22,7 @@ d = read_csv("../data/foodIntake2.csv", skip=1)
 colnames(d)[c(1,20)] = c("Week", "Skip")
 d2 = d %>% select(-Skip) %>% gather(Cage, Value, -Week)
 d2$Group = c(rep(rep("Control", 33), 18), rep(rep("Treatment", 33), 17))
+msleep = read_tsv("../data/msleep_ggplot2.txt")
 ```
 
 This is the messy "food intake in two groups of mice over time" dataset from the tidyr section.
@@ -112,6 +113,49 @@ d2 %>% filter(!is.na(Value)) %>% nrow() # or summarise(foo=n())
 d2 %>% filter(!is.na(Value)) %>% summarise(avg=median(Value))
 ```
 
+# Exercise
+
+Going back to the `msleep_ggplot2.txt` file that we loaded earlier, what's the average time (in hours) that primates spend sleeping?
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+```{r}
+msleep %>% filter(order == 'Primates') %>% summarise(ave=mean(sleep_total))
+```
+
 # dplyr: Grouping data
 
 We can create group and then summarize within them.
@@ -127,6 +171,49 @@ d2 %>% filter(!is.na(Value)) %>% group_by(Group, Week) %>% summarise(avg=mean(Va
 ```
 
 There are 8 results. Why? What happens if we swap the order of **Group** and **Week** in **`group_by`**?
+
+# Exercise
+
+Again, using the `msleep_ggplot2.txt` dataset, what is the average sleep time per order?
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+```{r}
+msleep %>% group_by(order) %>% summarise(ave=mean(sleep_total))
+```
 
 # dplyr: Adding variables
 
@@ -235,24 +322,6 @@ But what if we want a single table with **everything**?
 
 ```{r, echo=TRUE}
 full_join(t1, t2)
-```
-
-# dplyr: Filtering joins - semi_join
-
-What if we just want to filter a table for overlaps with another?
-
-```{r, echo=TRUE}
-semi_join(t1, t2)
-```
-
-Can we do the same with **`filter()`**?
-
-> - `t1 %>% filter(x1 %in% t2$x1)`
-
-The opposite is also possible
-
-```{r, echo=TRUE}
-anti_join(t1, t2)
 ```
 
 # dplyr: Combining datasets
