@@ -1,0 +1,131 @@
+---
+title: "P07_Data_annotation"
+author: "Katarzyna Sikora"
+date: "10/16/2018"
+output: html_document
+---
+
+###Outline:
+
+Using pattern matching functions in R for annotation (and other) purposes.
+Exact and partial matching functions are considered.
+Required packages:
++ data.table
++ biomaRt
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exact pattern matching
+
+#Task1: 
+From a table with 20000 rows, print out the row containing gene expression values for gene with the ensembl ID ENSMUSG00000040329.
+
+```{r }
+library(data.table)
+dat<-fread("")
+%in%
+match()
+grep()
+```
+
+#Task2:
+You have a table with gene expression values for 10 genes of interest. Genes are encoded as ensembl IDs in rownames of the table.
+Annotate the table with gene symbols.
+
+```{r}
+biomaRt
+match()
+merge()
+```
+
+Why not use grep or %in%?
+
+grep only looks up one value at a time.
+%in% returns a logical vector and no (usable) ordering information.
+
+#Task3:
+Given a table of log2-fold changes of gene expression between condition A and condition B, and a table of ChiPseq peaks for transcription factor XX, plot log2FC distributions for genes stratified into bound and not bound by that transcription factor.
+
+```{r}
+%in%
+table()
+boxplot()
+#violin plot
+```
+
+You notice that the two gene groups are very different in size.
+Adjust the plot so that the 'not bound' gene group matches the 'bound' group in size.
+
+```{r}
+sample()
+boxplot()
+```
+
+You rerun this code chunk a couple of times and see that the resulting plot is not identical.
+Make this step reproducible.
+
+```{r}
+set.seed()
+sample()
+boxplot()
+```
+
+##Partial pattern matching and some string operations
+
+#Task4:
+Subset a list of files for some pattern.
+
+```r{}
+dirlist<-c()
+dirlist.sub<-grep("",dirlist,value=TRUE)
+
+basename()
+ #dir
+```
+
+#Task5:
+Given sample names, create group information automatically.
+
+```r{}
+sample_names<-c("WT_1","MT_1","WT_2","MT_2","WT_31","MT_31")
+group<-gsub("_.+","",sample_names)
+as.data.frame(cbind(sample_names,group),stringsAsFactors=FALSE)
+
+sample_names<-c("WT9","MT9","WT12","MT12","WT13","MT13")
+group<-gsub("[0-9]{1,2}$","",sample_names)
+as.data.frame(cbind(sample_names,group),stringsAsFactors=FALSE)
+
+```
+Of interest: check help page for the substr() function.
+
+
+
+#Task6:
+Plot gene expression vs protein abundance values for samples coloured by sample group, for 2 or more groups.
+
+```r{}
+plotdat<-data.frame(SampleID=c("WT9","MT9","WT12","MT12","WT13","MT13"),RNAseq=c("220","48","340","56","280","50"),MASSPEC=c("1200","100","1800","120","1600","160")
+group<-gsub("[0-9]{1,2}$","",plotdat$SampleID)
+colv1<-ifelse(group=="WT","grey60","darkred")
+colv1
+
+cdict<-c("WT"="grey60","MT"="darkred")
+colv2<-cdict[group]
+colv2
+
+plotdat$Group<-group #no need to reorder
+plotdat$Colv<-"NA"
+plotdat$Colv[plotdat$Group] %in% "WT"<-"grey60"
+plotdat$Colv[plotdat$Group] %in% "MT"<-"darkred"
+plotdat$Colv
+
+identical(colv1,colv2)
+identical(colv1,plotdat$Colv)
+
+plot(x=plotdat$RNAseq,y=plotdat$MASSPEC,col=colv1)
+```
+
+Compare plot results using the individual colour vectors.
