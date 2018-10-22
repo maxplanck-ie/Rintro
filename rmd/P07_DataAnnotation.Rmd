@@ -44,6 +44,11 @@ Annotate the table with gene symbols.
 dat2<-dat[sample(nrow(dat),10),] #select 10 rows at random
 library(biomaRt)
 mm10<-useMart("ensembl",dataset="mmusculus_gene_ensembl")
+
+#listAttributes(mm10)[1:10,]
+table(listAttributes(mm10)$page)
+grep("GO",listAttributes(mm10)$description,value=TRUE)
+
 bm_res<-getBM(attributes=c("ensembl_gene_id","external_gene_name"),filters="ensembl_gene_id",values=dat2$GeneID,mart=mm10)
 
 #compare order of the gene IDs between dat2 and bm_res
@@ -51,6 +56,7 @@ bm_res<-getBM(attributes=c("ensembl_gene_id","external_gene_name"),filters="ense
 dat3<-dat2
 dat3$GeneSymbol<-bm_res$external_gene_name[match(dat2$GeneID,bm_res$ensembl_gene_id)]
 dat4<-merge(x=dat2,y=bm_res,by.x="GeneID",by.y="ensembl_gene_id",all.x=TRUE,sort=FALSE)
+
 ```
 
 Why not use grep or %in%?
@@ -69,47 +75,77 @@ colnames(dge_res)<-c("GeneID","baseMean","log2FoldChange","lfcSE","stat","pvalue
 dge_res$GeneID<-gsub("\\.[0-9]+","",dge_res$GeneID)
 dge_res<-dge_res[!is.na(dge_res$stat),]
 
+peaks<-fread("/data/processing/sikora/GSE77784_MACS2.workspaceR/bam1.annotated.sub.txt",header=TRUE,sep="\t")
+dge_res$HasPeak<-"No"
+dge_res$HasPeak[dge_res$GeneID %in% peaks$ensembl_gene_id]<-"Yes"
+table(dge_res$HasPeak)
+table(dge_res$Status,dge_res$HasPeak)
+boxplot(log2FoldChange~HasPeak,data=dge_res)
 
-%in%
-table()
-boxplot()
+dge_filt<-dge_res[abs(dge_res$log2FoldChange)>=1 & dge_res$padj<0.05,]
+table(dge_filt$HasPeak)
+table(dge_filt$Status,dge_filt$HasPeak)
+#z<-table(dge_filt$Status,dge_filt$HasPeak)
+#fisher.test(z)
+boxplot(log2FoldChange~HasPeak,data=dge_filt)
+#what does the boxplot suggest?
+
 #violin plot
 ```
 
-You notice that the two gene groups are very different in size.
-Adjust the plot so that the 'not bound' gene group matches the 'bound' group in size.
+Looking at the table counts, you notice that the two gene groups are very different in size.
+Adjust the plot so that both the 'not bound' gene group and the 'bound' group contain 100 genes, each.
 
 ```{r}
-sample()
-boxplot()
+dge_filtBound<-subset(dge_filt,HasPeak %in% "Yes")
+dge_filtNotBound<-subset(dge_filt,HasPeak %in% "No")
+
+dge_filt100<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100,replace=TRUE),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100,replace=TRUE),]))
+boxplot(log2FoldChange~HasPeak,data=dge_filt100)
+
+dge_filt100_1<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100,replace=TRUE),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100,replace=TRUE),]))
+dge_filt100_2<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100,replace=TRUE),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100,replace=TRUE),]))
+identical(dge_filt100_1,dge_filt100_2)
+
 ```
 
-You rerun this code chunk a couple of times and see that the resulting plot is not identical.
+You notice that the sampling results are not identical if repeated. This is expected and desired for generating random results. Now you'd like to publish the sampled table and plot.
 Make this step reproducible.
 
 ```{r}
-set.seed()
-sample()
-boxplot()
+set.seed(123)
+dge_filt100<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100,replace=TRUE),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100,replace=TRUE),]))
+boxplot(log2FoldChange~HasPeak,data=dge_filt100)
+
+set.seed(123)
+dge_filt100_1<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100,replace=TRUE),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100,replace=TRUE),]))
+set.seed(123)
+dge_filt100_2<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100,replace=TRUE),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100,replace=TRUE),]))
+identical(dge_filt100_1,dge_filt100_2)
+
+set.seed(NULL) #restores random seed
 ```
+
+Advanced reading: https://www.statmethods.net/advstats/bootstrapping.html .
+
 
 ##Partial pattern matching and some string operations
 
 #Task4:
 Subset a list of files for some pattern.
 
-```r{}
-dirlist<-c()
-dirlist.sub<-grep("",dirlist,value=TRUE)
+```{r}
+dirlist<-c("/data/processing/bioinfo-core/requests/Rintro_MOF_ext_ZYPtBV4H_ChIP-seq/analysis/MACS2/SRR1258429.filtered.BAMPE_peaks.narrowPeak","/data/processing/bioinfo-core/requests/Rintro_MOF_ext_ZYPtBV4H_ChIP-seq/analysis/MACS2/SRR1258429.filtered.BAMPE_peaks.xls","/data/processing/bioinfo-core/requests/Rintro_MOF_ext_ZYPtBV4H_ChIP-seq/analysis/MACS2/SRR1258430.filtered.BAMPE_peaks.narrowPeak","/data/processing/bioinfo-core/requests/Rintro_MOF_ext_ZYPtBV4H_ChIP-seq/analysis/MACS2/SRR1258430.filtered.BAMPE_peaks.xls")
+dirlist.sub<-grep("xls",basename(dirlist),value=TRUE)
+dirlist.sub<-grep("xls",basename(dirlist),value=TRUE,invert=TRUE)
 
-basename()
- #dir
+#?dir()
 ```
 
 #Task5:
 Given sample names, create group information automatically.
 
-```r{}
+```{r}
 sample_names<-c("WT_1","MT_1","WT_2","MT_2","WT_31","MT_31")
 group<-gsub("_.+","",sample_names)
 as.data.frame(cbind(sample_names,group),stringsAsFactors=FALSE)
@@ -118,6 +154,7 @@ sample_names<-c("WT9","MT9","WT12","MT12","WT13","MT13")
 group<-gsub("[0-9]{1,2}$","",sample_names)
 as.data.frame(cbind(sample_names,group),stringsAsFactors=FALSE)
 
+#?rep()
 ```
 Of interest: check help page for the substr() function.
 
@@ -126,8 +163,8 @@ Of interest: check help page for the substr() function.
 #Task6:
 Plot gene expression vs protein abundance values for samples coloured by sample group, for 2 or more groups.
 
-```r{}
-plotdat<-data.frame(SampleID=c("WT9","MT9","WT12","MT12","WT13","MT13"),RNAseq=c("220","48","340","56","280","50"),MASSPEC=c("1200","100","1800","120","1600","160")
+```{r}
+plotdat<-data.frame(SampleID=c("WT9","MT9","WT12","MT12","WT13","MT13"),RNAseq=c("220","48","340","56","280","50"),MASSPEC=c("1200","100","1800","120","1600","160"))
 group<-gsub("[0-9]{1,2}$","",plotdat$SampleID)
 colv1<-ifelse(group=="WT","grey60","darkred")
 colv1
@@ -138,14 +175,22 @@ colv2
 
 plotdat$Group<-group #no need to reorder
 plotdat$Colv<-"NA"
-plotdat$Colv[plotdat$Group] %in% "WT"<-"grey60"
-plotdat$Colv[plotdat$Group] %in% "MT"<-"darkred"
+plotdat$Colv[plotdat$Group %in% "WT"]<-"grey60"
+plotdat$Colv[plotdat$Group %in% "MT"]<-"darkred"
 plotdat$Colv
 
-identical(colv1,colv2)
+identical(colv1,unname(colv2))
 identical(colv1,plotdat$Colv)
 
 plot(x=plotdat$RNAseq,y=plotdat$MASSPEC,col=colv1)
-```
+#What happened??
+str(plotdat)
 
-Compare plot results using the individual colour vectors.
+plotdat[,2:3]<-apply(plotdat[,2:3],2,function(X)as.numeric(as.character(X)))
+str(plotdat)
+plot(x=plotdat$RNAseq,y=plotdat$MASSPEC,col=colv1)
+
+plot(MASSPEC~RNAseq,data=plotdat,col=colv2)
+
+```
+Important functions: apply().
