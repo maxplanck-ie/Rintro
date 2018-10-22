@@ -21,14 +21,19 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Exact pattern matching
 
 #Task1: 
-From a table with 20000 rows, print out the row containing gene expression values for gene with the ensembl ID ENSMUSG00000040329.
+From a table with >20000 rows, print out the row containing gene expression values for gene with the ensembl ID ENSMUSG00000030801.
 
 ```{r }
 library(data.table)
-dat<-fread("")
-%in%
-match()
-grep()
+download.file("https://owncloud.gwdg.de/index.php/s/khOKN6Q4lvcmolj/download",destfile=paste0(getwd(),"/expdat.tsv"))
+#dat<-read.table("https://github.com/maxplanck-ie/Rintro/blob/Katarzyna_test_branch/data/GSE77784_DESeq2.counts_normalized_mouse.tsv",header=TRUE,sep="\t",quote="",as.is=TRUE)
+dat<-fread("expdat.tsv",header=TRUE,sep="\t")
+colnames(dat)[1]<-"GeneID"
+dat$GeneID<-gsub("\\.[0-9]+","",dat$GeneID) #convert modEncode gene IDs to ensembl gene IDs
+
+dat[dat$GeneID %in% "ENSMUSG00000030087",]
+dat[match("ENSMUSG00000030087",dat$GeneID),]
+dat[grep("ENSMUSG00000030087",dat$GeneID),]
 ```
 
 #Task2:
@@ -36,20 +41,35 @@ You have a table with gene expression values for 10 genes of interest. Genes are
 Annotate the table with gene symbols.
 
 ```{r}
-biomaRt
-match()
-merge()
+dat2<-dat[sample(nrow(dat),10),] #select 10 rows at random
+library(biomaRt)
+mm10<-useMart("ensembl",dataset="mmusculus_gene_ensembl")
+bm_res<-getBM(attributes=c("ensembl_gene_id","external_gene_name"),filters="ensembl_gene_id",values=dat2$GeneID,mart=mm10)
+
+#compare order of the gene IDs between dat2 and bm_res
+
+dat3<-dat2
+dat3$GeneSymbol<-bm_res$external_gene_name[match(dat2$GeneID,bm_res$ensembl_gene_id)]
+dat4<-merge(x=dat2,y=bm_res,by.x="GeneID",by.y="ensembl_gene_id",all.x=TRUE,sort=FALSE)
 ```
 
 Why not use grep or %in%?
 
 grep only looks up one value at a time.
-%in% returns a logical vector and no (usable) ordering information.
+%in% returns a logical vector and no ordering information.
+
+Compare dat3 and dat4.
 
 #Task3:
 Given a table of log2-fold changes of gene expression between condition A and condition B, and a table of ChiPseq peaks for transcription factor XX, plot log2FC distributions for genes stratified into bound and not bound by that transcription factor.
 
 ```{r}
+dge_res<-fread("/data/processing/bioinfo-core/requests/Rintro_ext_WDg0XFFw_RNA-seq/analysis/DESeq2_WDg0XFFw_Rintro_ext_sampleSheet/DEseq_basic_DEresults.tsv",header=FALSE,sep="\t")
+colnames(dge_res)<-c("GeneID","baseMean","log2FoldChange","lfcSE","stat","pvalue","padj","Status","external_gene_name")
+dge_res$GeneID<-gsub("\\.[0-9]+","",dge_res$GeneID)
+dge_res<-dge_res[!is.na(dge_res$stat),]
+
+
 %in%
 table()
 boxplot()
