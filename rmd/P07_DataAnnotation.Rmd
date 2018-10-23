@@ -194,3 +194,9 @@ plot(MASSPEC~RNAseq,data=plotdat,col=colv2)
 
 ```
 Important functions: apply().
+
+
+##TODOs:
++ update paths from local to urls
++ correct header size
++ add take-home messages
