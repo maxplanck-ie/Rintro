@@ -1,0 +1,171 @@
+---
+title: "P08_ThisIsAPlaceHolder"
+author: "Katarzyna Sikora"
+date: "10/23/2018"
+output: html_document
+---
+
+###Outline:
+
+This is a placeholder
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+##Task1:
+
+You have obtain a pilot scRNAseq dataset with 500 cells, sequenced with the SmartSeq2 technology. Select a threshold to filter low quality cells. How many genes are not expressed? What is the most highly expressed gene in all cells?
+
+```{r}
+library(data.table)
+velten500<-fread("/data/manke/sikora/Rintro/data/velten500.tsv",header=TRUE,sep="\t")
+cs<-colSums(velten500[,-1])
+plot(cs[order(cs,decreasing=TRUE)])
+for(i in seq_along(quantile(cs))){
+        abline(h=quantile(cs)[i],col="red")
+}
+summary(cs)
+quantile(cs)
+
+#How many genes are not expressed?
+sum(rowSums(velten500[,-1])==0)
+
+#What is the most highly expressed gene in all cells?
+velten500$GeneID[which.max(rowSums(velten500[,-1]))]
+
+#Filter out low quality cells.
+dim(velten500)
+velten_filt<-subset(velten500,select=cs>=200000)
+dim(velten_filt)
+
+#How many genes are not expressed?
+sum(rowSums(velten_filt[,-1])==0)
+
+#What is the most highly expressed gene in all cells?
+velten_filt$GeneID[which.max(rowSums(velten_filt[,-1]))]
+```
+
+##Task2:
+
+After filtering out 'low quality cells', remove genes expressed in less than 4 cells at less than 2 reads.
+
+```{r}
+#Step1; per gene, calculate the number of cells in which their expression is at least 2.
+gs<-apply(velten_filt,1,function(X)sum(X>=2))
+length(gs)
+summary(gs)
+#Check how many genes are passing your filter before applying it.
+sum(gs>=4)
+
+#Step2, apply the filter.
+velten_filt2<-subset(velten_filt,gs>=4)
+dim(velten_filt2)
+```
+Additional excercise: list top 10 most expressed, and, separately, top 10 least expressed genes in the whole dataset. Make use of the `rowSums()` and `order()` functions.
+
+
+##Task3:
+
+For every pair of clusters, perform a pairwise t-test for differential gene expression for given marker genes. Provide the result in a table format. For loops are forbidden to use!!
+
+```{r}
+library(reshape2)
+cluv<-read.table("/data/manke/sikora/Rintro/data/cluv.txt",header=FALSE,sep="\t",quote="")$V1
+table(cluv)
+#Your cells have been assigned to 8 different clusters.
+
+#Step1: create all pairwise combinations between your clusters.
+combv<-combn(unique(cluv),2,simplify=FALSE)
+#What is the class and structure of combv? What would it be if simplify were set to TRUE?
+
+
+#Step2: define a function performing the t-test on two clusters at a time.
+my_test_fun<-function(gene_expr_mat,clu_v,gene_x,comb_sel){
+  
+  ####################################sanity checks on function arguments################################################
+  #test if comb_sel is a vector of 2 elements
+  if(length(comb_sel)!=2){stop("The cluster selection vector has to have exactly two elements!")}
+  ####################################process input data################################################################
+  #subset the gene expression matrix for the gene of interest and convert to data frame
+  expr_mat_sel<-subset(gene_expr_mat,subset=GeneID %in% gene_x,select=(-1))
+  #get cell IDs corresponding to the given two cluster IDs
+  cell_sel<-colnames(expr_mat_sel)[clu_v %in% comb_sel]
+  #subset the gene expression matrix for the selected cells
+  expr_mat_sel<-subset(expr_mat_sel,select=cell_sel)
+  #reshape the matrix to allow for using a formula in the t.test
+  expr_mat_long<-reshape2::melt(expr_mat_sel,value.name="NormExpr",variable.name="SampleID")
+  #add cluster annotation
+  expr_mat_long$Cluster<-clu_v[clu_v %in% comb_sel]
+  #log2-transform gene expression values after adding a pseudocount of 1
+  expr_mat_long$log2NormExpr<-log2(expr_mat_long$NormExpr+1)
+  
+  #############################run the actual test###########################################################
+  #perform the t-test
+  tt<-t.test(log2NormExpr~Cluster,data=expr_mat_long,var.equal=TRUE)
+  pval<-tt$p.value
+  ################################return result###########################################################
+  comp_str<-paste0(comb_sel[1],"_vs_",comb_sel[2])
+  res<-data.frame("Comparison"=comp_str,"pvalue"=pval,stringsAsFactors=FALSE)
+  return(res)
+  }
+
+geneX<-"IRF8 (ENSG00000140968)"
+
+#Step3: apply the function to the list of comparisons
+resL<-lapply(combv,function(X)my_test_fun(velten_filt,cluv,geneX,X)) #as velcten_filt2 might be 'overfiltered', velten_filt is used here
+#What is the structure of the result?
+class(resL)
+str(resL)
+
+#Step4: convert output to (data.)table format.
+resdat<-rbindlist(resL)
+#resdat<-do.call(rbind,resL)
+
+#apply multiple testing correction
+resdat$padj<-p.adjust(resdat$pvalue,method="BH")
+resdat
+
+#filter the result for adjusted pvalue <0.05.
+subset(resdat,padj<0.05)
+
+
+
+```
+Scope/environment.
+
+Additional excercise: redefine the function so that it can take a gene list/vector and return test pvalue per gene. Example gene list: `geneL<-c("ELANE (ENSG00000197561)","CA1 (ENSG00000133742)","CRHBP (ENSG00000145708)","DNTT (ENSG00000107447)","IRF8 (ENSG00000140968)","JUP (ENSG00000173801)","KLF1 (ENSG00000105610)","AVP (ENSG00000101200)")`.
+
+Plot a heatmap of normalized gene expressions for selected genes.
+
+```{r}
+library(gplots)
+library(RColorBrewer)
+plotdat<-subset(velten_filt,subset=GeneID %in% geneL,select=(-1))
+rownames(plotdat)<-velten_filt$GeneID[velten_filt$GeneID %in% geneL]
+plotdat2<-as.matrix(log2(plotdat+1))
+rownames(plotdat2)<-rownames(plotdat)
+
+heatmap.2(plotdat2, scale="row", trace="none", dendrogram="none",
+          col=colorRampPalette(rev(brewer.pal(9,"RdBu")))(255),labCol="",ColSideColors=brewer.pal(8,"Dark2")[as.numeric(cluv)],
+          main="Gene Selection")
+
+
+```
+
+
+##Task4:
+
+Run some for loop on a pair of lists or sth. Control for NULL elements.
+Plot Venn diagrams. TCR sequences?
+
+```{r}
+```
+
+##Task5:
+
+aggregating functions
+
+#Notes and todos
+For genomic bins, use the GenomicRanges package.
