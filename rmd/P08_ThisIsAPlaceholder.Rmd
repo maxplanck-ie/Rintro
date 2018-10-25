@@ -203,8 +203,36 @@ produce_venn(rep2,"Rep2")
 Reduce(setdiff,rep2)
 ```
 
+Calculate mean CDR3 length in amino acids per age class per replicate. Output in a data.frame format.
+Solution 1: using a for loop:
+```{r}
+dat<-data.frame("Class"=rep(c("Age1","Age2","Age3"),2),"Replicate"=rep(c("rep1","rep2"),each=3),stringsAsFactors=FALSE)
+dat$MeanCDRlength<-NA
+for(i in seq_along(1:nrow(dat))){
+  cdr3_v<-eval(as.name(dat$Replicate[i]))[[dat$Class[i]]]
+  dat$MeanCDRlength[i]<-mean(nchar(cdr3_v))
+  print(paste0(i,"_processed"))
+}
+
+dat
+
+```
+Solution 2: not using a for loop:
+But, you can also do it by combining lapply + shaping/casting your data, e.g.:
+
+```{r}
+library(reshape2)
+r1l<-lapply(rep1,function(X)mean(nchar(X)))
+r2l<-lapply(rep2,function(X)mean(nchar(X)))
+dat_tmp<-as.data.frame(rbind(unlist(r1l),unlist(r2l)),stringAsFactors=FALSE)
+dat_tmp$Replicate<-c("rep1","rep2")
+dat_final<-as.data.frame(melt(dat_tmp,id.var="Replicate",value.name="MeanCDRlength",variable.name="Class"),stringsAsFactors=FALSE)
+#You can reorder columns if you wish to have an identical result
+```
+
 #Notes and todos
 For genomic bins, use the GenomicRanges package.
 
 + add more descriptive text
 + update paths to urls
++ review the code
