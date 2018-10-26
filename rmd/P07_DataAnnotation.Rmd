@@ -5,12 +5,21 @@ date: "10/16/2018"
 output: html_document
 ---
 
-###Outline:
+#Content:
 
-Using pattern matching functions in R for annotation (and other) purposes.
-Exact and partial matching functions are considered.
-Required packages:
-+ data.table
+Main focus:   
++ Using pattern matching functions in R for annotation (and other) purposes.   
++ Examples of exact and partial pattern matching are considered.
+
+Additional relevant points:
++ Using the R package biomaRt for annotation   
++ Random and semi-random sampling   
++ Specifying variable dependencies via formula + data (already covered in 04_DataModels)   
++ Missing value handling (removal)
++ Applying the same function to multiple columns in a data.frame with 1 line of code
+
+Required packages:   
++ data.table   
 + biomaRt
 
 
@@ -20,7 +29,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Exact pattern matching
 
-#Task1: 
+###Task1: 
 From a table with >20000 rows, print out the row containing gene expression values for gene with the ensembl ID ENSMUSG00000030801.
 
 ```{r }
@@ -35,7 +44,10 @@ dat[match("ENSMUSG00000030087",dat$GeneID),]
 dat[grep("ENSMUSG00000030087",dat$GeneID),]
 ```
 
-#Task2:
+These three functions differ in their input, output and parameters, so that in certain comparisons their output would differ. Read their help pages.
+
+
+###Task2:
 You have a table with gene expression values for 10 genes of interest. Genes are encoded as ensembl IDs in rownames of the table.
 Annotate the table with gene symbols.
 
@@ -44,7 +56,7 @@ dat2<-dat[sample(nrow(dat),10),] #select 10 rows at random
 library(biomaRt)
 mm10<-useMart("ensembl",dataset="mmusculus_gene_ensembl")
 
-#listAttributes(mm10)[1:10,]
+listAttributes(mm10)[1:10,]
 table(listAttributes(mm10)$page)
 grep("GO",listAttributes(mm10)$description,value=TRUE)
 
@@ -65,7 +77,9 @@ grep only looks up one value at a time.
 
 Compare dat3 and dat4.
 
-#Task3:
+Additional task: find human homologs of these 10 mouse genes - provide their ensembl gene IDs and gene symbols.
+
+####Task3:
 Given a table of log2-fold changes of gene expression between condition A and condition B, and a table of ChiPseq peaks for transcription factor XX, plot log2FC distributions for genes stratified into bound and not bound by that transcription factor.
 
 ```{r}
@@ -74,6 +88,7 @@ dge_res<-fread("DEseq_results.tsv",header=FALSE,sep="\t")
 colnames(dge_res)<-c("GeneID","baseMean","log2FoldChange","lfcSE","stat","pvalue","padj","Status","external_gene_name")
 dge_res$GeneID<-gsub("\\.[0-9]+","",dge_res$GeneID)
 dge_res<-dge_res[!is.na(dge_res$stat),]
+#Read the documentation on complete.cases()
 
 download.file("https://owncloud.gwdg.de/index.php/s/Dp5OzJOmcwzxza5/download",destfile=paste0(getwd(),"/bam1.annotated.txt"))
 peaks<-fread("bam1.annotated.txt",header=TRUE,sep="\t")
@@ -89,8 +104,9 @@ table(dge_filt$Status,dge_filt$HasPeak)
 boxplot(log2FoldChange~HasPeak,data=dge_filt)
 #what does the boxplot suggest?
 
-#violin plot
+#A violin plot or a jitter plot might be more suitable!
 ```
+
 
 Looking at the table counts, you notice that the two gene groups are very different in size.
 Adjust the plot so that both the 'not bound' gene group and the 'bound' group contain 100 genes, each.
@@ -99,11 +115,11 @@ Adjust the plot so that both the 'not bound' gene group and the 'bound' group co
 dge_filtBound<-subset(dge_filt,HasPeak %in% "Yes")
 dge_filtNotBound<-subset(dge_filt,HasPeak %in% "No")
 
-dge_filt100<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100,replace=TRUE),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100,replace=TRUE),]))
+dge_filt100<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100),]))
 boxplot(log2FoldChange~HasPeak,data=dge_filt100)
 
-dge_filt100_1<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100,replace=TRUE),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100,replace=TRUE),]))
-dge_filt100_2<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100,replace=TRUE),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100,replace=TRUE),]))
+dge_filt100_1<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100),]))
+dge_filt100_2<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100),]))
 identical(dge_filt100_1,dge_filt100_2)
 
 ```
@@ -113,24 +129,24 @@ Make this step reproducible.
 
 ```{r}
 set.seed(123)
-dge_filt100<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100,replace=TRUE),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100,replace=TRUE),]))
+dge_filt100<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100),]))
 boxplot(log2FoldChange~HasPeak,data=dge_filt100)
 
 set.seed(123)
-dge_filt100_1<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100,replace=TRUE),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100,replace=TRUE),]))
+dge_filt100_1<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100),]))
 set.seed(123)
-dge_filt100_2<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100,replace=TRUE),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100,replace=TRUE),]))
+dge_filt100_2<-data.table(rbind(dge_filtBound[sample(nrow(dge_filtBound),100),],dge_filtNotBound[sample(nrow(dge_filtNotBound),100),]))
 identical(dge_filt100_1,dge_filt100_2)
 
 set.seed(NULL) #restores random seed
 ```
 
-Advanced reading: https://www.statmethods.net/advstats/bootstrapping.html .
+Additional (advanced) reading on using bootstrapping to calculate statistical metrics: https://www.statmethods.net/advstats/bootstrapping.html .
 
 
 ##Partial pattern matching and some string operations
 
-#Task4:
+###Task4:
 Subset a list of files for some pattern.
 
 ```{r}
@@ -140,8 +156,9 @@ dirlist.sub<-grep("xls",basename(dirlist),value=TRUE,invert=TRUE)
 
 #?dir()
 ```
+In real life you would obtain your file list using the `dir()` or `list.files()` function. Read help pages for these functions and test them on some folders in your path.
 
-#Task5:
+###Task5:
 Given sample names, create group information automatically.
 
 ```{r}
@@ -155,11 +172,11 @@ as.data.frame(cbind(sample_names,group),stringsAsFactors=FALSE)
 
 #?rep()
 ```
-Of interest: check help page for the substr() function.
+Of interest: check help page for the `rep()` and `substr()` functions.
 
 
 
-#Task6:
+###Task6:
 Plot gene expression vs protein abundance values for samples coloured by sample group, for 2 or more groups.
 
 ```{r}
@@ -192,9 +209,15 @@ plot(x=plotdat$RNAseq,y=plotdat$MASSPEC,col=colv1)
 plot(MASSPEC~RNAseq,data=plotdat,col=colv2)
 
 ```
-Important functions: apply().
 
+Consider log-transforming the data before plotting.
 
-##TODOs:
-+ correct header size
-+ add take-home messages
+##Take-home messages:
++ Data.table/fread are faster and use less memory than data.frame/read.table for large tables (genome-wide data).   
++ You can annotate your genes, for which you only have ensembl gene ID, with multiple attributes using the biomaRt package.    
++ When copying over information from one table to another, remember to check and adjust the order of copied elements!   
++ You can sample elements randomly from a set using the sample() function. Setting the seed to a non-random number will make the sampling reproducible.   
++ You can remove rows containing missing values in a given column of a data.frame by using !is.na(). Using complete.cases() will remove rows with missing values in any column.   
++ You can transform multiple columns of a data.frame with the same function by using apply().   
++ Factors behave differently than numeric columns in plotting.
+
