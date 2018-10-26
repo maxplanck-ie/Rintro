@@ -227,7 +227,24 @@ r2l<-lapply(rep2,function(X)mean(nchar(X)))
 dat_tmp<-as.data.frame(rbind(unlist(r1l),unlist(r2l)),stringAsFactors=FALSE)
 dat_tmp$Replicate<-c("rep1","rep2")
 dat_final<-as.data.frame(melt(dat_tmp,id.var="Replicate",value.name="MeanCDRlength",variable.name="Class"),stringsAsFactors=FALSE)
-#You can reorder columns if you wish to have an identical result
+```
+Additional: reorder the columns and test if the data.frames produced in these two ways are identical.
+
+#Task5
+Visualize all pairwise intersects between age categories in both replicates.
+
+```{r}
+library(UpSetR)
+
+#append the two lists into a new list
+newL<-c(rep1,rep2)
+#produce meaningful names
+names(newL)<-paste0(rep(c("rep1","rep2"),each=3),"_" ,rep(names(rep1),2))
+
+#png("MyImportantPlot.png",height=500,width=1000)
+upset(fromList(newL),nsets=length(newL),nintersects=NA, order.by = "freq",matrix.color="darkslategrey",main.bar.color="darkslategrey",mainbar.y.label = "Common CDR3 Intersections", sets.x.label = "Common CDR3 variants per mouse")
+#dev.off()
+
 ```
 
 #Notes and todos
