@@ -80,7 +80,7 @@ Compare dat3 and dat4.
 Additional task: find human homologs of these 10 mouse genes - provide their ensembl gene IDs and gene symbols.
 
 ####Task3:
-Given a table of log2-fold changes of gene expression between condition A and condition B, and a table of ChiPseq peaks for transcription factor XX, plot log2FC distributions for genes stratified into bound and not bound by that transcription factor.
+Given a table of log2-fold changes of gene expression between the condition transcription factor KO and condition Ctrl, and a table of ChiPseq peaks for transcription the transcription factor in control cells, plot log2FC distributions for genes stratified into bound and not bound by that transcription factor.
 
 ```{r}
 download.file("https://owncloud.gwdg.de/index.php/s/TSW798qBkIYHgWc/download",destfile=paste0(getwd(),"/DEseq_results.tsv"))

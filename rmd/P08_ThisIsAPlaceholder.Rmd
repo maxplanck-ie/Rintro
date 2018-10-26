@@ -1,5 +1,5 @@
 ---
-title: "P08_ThisIsAPlaceHolder"
+title: "P08_ApplyingFunctions"
 author: "Katarzyna Sikora"
 date: "10/23/2018"
 output: html_document
@@ -7,7 +7,18 @@ output: html_document
 
 ###Outline:
 
-This is a placeholder
+#Content:
+
+Main focus:   
++ Applying R functions to multiple elements simultaneously.   
++ Writing and applying custom functions.
+
+Additional relevant points:
++ 
+
+Required packages:   
++ data.table   
++ reshape2
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
