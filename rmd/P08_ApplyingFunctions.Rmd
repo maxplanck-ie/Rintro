@@ -36,7 +36,7 @@ knitr::opts_chunk$set(echo = TRUE)
 You have obtain a pilot scRNAseq dataset with 500 cells, sequenced with the SmartSeq2 technology. Select a threshold to filter low quality cells. How many genes are not expressed? What is the most highly expressed gene in all cells?
 
 ```{r}
-library(data.table)
+library(data.table,quietly=TRUE)
 download.file("https://owncloud.gwdg.de/index.php/s/jxUxo0XGTVj28Za/download",destfile=paste0(getwd(),"/velten500.tsv"))
 velten500<-fread("velten500.tsv",header=TRUE,sep="\t")
 cs<-colSums(velten500[,-1])
@@ -89,7 +89,7 @@ Additional excercise: list top 10 most expressed, and, separately, top 10 least 
 For every pair of clusters, perform a pairwise t-test for differential gene expression for given marker genes. Provide the result in a table format. For loops are forbidden to use!!
 
 ```{r}
-library(reshape2)
+library(reshape2,quietly=TRUE)
 download.file("https://owncloud.gwdg.de/index.php/s/xuyxZxMavOLWsWW/download",destfile=paste0(getwd(),"/cluv.txt"))
 cluv<-read.table("cluv.txt",header=FALSE,sep="\t",quote="")$V1
 table(cluv)
@@ -166,8 +166,8 @@ Additional excercise: redefine the function so that it can take a gene list/vect
 Plot a heatmap of normalized gene expressions for selected genes.
 
 ```{r}
-library(gplots)
-library(RColorBrewer)
+library(gplots,quietly=TRUE)
+library(RColorBrewer,quietly=TRUE)
 geneL<-c("ELANE (ENSG00000197561)","CA1 (ENSG00000133742)","CRHBP (ENSG00000145708)","DNTT (ENSG00000107447)","IRF8 (ENSG00000140968)","JUP (ENSG00000173801)","KLF1 (ENSG00000105610)","AVP (ENSG00000101200)")
 plotdat<-subset(velten_filt,subset=GeneID %in% geneL,select=(-1))
 rownames(plotdat)<-velten_filt$GeneID[velten_filt$GeneID %in% geneL]
@@ -189,7 +189,7 @@ You have obtained CDR3 amino acid sequences for mice of different age classes in
 Return a)pairwise intersects between replicates for each age class, b)Venn diagrams per replicate c)for rep2, the elements unique to Age1 and NOT present in Age2 or Age3.
 
 ```{r}
-library(VennDiagram)
+library(VennDiagram,quietly=TRUE)
 rep1<-list("Age1"=c("CASSPGDNYAEQFF","CASGDARGNTLYF","CASSPGYSYEQYF", "CASGDWGNQDTQYF","CASGDARGNTLYF","CASGDEQYF","CASSQQGNTGQLYF","CASSWGLGGYEQYF","CASSLTGGYAEQFF","CASGDDEQYF","CASGTGDAEQFF","CASSLVQYSDYTF","CASSDGVQAPLF",  "CASGDYEQYF","CASSLGGPGNTLYF","CASSPGQQDTQYF","CASGDDAEQFF","CASGDSEQYF","CASGAGYEQYF","CASGPNTGQLYF"),"Age2"=c("CASRGYAEQFF","CASGYRDKYEQYF","CASSLVEQYF","CASSGLSAETLYF","CASSLGGGAEQFF","CASSLVRNEQYF","CASGDAGYEQYF","CASSDIYEQYF","CASGYRDSYEQYF","CAGVWGDYAEQFF","CASSLWGGNTGQLYF","CASSLGTGGNTLYF","CASSQIGAPPLF","CASGDARGNTLYF","CASRGHAEQFF"),"Age3"=c("CASSFSWGGTQYF","CASRDWGYEQYF","CASSFDWGGAEQFF","CASSLRDWGYEQYF","CASSFDWGGVEQYF","CASGTGHYAEQFF","CASSFDWGREQYF","CASSLGGKAYEQYF","CASSFDWGNTLYF","CASSLHRVAEQFF","CASSFDWGGAEQYF","CASSFGWEDTQYF","CASRDWGYEQYF","CASSLSGKVYEQYF","CASSWDWGVEQYF","CASRNWGYEQYF","CASSRGGKSYEQYF","CASSSGGAYAEQFF","CASSFDWGREQYF","CASSFDWGGAEQYF"))
 rep2<-list("Age1"=c("CASRGYAEQFF","CASGYRDKYEQYF","CAGVWGDYAEQFF","CASRRDRVYEQYF","CASRRDRGYEQYF","CASSQDGKGDTQYF","CASSLAGGTTLYF","CASSLEWKYEQYF","CAWSLTWGQDTQYF","CASSFRGQDTQYF","CASSLVRNEQYF","CTCSPRTANSDYTF","CASSQESGGDTQYF","CASSQGTGDTQYF","CASSFRGQDTQYF","CASSQTGTGDTQYF","CASSPYRDWGGAREQYF"),"Age2"=c("CASRGYAEQFF","CASGYRDKYEQYF","CASSLVEQYF","CASSLVRNEQYF","CASGYRDSYEQYF","CASSDIYEQYF","CAGVWGDYAEQFF","CASRRDRVYEQYF","CASGDARGNTLYF","CASSLGTGGNTLYF","CASSQIGAPPLF","CASRGHAEQFF","CASSLGWEGNTLYF","CASGYRDSYEQYF","CASSLEWKYEQYF","CASGEAPLF","CASRRDRGYEQYF","CASSDSSQNTLYF","CSSSQWAGNEQYF","CASGSWNSGNTLYF","CASSRGRGGAEQFF","CASSQDGKGDTQYF", "CASSSTGGYAEQFF","CASGWDWGGYEQYF","CASSLLEGAYEQYF","CASSLTGGYAEQFF","CASGYKSSYEQYF","CASSLGGRGYEQYF","CASSLHNQAPLF","CASSWDRDYAEQFF","CASGDSEQYF","CASGEDWVYEQYF", "CASGVYEQYF","CASGDAVRAYEQYF","CASRDWGYEQYF"),"Age3"=c("CASSPGDNYAEQFF","CASGDARGNTLYF","CASSPGYSYEQYF","CASGDWGNQDTQYF","CASGDARGNTLYF","CASGDEQYF","CASSQQGNTGQLYF","CASSWGLGGYEQYF","CASSLTGGYAEQFF","CASGDDEQYF","CASGTGDAEQFF","CASSLVQYSDYTF","CASSDGVQAPLF","CASGDYEQYF","CASSLGGPGNTLYF","CASSPGQQDTQYF","CASGDDAEQFF","CASGDSEQYF","CASGAGYEQYF","CASGPNTGQLYF"))
 
@@ -262,7 +262,7 @@ Other useful functions: `ave()`, `aggregate()`.
 Visualize all pairwise intersects between all age categories in both replicates.
 
 ```{r}
-library(UpSetR)
+library(UpSetR,quietly=TRUE)
 
 #append the two lists into a new list
 newL<-c(rep1,rep2)

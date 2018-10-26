@@ -33,7 +33,7 @@ knitr::opts_chunk$set(echo = TRUE)
 From a table with >20000 rows, print out the row containing gene expression values for gene with the ensembl ID ENSMUSG00000030801.
 
 ```{r }
-library(data.table)
+library(data.table,quietly=TRUE)
 download.file("https://owncloud.gwdg.de/index.php/s/khOKN6Q4lvcmolj/download",destfile=paste0(getwd(),"/expdat.tsv"))
 dat<-fread("expdat.tsv",header=TRUE,sep="\t")
 colnames(dat)[1]<-"GeneID"
@@ -53,7 +53,7 @@ Annotate the table with gene symbols.
 
 ```{r}
 dat2<-dat[sample(nrow(dat),10),] #select 10 rows at random
-library(biomaRt)
+library(biomaRt,quietly=TRUE)
 mm10<-useMart("ensembl",dataset="mmusculus_gene_ensembl")
 
 listAttributes(mm10)[1:10,]
