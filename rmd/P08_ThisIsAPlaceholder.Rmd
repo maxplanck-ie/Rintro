@@ -20,7 +20,8 @@ You have obtain a pilot scRNAseq dataset with 500 cells, sequenced with the Smar
 
 ```{r}
 library(data.table)
-velten500<-fread("/data/manke/sikora/Rintro/data/velten500.tsv",header=TRUE,sep="\t")
+download.file("https://owncloud.gwdg.de/index.php/s/jxUxo0XGTVj28Za/download",destfile=paste0(getwd(),"/velten500.tsv"))
+velten500<-fread("velten500.tsv",header=TRUE,sep="\t")
 cs<-colSums(velten500[,-1])
 plot(cs[order(cs,decreasing=TRUE)])
 for(i in seq_along(quantile(cs))){
@@ -72,7 +73,8 @@ For every pair of clusters, perform a pairwise t-test for differential gene expr
 
 ```{r}
 library(reshape2)
-cluv<-read.table("/data/manke/sikora/Rintro/data/cluv.txt",header=FALSE,sep="\t",quote="")$V1
+download.file("https://owncloud.gwdg.de/index.php/s/xuyxZxMavOLWsWW/download",destfile=paste0(getwd(),"/cluv.txt"))
+cluv<-read.table("cluv.txt",header=FALSE,sep="\t",quote="")$V1
 table(cluv)
 #Your cells have been assigned to 8 different clusters.
 
@@ -230,8 +232,10 @@ dat_final<-as.data.frame(melt(dat_tmp,id.var="Replicate",value.name="MeanCDRleng
 ```
 Additional: reorder the columns and test if the data.frames produced in these two ways are identical.
 
+Other useful functions: `ave()`, `aggregate()`.
+
 #Task5
-Visualize all pairwise intersects between age categories in both replicates.
+Visualize all pairwise intersects between all age categories in both replicates.
 
 ```{r}
 library(UpSetR)
@@ -251,5 +255,5 @@ upset(fromList(newL),nsets=length(newL),nintersects=NA, order.by = "freq",matrix
 For genomic bins, use the GenomicRanges package.
 
 + add more descriptive text
-+ update paths to urls
 + review the code
++ add NA and NULL value handling and checking for length of arguments

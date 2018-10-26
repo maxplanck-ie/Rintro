@@ -26,7 +26,6 @@ From a table with >20000 rows, print out the row containing gene expression valu
 ```{r }
 library(data.table)
 download.file("https://owncloud.gwdg.de/index.php/s/khOKN6Q4lvcmolj/download",destfile=paste0(getwd(),"/expdat.tsv"))
-#dat<-read.table("https://github.com/maxplanck-ie/Rintro/blob/Katarzyna_test_branch/data/GSE77784_DESeq2.counts_normalized_mouse.tsv",header=TRUE,sep="\t",quote="",as.is=TRUE)
 dat<-fread("expdat.tsv",header=TRUE,sep="\t")
 colnames(dat)[1]<-"GeneID"
 dat$GeneID<-gsub("\\.[0-9]+","",dat$GeneID) #convert modEncode gene IDs to ensembl gene IDs
@@ -70,12 +69,14 @@ Compare dat3 and dat4.
 Given a table of log2-fold changes of gene expression between condition A and condition B, and a table of ChiPseq peaks for transcription factor XX, plot log2FC distributions for genes stratified into bound and not bound by that transcription factor.
 
 ```{r}
-dge_res<-fread("/data/processing/bioinfo-core/requests/Rintro_ext_WDg0XFFw_RNA-seq/analysis/DESeq2_WDg0XFFw_Rintro_ext_sampleSheet/DEseq_basic_DEresults.tsv",header=FALSE,sep="\t")
+download.file("https://owncloud.gwdg.de/index.php/s/TSW798qBkIYHgWc/download",destfile=paste0(getwd(),"/DEseq_results.tsv"))
+dge_res<-fread("DEseq_results.tsv",header=FALSE,sep="\t")
 colnames(dge_res)<-c("GeneID","baseMean","log2FoldChange","lfcSE","stat","pvalue","padj","Status","external_gene_name")
 dge_res$GeneID<-gsub("\\.[0-9]+","",dge_res$GeneID)
 dge_res<-dge_res[!is.na(dge_res$stat),]
 
-peaks<-fread("/data/processing/sikora/GSE77784_MACS2.workspaceR/bam1.annotated.sub.txt",header=TRUE,sep="\t")
+download.file("https://owncloud.gwdg.de/index.php/s/Dp5OzJOmcwzxza5/download",destfile=paste0(getwd(),"/bam1.annotated.txt"))
+peaks<-fread("bam1.annotated.txt",header=TRUE,sep="\t")
 dge_res$HasPeak<-"No"
 dge_res$HasPeak[dge_res$GeneID %in% peaks$ensembl_gene_id]<-"Yes"
 table(dge_res$HasPeak)
@@ -85,8 +86,6 @@ boxplot(log2FoldChange~HasPeak,data=dge_res)
 dge_filt<-dge_res[abs(dge_res$log2FoldChange)>=1 & dge_res$padj<0.05,]
 table(dge_filt$HasPeak)
 table(dge_filt$Status,dge_filt$HasPeak)
-#z<-table(dge_filt$Status,dge_filt$HasPeak)
-#fisher.test(z)
 boxplot(log2FoldChange~HasPeak,data=dge_filt)
 #what does the boxplot suggest?
 
@@ -197,6 +196,5 @@ Important functions: apply().
 
 
 ##TODOs:
-+ update paths from local to urls
 + correct header size
 + add take-home messages
