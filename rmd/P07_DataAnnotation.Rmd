@@ -77,7 +77,7 @@ grep only looks up one value at a time.
 
 Compare dat3 and dat4.
 
-Additional task: find human homologs of these 10 mouse genes - provide their ensembl gene IDs and gene symbols.
+Additional task: find human homologs of these 10 mouse genes - provide their ensembl gene IDs and gene symbols. Hint: human annotations are prefixed with "hsapiens" on biomaRt attribute names.
 
 ####Task3:
 Given a table of log2-fold changes of gene expression between the condition transcription factor KO and condition Ctrl, and a table of ChiPseq peaks for transcription the transcription factor in control cells, plot log2FC distributions for genes stratified into bound and not bound by that transcription factor.
@@ -143,6 +143,8 @@ set.seed(NULL) #restores random seed
 
 Additional (advanced) reading on using bootstrapping to calculate statistical metrics: https://www.statmethods.net/advstats/bootstrapping.html .
 
+Do you think boxplot is a good choice to represent this dataset?
+
 
 ##Partial pattern matching and some string operations
 
@@ -174,6 +176,7 @@ as.data.frame(cbind(sample_names,group),stringsAsFactors=FALSE)
 ```
 Of interest: check help page for the `rep()` and `substr()` functions.
 
+Additional task: produce a vector of a) "WT","Mut","WT","Mut","WT","Mut" b)"WT","WT","WT","Mut","Mut","Mut" with the help of the `rep()` function.
 
 
 ###Task6:
