@@ -153,6 +153,14 @@ anova(fit)
 ```
 *Interpretation*: Species account for much variation in the data (F(2, 147)=960. p tiny)
 
+# Model checking
+
+Searching for patterns:
+```{r}
+plot(resid(fit))                # residuals independent?
+plot(predict(fit), resid(fit))  # residuals (and variation) dependent on prediction?
+qqnorm(resid(fit))              # residuals normally distributed?
+```
 
 **Task**: Repeat the linear regression Petal.Width ~ Petal.Length with an *outlier* in the data 
 ```{r}
