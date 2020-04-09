@@ -78,6 +78,7 @@ df
 problems(df)
 ```
 
+# Remember that messy gene list?
 ```{r echo=TRUE, warning=FALSE}
 file = "../data/GeneList.tsv"
 df1 = read_tsv(file, comment = "%")
