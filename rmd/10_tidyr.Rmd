@@ -78,6 +78,18 @@ df
 problems(df)
 ```
 
+```{r echo=TRUE, warning=FALSE}
+file = "../data/GeneList.tsv"
+df1 = read_tsv(file, comment = "%")
+# better than:
+# df1 = read.table(file, header=TRUE, comment.char = "%", sep="\t", quote = "\"")
+
+# better still: know and define what to expect
+df1 = read_tsv(file, col_types = "ccnnnn", comment="%")
+df1
+problems(df1)
+```
+
 # readr column types
 
 | Full name | Symbol | Example |
@@ -89,7 +101,6 @@ problems(df)
 | `col_skip()` | _ | |
 | `col_number()` | n | "500.25???" |
 
-> - N.B., there are more, see `vignette("column-types")`.
 
 - Open the xlsx file in eXcel/Openoffice
   - Multiple levels of headers?!?!
@@ -213,23 +224,42 @@ Load the `msleep_ggplot2.txt` dataset that's in the `data/` folder. This is a da
 
 Use `filter()` to select only primates. How many of the animals in the table are primates (try the `nrow()` function)?
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 ```{r, echo=TRUE}
 msleep = read_tsv("../data/msleep_ggplot2.txt")
 head(msleep)
