@@ -1,0 +1,112 @@
+---
+title: "Review"
+author: "Thomas Manke"
+date:  "`r date() `"
+output: html_document
+---
+# 2020-04-16
+## Data Selection
+```{r}
+sc=c(1,3)                      # select column by index
+sr=grep("^v", iris$Species)    # select rows by 
+iris[,sc] 
+iris[sr,]
+```
+
+## Formulas
+```{r}
+boxplot( Petal.Length ~ Species, data = iris)
+plot( Petal.Length ~ Petal.Width, data = iris)
+```
+
+
+# 2020-04-15
+## Structured Data = Easy Analysis & Plotting
+Many powerful functions. Many customizable default parameters
+```{r , eval=FALSE}
+x=iris$Petal.Length  # numeric vector
+summary(x)
+plot(x)
+hist(x)
+boxplot(x)
+```
+
+## Palette: Mapping Numbers to Colours
+```{r base_palettes}
+palette("default")               # optional: default
+palette()
+barplot(1:20,col=1:20)
+
+palette(rainbow(18,alpha=0.5))   # explain this command
+palette()
+barplot(1:20,col=1:20)
+
+palette(heat.colors(18))
+barplot(1:20,col=1:20)
+palette("default")                # reset to default
+```
+
+## Use predefined palettes. 
+
+Other packages have even more palettes: `library(RColorBrewer)`
+
+## Own colour palettes 
+Define your own colours - if you must
+```{r own_palettes}
+alpha=seq(0.1, 1.0, length.out = 50)   # control transparency
+mc=rgb(0,0,1,alpha)                    # my colours
+mc
+plot(iris$Petal.Length,col=mc)
+
+
+```
+
+
+# 2020-04-14
+## Functions
+
+- Everything is a function: $y = f(x_1,x_2, \ldots, p_1, \ldots)$
+- *structured* inputs: variables ($x_i$) and parameters ($p_i \to$ defaults?)
+- *structured* outputs: $y$
+
+Examples:
+```{r}
+sqrt(2)
+sin(pi)
+1+2
+```
+## Variables
+
+- creation
+- access: by index (`v[3]`), by name (`v["name"]`)
+- recycling: `1:10 + c(1,2)`
+
+Examples:
+```{r variables}
+# variable creation
+x=exp(2)
+v=sqrt(1:5)
+names(v)=letters[1:5]
+
+# variable access
+v
+v[3]    # by index
+v["d"]  # by name
+v[v<2]  # by logic
+
+1:10 + c(1,2) # recycle
+```
+
+
+## Warning and errors
+
+```{r warnings, eval=FALSE}
+1:10 + c(1,2,3)
+sqrt(-1:2)
+```
+
+```{r errors, eval=FALSE}
+sqrt("a")
+```
+
+
