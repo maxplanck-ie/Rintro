@@ -1,24 +1,16 @@
 ---
-title: "Image Power: Vizualizing Matrices"
+title: "Data Visualization"
 author: "Thomas Manke"
-date: "12 Feb 2018"
+date: "`r date() `"
 output: html_document
 ---
 
+# Image: Show me all the data
+The image() function maps numbers to colours. Try it on the iris data frame and understand the error.
 
-# Image:
-Rather than looking at all pairwise correlation coefficients, it is often easier to visualize them as a colour-coded matrix image.
-```{r}
-niris=iris[,-5]
-C=cor(niris)
-C
-image(C)
-```
-
-**Task**:
-Using the image() call, try to reproduce the following image for the full iris data (not just its correlation matrix)
-```{r, echo=FALSE}
-M=as.matrix(niris)
+```{r image}
+niris=iris[,-5]     # define numeric iris data
+M=as.matrix(niris)  # there are many as.* functions that convert among data structures
 image(M)
 ```
 
@@ -30,8 +22,7 @@ Be aware:
 * there is an implicit color-scheme: which one?
 
 Below we are re-scaling the iris-matrix
-```{r}
-M=as.matrix(niris)
+```{r scaling}
 S=scale(M)            # scales column-wise
 br=seq(-5,7,by=0.5)   # set common break points for the histograms below
 hist(M[,"Sepal.Width"], breaks = br)
@@ -47,7 +38,7 @@ image(S,main="Normalized IRIS data", axes=FALSE)              # as before, suppr
 ## Heatmaps
 Heatmaps are advanced images in which rows and columns are re-ordered according
 to some distance measure (default: Euclidean) and hierarchical clustering method (default: complete) 
-```{r}
+```{r heatmap}
 heatmap(S)
 ```
 
@@ -58,14 +49,14 @@ Notice that:
 * frequently needs many customizations: label size, remove row-names, ...
 * there is an implicit colour scheme: "numerical value $\to$ colour"
 * there are multiple extensions of this in other R-packages: e.g. gplots::heatmap.2
-```{r}
-cols = rainbow(3)[iris$Species]  # understand how color is defined
+```{r heatmap_with_col}
+cols = rainbow(3)[iris$Species]            # understand how color is defined
 heatmap(S,scale="none", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
 ```
 
 # Sending plots to files
 In Rstudio, we can export figures from the "Plots" tab. On the console we can define a pdf file as a new device for all subsequent figures. This is usually done only *after* the image is sufficiently optimized
-```{r}
+```{r pdf}
 pdf("../data/heatmap.pdf") # similar for jpeg, png, ...
 heatmap(S,scale="none", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
 dev.off()  # close device = pdf file
