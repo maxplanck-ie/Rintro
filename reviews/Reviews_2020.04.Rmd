@@ -8,16 +8,46 @@ output: html_document
 ## Data Selection
 ```{r}
 sc=c(1,3)                      # select column by index
-sr=grep("^v", iris$Species)    # select rows by 
+sr=grep("^v", iris$Species)    # select rows by logic statement
 iris[,sc] 
 iris[sr,]
 ```
 
-## Formulas
+## Formula Notation
 ```{r}
 boxplot( Petal.Length ~ Species, data = iris)
 plot( Petal.Length ~ Petal.Width, data = iris)
 ```
+## Questions
+```{r}
+v=1:4
+names(v)=letters[1:4]
+v
+v=1:3  # redefine v (attributes "names" are lost)
+v
+
+######
+
+h=3
+w=4
+A=h*w
+A
+
+h=7
+A   # A is a variable, not a function
+```
+
+```{r function}
+area = function(w,h) {  return(w*h) }
+area(3,4)
+```
+## Access vs Parameter
+```{r}
+cs=3
+cv=rainbow(3)  # function(): rainbow(n, s=1, ....) returns vector with n elements
+cv[1]          # accecc[]: pick element from vector
+```
+
 
 
 # 2020-04-15
