@@ -4,6 +4,19 @@ author: "Thomas Manke"
 date:  "`r date() `"
 output: html_document
 ---
+# 2020-04-17
+## A brief glance: from plotting to modeling
+```{r}
+plot(Petal.Length ~ Petal.Width, data=iris)
+cor(iris$Petal.Length, iris$Petal.Width)
+fit=lm(Petal.Length ~ Petal.Width, data=iris)  # very simple, very powerful, very common
+str(fit)      # this is a more complicated object:  a "list" = bag of things
+summary(fit)  # the function summary() knows what we want to see from a fit
+abline(fit)   # abline can deal with "fit". plot fit-line on the top of current "device" --> opened by plot
+```
+Many other functions are available to interact with such objects (plotting, predicting, ...)
+Please refer to rmd/04_DataModels.Rmd for a full notebook on "linear modeling"
+
 # 2020-04-16
 ## Data Selection
 ```{r}
