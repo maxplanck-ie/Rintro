@@ -5,18 +5,18 @@ date: "`r date()`"
 output: html_document
 ---
 
-# Saving objects as Rdat files
+# Saving objects as Rdata files
 In the process of data exploration we often generate many new data objects. Just as with figures, we may also save data objects for later use. 
 
-The following call saves an "image" of all data obejcts in a compressed file format (conventional: *.Rdat)
+The following call saves an "image" of all data obejcts in a compressed file format (conventional: *.Rdata)
 ```{r, eval=FALSE}
-save.image(file="04.Rdat") 
+save.image(file="04.Rdata") 
 ```
 
 **Task**: What happens if the "file=" parameter is omitted? Saving all data can be an overkill. Find out how to save only selected or single objects, e.g. S.
 
 # Saving objects as text files
-Rdat files are most convenient for future processing with R.
+Rdata files are most convenient for future processing with R.
 Sometimes we need to save objects in (tab-separated) text files:
 ```{r, eval=FALSE}
 write.table(iris, file="iris.tsv", sep="\t", row.names=FALSE, quote=FALSE)
@@ -38,13 +38,13 @@ In Rstudio, explore the "Files" tab. On the console:
 getwd()         # get the full path of the current working directory
 list.files()    # list all files in working directory
 setwd("~")      # change working directory to new directory (here: "~" = home)
-list.files(pattern=".Rdat") # list all ".Rdat files in working directory  
+list.files(pattern=".Rdata") # list all ".Rdata files in working directory  
 ```
 
 # The theory of I/O
 Reading external data into R is easy, but it is crucial to have a very clean and well-defined data structure. 
 ```{r, eval=TRUE}
-# load("04.Rdat")  # easiest and fastest for previously generated Rdat files
+# load("04.Rdata")  # easiest and fastest for previously generated Rdata files
 iris_f=read.table(file="../data/iris.tsv", sep="\t", header=TRUE)
 str(iris_f)
 head(iris_f)
@@ -116,7 +116,7 @@ write.table(P,file="../data/chip.tsv", sep="\t", quote=FALSE)  # write p-values 
 
 # Review:
 
-* exporting objects as Rdat (save.image) or text-file (write.table)
+* exporting objects as Rdata (save.image) or text-file (write.table)
 * navigate in directories, know where you are working: ls
 * I/O pain: keep data clean and well structured !
 
