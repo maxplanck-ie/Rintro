@@ -22,6 +22,8 @@ Sometimes we need to save objects in (tab-separated) text files:
 write.table(iris, file="iris.tsv", sep="\t", row.names=FALSE, quote=FALSE)
 ```
 
+**Task**: Save only the setosa data in a file setosa.tsv
+
 # Tracking objects
 In RStudio, explore the "Environment" tab. On the console there are also many convenient commands to track (and delte) objects from memory.
 ```{r, eval=FALSE}
@@ -46,6 +48,7 @@ Reading external data into R is easy, but it is crucial to have a very clean and
 iris_f=read.table(file="../data/iris.tsv", sep="\t", header=TRUE)
 str(iris_f)
 head(iris_f)
+identical(iris, iris_f)  # sanity check
 ```
 
 # The reality of I/O
@@ -54,7 +57,10 @@ In reality, many external data is badly formatted, leading to much wasted time -
 
 ### Mock real
 ```{r, eval=FALSE, error=TRUE}
-file="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/GeneList.tsv"  # locate at github https://github.com/maxplanck-ie/Rintro
+file="../data/GeneList.tsv"     # if github directory is locally available, find proper relative directory
+
+# alternatively: locate at github https://github.com/maxplanck-ie/Rintro
+# file="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/GeneList.tsv"  
 read.table(file) 
 read.table(file, header=TRUE)                                            # watch out for headers
 read.table(file, header=TRUE, comment.char = "%")                        # comment lines
