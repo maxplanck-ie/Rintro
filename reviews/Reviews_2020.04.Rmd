@@ -4,6 +4,62 @@ author: "Thomas Manke"
 date:  "`r date() `"
 output: html_document
 ---
+
+# 2020-04-20
+## More on heatmaps
+```{r load_package, message=FALSE, warning=FALSE}
+#install.packages("pheatmap") # install package (only once)
+library(pheatmap)            # add new functionality to R
+#?pheatmap
+```
+
+
+```{r pheatmap}
+S = scale(iris[,-5])
+pheatmap(S)  
+```
+
+```{r custom}
+rownames(S)=1:150
+rowannot=data.frame(Species=iris$Species)
+pheatmap(S, annotation_row = rowannot, show_rownames = FALSE)
+```
+## Dynamic interactions
+```{r heatmaply, message=FALSE, warning=FALSE}
+# install.packages("heatmaply")  # this may take some time: dependencies 
+library(heatmaply)
+
+# other package - more functionalities - some similarities - other defaults
+heatmaply(S, RowSideColors = iris$Species) 
+```
+
+
+## Principle Component Analysis
+```{r}
+plot(iris[,-5], col=iris$Species)
+cor(iris[,-5])
+```
+Notice: many correlation between many variables (here: 4) 
+Idea: Find new variable 
+
+![PCA goal](../images/PCA.gif)
+from amoeba @ https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues
+
+```{r}
+pca = prcomp(iris[,-5], scale=TRUE)
+S = pca$x                         # scores
+pairs(S, col=iris$Species)
+cor(S)
+
+```
+
+## More PCA-plots
+```{r biplot}
+biplot(pca)
+plot(pca)    # explained variance
+```
+
+
 # 2020-04-17
 ## A brief glance: from plotting to modeling
 ```{r}
