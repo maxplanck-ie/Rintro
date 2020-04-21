@@ -1,9 +1,34 @@
 ---
 title: "Review"
 author: "Thomas Manke"
-date:  "`r date() `"
-output: html_document
+date: "`r date() `"
+output:
+  html_document:
+    code_folding: show
 ---
+# 2020-04-21
+
+## Progress
+- Rstudio
+- Data classes: vector, matrix, data.frame, list = bags (e.g. lm, prcomp)
+- Functions: Input, Ouput and Parameters (defaults)
+- Visualizations: Basic, Heatmap, PCA
+- Packages: Install and Invoke (library)
+- Efficiency: History, Help, Notebooks
+
+## Console, Environment and all that
+- console = testing commands (trial & error)
+- history = list of everything that was typed in console: savehistory("history.R") 
+- environment = list of objects: save.image("env.Rdata"), load()
+
+- script (.R)  = structured commands and reproducible R code: source(script.R)
+- notebook/Rmarkdown (.Rmd) = annotated and documented scripts (knit --> html, pdf, docx)
+
+## Central Dogma of Data Analysis
+
+Read -> Check -> Filter -> Process -> Visualize -> Share
+
+
 
 # 2020-04-20
 ## More on heatmaps
@@ -24,6 +49,7 @@ rownames(S)=1:150
 rowannot=data.frame(Species=iris$Species)
 pheatmap(S, annotation_row = rowannot, show_rownames = FALSE)
 ```
+
 ## Dynamic interactions
 ```{r heatmaply, message=FALSE, warning=FALSE}
 # install.packages("heatmaply")  # this may take some time: dependencies 
