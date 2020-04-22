@@ -1,0 +1,160 @@
+---
+title: "Data Exploration: Regulatory Modules from ChIP-seq"
+author: "Thomas Manke"
+date: "`r date()`"
+output: 
+  html_document:
+    code_folding: hide
+    toc: yes
+---
+# Goal 
+- Input:  genome-wide binding data for 113 transcription factors in yeast (ChIP-chip): --> 6000 x 113 matrix
+- Analysis: identify combinations of TF
+- Output: a reproducible analysis document (Rmd) and report (html)
+- Reference: Lee et al. (2002) Transcriptional Regulatory Networks in Saccharomyces cerevisea.
+- Data Set: chip="http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_gene.tsv"
+
+# Setup
+Define libraries required for this project
+```{r}
+library(pheatmap)
+```
+
+
+# Skipped: Pre-processing
+Steps: extract only p-values from full data, define proper names for rows, remove columns 
+```{r preprocessing, eval=FALSE}
+# define a filename (notice that R can read from http)
+# Beware: For slow network connections it will be faster to first download the file to local storage and work from there.
+
+chip="http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_gene.tsv"
+
+###############################
+# Data munging: Trial and errors have been commented out 
+# first problem: two headers --> skip first --> skip line 1
+# D=read.table(file=chip, header=TRUE,  skip=1, sep="\t")
+# nrow(D)  # 511 << 6000 !!!???
+
+# second problem: quote symbols in names (')
+# cf=count.fields(chip,sep="\t") # many NA --> quoted fields got missing
+
+D=read.table(chip, header=TRUE,  sep="\t", quote="\"", skip=1)
+rownames(D)=D[,1]          # ORF-symbols in column 1, keep them as rownames 
+ic=c(1:4,seq(6,230,by=2))  # define column indices to be excluded (only keep p-values)
+P=D[,-ic]                  # new data-frame of p-values, exclude superfluous columns and ratios
+###############################
+
+# save cleaned data for future use
+write.table(P,file="../data/chip.tsv", sep="\t", quote=FALSE)  # write p-values to file
+```
+
+# Read Clean Data
+Let's start with a cleaned-up data set. 
+
+Now available at "https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/chip.tsv"
+(you might want to locate the *raw* file on https://github.com/maxplanck-ie/Rintro/).
+
+Faster: have it local
+
+```{r read}
+fn="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/chip.tsv"  # remote filename
+fn="../data/chip.tsv"                                                            # local: same but faster
+P=read.table(file=fn, header=TRUE, sep="\t")
+```
+
+
+# Sanity Checks
+Inspect data. You might want to do this on the console.
+So that you don't clutter your notebook.
+
+## Structure
+```{r str, eval=FALSE}
+str(P) # you might want to do this on the console 
+```
+
+## Dimensions, Names, strange entries
+```{r checks}
+dim(P)
+colnames(P)
+anyNA(P)           # are there any undefined values
+sum(P<0 | P>1)     # how many "strange" p-values --> errors?
+```
+
+## Summary Plots
+```{r summary_plots}
+boxplot(P)         # distribution
+hist(as.matrix(P)) # hist() requires matrix as input 
+```
+
+## Show me all the data
+This might be slow.
+```{r pheatmap}
+pheatmap(P, show_rownames=FALSE)
+```
+
+# Transformations
+```{r transform}
+pt = 1e-3           # define P-value threshold
+B = P < pt          # B is a Boolean matrix (FALSE/TRUE)
+```
+
+# Filter
+Some genes (rows) have no associated TF. Some TF target no gene.
+```{r filter}
+nt = rowSums(B)     # number of transcription factors targetting a gene
+ng = colSums(B)     # number of genes targetted by TF
+D = B[nt>1, ng>40]  # define filtered data
+dim(B)
+dim(D)
+```
+
+# Show me the processed data
+```{r plot}
+pheatmap(D+0, show_rownames=FALSE) # D + 0 is trick to convert logical matrix to numeric matrix (FALSE=0, TRUE=1) 
+```
+
+# Main Results: All Correlations
+```{r correlations}
+C = cor(D)
+pheatmap(C)
+```
+
+#  Explore specific factor combinations
+
+```{r smoothScatter}
+t1="FHL1"
+t2="RAP1"
+plot( P[,t1], P[,t2] )                     # not very meaningful
+smoothScatter( log(P[,t1]), log(P[,t2]) )  # scatterplot of log(p-values) for two TF 
+abline(h=log(pt), v=log(pt), col="red")    # show thresholds
+```
+
+
+Correlation Coefficient: `r C[t1,t2]`
+
+# Contigency tables
+```{r contTables}
+table(B[,t1])               # 194 genes bound by t1="FHL1"
+names(which(B[,t1]))        # their names
+
+tb=table(B[,t1],B[,t2])     # contingency table: 119 genes bound by FHL1 and RAP1
+tb
+
+fisher.test(tb)             # a test at last: the overlap is highly unexpected
+```
+
+# Investigating Multiple Overlaps
+upsetR is better (more general) than Venn diagrams
+```{r upsetR}
+library(UpSetR)
+upset( as.data.frame(B+0), sets = c("FHL1", "RAP1", "MCM1", "STE12") )
+```
+
+
+
+# Review
+* Data munging: typically requires basic processing and filtering steps ==> use clean data
+* data exploration and visualization: heatmap(), smoothScatter()
+* quantitative data descriptions: cor(), table()
+* some tests: fisher.test()
+* R notebooks: run code chunks interactively, or generate full reports
