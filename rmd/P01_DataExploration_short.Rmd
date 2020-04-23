@@ -59,6 +59,7 @@ Faster: have it local
 ```{r read}
 fn="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/chip.tsv"  # remote filename
 fn="../data/chip.tsv"                                                            # local: same but faster
+
 P=read.table(file=fn, header=TRUE, sep="\t")
 ```
 
@@ -121,7 +122,7 @@ pheatmap(C)
 
 #  Explore specific factor combinations
 
-```{r smoothScatter}
+```{r}
 t1="FHL1"
 t2="RAP1"
 plot( P[,t1], P[,t2] )                     # not very meaningful
@@ -129,8 +130,7 @@ smoothScatter( log(P[,t1]), log(P[,t2]) )  # scatterplot of log(p-values) for tw
 abline(h=log(pt), v=log(pt), col="red")    # show thresholds
 ```
 
-
-Correlation Coefficient: `r C[t1,t2]`
+Correlation Coefficient: `r C[t1,t2]`. 
 
 # Contigency tables
 ```{r contTables}
