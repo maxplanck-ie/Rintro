@@ -59,7 +59,6 @@ Faster: have it local
 ```{r read}
 fn="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/chip.tsv"  # remote filename
 fn="../data/chip.tsv"                                                            # local: same but faster
-
 P=read.table(file=fn, header=TRUE, sep="\t")
 ```
 
@@ -122,7 +121,7 @@ pheatmap(C)
 
 #  Explore specific factor combinations
 
-```{r}
+```{r smoothScatter}
 t1="FHL1"
 t2="RAP1"
 plot( P[,t1], P[,t2] )                     # not very meaningful
