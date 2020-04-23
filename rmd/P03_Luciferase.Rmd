@@ -1,0 +1,111 @@
+---
+title: "Luciferase - An Example"
+author: "Thomas Manke"
+date: "`r date() `"
+output:
+  html_document:
+    code_folding: show
+    toc: yes
+---
+
+# Read the data
+```{r read}
+# notice: use first column as row.names
+D=read.delim2("../data/luciferase.tsv", row.names=1)
+D
+```
+
+# Transform
+Barplot (from base R) will need matrix. So need to convert data.frame --> matrix. 
+At the same time log-transform might be useful --> avoid gaps
+```{r transform}
+M=as.matrix(log(D))
+```
+
+# Barplot
+These are first attempts to generate boxplots with base R.
+They will not be very meaningful, but they can highlight some problems
+```{r barplot_with_baseR}
+palette(rainbow(4,alpha=0.7)) # set some palette for color mapping
+
+barplot(M, beside = TRUE, col=1:4)
+legend("topleft", legend = rownames(M),  fill = 1:4)
+
+# Taking the transpose (t(M) below) may be somwhat closer to the desired output
+cols=rep(1:4, each=3)  # define colours
+sp=c(0.2, 1)           # control the gap between the bars
+barplot(t(M), beside = TRUE, col=cols, space = sp)
+legend("topleft", legend = colnames(M),  fill = cols)
+# Notice that the colour assignment assumes a specific order an implicit understanding of the data
+```
+
+# Problems
+- no easy way to plot error bars on barplots (discouraged) --> boxplot
+- no easy way to plot gap on axis --> other packages (thank you google): plotrix:gap.barplot --> better solution: log-transform
+- no way for R to know groups (relation between columns): only humans take interpretation of column names --> colour choice
+- need to define some representative value for groups (mean) and variation around (standard deviation)
+
+Unfortunately the data is not "tidy" :-(
+
+# Tidy the data
+The tidyverse way. Very powerful, but it forces the adoption of some grammar rules
+
+```{r tidy}
+library(tidyverse)  # this package (and dependencies) will have to be installed before
+
+# now keep the Treatment as column (c.f. the first efforts)
+
+D=read.delim2("../data/luciferase.tsv") 
+```
+
+## Reformat the data
+Observation: We have two categorical variables (Treatment, Condition), 1 measurement (number)
+
+Goal: Gather all columns and 
+
+- collect them as categorical variable ("Cond"),
+- call the observed value = "number"
+- keep variable "Treatment"
+
+We will do this in a pipeline (%>%)
+
+```{r gather}
+D %>% gather(Cond, number, -Treatment) %>% head  # just print the head for now (might be a big data set)
+```
+
+Now expand the above pipe to deal with the Condition variable: unify Cond.
+Remove the suffix from string (mutate variable)
+```{r mutate}
+# thankfully this is easy (just remove suffix .1 and .2) --> mutate and use regexp
+D = D %>% gather(Cond, number, -Treatment) %>% mutate(Cond=str_remove(Cond,".\\d"))
+```
+
+
+# Boxplot
+This is the prefered way, as you will show the distribution in a more meaningful way.
+
+```{r boxplot}
+ggplot(D, aes(x=Cond, y=number, colour=Cond)) +
+  geom_boxplot() +                              # a boxplot summary
+  geom_jitter() +                               # add actual data points
+  scale_y_continuous(trans = 'log2') +          # on a logarithmic scale
+  facet_grid(~Treatment)  +                     # "facet" over treatments
+  theme(axis.text.x = element_text(angle = 90)) # use theme to change axis labels/angles
+```
+
+# Barplot
+If you really have to use a barplot. Barplots are frequently used, but discouraged
+
+https://www.data-to-viz.com/caveat/error_bar.html
+
+```{r barplot}
+# First define some mean number (mn) and standard deviation (nd) for each combination (Treatment, Cond)
+Db = D %>% group_by(Treatment, Cond) %>% summarize(nm=mean(number), nd=sd(number))
+
+ggplot(Db, aes(x=Cond, y=nm, fill=Cond)) +
+  geom_bar(stat="identity") +                         # plots barplot
+  geom_errorbar(aes(ymin=nm-nd, ymax=nm+nd)) +        # adds errorbar
+  scale_y_continuous(trans = 'log2') +                # log. scale
+  facet_grid(~Treatment) +                          
+  theme(axis.text.x = element_text(angle = 90))       # use theme() to change axis labels/angles
+```
