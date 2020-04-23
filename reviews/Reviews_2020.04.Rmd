@@ -7,6 +7,80 @@ output:
     code_folding: show
 ---
 # 2020-04-21
+```{r}
+# notice: use first column as row.names
+D=read.delim2("~/R/Rstudio/Projects/RstudioIntro1/luciferase.tsv", row.names=1)
+
+# transformation: 
+# 1) base:barplot needs matrix not data frame 
+# 2) log is more meaningful --> avoid gaps
+
+M=as.matrix(log(D))
+```
+
+```{r plot}
+palette(rainbow(4,alpha=0.7)) # set some meaningful palette
+ 
+# Notice that the color assignment assume an implicit understanding of the data
+barplot(M, beside = TRUE, col=1:4)
+legend("topleft", legend = rownames(M),  fill = 1:4)
+
+# Probably closer
+cols=rep(1:4, each=3)
+sp=c(0.2, 1)
+barplot(t(M), beside = TRUE, col=cols, space = sp)
+legend("topleft", legend = colnames(M),  fill = cols)
+
+```
+Problems:
+- no easy way to plot error bars on barplots (discouraged) --> boxplot
+- no easy way to plot gap on axis --> plotrix:gap.barplot --> better: log-transform
+- no way for R to know groups: only humans take interpretation of column names
+
+
+# The ggplot way
+powerful, but forces the adoption of some grammar rules
+```{r}
+D=read.delim2("~/R/Rstudio/Projects/RstudioIntro1/luciferase.tsv") # keep the Treatment as column
+
+# 1. reformat the data
+# observation: two categorical variables (Treatment, Condition), 1 measurement (number)
+# Gather all columns and 
+#   collect them as categorical variable ("Cond"),
+#   call the observed value = "number"
+#   don't do this for variable "Treatment"
+D %>% gather(Cond, number, -Treatment) %>% head
+
+# now deal with Condition variable - thankfully this is easy (just remove suffix .1 and .2)
+D = D %>% gather(Cond, number, -Treatment) %>% mutate(Cond=str_remove(Cond,".\\d"))
+```
+
+```{r barplot}
+Db = D %>% group_by(Treatment, Cond) %>% summarize(mn=mean(number), nd=sd(number))
+
+ggplot(Db, aes(x=Cond, y=mn)) +
+  geom_bar(stat="identity") +
+  scale_y_continuous(trans = 'log2') +
+  facet_grid(~Treatment)
+  theme(axis.text.x = element_text(angle = 90)) # use theme to change axis labels/angles
+```
+
+```{r boxplot}
+ggplot(D, aes(x=Cond, y=number, colour=Cond)) +
+  geom_boxplot() +                              # a boxplot summary
+  geom_jitter() +                               # add actual data points
+  scale_y_continuous(trans = 'log2') +          # on a logarithmic scale
+  facet_grid(~Treatment)  +                     # "facet" over treatments
+  theme(axis.text.x = element_text(angle = 90)) # use theme to change axis labels/angles
+```
+
+```{r}
+ct= c(a=50,b=50,c=50) # some count table
+barplot(ct)
+
+ct= table(iris$Species) # some count table
+
+```
 
 ## Progress
 - Rstudio
