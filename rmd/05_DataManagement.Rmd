@@ -1,8 +1,11 @@
 ---
-title: "Data Managment: Objects and Files"
+title: 'Data Managment: Objects and Files'
 author: "Thomas Manke"
 date: "`r date()`"
-output: html_document
+output:
+  html_document:
+    df_print: paged
+    code_folding: show
 ---
 
 # Saving objects as Rdata files
@@ -41,24 +44,37 @@ setwd("~")      # change working directory to new directory (here: "~" = home)
 list.files(pattern=".Rdata") # list all ".Rdata files in working directory  
 ```
 
+# some jargon
+```{r jargon}
+( wd = getwd() )                        # working directory --> full path
+( fn = paste(wd,"test.txt", sep="/") ) # filename (may not exist)
+( dn = dirname(fn) )                    # directory name 
+( bn = basename(fn) )                   # basename
+( rp = "../data/test.tsv" )             # relative path  = relative to current work directory
+```
+
 # The theory of I/O
 Reading external data into R is easy, but it is crucial to have a very clean and well-defined data structure. 
 ```{r, eval=TRUE}
 # load("04.Rdata")  # easiest and fastest for previously generated Rdata files
-iris_f=read.table(file="../data/iris.tsv", sep="\t", header=TRUE)
+iris_f=read.table(file="../data/iris.tsv", sep="\t", header=TRUE) 
+
+# Checks
 str(iris_f)
 head(iris_f)
 identical(iris, iris_f)  # sanity check
 ```
+
+
 
 # The reality of I/O
 In reality, many external data is badly formatted, leading to much wasted time - before any analysis. 
 
 
 ### Mock real
-```{r, eval=FALSE, error=TRUE}
+The code snippet below are not run
+```{r trial_and_error, eval=FALSE, error=TRUE}
 file="../data/GeneList.tsv"     # if github directory is locally available, find proper relative directory
-
 # alternatively: locate at github https://github.com/maxplanck-ie/Rintro
 # file="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/GeneList.tsv"  
 read.table(file) 
@@ -66,18 +82,37 @@ read.table(file, header=TRUE)                                            # watch
 read.table(file, header=TRUE, comment.char = "%")                        # comment lines
 read.table(file, header=TRUE, comment.char = "%", sep="\t")              # separators
 read.table(file, header=TRUE, comment.char = "%", sep="\t", quote="\"")  # quote character. What is the default?
+```
 
-# read.delim(file, comment.char = "%")                                   # alternative with certain options in place
-
-# Now fill the data frame
+Happy with results? Fill the data frame
+```{r full_read}
+file="../data/GeneList.tsv" 
 D=read.table(file, header=TRUE, comment.char = "%", sep="\t", quote="\"")
+```
 
+Many more alternatives:
+```{r alt, eval=FALSE}
+file="../data/GeneList.tsv"
+read.delim(file, comment.char = "%")      # certain useful (default) parameters in place
+
+# other packages:
+readr::read_delim(file, delim ="\t", comment = "%")
+
+# even from EXCEL
+file="../data/MouseFoodExperiment.xlsx"
+readxl::read_excel(file)
+```
+Also see: "File->Import Dataset"
+
+
+```{r checks}
+str(D)
 is.na(D)  # any NA's?
 
 colSums(is.na(D))
-i=which(rowSums(is.na(D[,3:5]))==0)   # keep rows without NA
-j=which(colSums(is.na(D))==nrow(D))   # remove columns with all NA
-D[i,-j]
+i=rowSums(is.na(D[,3:5]))==0   # keep rows without NA
+j=colSums(is.na(D))==nrow(D)   # remove columns with all NA
+D[i,!j]
 ```
 
 ### Real real (Homework)
