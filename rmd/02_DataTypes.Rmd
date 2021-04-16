@@ -1,7 +1,7 @@
 ---
 title: "Data Types"
 author: "Thomas Manke"
-date: "26 Sep 2017"
+date: "`r date() `"
 output: html_document
 ---
 
