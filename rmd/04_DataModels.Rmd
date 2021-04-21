@@ -49,7 +49,7 @@ fit$coefficients
 fit$df.residual
 ```
 
-#Reporting the fit (model)
+# Reporting the fit (model)
 ```{r}
 coefficients(fit)
 confint(fit)   # Try to change the confidence level: ?confint
