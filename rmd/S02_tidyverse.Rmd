@@ -1,0 +1,121 @@
+---
+title: 'Tidyverse'
+author: "Thomas Manke"
+date: "`r date()`"
+output:
+  html_document:
+    df_print: paged
+    code_folding: show
+---
+
+# Tidyverse
+
+See also: R for Data Science:  https://r4ds.had.co.nz/
+```{r installation, eval=FALSE}
+install.packages("tidyverse") # only needed once
+```
+
+```{r setup}
+library("tidyverse")
+```
+
+```{r read_data}
+getwd()  # know your working directory
+file="../data/GeneList.tsv"   # set file name relative to working directory
+D = read_tsv(file, comment="%")
+D
+```
+
+
+# A new style: Pipes
+```{r tidyverse_style}
+iris %>% str()
+iris %>% head()
+```
+
+# Selection
+```{r selection}
+# column selection / unselection
+iris %>% select(-Species) %>% head()                            
+iris %>% select(matches("Length")) %>% head()
+
+# row selection
+iris %>% slice(-c(4:150))
+iris %>% filter(Petal.Length==min(Petal.Length))      
+iris %>% filter(Petal.Length<2 & Sepal.Width>4) 
+```
+
+
+# Data Munging and Reshaping
+
+Same data can come in various shapes:
+```{r }
+iris %>% gather(Measurement, Value, -Species)   # convert between wide and long forms
+```
+
+
+
+# Sorting and Ordering
+```{r}
+iris %>% top_n(4, Petal.Length) %>% arrange(desc(Petal.Length))
+```
+
+```{r counting}
+iris %>% distinct(Species)
+iris %>% count(Species)
+```
+
+**Task** count Petal.Length
+
+# Adding data
+```{r adding_data}
+# a silly example: convert Petal.Length from centimeters --> meters
+iris %>% mutate(pl_m=Petal.Length/100) %>% head()
+
+# perhaps more useful
+iris %>% mutate(PLr=rank(Petal.Length)) %>% arrange(Petal.Length) %>% head()
+```
+
+# Grouping and Summarizing
+```{r group_and_sum}
+iris %>% group_by(Species) %>% summarise(m=mean(Petal.Length))
+```
+**Task1** Plot the standard deviation [hint: ?sd] of Petal.Length within each group
+
+**Task2** Plot the mean(Petal.Length) against the mean(Petal.Width) where the means are for each Species 
+
+
+# Merging Data frames
+```{r}
+# create two data sets for Sepal and Petal measurments, but add ID to keep track of the flow-ID
+irisS=iris%>% select(matches("Sepal")) %>% mutate(id=row_number())                           
+irisP=iris%>% select(matches("Petal")) %>% mutate(id=row_number()) %>% sample_frac(0.05)  # second plant is subsampled
+
+left_join(irisP,irisS, by="id")
+right_join(irisP,irisS, by="id")
+inner_join(irisP,irisS, by="id")
+```
+
+**Task** Explore the resulting data
+
+# ggplot: Powerful plotting
+```{r ggplot}
+g = ggplot(iris, aes(x=Petal.Length, y=Petal.Width, colour=Species))
+g + geom_point() +
+    geom_smooth(method="lm", se=TRUE, color="yellow") +
+    geom_smooth(method="loess", colour="orange")
+```
+
+# Grouping
+```{r group}
+g + geom_point() + facet_grid(~Species) # arrange subplot by categorical variable, try setting sclaes="free"
+
+g + geom_smooth(aes(group=Species))   # smooth based on group defined by species
+```
+```{r other}
+g = ggplot(iris, aes(x=Species, y=Petal.Width, colour=Species))
+g + geom_violin() +
+    scale_x_discrete(limits=c("versicolor", "setosa","virginica"))  # change order
+```
+
+
