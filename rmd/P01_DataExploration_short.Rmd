@@ -83,7 +83,7 @@ sum(P<0 | P>1)     # how many "strange" p-values --> errors?
 ## Summary Plots
 ```{r summary_plots}
 boxplot(P)         # distribution
-hist(as.matrix(P)) # hist() requires matrix as input 
+#hist(as.matrix(P)) # hist() requires matrix as input 
 ```
 
 ## Show me all the data
