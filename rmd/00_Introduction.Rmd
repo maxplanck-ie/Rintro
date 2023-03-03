@@ -8,14 +8,13 @@ output: html_document
 
 ## Block 1: Groundwork
 * Intro to RStudio: a GUI for R
-* The Basics: data types and classes
+* Getting data: I/O
 * function structures (understanding output)
 
-## Block 2: Basic 
+## Block 2: Speaking about Data 
 * Data Descriptions
 * Data Visualization: simple plots and advanced heatmaps
 * Data Models: linear models
-* Data Management: getting data in and out
 
 ## Block 3: Open the universe
 * installing and using packages
@@ -66,11 +65,12 @@ This course does *not* teach
 * frequent requirement during (bioinformatics) hiring
 
 # First hurdles
-* its a new language: vocabulary & grammar
-* computers are stuborn and stupid: they do not think along
+* it's a new language: vocabulary & grammar
 * case sensitivity: $a \ne A$
-* choices: many ways to say (to program) things
-* more choices: 3000 (redundant) packages
+* parameter sensitivity
+* choices: many ways to say (to program) the same things
+* more choices: many (redundant) packages
+* computers are stubborn and stupid: they do not think along
 * learning curve: steep (but rewarding)
 
 # Start Rstudio
