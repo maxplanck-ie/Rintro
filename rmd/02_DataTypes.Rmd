@@ -1,5 +1,5 @@
 ---
-title: "Data Types"
+title: "02: Data Types"
 author: "Thomas Manke"
 date: "`r date() `"
 output: html_document
