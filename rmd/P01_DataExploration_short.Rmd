@@ -88,7 +88,7 @@ boxplot(P)         # distribution
 
 ## Show me all the data
 This might be slow.
-```{r pheatmap}
+```{r pheatmap, cache=TRUE}
 pheatmap(P, show_rownames=FALSE)
 ```
 

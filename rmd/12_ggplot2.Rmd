@@ -186,7 +186,7 @@ ggplot(data = d3, aes(x = Week, y = avg)) +
 
 But really what's the fun of that when we can have ggplot do it for us:
 
-```{r}
+```{r geom_smooth}
 ggplot(data = d2, aes(x = Week, y = Value)) +
   geom_smooth(aes(color=Group, fill=Group)) +
   labs(x="Measurement week", y="Food intake (g)")
@@ -201,7 +201,7 @@ The shaded regions are the 95% confidence intervals. The amount of smoothing is 
 
 Let's look again at the line plot:
 
-```{r}
+```{r facets}
 ggplot(data = d2, aes(x = Week, y = Value, group=Cage)) +
   geom_line(aes(color=Group)) +
   labs(x="Measurement week", y="Food intake (g)")

@@ -1,0 +1,31 @@
+name: Rintro2023
+output_dir: _site
+exclude: ["P0*", "S0*"]
+
+#subdirs: TRUE
+
+navbar:
+  title: "RIntro 2023"
+  type: inverse
+  left:
+    - text: "Overview"
+      href: 00_Introduction.html
+
+    - text: "Modules"
+      menu:
+#        - text: "--------"
+        - text: "01_FirstSteps"
+          href: 01_FirstSteps.html
+        - text: "02_DataTypes"
+          href: 02_DataTypes.html
+  right:
+    - text: "GitHub"
+      icon: fa-github
+      href: https://github.com/maxplanck-ie/Rintro/tree/2023.03
+
+output:
+  html_document:
+    toc: true
+    highlight: textmate
+    include:
+      after_body: ../html/footer.html
