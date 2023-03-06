@@ -1,0 +1,33 @@
+---
+title: "Tidy Data"
+subtitle: "David Koppstein"
+format:
+  revealjs: 
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/maxplanck-ie.jpg
+    css: styles.css
+    footer: <https://github.com/maxplanck-ie/Rintro>
+---
+
+## Real data is very messy
+
+- Typically not in a usable format
+- Random empty values
+- Poorly coded treatments
+
+This **always** happens with other people's datasets.
+
+The process of correcting all of this is called "munging."
+
+## What is tidy data? 
+
+
+
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
