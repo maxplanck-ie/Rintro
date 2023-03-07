@@ -9,6 +9,11 @@ output:
     code_folding: hide   # code for which echo=TRUE will not be shown but folded
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache=TRUE)
+```
+
 # Recap: All-Against-All Correlations
 **Task**: remove the Species variable from "iris" and store the result in a new data.frame "niris"
 ```{r}

@@ -5,9 +5,14 @@ date: "`r date() `"
 output: html_document
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache=TRUE)
+```
+
 # From Vectors to Matrices
 
-```{r}
+```{r matgen}
 v=1:20
 str(v)    # str helps to understand the structure of an object
 
@@ -19,7 +24,7 @@ typeof(M) # matrix entries always have a single data type
 
 ```
 # Added information for matrices
-```{r, eval=FALSE}
+```{r matinfo, eval=FALSE}
 dim(M)  
 nrow(M)
 ncol(M)
@@ -27,7 +32,7 @@ length(M)
 ```
 
 # Matrices != Vectors
-```{r}
+```{r matquery}
 is.vector(M)
 is.vector(M[,1]) # matrix is a collection of vectors
 
@@ -73,7 +78,7 @@ Mc
 
 # Naming Matrices
 What are the following commands doing? Inspect matrix $M$ before and after.
-```{r}
+```{r rowcol_names}
 rownames(M)=letters[1:nrow(M)]
 colnames(M)=LETTERS[1:ncol(M)]
 ```

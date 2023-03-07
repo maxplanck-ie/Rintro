@@ -7,6 +7,12 @@ output:
     code_folding: hide
     toc: yes
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache=TRUE)
+```
+
 # Goal 
 - Input:  genome-wide binding data for 113 transcription factors in yeast (ChIP-chip): --> 6000 x 113 matrix
 - Analysis: identify combinations of TF

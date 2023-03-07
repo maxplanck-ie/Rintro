@@ -1,9 +1,20 @@
 ---
 title: "Data Visualization"
 author: "Thomas Manke"
-date: "`r date() `"
-output: html_document
+date: '`r Sys.Date()`'
+output:
+  html_document:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_depth: 2
 ---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache=TRUE)
+```
 
 # Image: Show me all the data
 The image() function maps numbers to colours. Try it on the iris data frame and understand the error.
