@@ -23,8 +23,8 @@ jobs:
 
       - name: Install Rintro
         run: |
-	    pwd
-	    ls
+	          pwd
+	          ls
             echo "begin: PATH=$PATH;"
             #conda install mamba
             #mamba create -y --name Rintro samtools
