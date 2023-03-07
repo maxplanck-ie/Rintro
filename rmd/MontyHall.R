@@ -15,12 +15,27 @@ success=0                                         # Number of successes when swi
 
 # A loop over N trials
 for (i in 1:N){
-  doors = sample(doors)                           # shuffle doors
-  pick  = sample(doors,1)                         # candidate picks one door at random
-  open  = open_door(pick,doors)                   # show master picks one other door (!= pick != win)
-  switch= doors[ doors != pick & doors != open]   # candidate has choice to switch
-  if (switch=="W") { success=success+1}           # count if switching strategy is successful (= "win")
+  doors  = sample(doors)                           # shuffle doors
+  pick   = sample(doors,1)                         # candidate picks one door at random
+  open   = open_door(pick,doors)                   # show master picks one other door (!= pick != win)
+  switch = doors[ doors != pick & doors != open]   # candidate has (one) choice to switch
+  if (switch=="W") { success=success+1}            # count if switching strategy is successful (= "win")
 }
 
 # ouput message of successes
 cat("successes with switching= ",success, "success_rate: ", success/N, "\n")
+
+########################
+# improvements: without for & if
+# replace by replicate() and but create boolean vector of switch success
+switch = replicate(N, {
+  doors  = sample(doors)
+  pick   = sample(doors, 1)
+  open   = open_door(pick,doors)
+  switch = doors[ doors != pick & doors != open]
+  switch == "W"              # TRUE if switching strategy was successful
+})
+
+cat("successes with switching= ",sum(switch), "success_rate: ", mean(switch), "\n")
+
+
