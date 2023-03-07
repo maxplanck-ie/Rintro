@@ -23,13 +23,13 @@ jobs:
 
       - name: Install Rintro
         run: |
-	          pwd
-	          ls
-            echo "begin: PATH=$PATH;"
-            #conda install mamba
-            #mamba create -y --name Rintro samtools
+          pwd
+	        ls
+          echo "begin: PATH=$PATH;"
+          #conda install mamba
+          #mamba create -y --name Rintro r-base=4.1.3
 
-            #conda activate Rintro || true
-            echo "after conda activate Rintro: PATH=$PATH;"
-            which R || true
-            R --version
+          #conda activate Rintro || true
+          echo "after conda activate Rintro: PATH=$PATH;"
+          which R || true
+          R --version
