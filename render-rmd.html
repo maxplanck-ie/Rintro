@@ -1,4 +1,4 @@
-name: Render Rintro  to HTML
+name: Render Rintro to HTML
 
 on:
   push:
@@ -14,11 +14,11 @@ jobs:
         r-version: '4.1.2'
     - name: Install R packages
       run: Rscript -e "install.packages(c('rmarkdown', 'knitr'))"
-    - name: Render R Markdown
-      run: Rscript -e "rmarkdown::render_site(source_dir = 'rmd')"
+    - name: Render R Markdown and Move Site
+      run: Rscript -e "rmarkdown::render_site('rmd')" ; mv rmd/_site .
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./html
+        publish_dir: ./_site
 
