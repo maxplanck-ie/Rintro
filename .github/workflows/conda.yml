@@ -1,0 +1,35 @@
+name: Conda
+on: [push]
+
+jobs:
+  # label of the job
+  tests:
+    name: Conda Tests
+    runs-on: ubuntu-latest
+    # Do not ignore bash profile files. From:
+    # https://github.com/marketplace/actions/setup-miniconda
+    defaults:
+      run:
+        shell: bash -l {0}
+    container: node:latest
+    steps:
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniconda-version: "latest"
+          channels: bioconda, conda-forge, defaults
+          use-only-tar-bz2: true 
+          auto-update-conda: true
+          auto-activate-base: true
+
+      - name: Install Rintro
+        run: |
+	    pwd
+	    ls
+            echo "begin: PATH=$PATH;"
+            #conda install mamba
+            #mamba create -y --name Rintro samtools
+
+            #conda activate Rintro || true
+            echo "after conda activate Rintro: PATH=$PATH;"
+            which R || true
+            R --version
