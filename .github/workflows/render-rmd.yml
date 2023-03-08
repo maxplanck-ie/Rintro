@@ -41,11 +41,17 @@ jobs:
           echo "conda activate base" >> $HOME/.bashrc
           cat $HOME/.bashrc
           exec bash
-          
+
       - name: Install Requirements
         run: |
           conda install mamba
-          mamba env create -f conda_config.yml 
+          mamba env create --name Rintro2023 -f conda_config.yml
+          conda activate Rintro2023 
+
+      - name: List Available Environment
+        run: 
+          conda info --envs
+          conda env list
 
       - name: Activate Environment
         run: 
