@@ -27,10 +27,10 @@ jobs:
           echo "begin: PATH=$PATH;"
           which R || true
 
-          #conda install mamba
-          #mamba create -y --name Rintro r-base=4.1.3
+          conda install mamba
+          mamba create -y --name Rintro r-base=4.1.3
 
-          #conda activate Rintro || true
+          conda activate Rintro || true
           echo "after conda activate Rintro: PATH=$PATH;"
           which R || true
-          R --version
+          R --version || true
