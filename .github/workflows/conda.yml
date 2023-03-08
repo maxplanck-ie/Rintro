@@ -1,5 +1,9 @@
 name: Conda
-on: [push]
+run-name: ${{ github.actor }} is testing Conda installation
+
+on:
+  push:
+    branches: ["2023.03"] 
 
 jobs:
   # label of the job
@@ -13,6 +17,12 @@ jobs:
         shell: bash -l {0}
     container: node:latest
     steps:
+      - uses: actions/checkout@v2
+      - name: Check directory
+        run: |
+          pwd
+          ls -al || true
+          cat conda_config.yml || true
       - uses: conda-incubator/setup-miniconda@v2
         with:
           miniconda-version: "latest"
@@ -20,17 +30,16 @@ jobs:
           use-only-tar-bz2: true 
           auto-update-conda: true
           auto-activate-base: true
+      # - name: Install Rintro
+      #   run: |
+      #     pwd; ls
+      #     echo "begin: PATH=$PATH;"
+      #     which R || true
 
-      - name: Install Rintro
-        run: |
-          pwd; ls
-          echo "begin: PATH=$PATH;"
-          which R || true
+      #     conda install mamba
+      #     mamba create -y --name Rintro r-base=4.1.3
 
-          conda install mamba
-          mamba create -y --name Rintro r-base=4.1.3
-
-          conda activate Rintro || true
-          echo "after conda activate Rintro: PATH=$PATH;"
-          which R || true
-          R --version || true
+      #     conda activate Rintro || true
+      #     echo "after conda activate Rintro: PATH=$PATH;"
+      #     which R || true
+      #     R --version || true

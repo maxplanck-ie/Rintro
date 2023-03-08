@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is testing
 
 on:
   push:
-    branches: [2023.03] 
+    branches: ["2023.03"] 
 
 jobs:
   build:
