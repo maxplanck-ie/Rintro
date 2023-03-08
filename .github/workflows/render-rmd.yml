@@ -37,15 +37,19 @@ jobs:
       - name: Configure conda
         run: |
           conda init bash
-          echo ". /opt/conda/etc/profile.d/conda.sh" >> $HOME/.bashrc
-          echo "conda activate base" >> $HOME/.bashrc
           cat $HOME/.bashrc
-          exec bash
+          # exec bash
+          conda env list
+
+      # - name: Install Mamba
+      #   run: |
+      #     conda install mamba
+      #     conda info --envs
 
       - name: Install Requirements
         run: |
-          conda install mamba
-          mamba env create --name Rintro2023 -f conda_config.yml
+          conda env create --name Rintro2023 -f conda_config.yml
+          conda info --envs
           conda activate Rintro2023 
 
       - name: List Available Environment
