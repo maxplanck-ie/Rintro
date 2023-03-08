@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Thomas Manke" />
+
+<meta name="date" content="2023-03-08" />
+
+<title>Tidyverse</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Rintro 2023</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Modules
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_Introduction.html">00_Introduction</a>
+    </li>
+    <li>
+      <a href="01_FirstSteps.html">01_FirstSteps</a>
+    </li>
+    <li>
+      <a href="02_DataTypes.html">02_DataTypes</a>
+    </li>
+    <li>
+      <a href="03_DataDescriptions.html">03_DataDescriptions</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="04_DataModels.html">04_DataModels</a>
+    </li>
+    <li>
+      <a href="04_DataVisualization.html">04_DataVisualization</a>
+    </li>
+    <li>
+      <a href="05_DataManagement.html">05_DataManagement</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="10_tidyr.html">10_tidyr</a>
+    </li>
+    <li>
+      <a href="11_dplyr.html">11_dplyr</a>
+    </li>
+    <li>
+      <a href="12_ggplot2.html">12_ggplot2</a>
+    </li>
+    <li class="divider"></li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/maxplanck-ie/Rintro/tree/2023.03">
+    <span class="fa fa-github"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Tidyverse</h1>
+<h4 class="author">Thomas Manke</h4>
+<h4 class="date">2023-03-08</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#tidyverse" id="toc-tidyverse">Tidyverse</a></li>
+<li><a href="#a-new-style-pipes" id="toc-a-new-style-pipes">A new style:
+Pipes</a></li>
+<li><a href="#selection" id="toc-selection">Selection</a></li>
+<li><a href="#data-munging-and-reshaping"
+id="toc-data-munging-and-reshaping">Data Munging and Reshaping</a></li>
+<li><a href="#sorting-and-ordering"
+id="toc-sorting-and-ordering">Sorting and Ordering</a></li>
+<li><a href="#adding-data" id="toc-adding-data">Adding data</a></li>
+<li><a href="#grouping-and-summarizing"
+id="toc-grouping-and-summarizing">Grouping and Summarizing</a></li>
+<li><a href="#merging-data-frames" id="toc-merging-data-frames">Merging
+Data frames</a></li>
+<li><a href="#ggplot-powerful-plotting"
+id="toc-ggplot-powerful-plotting">ggplot: Powerful plotting</a></li>
+<li><a href="#grouping" id="toc-grouping">Grouping</a></li>
+</ul>
+</div>
+
+<div id="tidyverse" class="section level1">
+<h1>Tidyverse</h1>
+<p>See also: R for Data Science: <a href="https://r4ds.had.co.nz/"
+class="uri">https://r4ds.had.co.nz/</a></p>
+<pre class="r"><code>install.packages(&quot;tidyverse&quot;) # only needed once</code></pre>
+<pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre>
+<pre class="r"><code>getwd()  # know your working directory</code></pre>
+<pre><code>## [1] &quot;/__w/Rintro/Rintro/rmd&quot;</code></pre>
+<pre class="r"><code>file=&quot;../data/GeneList.tsv&quot;   # set file name relative to working directory
+D = read_tsv(file, comment=&quot;%&quot;)</code></pre>
+<pre><code>## Rows: 6 Columns: 6
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;\t&quot;
+## chr (2): GeneName, Description
+## dbl (3): Exp1, Exp2, Exp3
+## lgl (1): Planned
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>D</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["GeneName"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Description"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Exp1"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Exp2"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Exp3"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Planned"],"name":[6],"type":["lgl"],"align":["right"]}],"data":[{"1":"ABC","2":"unknown","3":"1.2","4":"1.5","5":"1.3","6":"NA"},{"1":"DEF1","2":"NA","3":"1.3","4":"4.7","5":"NA","6":"NA"},{"1":"5'XYZ","2":"pseudogene","3":"50.0","4":"20.0","5":"12.0","6":"NA"},{"1":"3'UVW","2":"NA","3":"10.0","4":"20.0","5":"34.0","6":"NA"},{"1":"Sep7","2":"NA","3":"20.0","4":"NA","5":"22.0","6":"NA"},{"1":"Oct1","2":"important","3":"1.0","4":"1.0","5":"1.0","6":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="a-new-style-pipes" class="section level1">
+<h1>A new style: Pipes</h1>
+<pre class="r"><code>iris %&gt;% str()</code></pre>
+<pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
+##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ Species     : Factor w/ 3 levels &quot;setosa&quot;,&quot;versicolor&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code>iris %&gt;% head()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Sepal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sepal.Width"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Petal.Length"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Petal.Width"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Species"],"name":[5],"type":["fct"],"align":["left"]}],"data":[{"1":"5.1","2":"3.5","3":"1.4","4":"0.2","5":"setosa","_rn_":"1"},{"1":"4.9","2":"3.0","3":"1.4","4":"0.2","5":"setosa","_rn_":"2"},{"1":"4.7","2":"3.2","3":"1.3","4":"0.2","5":"setosa","_rn_":"3"},{"1":"4.6","2":"3.1","3":"1.5","4":"0.2","5":"setosa","_rn_":"4"},{"1":"5.0","2":"3.6","3":"1.4","4":"0.2","5":"setosa","_rn_":"5"},{"1":"5.4","2":"3.9","3":"1.7","4":"0.4","5":"setosa","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="selection" class="section level1">
+<h1>Selection</h1>
+<pre class="r"><code># column selection / unselection
+iris %&gt;% select(-Species) %&gt;% head()                            </code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Sepal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sepal.Width"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Petal.Length"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Petal.Width"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"5.1","2":"3.5","3":"1.4","4":"0.2","_rn_":"1"},{"1":"4.9","2":"3.0","3":"1.4","4":"0.2","_rn_":"2"},{"1":"4.7","2":"3.2","3":"1.3","4":"0.2","_rn_":"3"},{"1":"4.6","2":"3.1","3":"1.5","4":"0.2","_rn_":"4"},{"1":"5.0","2":"3.6","3":"1.4","4":"0.2","_rn_":"5"},{"1":"5.4","2":"3.9","3":"1.7","4":"0.4","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>iris %&gt;% select(matches(&quot;Length&quot;)) %&gt;% head()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Sepal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Petal.Length"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"5.1","2":"1.4","_rn_":"1"},{"1":"4.9","2":"1.4","_rn_":"2"},{"1":"4.7","2":"1.3","_rn_":"3"},{"1":"4.6","2":"1.5","_rn_":"4"},{"1":"5.0","2":"1.4","_rn_":"5"},{"1":"5.4","2":"1.7","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code># row selection
+iris %&gt;% slice(-c(4:150))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Sepal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sepal.Width"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Petal.Length"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Petal.Width"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Species"],"name":[5],"type":["fct"],"align":["left"]}],"data":[{"1":"5.1","2":"3.5","3":"1.4","4":"0.2","5":"setosa"},{"1":"4.9","2":"3.0","3":"1.4","4":"0.2","5":"setosa"},{"1":"4.7","2":"3.2","3":"1.3","4":"0.2","5":"setosa"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>iris %&gt;% filter(Petal.Length==min(Petal.Length))      </code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Sepal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sepal.Width"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Petal.Length"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Petal.Width"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Species"],"name":[5],"type":["fct"],"align":["left"]}],"data":[{"1":"4.6","2":"3.6","3":"1","4":"0.2","5":"setosa"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>iris %&gt;% filter(Petal.Length&lt;2 &amp; Sepal.Width&gt;4) </code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Sepal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sepal.Width"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Petal.Length"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Petal.Width"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Species"],"name":[5],"type":["fct"],"align":["left"]}],"data":[{"1":"5.7","2":"4.4","3":"1.5","4":"0.4","5":"setosa"},{"1":"5.2","2":"4.1","3":"1.5","4":"0.1","5":"setosa"},{"1":"5.5","2":"4.2","3":"1.4","4":"0.2","5":"setosa"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="data-munging-and-reshaping" class="section level1">
+<h1>Data Munging and Reshaping</h1>
+<p>Same data can come in various shapes:</p>
+<pre class="r"><code>iris %&gt;% gather(Measurement, Value, -Species)   # convert between wide and long forms</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Species"],"name":[1],"type":["fct"],"align":["left"]},{"label":["Measurement"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Value"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"setosa","2":"Sepal.Length","3":"5.1"},{"1":"setosa","2":"Sepal.Length","3":"4.9"},{"1":"setosa","2":"Sepal.Length","3":"4.7"},{"1":"setosa","2":"Sepal.Length","3":"4.6"},{"1":"setosa","2":"Sepal.Length","3":"5.0"},{"1":"setosa","2":"Sepal.Length","3":"5.4"},{"1":"setosa","2":"Sepal.Length","3":"4.6"},{"1":"setosa","2":"Sepal.Length","3":"5.0"},{"1":"setosa","2":"Sepal.Length","3":"4.4"},{"1":"setosa","2":"Sepal.Length","3":"4.9"},{"1":"setosa","2":"Sepal.Length","3":"5.4"},{"1":"setosa","2":"Sepal.Length","3":"4.8"},{"1":"setosa","2":"Sepal.Length","3":"4.8"},{"1":"setosa","2":"Sepal.Length","3":"4.3"},{"1":"setosa","2":"Sepal.Length","3":"5.8"},{"1":"setosa","2":"Sepal.Length","3":"5.7"},{"1":"setosa","2":"Sepal.Length","3":"5.4"},{"1":"setosa","2":"Sepal.Length","3":"5.1"},{"1":"setosa","2":"Sepal.Length","3":"5.7"},{"1":"setosa","2":"Sepal.Length","3":"5.1"},{"1":"setosa","2":"Sepal.Length","3":"5.4"},{"1":"setosa","2":"Sepal.Length","3":"5.1"},{"1":"setosa","2":"Sepal.Length","3":"4.6"},{"1":"setosa","2":"Sepal.Length","3":"5.1"},{"1":"setosa","2":"Sepal.Length","3":"4.8"},{"1":"setosa","2":"Sepal.Length","3":"5.0"},{"1":"setosa","2":"Sepal.Length","3":"5.0"},{"1":"setosa","2":"Sepal.Length","3":"5.2"},{"1":"setosa","2":"Sepal.Length","3":"5.2"},{"1":"setosa","2":"Sepal.Length","3":"4.7"},{"1":"setosa","2":"Sepal.Length","3":"4.8"},{"1":"setosa","2":"Sepal.Length","3":"5.4"},{"1":"setosa","2":"Sepal.Length","3":"5.2"},{"1":"setosa","2":"Sepal.Length","3":"5.5"},{"1":"setosa","2":"Sepal.Length","3":"4.9"},{"1":"setosa","2":"Sepal.Length","3":"5.0"},{"1":"setosa","2":"Sepal.Length","3":"5.5"},{"1":"setosa","2":"Sepal.Length","3":"4.9"},{"1":"setosa","2":"Sepal.Length","3":"4.4"},{"1":"setosa","2":"Sepal.Length","3":"5.1"},{"1":"setosa","2":"Sepal.Length","3":"5.0"},{"1":"setosa","2":"Sepal.Length","3":"4.5"},{"1":"setosa","2":"Sepal.Length","3":"4.4"},{"1":"setosa","2":"Sepal.Length","3":"5.0"},{"1":"setosa","2":"Sepal.Length","3":"5.1"},{"1":"setosa","2":"Sepal.Length","3":"4.8"},{"1":"setosa","2":"Sepal.Length","3":"5.1"},{"1":"setosa","2":"Sepal.Length","3":"4.6"},{"1":"setosa","2":"Sepal.Length","3":"5.3"},{"1":"setosa","2":"Sepal.Length","3":"5.0"},{"1":"versicolor","2":"Sepal.Length","3":"7.0"},{"1":"versicolor","2":"Sepal.Length","3":"6.4"},{"1":"versicolor","2":"Sepal.Length","3":"6.9"},{"1":"versicolor","2":"Sepal.Length","3":"5.5"},{"1":"versicolor","2":"Sepal.Length","3":"6.5"},{"1":"versicolor","2":"Sepal.Length","3":"5.7"},{"1":"versicolor","2":"Sepal.Length","3":"6.3"},{"1":"versicolor","2":"Sepal.Length","3":"4.9"},{"1":"versicolor","2":"Sepal.Length","3":"6.6"},{"1":"versicolor","2":"Sepal.Length","3":"5.2"},{"1":"versicolor","2":"Sepal.Length","3":"5.0"},{"1":"versicolor","2":"Sepal.Length","3":"5.9"},{"1":"versicolor","2":"Sepal.Length","3":"6.0"},{"1":"versicolor","2":"Sepal.Length","3":"6.1"},{"1":"versicolor","2":"Sepal.Length","3":"5.6"},{"1":"versicolor","2":"Sepal.Length","3":"6.7"},{"1":"versicolor","2":"Sepal.Length","3":"5.6"},{"1":"versicolor","2":"Sepal.Length","3":"5.8"},{"1":"versicolor","2":"Sepal.Length","3":"6.2"},{"1":"versicolor","2":"Sepal.Length","3":"5.6"},{"1":"versicolor","2":"Sepal.Length","3":"5.9"},{"1":"versicolor","2":"Sepal.Length","3":"6.1"},{"1":"versicolor","2":"Sepal.Length","3":"6.3"},{"1":"versicolor","2":"Sepal.Length","3":"6.1"},{"1":"versicolor","2":"Sepal.Length","3":"6.4"},{"1":"versicolor","2":"Sepal.Length","3":"6.6"},{"1":"versicolor","2":"Sepal.Length","3":"6.8"},{"1":"versicolor","2":"Sepal.Length","3":"6.7"},{"1":"versicolor","2":"Sepal.Length","3":"6.0"},{"1":"versicolor","2":"Sepal.Length","3":"5.7"},{"1":"versicolor","2":"Sepal.Length","3":"5.5"},{"1":"versicolor","2":"Sepal.Length","3":"5.5"},{"1":"versicolor","2":"Sepal.Length","3":"5.8"},{"1":"versicolor","2":"Sepal.Length","3":"6.0"},{"1":"versicolor","2":"Sepal.Length","3":"5.4"},{"1":"versicolor","2":"Sepal.Length","3":"6.0"},{"1":"versicolor","2":"Sepal.Length","3":"6.7"},{"1":"versicolor","2":"Sepal.Length","3":"6.3"},{"1":"versicolor","2":"Sepal.Length","3":"5.6"},{"1":"versicolor","2":"Sepal.Length","3":"5.5"},{"1":"versicolor","2":"Sepal.Length","3":"5.5"},{"1":"versicolor","2":"Sepal.Length","3":"6.1"},{"1":"versicolor","2":"Sepal.Length","3":"5.8"},{"1":"versicolor","2":"Sepal.Length","3":"5.0"},{"1":"versicolor","2":"Sepal.Length","3":"5.6"},{"1":"versicolor","2":"Sepal.Length","3":"5.7"},{"1":"versicolor","2":"Sepal.Length","3":"5.7"},{"1":"versicolor","2":"Sepal.Length","3":"6.2"},{"1":"versicolor","2":"Sepal.Length","3":"5.1"},{"1":"versicolor","2":"Sepal.Length","3":"5.7"},{"1":"virginica","2":"Sepal.Length","3":"6.3"},{"1":"virginica","2":"Sepal.Length","3":"5.8"},{"1":"virginica","2":"Sepal.Length","3":"7.1"},{"1":"virginica","2":"Sepal.Length","3":"6.3"},{"1":"virginica","2":"Sepal.Length","3":"6.5"},{"1":"virginica","2":"Sepal.Length","3":"7.6"},{"1":"virginica","2":"Sepal.Length","3":"4.9"},{"1":"virginica","2":"Sepal.Length","3":"7.3"},{"1":"virginica","2":"Sepal.Length","3":"6.7"},{"1":"virginica","2":"Sepal.Length","3":"7.2"},{"1":"virginica","2":"Sepal.Length","3":"6.5"},{"1":"virginica","2":"Sepal.Length","3":"6.4"},{"1":"virginica","2":"Sepal.Length","3":"6.8"},{"1":"virginica","2":"Sepal.Length","3":"5.7"},{"1":"virginica","2":"Sepal.Length","3":"5.8"},{"1":"virginica","2":"Sepal.Length","3":"6.4"},{"1":"virginica","2":"Sepal.Length","3":"6.5"},{"1":"virginica","2":"Sepal.Length","3":"7.7"},{"1":"virginica","2":"Sepal.Length","3":"7.7"},{"1":"virginica","2":"Sepal.Length","3":"6.0"},{"1":"virginica","2":"Sepal.Length","3":"6.9"},{"1":"virginica","2":"Sepal.Length","3":"5.6"},{"1":"virginica","2":"Sepal.Length","3":"7.7"},{"1":"virginica","2":"Sepal.Length","3":"6.3"},{"1":"virginica","2":"Sepal.Length","3":"6.7"},{"1":"virginica","2":"Sepal.Length","3":"7.2"},{"1":"virginica","2":"Sepal.Length","3":"6.2"},{"1":"virginica","2":"Sepal.Length","3":"6.1"},{"1":"virginica","2":"Sepal.Length","3":"6.4"},{"1":"virginica","2":"Sepal.Length","3":"7.2"},{"1":"virginica","2":"Sepal.Length","3":"7.4"},{"1":"virginica","2":"Sepal.Length","3":"7.9"},{"1":"virginica","2":"Sepal.Length","3":"6.4"},{"1":"virginica","2":"Sepal.Length","3":"6.3"},{"1":"virginica","2":"Sepal.Length","3":"6.1"},{"1":"virginica","2":"Sepal.Length","3":"7.7"},{"1":"virginica","2":"Sepal.Length","3":"6.3"},{"1":"virginica","2":"Sepal.Length","3":"6.4"},{"1":"virginica","2":"Sepal.Length","3":"6.0"},{"1":"virginica","2":"Sepal.Length","3":"6.9"},{"1":"virginica","2":"Sepal.Length","3":"6.7"},{"1":"virginica","2":"Sepal.Length","3":"6.9"},{"1":"virginica","2":"Sepal.Length","3":"5.8"},{"1":"virginica","2":"Sepal.Length","3":"6.8"},{"1":"virginica","2":"Sepal.Length","3":"6.7"},{"1":"virginica","2":"Sepal.Length","3":"6.7"},{"1":"virginica","2":"Sepal.Length","3":"6.3"},{"1":"virginica","2":"Sepal.Length","3":"6.5"},{"1":"virginica","2":"Sepal.Length","3":"6.2"},{"1":"virginica","2":"Sepal.Length","3":"5.9"},{"1":"setosa","2":"Sepal.Width","3":"3.5"},{"1":"setosa","2":"Sepal.Width","3":"3.0"},{"1":"setosa","2":"Sepal.Width","3":"3.2"},{"1":"setosa","2":"Sepal.Width","3":"3.1"},{"1":"setosa","2":"Sepal.Width","3":"3.6"},{"1":"setosa","2":"Sepal.Width","3":"3.9"},{"1":"setosa","2":"Sepal.Width","3":"3.4"},{"1":"setosa","2":"Sepal.Width","3":"3.4"},{"1":"setosa","2":"Sepal.Width","3":"2.9"},{"1":"setosa","2":"Sepal.Width","3":"3.1"},{"1":"setosa","2":"Sepal.Width","3":"3.7"},{"1":"setosa","2":"Sepal.Width","3":"3.4"},{"1":"setosa","2":"Sepal.Width","3":"3.0"},{"1":"setosa","2":"Sepal.Width","3":"3.0"},{"1":"setosa","2":"Sepal.Width","3":"4.0"},{"1":"setosa","2":"Sepal.Width","3":"4.4"},{"1":"setosa","2":"Sepal.Width","3":"3.9"},{"1":"setosa","2":"Sepal.Width","3":"3.5"},{"1":"setosa","2":"Sepal.Width","3":"3.8"},{"1":"setosa","2":"Sepal.Width","3":"3.8"},{"1":"setosa","2":"Sepal.Width","3":"3.4"},{"1":"setosa","2":"Sepal.Width","3":"3.7"},{"1":"setosa","2":"Sepal.Width","3":"3.6"},{"1":"setosa","2":"Sepal.Width","3":"3.3"},{"1":"setosa","2":"Sepal.Width","3":"3.4"},{"1":"setosa","2":"Sepal.Width","3":"3.0"},{"1":"setosa","2":"Sepal.Width","3":"3.4"},{"1":"setosa","2":"Sepal.Width","3":"3.5"},{"1":"setosa","2":"Sepal.Width","3":"3.4"},{"1":"setosa","2":"Sepal.Width","3":"3.2"},{"1":"setosa","2":"Sepal.Width","3":"3.1"},{"1":"setosa","2":"Sepal.Width","3":"3.4"},{"1":"setosa","2":"Sepal.Width","3":"4.1"},{"1":"setosa","2":"Sepal.Width","3":"4.2"},{"1":"setosa","2":"Sepal.Width","3":"3.1"},{"1":"setosa","2":"Sepal.Width","3":"3.2"},{"1":"setosa","2":"Sepal.Width","3":"3.5"},{"1":"setosa","2":"Sepal.Width","3":"3.6"},{"1":"setosa","2":"Sepal.Width","3":"3.0"},{"1":"setosa","2":"Sepal.Width","3":"3.4"},{"1":"setosa","2":"Sepal.Width","3":"3.5"},{"1":"setosa","2":"Sepal.Width","3":"2.3"},{"1":"setosa","2":"Sepal.Width","3":"3.2"},{"1":"setosa","2":"Sepal.Width","3":"3.5"},{"1":"setosa","2":"Sepal.Width","3":"3.8"},{"1":"setosa","2":"Sepal.Width","3":"3.0"},{"1":"setosa","2":"Sepal.Width","3":"3.8"},{"1":"setosa","2":"Sepal.Width","3":"3.2"},{"1":"setosa","2":"Sepal.Width","3":"3.7"},{"1":"setosa","2":"Sepal.Width","3":"3.3"},{"1":"versicolor","2":"Sepal.Width","3":"3.2"},{"1":"versicolor","2":"Sepal.Width","3":"3.2"},{"1":"versicolor","2":"Sepal.Width","3":"3.1"},{"1":"versicolor","2":"Sepal.Width","3":"2.3"},{"1":"versicolor","2":"Sepal.Width","3":"2.8"},{"1":"versicolor","2":"Sepal.Width","3":"2.8"},{"1":"versicolor","2":"Sepal.Width","3":"3.3"},{"1":"versicolor","2":"Sepal.Width","3":"2.4"},{"1":"versicolor","2":"Sepal.Width","3":"2.9"},{"1":"versicolor","2":"Sepal.Width","3":"2.7"},{"1":"versicolor","2":"Sepal.Width","3":"2.0"},{"1":"versicolor","2":"Sepal.Width","3":"3.0"},{"1":"versicolor","2":"Sepal.Width","3":"2.2"},{"1":"versicolor","2":"Sepal.Width","3":"2.9"},{"1":"versicolor","2":"Sepal.Width","3":"2.9"},{"1":"versicolor","2":"Sepal.Width","3":"3.1"},{"1":"versicolor","2":"Sepal.Width","3":"3.0"},{"1":"versicolor","2":"Sepal.Width","3":"2.7"},{"1":"versicolor","2":"Sepal.Width","3":"2.2"},{"1":"versicolor","2":"Sepal.Width","3":"2.5"},{"1":"versicolor","2":"Sepal.Width","3":"3.2"},{"1":"versicolor","2":"Sepal.Width","3":"2.8"},{"1":"versicolor","2":"Sepal.Width","3":"2.5"},{"1":"versicolor","2":"Sepal.Width","3":"2.8"},{"1":"versicolor","2":"Sepal.Width","3":"2.9"},{"1":"versicolor","2":"Sepal.Width","3":"3.0"},{"1":"versicolor","2":"Sepal.Width","3":"2.8"},{"1":"versicolor","2":"Sepal.Width","3":"3.0"},{"1":"versicolor","2":"Sepal.Width","3":"2.9"},{"1":"versicolor","2":"Sepal.Width","3":"2.6"},{"1":"versicolor","2":"Sepal.Width","3":"2.4"},{"1":"versicolor","2":"Sepal.Width","3":"2.4"},{"1":"versicolor","2":"Sepal.Width","3":"2.7"},{"1":"versicolor","2":"Sepal.Width","3":"2.7"},{"1":"versicolor","2":"Sepal.Width","3":"3.0"},{"1":"versicolor","2":"Sepal.Width","3":"3.4"},{"1":"versicolor","2":"Sepal.Width","3":"3.1"},{"1":"versicolor","2":"Sepal.Width","3":"2.3"},{"1":"versicolor","2":"Sepal.Width","3":"3.0"},{"1":"versicolor","2":"Sepal.Width","3":"2.5"},{"1":"versicolor","2":"Sepal.Width","3":"2.6"},{"1":"versicolor","2":"Sepal.Width","3":"3.0"},{"1":"versicolor","2":"Sepal.Width","3":"2.6"},{"1":"versicolor","2":"Sepal.Width","3":"2.3"},{"1":"versicolor","2":"Sepal.Width","3":"2.7"},{"1":"versicolor","2":"Sepal.Width","3":"3.0"},{"1":"versicolor","2":"Sepal.Width","3":"2.9"},{"1":"versicolor","2":"Sepal.Width","3":"2.9"},{"1":"versicolor","2":"Sepal.Width","3":"2.5"},{"1":"versicolor","2":"Sepal.Width","3":"2.8"},{"1":"virginica","2":"Sepal.Width","3":"3.3"},{"1":"virginica","2":"Sepal.Width","3":"2.7"},{"1":"virginica","2":"Sepal.Width","3":"3.0"},{"1":"virginica","2":"Sepal.Width","3":"2.9"},{"1":"virginica","2":"Sepal.Width","3":"3.0"},{"1":"virginica","2":"Sepal.Width","3":"3.0"},{"1":"virginica","2":"Sepal.Width","3":"2.5"},{"1":"virginica","2":"Sepal.Width","3":"2.9"},{"1":"virginica","2":"Sepal.Width","3":"2.5"},{"1":"virginica","2":"Sepal.Width","3":"3.6"},{"1":"virginica","2":"Sepal.Width","3":"3.2"},{"1":"virginica","2":"Sepal.Width","3":"2.7"},{"1":"virginica","2":"Sepal.Width","3":"3.0"},{"1":"virginica","2":"Sepal.Width","3":"2.5"},{"1":"virginica","2":"Sepal.Width","3":"2.8"},{"1":"virginica","2":"Sepal.Width","3":"3.2"},{"1":"virginica","2":"Sepal.Width","3":"3.0"},{"1":"virginica","2":"Sepal.Width","3":"3.8"},{"1":"virginica","2":"Sepal.Width","3":"2.6"},{"1":"virginica","2":"Sepal.Width","3":"2.2"},{"1":"virginica","2":"Sepal.Width","3":"3.2"},{"1":"virginica","2":"Sepal.Width","3":"2.8"},{"1":"virginica","2":"Sepal.Width","3":"2.8"},{"1":"virginica","2":"Sepal.Width","3":"2.7"},{"1":"virginica","2":"Sepal.Width","3":"3.3"},{"1":"virginica","2":"Sepal.Width","3":"3.2"},{"1":"virginica","2":"Sepal.Width","3":"2.8"},{"1":"virginica","2":"Sepal.Width","3":"3.0"},{"1":"virginica","2":"Sepal.Width","3":"2.8"},{"1":"virginica","2":"Sepal.Width","3":"3.0"},{"1":"virginica","2":"Sepal.Width","3":"2.8"},{"1":"virginica","2":"Sepal.Width","3":"3.8"},{"1":"virginica","2":"Sepal.Width","3":"2.8"},{"1":"virginica","2":"Sepal.Width","3":"2.8"},{"1":"virginica","2":"Sepal.Width","3":"2.6"},{"1":"virginica","2":"Sepal.Width","3":"3.0"},{"1":"virginica","2":"Sepal.Width","3":"3.4"},{"1":"virginica","2":"Sepal.Width","3":"3.1"},{"1":"virginica","2":"Sepal.Width","3":"3.0"},{"1":"virginica","2":"Sepal.Width","3":"3.1"},{"1":"virginica","2":"Sepal.Width","3":"3.1"},{"1":"virginica","2":"Sepal.Width","3":"3.1"},{"1":"virginica","2":"Sepal.Width","3":"2.7"},{"1":"virginica","2":"Sepal.Width","3":"3.2"},{"1":"virginica","2":"Sepal.Width","3":"3.3"},{"1":"virginica","2":"Sepal.Width","3":"3.0"},{"1":"virginica","2":"Sepal.Width","3":"2.5"},{"1":"virginica","2":"Sepal.Width","3":"3.0"},{"1":"virginica","2":"Sepal.Width","3":"3.4"},{"1":"virginica","2":"Sepal.Width","3":"3.0"},{"1":"setosa","2":"Petal.Length","3":"1.4"},{"1":"setosa","2":"Petal.Length","3":"1.4"},{"1":"setosa","2":"Petal.Length","3":"1.3"},{"1":"setosa","2":"Petal.Length","3":"1.5"},{"1":"setosa","2":"Petal.Length","3":"1.4"},{"1":"setosa","2":"Petal.Length","3":"1.7"},{"1":"setosa","2":"Petal.Length","3":"1.4"},{"1":"setosa","2":"Petal.Length","3":"1.5"},{"1":"setosa","2":"Petal.Length","3":"1.4"},{"1":"setosa","2":"Petal.Length","3":"1.5"},{"1":"setosa","2":"Petal.Length","3":"1.5"},{"1":"setosa","2":"Petal.Length","3":"1.6"},{"1":"setosa","2":"Petal.Length","3":"1.4"},{"1":"setosa","2":"Petal.Length","3":"1.1"},{"1":"setosa","2":"Petal.Length","3":"1.2"},{"1":"setosa","2":"Petal.Length","3":"1.5"},{"1":"setosa","2":"Petal.Length","3":"1.3"},{"1":"setosa","2":"Petal.Length","3":"1.4"},{"1":"setosa","2":"Petal.Length","3":"1.7"},{"1":"setosa","2":"Petal.Length","3":"1.5"},{"1":"setosa","2":"Petal.Length","3":"1.7"},{"1":"setosa","2":"Petal.Length","3":"1.5"},{"1":"setosa","2":"Petal.Length","3":"1.0"},{"1":"setosa","2":"Petal.Length","3":"1.7"},{"1":"setosa","2":"Petal.Length","3":"1.9"},{"1":"setosa","2":"Petal.Length","3":"1.6"},{"1":"setosa","2":"Petal.Length","3":"1.6"},{"1":"setosa","2":"Petal.Length","3":"1.5"},{"1":"setosa","2":"Petal.Length","3":"1.4"},{"1":"setosa","2":"Petal.Length","3":"1.6"},{"1":"setosa","2":"Petal.Length","3":"1.6"},{"1":"setosa","2":"Petal.Length","3":"1.5"},{"1":"setosa","2":"Petal.Length","3":"1.5"},{"1":"setosa","2":"Petal.Length","3":"1.4"},{"1":"setosa","2":"Petal.Length","3":"1.5"},{"1":"setosa","2":"Petal.Length","3":"1.2"},{"1":"setosa","2":"Petal.Length","3":"1.3"},{"1":"setosa","2":"Petal.Length","3":"1.4"},{"1":"setosa","2":"Petal.Length","3":"1.3"},{"1":"setosa","2":"Petal.Length","3":"1.5"},{"1":"setosa","2":"Petal.Length","3":"1.3"},{"1":"setosa","2":"Petal.Length","3":"1.3"},{"1":"setosa","2":"Petal.Length","3":"1.3"},{"1":"setosa","2":"Petal.Length","3":"1.6"},{"1":"setosa","2":"Petal.Length","3":"1.9"},{"1":"setosa","2":"Petal.Length","3":"1.4"},{"1":"setosa","2":"Petal.Length","3":"1.6"},{"1":"setosa","2":"Petal.Length","3":"1.4"},{"1":"setosa","2":"Petal.Length","3":"1.5"},{"1":"setosa","2":"Petal.Length","3":"1.4"},{"1":"versicolor","2":"Petal.Length","3":"4.7"},{"1":"versicolor","2":"Petal.Length","3":"4.5"},{"1":"versicolor","2":"Petal.Length","3":"4.9"},{"1":"versicolor","2":"Petal.Length","3":"4.0"},{"1":"versicolor","2":"Petal.Length","3":"4.6"},{"1":"versicolor","2":"Petal.Length","3":"4.5"},{"1":"versicolor","2":"Petal.Length","3":"4.7"},{"1":"versicolor","2":"Petal.Length","3":"3.3"},{"1":"versicolor","2":"Petal.Length","3":"4.6"},{"1":"versicolor","2":"Petal.Length","3":"3.9"},{"1":"versicolor","2":"Petal.Length","3":"3.5"},{"1":"versicolor","2":"Petal.Length","3":"4.2"},{"1":"versicolor","2":"Petal.Length","3":"4.0"},{"1":"versicolor","2":"Petal.Length","3":"4.7"},{"1":"versicolor","2":"Petal.Length","3":"3.6"},{"1":"versicolor","2":"Petal.Length","3":"4.4"},{"1":"versicolor","2":"Petal.Length","3":"4.5"},{"1":"versicolor","2":"Petal.Length","3":"4.1"},{"1":"versicolor","2":"Petal.Length","3":"4.5"},{"1":"versicolor","2":"Petal.Length","3":"3.9"},{"1":"versicolor","2":"Petal.Length","3":"4.8"},{"1":"versicolor","2":"Petal.Length","3":"4.0"},{"1":"versicolor","2":"Petal.Length","3":"4.9"},{"1":"versicolor","2":"Petal.Length","3":"4.7"},{"1":"versicolor","2":"Petal.Length","3":"4.3"},{"1":"versicolor","2":"Petal.Length","3":"4.4"},{"1":"versicolor","2":"Petal.Length","3":"4.8"},{"1":"versicolor","2":"Petal.Length","3":"5.0"},{"1":"versicolor","2":"Petal.Length","3":"4.5"},{"1":"versicolor","2":"Petal.Length","3":"3.5"},{"1":"versicolor","2":"Petal.Length","3":"3.8"},{"1":"versicolor","2":"Petal.Length","3":"3.7"},{"1":"versicolor","2":"Petal.Length","3":"3.9"},{"1":"versicolor","2":"Petal.Length","3":"5.1"},{"1":"versicolor","2":"Petal.Length","3":"4.5"},{"1":"versicolor","2":"Petal.Length","3":"4.5"},{"1":"versicolor","2":"Petal.Length","3":"4.7"},{"1":"versicolor","2":"Petal.Length","3":"4.4"},{"1":"versicolor","2":"Petal.Length","3":"4.1"},{"1":"versicolor","2":"Petal.Length","3":"4.0"},{"1":"versicolor","2":"Petal.Length","3":"4.4"},{"1":"versicolor","2":"Petal.Length","3":"4.6"},{"1":"versicolor","2":"Petal.Length","3":"4.0"},{"1":"versicolor","2":"Petal.Length","3":"3.3"},{"1":"versicolor","2":"Petal.Length","3":"4.2"},{"1":"versicolor","2":"Petal.Length","3":"4.2"},{"1":"versicolor","2":"Petal.Length","3":"4.2"},{"1":"versicolor","2":"Petal.Length","3":"4.3"},{"1":"versicolor","2":"Petal.Length","3":"3.0"},{"1":"versicolor","2":"Petal.Length","3":"4.1"},{"1":"virginica","2":"Petal.Length","3":"6.0"},{"1":"virginica","2":"Petal.Length","3":"5.1"},{"1":"virginica","2":"Petal.Length","3":"5.9"},{"1":"virginica","2":"Petal.Length","3":"5.6"},{"1":"virginica","2":"Petal.Length","3":"5.8"},{"1":"virginica","2":"Petal.Length","3":"6.6"},{"1":"virginica","2":"Petal.Length","3":"4.5"},{"1":"virginica","2":"Petal.Length","3":"6.3"},{"1":"virginica","2":"Petal.Length","3":"5.8"},{"1":"virginica","2":"Petal.Length","3":"6.1"},{"1":"virginica","2":"Petal.Length","3":"5.1"},{"1":"virginica","2":"Petal.Length","3":"5.3"},{"1":"virginica","2":"Petal.Length","3":"5.5"},{"1":"virginica","2":"Petal.Length","3":"5.0"},{"1":"virginica","2":"Petal.Length","3":"5.1"},{"1":"virginica","2":"Petal.Length","3":"5.3"},{"1":"virginica","2":"Petal.Length","3":"5.5"},{"1":"virginica","2":"Petal.Length","3":"6.7"},{"1":"virginica","2":"Petal.Length","3":"6.9"},{"1":"virginica","2":"Petal.Length","3":"5.0"},{"1":"virginica","2":"Petal.Length","3":"5.7"},{"1":"virginica","2":"Petal.Length","3":"4.9"},{"1":"virginica","2":"Petal.Length","3":"6.7"},{"1":"virginica","2":"Petal.Length","3":"4.9"},{"1":"virginica","2":"Petal.Length","3":"5.7"},{"1":"virginica","2":"Petal.Length","3":"6.0"},{"1":"virginica","2":"Petal.Length","3":"4.8"},{"1":"virginica","2":"Petal.Length","3":"4.9"},{"1":"virginica","2":"Petal.Length","3":"5.6"},{"1":"virginica","2":"Petal.Length","3":"5.8"},{"1":"virginica","2":"Petal.Length","3":"6.1"},{"1":"virginica","2":"Petal.Length","3":"6.4"},{"1":"virginica","2":"Petal.Length","3":"5.6"},{"1":"virginica","2":"Petal.Length","3":"5.1"},{"1":"virginica","2":"Petal.Length","3":"5.6"},{"1":"virginica","2":"Petal.Length","3":"6.1"},{"1":"virginica","2":"Petal.Length","3":"5.6"},{"1":"virginica","2":"Petal.Length","3":"5.5"},{"1":"virginica","2":"Petal.Length","3":"4.8"},{"1":"virginica","2":"Petal.Length","3":"5.4"},{"1":"virginica","2":"Petal.Length","3":"5.6"},{"1":"virginica","2":"Petal.Length","3":"5.1"},{"1":"virginica","2":"Petal.Length","3":"5.1"},{"1":"virginica","2":"Petal.Length","3":"5.9"},{"1":"virginica","2":"Petal.Length","3":"5.7"},{"1":"virginica","2":"Petal.Length","3":"5.2"},{"1":"virginica","2":"Petal.Length","3":"5.0"},{"1":"virginica","2":"Petal.Length","3":"5.2"},{"1":"virginica","2":"Petal.Length","3":"5.4"},{"1":"virginica","2":"Petal.Length","3":"5.1"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.4"},{"1":"setosa","2":"Petal.Width","3":"0.3"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.1"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.1"},{"1":"setosa","2":"Petal.Width","3":"0.1"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.4"},{"1":"setosa","2":"Petal.Width","3":"0.4"},{"1":"setosa","2":"Petal.Width","3":"0.3"},{"1":"setosa","2":"Petal.Width","3":"0.3"},{"1":"setosa","2":"Petal.Width","3":"0.3"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.4"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.5"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.4"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.4"},{"1":"setosa","2":"Petal.Width","3":"0.1"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.1"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.3"},{"1":"setosa","2":"Petal.Width","3":"0.3"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.6"},{"1":"setosa","2":"Petal.Width","3":"0.4"},{"1":"setosa","2":"Petal.Width","3":"0.3"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"setosa","2":"Petal.Width","3":"0.2"},{"1":"versicolor","2":"Petal.Width","3":"1.4"},{"1":"versicolor","2":"Petal.Width","3":"1.5"},{"1":"versicolor","2":"Petal.Width","3":"1.5"},{"1":"versicolor","2":"Petal.Width","3":"1.3"},{"1":"versicolor","2":"Petal.Width","3":"1.5"},{"1":"versicolor","2":"Petal.Width","3":"1.3"},{"1":"versicolor","2":"Petal.Width","3":"1.6"},{"1":"versicolor","2":"Petal.Width","3":"1.0"},{"1":"versicolor","2":"Petal.Width","3":"1.3"},{"1":"versicolor","2":"Petal.Width","3":"1.4"},{"1":"versicolor","2":"Petal.Width","3":"1.0"},{"1":"versicolor","2":"Petal.Width","3":"1.5"},{"1":"versicolor","2":"Petal.Width","3":"1.0"},{"1":"versicolor","2":"Petal.Width","3":"1.4"},{"1":"versicolor","2":"Petal.Width","3":"1.3"},{"1":"versicolor","2":"Petal.Width","3":"1.4"},{"1":"versicolor","2":"Petal.Width","3":"1.5"},{"1":"versicolor","2":"Petal.Width","3":"1.0"},{"1":"versicolor","2":"Petal.Width","3":"1.5"},{"1":"versicolor","2":"Petal.Width","3":"1.1"},{"1":"versicolor","2":"Petal.Width","3":"1.8"},{"1":"versicolor","2":"Petal.Width","3":"1.3"},{"1":"versicolor","2":"Petal.Width","3":"1.5"},{"1":"versicolor","2":"Petal.Width","3":"1.2"},{"1":"versicolor","2":"Petal.Width","3":"1.3"},{"1":"versicolor","2":"Petal.Width","3":"1.4"},{"1":"versicolor","2":"Petal.Width","3":"1.4"},{"1":"versicolor","2":"Petal.Width","3":"1.7"},{"1":"versicolor","2":"Petal.Width","3":"1.5"},{"1":"versicolor","2":"Petal.Width","3":"1.0"},{"1":"versicolor","2":"Petal.Width","3":"1.1"},{"1":"versicolor","2":"Petal.Width","3":"1.0"},{"1":"versicolor","2":"Petal.Width","3":"1.2"},{"1":"versicolor","2":"Petal.Width","3":"1.6"},{"1":"versicolor","2":"Petal.Width","3":"1.5"},{"1":"versicolor","2":"Petal.Width","3":"1.6"},{"1":"versicolor","2":"Petal.Width","3":"1.5"},{"1":"versicolor","2":"Petal.Width","3":"1.3"},{"1":"versicolor","2":"Petal.Width","3":"1.3"},{"1":"versicolor","2":"Petal.Width","3":"1.3"},{"1":"versicolor","2":"Petal.Width","3":"1.2"},{"1":"versicolor","2":"Petal.Width","3":"1.4"},{"1":"versicolor","2":"Petal.Width","3":"1.2"},{"1":"versicolor","2":"Petal.Width","3":"1.0"},{"1":"versicolor","2":"Petal.Width","3":"1.3"},{"1":"versicolor","2":"Petal.Width","3":"1.2"},{"1":"versicolor","2":"Petal.Width","3":"1.3"},{"1":"versicolor","2":"Petal.Width","3":"1.3"},{"1":"versicolor","2":"Petal.Width","3":"1.1"},{"1":"versicolor","2":"Petal.Width","3":"1.3"},{"1":"virginica","2":"Petal.Width","3":"2.5"},{"1":"virginica","2":"Petal.Width","3":"1.9"},{"1":"virginica","2":"Petal.Width","3":"2.1"},{"1":"virginica","2":"Petal.Width","3":"1.8"},{"1":"virginica","2":"Petal.Width","3":"2.2"},{"1":"virginica","2":"Petal.Width","3":"2.1"},{"1":"virginica","2":"Petal.Width","3":"1.7"},{"1":"virginica","2":"Petal.Width","3":"1.8"},{"1":"virginica","2":"Petal.Width","3":"1.8"},{"1":"virginica","2":"Petal.Width","3":"2.5"},{"1":"virginica","2":"Petal.Width","3":"2.0"},{"1":"virginica","2":"Petal.Width","3":"1.9"},{"1":"virginica","2":"Petal.Width","3":"2.1"},{"1":"virginica","2":"Petal.Width","3":"2.0"},{"1":"virginica","2":"Petal.Width","3":"2.4"},{"1":"virginica","2":"Petal.Width","3":"2.3"},{"1":"virginica","2":"Petal.Width","3":"1.8"},{"1":"virginica","2":"Petal.Width","3":"2.2"},{"1":"virginica","2":"Petal.Width","3":"2.3"},{"1":"virginica","2":"Petal.Width","3":"1.5"},{"1":"virginica","2":"Petal.Width","3":"2.3"},{"1":"virginica","2":"Petal.Width","3":"2.0"},{"1":"virginica","2":"Petal.Width","3":"2.0"},{"1":"virginica","2":"Petal.Width","3":"1.8"},{"1":"virginica","2":"Petal.Width","3":"2.1"},{"1":"virginica","2":"Petal.Width","3":"1.8"},{"1":"virginica","2":"Petal.Width","3":"1.8"},{"1":"virginica","2":"Petal.Width","3":"1.8"},{"1":"virginica","2":"Petal.Width","3":"2.1"},{"1":"virginica","2":"Petal.Width","3":"1.6"},{"1":"virginica","2":"Petal.Width","3":"1.9"},{"1":"virginica","2":"Petal.Width","3":"2.0"},{"1":"virginica","2":"Petal.Width","3":"2.2"},{"1":"virginica","2":"Petal.Width","3":"1.5"},{"1":"virginica","2":"Petal.Width","3":"1.4"},{"1":"virginica","2":"Petal.Width","3":"2.3"},{"1":"virginica","2":"Petal.Width","3":"2.4"},{"1":"virginica","2":"Petal.Width","3":"1.8"},{"1":"virginica","2":"Petal.Width","3":"1.8"},{"1":"virginica","2":"Petal.Width","3":"2.1"},{"1":"virginica","2":"Petal.Width","3":"2.4"},{"1":"virginica","2":"Petal.Width","3":"2.3"},{"1":"virginica","2":"Petal.Width","3":"1.9"},{"1":"virginica","2":"Petal.Width","3":"2.3"},{"1":"virginica","2":"Petal.Width","3":"2.5"},{"1":"virginica","2":"Petal.Width","3":"2.3"},{"1":"virginica","2":"Petal.Width","3":"1.9"},{"1":"virginica","2":"Petal.Width","3":"2.0"},{"1":"virginica","2":"Petal.Width","3":"2.3"},{"1":"virginica","2":"Petal.Width","3":"1.8"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="sorting-and-ordering" class="section level1">
+<h1>Sorting and Ordering</h1>
+<pre class="r"><code>iris %&gt;% top_n(4, Petal.Length) %&gt;% arrange(desc(Petal.Length))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Sepal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sepal.Width"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Petal.Length"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Petal.Width"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Species"],"name":[5],"type":["fct"],"align":["left"]}],"data":[{"1":"7.7","2":"2.6","3":"6.9","4":"2.3","5":"virginica"},{"1":"7.7","2":"3.8","3":"6.7","4":"2.2","5":"virginica"},{"1":"7.7","2":"2.8","3":"6.7","4":"2.0","5":"virginica"},{"1":"7.6","2":"3.0","3":"6.6","4":"2.1","5":"virginica"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>iris %&gt;% distinct(Species)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Species"],"name":[1],"type":["fct"],"align":["left"]}],"data":[{"1":"setosa"},{"1":"versicolor"},{"1":"virginica"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>iris %&gt;% count(Species)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Species"],"name":[1],"type":["fct"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"setosa","2":"50"},{"1":"versicolor","2":"50"},{"1":"virginica","2":"50"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p><strong>Task</strong> count Petal.Length</p>
+</div>
+<div id="adding-data" class="section level1">
+<h1>Adding data</h1>
+<pre class="r"><code># a silly example: convert Petal.Length from centimeters --&gt; meters
+iris %&gt;% mutate(pl_m=Petal.Length/100) %&gt;% head()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Sepal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sepal.Width"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Petal.Length"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Petal.Width"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Species"],"name":[5],"type":["fct"],"align":["left"]},{"label":["pl_m"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"5.1","2":"3.5","3":"1.4","4":"0.2","5":"setosa","6":"0.014","_rn_":"1"},{"1":"4.9","2":"3.0","3":"1.4","4":"0.2","5":"setosa","6":"0.014","_rn_":"2"},{"1":"4.7","2":"3.2","3":"1.3","4":"0.2","5":"setosa","6":"0.013","_rn_":"3"},{"1":"4.6","2":"3.1","3":"1.5","4":"0.2","5":"setosa","6":"0.015","_rn_":"4"},{"1":"5.0","2":"3.6","3":"1.4","4":"0.2","5":"setosa","6":"0.014","_rn_":"5"},{"1":"5.4","2":"3.9","3":"1.7","4":"0.4","5":"setosa","6":"0.017","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code># perhaps more useful
+iris %&gt;% mutate(PLr=rank(Petal.Length)) %&gt;% arrange(Petal.Length) %&gt;% head()</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Sepal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sepal.Width"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Petal.Length"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Petal.Width"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Species"],"name":[5],"type":["fct"],"align":["left"]},{"label":["PLr"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"4.6","2":"3.6","3":"1.0","4":"0.2","5":"setosa","6":"1.0","_rn_":"1"},{"1":"4.3","2":"3.0","3":"1.1","4":"0.1","5":"setosa","6":"2.0","_rn_":"2"},{"1":"5.8","2":"4.0","3":"1.2","4":"0.2","5":"setosa","6":"3.5","_rn_":"3"},{"1":"5.0","2":"3.2","3":"1.2","4":"0.2","5":"setosa","6":"3.5","_rn_":"4"},{"1":"4.7","2":"3.2","3":"1.3","4":"0.2","5":"setosa","6":"8.0","_rn_":"5"},{"1":"5.4","2":"3.9","3":"1.3","4":"0.4","5":"setosa","6":"8.0","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="grouping-and-summarizing" class="section level1">
+<h1>Grouping and Summarizing</h1>
+<pre class="r"><code>iris %&gt;% group_by(Species) %&gt;% summarise(m=mean(Petal.Length))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Species"],"name":[1],"type":["fct"],"align":["left"]},{"label":["m"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"setosa","2":"1.462"},{"1":"versicolor","2":"4.260"},{"1":"virginica","2":"5.552"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p><strong>Task1</strong> Plot the standard deviation [hint: ?sd] of
+Petal.Length within each group</p>
+<p><strong>Task2</strong> Plot the mean(Petal.Length) against the
+mean(Petal.Width) where the means are for each Species</p>
+</div>
+<div id="merging-data-frames" class="section level1">
+<h1>Merging Data frames</h1>
+<pre class="r"><code># create two data sets for Sepal and Petal measurments, but add ID to keep track of the flow-ID
+irisS=iris%&gt;% select(matches(&quot;Sepal&quot;)) %&gt;% mutate(id=row_number())                           
+irisP=iris%&gt;% select(matches(&quot;Petal&quot;)) %&gt;% mutate(id=row_number()) %&gt;% sample_frac(0.05)  # second plant is subsampled
+
+left_join(irisP,irisS, by=&quot;id&quot;)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Petal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Petal.Width"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["id"],"name":[3],"type":["int"],"align":["right"]},{"label":["Sepal.Length"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Sepal.Width"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"1.5","2":"0.1","3":"33","4":"5.2","5":"4.1"},{"1":"1.6","2":"0.2","3":"12","4":"4.8","5":"3.4"},{"1":"5.1","2":"2.4","3":"115","4":"5.8","5":"2.8"},{"1":"4.5","2":"1.5","3":"85","4":"5.4","5":"3.0"},{"1":"4.0","2":"1.3","3":"72","4":"6.1","5":"2.8"},{"1":"1.4","2":"0.2","3":"34","4":"5.5","5":"4.2"},{"1":"1.5","2":"0.2","3":"28","4":"5.2","5":"3.5"},{"1":"3.0","2":"1.1","3":"99","4":"5.1","5":"2.5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>right_join(irisP,irisS, by=&quot;id&quot;)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Petal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Petal.Width"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["id"],"name":[3],"type":["int"],"align":["right"]},{"label":["Sepal.Length"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Sepal.Width"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"1.5","2":"0.1","3":"33","4":"5.2","5":"4.1"},{"1":"1.6","2":"0.2","3":"12","4":"4.8","5":"3.4"},{"1":"5.1","2":"2.4","3":"115","4":"5.8","5":"2.8"},{"1":"4.5","2":"1.5","3":"85","4":"5.4","5":"3.0"},{"1":"4.0","2":"1.3","3":"72","4":"6.1","5":"2.8"},{"1":"1.4","2":"0.2","3":"34","4":"5.5","5":"4.2"},{"1":"1.5","2":"0.2","3":"28","4":"5.2","5":"3.5"},{"1":"3.0","2":"1.1","3":"99","4":"5.1","5":"2.5"},{"1":"NA","2":"NA","3":"1","4":"5.1","5":"3.5"},{"1":"NA","2":"NA","3":"2","4":"4.9","5":"3.0"},{"1":"NA","2":"NA","3":"3","4":"4.7","5":"3.2"},{"1":"NA","2":"NA","3":"4","4":"4.6","5":"3.1"},{"1":"NA","2":"NA","3":"5","4":"5.0","5":"3.6"},{"1":"NA","2":"NA","3":"6","4":"5.4","5":"3.9"},{"1":"NA","2":"NA","3":"7","4":"4.6","5":"3.4"},{"1":"NA","2":"NA","3":"8","4":"5.0","5":"3.4"},{"1":"NA","2":"NA","3":"9","4":"4.4","5":"2.9"},{"1":"NA","2":"NA","3":"10","4":"4.9","5":"3.1"},{"1":"NA","2":"NA","3":"11","4":"5.4","5":"3.7"},{"1":"NA","2":"NA","3":"13","4":"4.8","5":"3.0"},{"1":"NA","2":"NA","3":"14","4":"4.3","5":"3.0"},{"1":"NA","2":"NA","3":"15","4":"5.8","5":"4.0"},{"1":"NA","2":"NA","3":"16","4":"5.7","5":"4.4"},{"1":"NA","2":"NA","3":"17","4":"5.4","5":"3.9"},{"1":"NA","2":"NA","3":"18","4":"5.1","5":"3.5"},{"1":"NA","2":"NA","3":"19","4":"5.7","5":"3.8"},{"1":"NA","2":"NA","3":"20","4":"5.1","5":"3.8"},{"1":"NA","2":"NA","3":"21","4":"5.4","5":"3.4"},{"1":"NA","2":"NA","3":"22","4":"5.1","5":"3.7"},{"1":"NA","2":"NA","3":"23","4":"4.6","5":"3.6"},{"1":"NA","2":"NA","3":"24","4":"5.1","5":"3.3"},{"1":"NA","2":"NA","3":"25","4":"4.8","5":"3.4"},{"1":"NA","2":"NA","3":"26","4":"5.0","5":"3.0"},{"1":"NA","2":"NA","3":"27","4":"5.0","5":"3.4"},{"1":"NA","2":"NA","3":"29","4":"5.2","5":"3.4"},{"1":"NA","2":"NA","3":"30","4":"4.7","5":"3.2"},{"1":"NA","2":"NA","3":"31","4":"4.8","5":"3.1"},{"1":"NA","2":"NA","3":"32","4":"5.4","5":"3.4"},{"1":"NA","2":"NA","3":"35","4":"4.9","5":"3.1"},{"1":"NA","2":"NA","3":"36","4":"5.0","5":"3.2"},{"1":"NA","2":"NA","3":"37","4":"5.5","5":"3.5"},{"1":"NA","2":"NA","3":"38","4":"4.9","5":"3.6"},{"1":"NA","2":"NA","3":"39","4":"4.4","5":"3.0"},{"1":"NA","2":"NA","3":"40","4":"5.1","5":"3.4"},{"1":"NA","2":"NA","3":"41","4":"5.0","5":"3.5"},{"1":"NA","2":"NA","3":"42","4":"4.5","5":"2.3"},{"1":"NA","2":"NA","3":"43","4":"4.4","5":"3.2"},{"1":"NA","2":"NA","3":"44","4":"5.0","5":"3.5"},{"1":"NA","2":"NA","3":"45","4":"5.1","5":"3.8"},{"1":"NA","2":"NA","3":"46","4":"4.8","5":"3.0"},{"1":"NA","2":"NA","3":"47","4":"5.1","5":"3.8"},{"1":"NA","2":"NA","3":"48","4":"4.6","5":"3.2"},{"1":"NA","2":"NA","3":"49","4":"5.3","5":"3.7"},{"1":"NA","2":"NA","3":"50","4":"5.0","5":"3.3"},{"1":"NA","2":"NA","3":"51","4":"7.0","5":"3.2"},{"1":"NA","2":"NA","3":"52","4":"6.4","5":"3.2"},{"1":"NA","2":"NA","3":"53","4":"6.9","5":"3.1"},{"1":"NA","2":"NA","3":"54","4":"5.5","5":"2.3"},{"1":"NA","2":"NA","3":"55","4":"6.5","5":"2.8"},{"1":"NA","2":"NA","3":"56","4":"5.7","5":"2.8"},{"1":"NA","2":"NA","3":"57","4":"6.3","5":"3.3"},{"1":"NA","2":"NA","3":"58","4":"4.9","5":"2.4"},{"1":"NA","2":"NA","3":"59","4":"6.6","5":"2.9"},{"1":"NA","2":"NA","3":"60","4":"5.2","5":"2.7"},{"1":"NA","2":"NA","3":"61","4":"5.0","5":"2.0"},{"1":"NA","2":"NA","3":"62","4":"5.9","5":"3.0"},{"1":"NA","2":"NA","3":"63","4":"6.0","5":"2.2"},{"1":"NA","2":"NA","3":"64","4":"6.1","5":"2.9"},{"1":"NA","2":"NA","3":"65","4":"5.6","5":"2.9"},{"1":"NA","2":"NA","3":"66","4":"6.7","5":"3.1"},{"1":"NA","2":"NA","3":"67","4":"5.6","5":"3.0"},{"1":"NA","2":"NA","3":"68","4":"5.8","5":"2.7"},{"1":"NA","2":"NA","3":"69","4":"6.2","5":"2.2"},{"1":"NA","2":"NA","3":"70","4":"5.6","5":"2.5"},{"1":"NA","2":"NA","3":"71","4":"5.9","5":"3.2"},{"1":"NA","2":"NA","3":"73","4":"6.3","5":"2.5"},{"1":"NA","2":"NA","3":"74","4":"6.1","5":"2.8"},{"1":"NA","2":"NA","3":"75","4":"6.4","5":"2.9"},{"1":"NA","2":"NA","3":"76","4":"6.6","5":"3.0"},{"1":"NA","2":"NA","3":"77","4":"6.8","5":"2.8"},{"1":"NA","2":"NA","3":"78","4":"6.7","5":"3.0"},{"1":"NA","2":"NA","3":"79","4":"6.0","5":"2.9"},{"1":"NA","2":"NA","3":"80","4":"5.7","5":"2.6"},{"1":"NA","2":"NA","3":"81","4":"5.5","5":"2.4"},{"1":"NA","2":"NA","3":"82","4":"5.5","5":"2.4"},{"1":"NA","2":"NA","3":"83","4":"5.8","5":"2.7"},{"1":"NA","2":"NA","3":"84","4":"6.0","5":"2.7"},{"1":"NA","2":"NA","3":"86","4":"6.0","5":"3.4"},{"1":"NA","2":"NA","3":"87","4":"6.7","5":"3.1"},{"1":"NA","2":"NA","3":"88","4":"6.3","5":"2.3"},{"1":"NA","2":"NA","3":"89","4":"5.6","5":"3.0"},{"1":"NA","2":"NA","3":"90","4":"5.5","5":"2.5"},{"1":"NA","2":"NA","3":"91","4":"5.5","5":"2.6"},{"1":"NA","2":"NA","3":"92","4":"6.1","5":"3.0"},{"1":"NA","2":"NA","3":"93","4":"5.8","5":"2.6"},{"1":"NA","2":"NA","3":"94","4":"5.0","5":"2.3"},{"1":"NA","2":"NA","3":"95","4":"5.6","5":"2.7"},{"1":"NA","2":"NA","3":"96","4":"5.7","5":"3.0"},{"1":"NA","2":"NA","3":"97","4":"5.7","5":"2.9"},{"1":"NA","2":"NA","3":"98","4":"6.2","5":"2.9"},{"1":"NA","2":"NA","3":"100","4":"5.7","5":"2.8"},{"1":"NA","2":"NA","3":"101","4":"6.3","5":"3.3"},{"1":"NA","2":"NA","3":"102","4":"5.8","5":"2.7"},{"1":"NA","2":"NA","3":"103","4":"7.1","5":"3.0"},{"1":"NA","2":"NA","3":"104","4":"6.3","5":"2.9"},{"1":"NA","2":"NA","3":"105","4":"6.5","5":"3.0"},{"1":"NA","2":"NA","3":"106","4":"7.6","5":"3.0"},{"1":"NA","2":"NA","3":"107","4":"4.9","5":"2.5"},{"1":"NA","2":"NA","3":"108","4":"7.3","5":"2.9"},{"1":"NA","2":"NA","3":"109","4":"6.7","5":"2.5"},{"1":"NA","2":"NA","3":"110","4":"7.2","5":"3.6"},{"1":"NA","2":"NA","3":"111","4":"6.5","5":"3.2"},{"1":"NA","2":"NA","3":"112","4":"6.4","5":"2.7"},{"1":"NA","2":"NA","3":"113","4":"6.8","5":"3.0"},{"1":"NA","2":"NA","3":"114","4":"5.7","5":"2.5"},{"1":"NA","2":"NA","3":"116","4":"6.4","5":"3.2"},{"1":"NA","2":"NA","3":"117","4":"6.5","5":"3.0"},{"1":"NA","2":"NA","3":"118","4":"7.7","5":"3.8"},{"1":"NA","2":"NA","3":"119","4":"7.7","5":"2.6"},{"1":"NA","2":"NA","3":"120","4":"6.0","5":"2.2"},{"1":"NA","2":"NA","3":"121","4":"6.9","5":"3.2"},{"1":"NA","2":"NA","3":"122","4":"5.6","5":"2.8"},{"1":"NA","2":"NA","3":"123","4":"7.7","5":"2.8"},{"1":"NA","2":"NA","3":"124","4":"6.3","5":"2.7"},{"1":"NA","2":"NA","3":"125","4":"6.7","5":"3.3"},{"1":"NA","2":"NA","3":"126","4":"7.2","5":"3.2"},{"1":"NA","2":"NA","3":"127","4":"6.2","5":"2.8"},{"1":"NA","2":"NA","3":"128","4":"6.1","5":"3.0"},{"1":"NA","2":"NA","3":"129","4":"6.4","5":"2.8"},{"1":"NA","2":"NA","3":"130","4":"7.2","5":"3.0"},{"1":"NA","2":"NA","3":"131","4":"7.4","5":"2.8"},{"1":"NA","2":"NA","3":"132","4":"7.9","5":"3.8"},{"1":"NA","2":"NA","3":"133","4":"6.4","5":"2.8"},{"1":"NA","2":"NA","3":"134","4":"6.3","5":"2.8"},{"1":"NA","2":"NA","3":"135","4":"6.1","5":"2.6"},{"1":"NA","2":"NA","3":"136","4":"7.7","5":"3.0"},{"1":"NA","2":"NA","3":"137","4":"6.3","5":"3.4"},{"1":"NA","2":"NA","3":"138","4":"6.4","5":"3.1"},{"1":"NA","2":"NA","3":"139","4":"6.0","5":"3.0"},{"1":"NA","2":"NA","3":"140","4":"6.9","5":"3.1"},{"1":"NA","2":"NA","3":"141","4":"6.7","5":"3.1"},{"1":"NA","2":"NA","3":"142","4":"6.9","5":"3.1"},{"1":"NA","2":"NA","3":"143","4":"5.8","5":"2.7"},{"1":"NA","2":"NA","3":"144","4":"6.8","5":"3.2"},{"1":"NA","2":"NA","3":"145","4":"6.7","5":"3.3"},{"1":"NA","2":"NA","3":"146","4":"6.7","5":"3.0"},{"1":"NA","2":"NA","3":"147","4":"6.3","5":"2.5"},{"1":"NA","2":"NA","3":"148","4":"6.5","5":"3.0"},{"1":"NA","2":"NA","3":"149","4":"6.2","5":"3.4"},{"1":"NA","2":"NA","3":"150","4":"5.9","5":"3.0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>inner_join(irisP,irisS, by=&quot;id&quot;)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Petal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Petal.Width"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["id"],"name":[3],"type":["int"],"align":["right"]},{"label":["Sepal.Length"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Sepal.Width"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"1.5","2":"0.1","3":"33","4":"5.2","5":"4.1"},{"1":"1.6","2":"0.2","3":"12","4":"4.8","5":"3.4"},{"1":"5.1","2":"2.4","3":"115","4":"5.8","5":"2.8"},{"1":"4.5","2":"1.5","3":"85","4":"5.4","5":"3.0"},{"1":"4.0","2":"1.3","3":"72","4":"6.1","5":"2.8"},{"1":"1.4","2":"0.2","3":"34","4":"5.5","5":"4.2"},{"1":"1.5","2":"0.2","3":"28","4":"5.2","5":"3.5"},{"1":"3.0","2":"1.1","3":"99","4":"5.1","5":"2.5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p><strong>Task</strong> Explore the resulting data</p>
+</div>
+<div id="ggplot-powerful-plotting" class="section level1">
+<h1>ggplot: Powerful plotting</h1>
+<pre class="r"><code>g = ggplot(iris, aes(x=Petal.Length, y=Petal.Width, colour=Species))
+g + geom_point() +
+    geom_smooth(method=&quot;lm&quot;, se=TRUE, color=&quot;yellow&quot;) +
+    geom_smooth(method=&quot;loess&quot;, colour=&quot;orange&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
+## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="S02_tidyverse_files/figure-html/ggplot-1.png" width="672" /></p>
+</div>
+<div id="grouping" class="section level1">
+<h1>Grouping</h1>
+<pre class="r"><code>g + geom_point() + facet_grid(~Species) # arrange subplot by categorical variable, try setting sclaes=&quot;free&quot;</code></pre>
+<p><img src="S02_tidyverse_files/figure-html/group-1.png" width="672" /></p>
+<pre class="r"><code>g + geom_smooth(aes(group=Species))   # smooth based on group defined by species</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="S02_tidyverse_files/figure-html/group-2.png" width="672" /></p>
+<pre class="r"><code>g = ggplot(iris, aes(x=Species, y=Petal.Width, colour=Species))
+g + geom_violin() +
+    scale_x_discrete(limits=c(&quot;versicolor&quot;, &quot;setosa&quot;,&quot;virginica&quot;))  # change order</code></pre>
+<p><img src="S02_tidyverse_files/figure-html/other-1.png" width="672" /></p>
+</div>
+
+<br />
+<br />
+<hr>
+<p> Bioinfo Core @ MPI-IE Freiburg (2023) </p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

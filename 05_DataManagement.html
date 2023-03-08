@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Thomas Manke" />
+
+
+<title>Data Managment: Objects and Files</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Rintro 2023</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Modules
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_Introduction.html">00_Introduction</a>
+    </li>
+    <li>
+      <a href="01_FirstSteps.html">01_FirstSteps</a>
+    </li>
+    <li>
+      <a href="02_DataTypes.html">02_DataTypes</a>
+    </li>
+    <li>
+      <a href="03_DataDescriptions.html">03_DataDescriptions</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="04_DataModels.html">04_DataModels</a>
+    </li>
+    <li>
+      <a href="04_DataVisualization.html">04_DataVisualization</a>
+    </li>
+    <li>
+      <a href="05_DataManagement.html">05_DataManagement</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="10_tidyr.html">10_tidyr</a>
+    </li>
+    <li>
+      <a href="11_dplyr.html">11_dplyr</a>
+    </li>
+    <li>
+      <a href="12_ggplot2.html">12_ggplot2</a>
+    </li>
+    <li class="divider"></li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/maxplanck-ie/Rintro/tree/2023.03">
+    <span class="fa fa-github"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Data Managment: Objects and Files</h1>
+<h4 class="author">Thomas Manke</h4>
+<h4 class="date">Wed Mar 8 16:23:35 2023</h4>
+
+</div>
+
+
+<div id="saving-objects-as-rdata-files" class="section level1">
+<h1>Saving objects as Rdata files</h1>
+<p>In the process of data exploration we often generate many new data
+objects. Just as with figures, we may also save data objects for later
+use.</p>
+<p>The following call saves an “image” of all data obejcts in a
+compressed file format (conventional: *.Rdata)</p>
+<pre class="r"><code>save.image(file=&quot;04.Rdata&quot;) </code></pre>
+<p><strong>Task</strong>: What happens if the “file=” parameter is
+omitted? Saving all data can be an overkill. Find out how to save only
+selected or single objects, e.g. S.</p>
+</div>
+<div id="saving-objects-as-text-files" class="section level1">
+<h1>Saving objects as text files</h1>
+<p>Rdata files are most convenient for future processing with R.
+Sometimes we need to save objects in (tab-separated) text files:</p>
+<pre class="r"><code>write.table(iris, file=&quot;iris.tsv&quot;, sep=&quot;\t&quot;, row.names=FALSE, quote=FALSE)</code></pre>
+<p><strong>Task</strong>: Save only the setosa data in a file
+setosa.tsv</p>
+</div>
+<div id="tracking-objects" class="section level1">
+<h1>Tracking objects</h1>
+<p>In RStudio, explore the “Environment” tab. On the console there are
+also many convenient commands to track (and delte) objects from
+memory.</p>
+<pre class="r"><code>ls()     # list all obejct
+rm(x)    # remove object x
+# rm(list=ls()) # Careful: This removes all objects</code></pre>
+</div>
+<div id="navigation-where-am-i-where-are-my-files"
+class="section level1">
+<h1>Navigation: Where am I, where are my files?</h1>
+<p>In Rstudio, explore the “Files” tab. On the console:</p>
+<pre class="r"><code>getwd()         # get the full path of the current working directory
+list.files()    # list all files in working directory
+setwd(&quot;~&quot;)      # change working directory to new directory (here: &quot;~&quot; = home)
+list.files(pattern=&quot;.Rdata&quot;) # list all &quot;.Rdata files in working directory  </code></pre>
+</div>
+<div id="some-jargon" class="section level1">
+<h1>some jargon</h1>
+<pre class="r"><code>( wd = getwd() )                        # working directory --&gt; full path</code></pre>
+<pre><code>## [1] &quot;/__w/Rintro/Rintro/rmd&quot;</code></pre>
+<pre class="r"><code>( fn = paste(wd,&quot;test.txt&quot;, sep=&quot;/&quot;) ) # filename (may not exist)</code></pre>
+<pre><code>## [1] &quot;/__w/Rintro/Rintro/rmd/test.txt&quot;</code></pre>
+<pre class="r"><code>( dn = dirname(fn) )                    # directory name </code></pre>
+<pre><code>## [1] &quot;/__w/Rintro/Rintro/rmd&quot;</code></pre>
+<pre class="r"><code>( bn = basename(fn) )                   # basename</code></pre>
+<pre><code>## [1] &quot;test.txt&quot;</code></pre>
+<pre class="r"><code>( rp = &quot;../data/test.tsv&quot; )             # relative path  = relative to current work directory</code></pre>
+<pre><code>## [1] &quot;../data/test.tsv&quot;</code></pre>
+</div>
+<div id="the-theory-of-io" class="section level1">
+<h1>The theory of I/O</h1>
+<p>Reading external data into R is easy, but it is crucial to have a
+very clean and well-defined data structure.</p>
+<pre class="r"><code># load(&quot;04.Rdata&quot;)  # easiest and fastest for previously generated Rdata files
+iris_f=read.table(file=&quot;../data/iris.tsv&quot;, sep=&quot;\t&quot;, header=TRUE) 
+
+# Checks
+str(iris_f)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
+##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ Species     : chr  &quot;setosa&quot; &quot;setosa&quot; &quot;setosa&quot; &quot;setosa&quot; ...</code></pre>
+<pre class="r"><code>head(iris_f)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Sepal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sepal.Width"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Petal.Length"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Petal.Width"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Species"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"5.1","2":"3.5","3":"1.4","4":"0.2","5":"setosa","_rn_":"1"},{"1":"4.9","2":"3.0","3":"1.4","4":"0.2","5":"setosa","_rn_":"2"},{"1":"4.7","2":"3.2","3":"1.3","4":"0.2","5":"setosa","_rn_":"3"},{"1":"4.6","2":"3.1","3":"1.5","4":"0.2","5":"setosa","_rn_":"4"},{"1":"5.0","2":"3.6","3":"1.4","4":"0.2","5":"setosa","_rn_":"5"},{"1":"5.4","2":"3.9","3":"1.7","4":"0.4","5":"setosa","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>identical(iris, iris_f)  # sanity check</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div id="the-reality-of-io" class="section level1">
+<h1>The reality of I/O</h1>
+<p>In reality, many external data is badly formatted, leading to much
+wasted time - before any analysis.</p>
+<div id="mock-real" class="section level3">
+<h3>Mock real</h3>
+<p>The code snippet below are not run</p>
+<pre class="r"><code>file=&quot;../data/GeneList.tsv&quot;     # if github directory is locally available, find proper relative directory
+# alternatively: locate at github https://github.com/maxplanck-ie/Rintro
+# file=&quot;https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/GeneList.tsv&quot;  
+read.table(file) 
+read.table(file, header=TRUE)                                            # watch out for headers
+read.table(file, header=TRUE, comment.char = &quot;%&quot;)                        # comment lines
+read.table(file, header=TRUE, comment.char = &quot;%&quot;, sep=&quot;\t&quot;)              # separators
+read.table(file, header=TRUE, comment.char = &quot;%&quot;, sep=&quot;\t&quot;, quote=&quot;\&quot;&quot;)  # quote character. What is the default?</code></pre>
+<p>Happy with results? Fill the data frame</p>
+<pre class="r"><code>file=&quot;../data/GeneList.tsv&quot; 
+D=read.table(file, header=TRUE, comment.char = &quot;%&quot;, sep=&quot;\t&quot;, quote=&quot;\&quot;&quot;)</code></pre>
+<p>Many more alternatives:</p>
+<pre class="r"><code>file=&quot;../data/GeneList.tsv&quot;
+read.delim(file, comment.char = &quot;%&quot;)      # certain useful (default) parameters in place
+
+# other packages:
+readr::read_delim(file, delim =&quot;\t&quot;, comment = &quot;%&quot;)
+
+# even from EXCEL
+file=&quot;../data/MouseFoodExperiment.xlsx&quot;
+readxl::read_excel(file)</code></pre>
+<p>Also see: “File-&gt;Import Dataset”</p>
+<pre class="r"><code>str(D)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    6 obs. of  6 variables:
+##  $ GeneName   : chr  &quot;ABC&quot; &quot;DEF1&quot; &quot;5&#39;XYZ&quot; &quot;3&#39;UVW&quot; ...
+##  $ Description: chr  &quot;unknown&quot; &quot;&quot; &quot;pseudogene&quot; &quot;&quot; ...
+##  $ Exp1       : num  1.2 1.3 50 10 20 1
+##  $ Exp2       : num  1.5 4.7 20 20 NA 1
+##  $ Exp3       : num  1.3 NA 12 34 22 1
+##  $ Planned    : logi  NA NA NA NA NA NA</code></pre>
+<pre class="r"><code>is.na(D)  # any NA&#39;s?</code></pre>
+<pre><code>##      GeneName Description  Exp1  Exp2  Exp3 Planned
+## [1,]    FALSE       FALSE FALSE FALSE FALSE    TRUE
+## [2,]    FALSE       FALSE FALSE FALSE  TRUE    TRUE
+## [3,]    FALSE       FALSE FALSE FALSE FALSE    TRUE
+## [4,]    FALSE       FALSE FALSE FALSE FALSE    TRUE
+## [5,]    FALSE        TRUE FALSE  TRUE FALSE    TRUE
+## [6,]    FALSE       FALSE FALSE FALSE FALSE    TRUE</code></pre>
+<pre class="r"><code>colSums(is.na(D))</code></pre>
+<pre><code>##    GeneName Description        Exp1        Exp2        Exp3     Planned 
+##           0           1           0           1           1           6</code></pre>
+<pre class="r"><code>i=rowSums(is.na(D[,3:5]))==0   # keep rows without NA
+j=colSums(is.na(D))==nrow(D)   # remove columns with all NA
+D[i,!j]</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["GeneName"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Description"],"name":[2],"type":["chr"],"align":["left"]},{"label":["Exp1"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Exp2"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Exp3"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"ABC","2":"unknown","3":"1.2","4":"1.5","5":"1.3","_rn_":"1"},{"1":"5'XYZ","2":"pseudogene","3":"50.0","4":"20.0","5":"12.0","_rn_":"3"},{"1":"3'UVW","2":"","3":"10.0","4":"20.0","5":"34.0","_rn_":"4"},{"1":"Oct1","2":"important","3":"1.0","4":"1.0","5":"1.0","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="real-real-homework" class="section level3">
+<h3>Real real (Homework)</h3>
+<p>Below is a real world example to get data from one of the first large
+scale ChIP-studies (Rick Young lab). This data forms the basis of a data
+exploration exercise (later), but here we focus only on data
+retrieval.</p>
+<p>Notice the individual and complex filtering process. Nothing of this
+will be transferable to other data sets.</p>
+<pre class="r"><code># consider a data file from one of the first large scale ChIP-studies (Rick Young lab: yeast)
+# 1. Find their homepage (google) and go to the &quot;Data Download&quot;&quot; section.
+# 2. find the Publication by Lee et al. (2002) Transcriptional Regulatory Networks in Saccharomyces cerevisea.
+# 3. In the &quot;Download Raw Data&quot; section copy the second link (&quot;binding of regulators to genes (text file)&quot;
+# this file contains binding data (p-values and ratios) for more than 6000 yeast genes and 113 yeast transcription factors
+
+chip=&quot;http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_gene.tsv&quot; # R can read http. 
+
+# Not advisable if network is slow, or repeated trial/errors are to be expected. In this case download first.
+
+# first problem: two header lines --&gt; skip first --&gt; skip line 1
+D=read.table(file=chip, header=TRUE,  skip=1, sep=&quot;\t&quot;)
+nrow(D)  # 511 &lt;&lt; 6000 !!!???
+
+# second problem: quote symbols in names (&#39;)
+cf=count.fields(chip,sep=&quot;\t&quot;) # many NA --&gt; quoted fields got missing
+
+D=read.table(chip, header=TRUE,  sep=&quot;\t&quot;, quote=&quot;\&quot;&quot;, skip=1)
+rownames(D)=D[,1]          # ORF-symbols in column 1, keep them as rownames 
+ic=c(1:4,seq(6,230,by=2))  # define column indices to be excluded (only keep p-values)
+P=D[,-ic]                  # new data-frame of p-values, exclude superfluous columns and ratios
+
+write.table(P,file=&quot;../data/chip.tsv&quot;, sep=&quot;\t&quot;, quote=FALSE)  # write p-values to clean file</code></pre>
+<hr />
+</div>
+</div>
+<div id="review" class="section level1">
+<h1>Review:</h1>
+<ul>
+<li>exporting objects as Rdata (save.image) or text-file
+(write.table)</li>
+<li>navigate in directories, know where you are working: ls</li>
+<li>I/O pain: keep data clean and well structured !</li>
+</ul>
+</div>
+
+<br />
+<br />
+<hr>
+<p> Bioinfo Core @ MPI-IE Freiburg (2023) </p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

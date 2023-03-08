@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Thomas Manke" />
+
+<meta name="date" content="2023-03-08" />
+
+<title>01: First Steps</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Rintro 2023</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Modules
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_Introduction.html">00_Introduction</a>
+    </li>
+    <li>
+      <a href="01_FirstSteps.html">01_FirstSteps</a>
+    </li>
+    <li>
+      <a href="02_DataTypes.html">02_DataTypes</a>
+    </li>
+    <li>
+      <a href="03_DataDescriptions.html">03_DataDescriptions</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="04_DataModels.html">04_DataModels</a>
+    </li>
+    <li>
+      <a href="04_DataVisualization.html">04_DataVisualization</a>
+    </li>
+    <li>
+      <a href="05_DataManagement.html">05_DataManagement</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="10_tidyr.html">10_tidyr</a>
+    </li>
+    <li>
+      <a href="11_dplyr.html">11_dplyr</a>
+    </li>
+    <li>
+      <a href="12_ggplot2.html">12_ggplot2</a>
+    </li>
+    <li class="divider"></li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/maxplanck-ie/Rintro/tree/2023.03">
+    <span class="fa fa-github"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">01: First Steps</h1>
+<h4 class="author">Thomas Manke</h4>
+<h4 class="date">2023-03-08</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#create-r-project" id="toc-create-r-project">Create R
+project</a></li>
+<li><a href="#console-and-commands"
+id="toc-console-and-commands">Console and Commands</a></li>
+<li><a href="#command-history" id="toc-command-history">Command
+History</a></li>
+<li><a href="#first-help" id="toc-first-help">First help</a></li>
+<li><a href="#community-help" id="toc-community-help">Community
+help</a></li>
+<li><a href="#sessioninfo" id="toc-sessioninfo">SessionInfo</a></li>
+<li><a href="#assigning-values-to-objects"
+id="toc-assigning-values-to-objects">Assigning values to
+objects</a></li>
+<li><a href="#simple-vectors" id="toc-simple-vectors">Simple
+Vectors</a></li>
+<li><a href="#accessing-vectors" id="toc-accessing-vectors">Accessing
+Vectors</a></li>
+<li><a href="#vector-generation" id="toc-vector-generation">Vector
+Generation</a></li>
+<li><a href="#vector-operations" id="toc-vector-operations">Vector
+Operations</a></li>
+<li><a href="#misc" id="toc-misc">Misc</a></li>
+<li><a href="#learning-curve" id="toc-learning-curve">Learning
+Curve:</a></li>
+</ul>
+</div>
+
+<div id="create-r-project" class="section level1">
+<h1>Create R project</h1>
+<p>It is good practice that each R project should have their dedicated
+directory. This directory will hold code, data, results etc.</p>
+<p><strong>Task</strong>: Open a new project with File &gt; New Project
+…</p>
+<p>Notice the following distinction:</p>
+<ul>
+<li>When running Rstudio locally, the project directory will reside on
+your <strong>local</strong> computer.</li>
+<li>When accessing a web server, the project directory will also be on
+that server.</li>
+</ul>
+<p><strong>Task</strong>: Familiarize yourself with the layout and the
+various panels in Rstudio.</p>
+<p>For now, the most important panel is the so-called “Console” with the
+prompt (“&gt;”).</p>
+<p>This is where the first interactions with the R-software will take
+place.</p>
+<p>The other panels are for: output, help and other information.</p>
+</div>
+<div id="console-and-commands" class="section level1">
+<h1>Console and Commands</h1>
+<p>In the Console try to repeat and understand the following
+operations</p>
+<pre class="r"><code>2+2</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>2^3        # This is a comment: try also 2**3</code></pre>
+<pre><code>## [1] 8</code></pre>
+<pre class="r"><code>1+2+3/6    # beware of precedence rules</code></pre>
+<pre><code>## [1] 3.5</code></pre>
+<pre class="r"><code>sqrt(2)    # functions</code></pre>
+<pre><code>## [1] 1.414214</code></pre>
+<pre class="r"><code>sin(pi/2)  # functions and built-in constants</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code># Special values
+1/0        # R knows infinity! Try 1/Inf and 1/inf</code></pre>
+<pre><code>## [1] Inf</code></pre>
+<pre class="r"><code>0/0        # Not a number!     Try sqrt(-1)</code></pre>
+<pre><code>## [1] NaN</code></pre>
+</div>
+<div id="command-history" class="section level1">
+<h1>Command History</h1>
+<p>All R-commands are tracked in a <em>history</em>. It maybe accessed
+using the cursors (or the history panel in RStudio). This is extremely
+useful to navigate to previous commands, repeat them, or change them
+slightly.</p>
+<p><strong>Task</strong>: Using the history, determine <span
+class="math inline">\(\sqrt 3\)</span>.</p>
+</div>
+<div id="first-help" class="section level1">
+<h1>First help</h1>
+<p>There are various different ways to get help</p>
+<pre class="r"><code>?sin</code></pre>
+<p>Use help to find out more about: sqrt, exp or anything else of
+interest.</p>
+</div>
+<div id="community-help" class="section level1">
+<h1>Community help</h1>
+<ul>
+<li>online courses: <a href="http://software-carpentry.org/lessons"
+class="uri">http://software-carpentry.org/lessons</a>, Coursera,
+Udacity, …</li>
+<li>bootcamp: <a href="https://github.com/jknowles/r_tutorial_ed"
+class="uri">https://github.com/jknowles/r_tutorial_ed</a></li>
+<li>QuickR: <a href="http://www.statmethods.net"
+class="uri">http://www.statmethods.net</a></li>
+<li><a href="http://stackoverflow.com"
+class="uri">http://stackoverflow.com</a>, <a
+href="http://www.r-bloggers.com/"
+class="uri">http://www.r-bloggers.com/</a></li>
+</ul>
+</div>
+<div id="sessioninfo" class="section level1">
+<h1>SessionInfo</h1>
+<p>Every language operates in a certain context and is
+context-dependent.</p>
+<p>Software depends on other software and libraries.</p>
+<p>It is important to be aware of those (often complex)
+dependencies.</p>
+<p>One way to communicate this context is with the output from
+sessionInfo().</p>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 4.1.3 (2022-03-10)
+## Platform: x86_64-conda-linux-gnu (64-bit)
+## Running under: Debian GNU/Linux 11 (bullseye)
+## 
+## Matrix products: default
+## BLAS/LAPACK: /github/home/micromamba-root/envs/Rintro2023/lib/libopenblasp-r0.3.21.so
+## 
+## locale:
+## [1] C
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## loaded via a namespace (and not attached):
+##  [1] digest_0.6.31   R6_2.5.1        lifecycle_1.0.3 jsonlite_1.8.4 
+##  [5] magrittr_2.0.3  evaluate_0.20   stringi_1.7.12  rlang_1.0.6    
+##  [9] cachem_1.0.7    cli_3.6.0       jquerylib_0.1.4 bslib_0.4.2    
+## [13] vctrs_0.5.2     rmarkdown_2.14  tools_4.1.3     stringr_1.5.0  
+## [17] glue_1.6.2      xfun_0.37       yaml_2.3.7      fastmap_1.1.1  
+## [21] compiler_4.1.3  htmltools_0.5.4 knitr_1.42      sass_0.4.5</code></pre>
+<hr />
+</div>
+<div id="assigning-values-to-objects" class="section level1">
+<h1>Assigning values to objects</h1>
+<p>Goal: store results of computation in new variables</p>
+<pre class="r"><code>x &lt;- 2*pi # pre-defined constant pi
+x         # see value of object x = show(x) </code></pre>
+<pre><code>## [1] 6.283185</code></pre>
+<pre class="r"><code>x &lt; -2    # Careful: what&#39;s going on here?</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>x</code></pre>
+<pre><code>## [1] 6.283185</code></pre>
+<pre class="r"><code>x = 2  # &quot;=&quot; as in most other languages.  
+x      # x was overwritten</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>x==3   # another logical comparison (x unchanged)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>x+x    # passing objects to functions (+)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<hr />
+</div>
+<div id="simple-vectors" class="section level1">
+<h1>Simple Vectors</h1>
+<p>Vectors illustrate how complex data structures can be built from
+smaller blocks. Here we learn how to create and inspect vectors.</p>
+<pre class="r"><code>v=c(1,2)            # combine arguments into vector
+v                   # display v</code></pre>
+<pre><code>## [1] 1 2</code></pre>
+<pre class="r"><code># functions for vectors
+str(v)              # structure of v (especially useful for long and structured objects)</code></pre>
+<pre><code>##  num [1:2] 1 2</code></pre>
+<pre class="r"><code>typeof(v)           # type of v ( ~ storage mode)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>class(v)            # class of v (determines how certain functions will work with v)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code>length(v)</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>sum(v)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>summary(v)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    1.00    1.25    1.50    1.50    1.75    2.00</code></pre>
+</div>
+<div id="accessing-vectors" class="section level1">
+<h1>Accessing Vectors</h1>
+<p>Frequently we need to access specific elements from a vector</p>
+<pre class="r"><code>v[1]</code></pre>
+<pre><code>## [1] 1</code></pre>
+<p><strong>Task</strong>: access the following vector elements: v[1],
+v[2], v[3], v[1:3], v[-1]</p>
+</div>
+<div id="vector-generation" class="section level1">
+<h1>Vector Generation</h1>
+<pre class="r"><code>v=c(1,2,3,4,5)    # combining many elements can get cumbersome
+v=1:5             # more efficient
+
+v=seq(from=1, to=5, by=1) # same as before but more flexibilty
+v=seq(1,5,0.5)            # short-hand defaults</code></pre>
+<p><strong>Tasks</strong>:</p>
+<ul>
+<li>Explore the seq() function and inspect other parameter options.</li>
+<li>Create a vector with 5 numbers equally spaced from +2 to -1.9</li>
+</ul>
+<pre><code>## [1]  2.000  1.025  0.050 -0.925 -1.900</code></pre>
+<p><strong>Task</strong>: Understand the difference between the two
+vectors v1 and v2</p>
+<pre class="r"><code>v1=1:10-1
+v2=1:(10-1)</code></pre>
+</div>
+<div id="vector-operations" class="section level1">
+<h1>Vector Operations</h1>
+<pre class="r"><code>v1=1:3      # = c(1,2,3)
+v2=rep(2,3) # = c(2,2,2)
+
+v1+v2      # elementwise addition
+v1*v2      # ... multiplication
+v1 &gt; v2    # ... comparisons
+v1 %*% v2  # scalar product</code></pre>
+</div>
+<div id="misc" class="section level1">
+<h1>Misc</h1>
+<pre class="r"><code>v=1:4                    # Vector Definition
+v+c(10,20)               # Recycling
+v+c(10,20,30)            # Warning != Error
+
+#v %*% c(10,20,30)        # Error = Error
+
+letters                  # built-in vector. Try LETTERS 
+typeof(letters)          # there is more than numbers
+
+names(v)=letters[1:4]    # naming of vector elements (for convenience)
+v[&quot;b&quot;]                   # index by name
+
+rev(v)                   # reverse vectors</code></pre>
+<hr />
+</div>
+<div id="learning-curve" class="section level1">
+<h1>Learning Curve:</h1>
+<ul>
+<li>Rstudio: Starting an R project</li>
+<li>work with console</li>
+<li>simple functions (input, output) and logical operation</li>
+<li>creating simple objects and assigning values</li>
+<li>inspecting objects: v, str(v), typeof(v), length(v)</li>
+<li>flexible creation of vectors</li>
+<li>vector indices and subsetting</li>
+<li>vector operations and recycling</li>
+<li>undefined values: NaN, NA</li>
+<li>functions can behave differently on different input: summary()</li>
+<li>see warning messages and errors</li>
+<li>use help to understand about functions: ?sqrt</li>
+</ul>
+</div>
+
+<br />
+<br />
+<hr>
+<p> Bioinfo Core @ MPI-IE Freiburg (2023) </p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

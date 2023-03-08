@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Devon P. Ryan" />
+
+<meta name="date" content="2023-03-08" />
+
+<title>Tidying a mess of data</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Rintro 2023</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Modules
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_Introduction.html">00_Introduction</a>
+    </li>
+    <li>
+      <a href="01_FirstSteps.html">01_FirstSteps</a>
+    </li>
+    <li>
+      <a href="02_DataTypes.html">02_DataTypes</a>
+    </li>
+    <li>
+      <a href="03_DataDescriptions.html">03_DataDescriptions</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="04_DataModels.html">04_DataModels</a>
+    </li>
+    <li>
+      <a href="04_DataVisualization.html">04_DataVisualization</a>
+    </li>
+    <li>
+      <a href="05_DataManagement.html">05_DataManagement</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="10_tidyr.html">10_tidyr</a>
+    </li>
+    <li>
+      <a href="11_dplyr.html">11_dplyr</a>
+    </li>
+    <li>
+      <a href="12_ggplot2.html">12_ggplot2</a>
+    </li>
+    <li class="divider"></li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/maxplanck-ie/Rintro/tree/2023.03">
+    <span class="fa fa-github"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Tidying a mess of data</h1>
+<h4 class="author">Devon P. Ryan</h4>
+<h4 class="date">2023-03-08</h4>
+
+</div>
+
+
+<div id="initial-setup" class="section level1">
+<h1>Initial setup</h1>
+<p>Before continuing, please run the following:</p>
+<pre class="r"><code>install.packages(c(&quot;readr&quot;, &quot;tidyr&quot;, &quot;dplyr&quot;, &quot;ggplot2&quot;, &quot;devtools&quot;))</code></pre>
+</div>
+<div id="real-data-is-very-messy" class="section level1">
+<h1>Real data is very messy</h1>
+<ul>
+<li>Typically not in a usable format</li>
+<li>Random empty values</li>
+<li>Poorly coded treatments</li>
+</ul>
+<p>This <strong>always</strong> happens with other’s datasets.</p>
+<p>The process of correcting all of this is called “munging.”</p>
+</div>
+<div id="with-great-power-comes-great-annoyance" class="section level1">
+<h1>With great power comes great annoyance</h1>
+<p>Congrats, you’re now the R gal/guy. Everyone will now ask you for
+help and their data will be a total mess.</p>
+<ul>
+<li>Everyone likes doing crazy stuff in Excel
+<ul>
+<li>Missing values</li>
+<li>Random coding, like “–” for missing</li>
+<li>Multiple entries/column</li>
+</ul></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="center">Day</th>
+<th align="center">Escape Time</th>
+<th align="center">Distance Traveled</th>
+<th align="center">Quadrant Occupancy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mouse 1</td>
+<td align="center">1</td>
+<td align="center">60</td>
+<td align="center">100</td>
+<td align="center">45 / 27</td>
+</tr>
+<tr class="even">
+<td>Mouse 2</td>
+<td align="center">1</td>
+<td align="center">50</td>
+<td align="center">110</td>
+<td align="center">45 / 27</td>
+</tr>
+<tr class="odd">
+<td>Mouse 3</td>
+<td align="center">1</td>
+<td align="center">52</td>
+<td align="center">00</td>
+<td align="center">45 / 27</td>
+</tr>
+<tr class="even">
+<td>Mouse 1</td>
+<td align="center">2</td>
+<td align="center">–</td>
+<td align="center">–</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="the-tidyverse" class="section level1">
+<h1>The Tidyverse</h1>
+<p>Much of modern data analysis relies heavily on packages from Hadley
+Wickham:</p>
+<ul>
+<li>readr</li>
+<li>tidyr</li>
+<li>reshape2</li>
+<li>dplyr (largely replaces reshape2)</li>
+<li>ggplot2 (the next section)</li>
+</ul>
+</div>
+<div id="readr" class="section level1">
+<h1>readr</h1>
+<ul>
+<li>Alternatives for <code>read.delim</code>, <code>read.csv</code>,
+etc.</li>
+<li>Handles remote files</li>
+<li>Consistent option names</li>
+<li>Only read some columns</li>
+<li>Error tolerant</li>
+<li>No automatic conversion of strings -&gt; factors</li>
+<li>dplyr integration</li>
+<li>row names are never set</li>
+</ul>
+</div>
+<div id="readr-example" class="section level1">
+<h1>readr example</h1>
+<pre class="r"><code>library(&quot;readr&quot;)
+df = read_csv(col_types = &quot;dd&quot;, col_names = c(&quot;x&quot;, &quot;y&quot;), skip = 1, &quot;
+1,2
+a,b
+&quot;)</code></pre>
+<pre class="r"><code>df</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##       x     y
+##   &lt;dbl&gt; &lt;dbl&gt;
+## 1     1     2
+## 2    NA    NA</code></pre>
+<pre class="r"><code>problems(df)</code></pre>
+<pre><code>## # A tibble: 2 x 5
+##     row   col expected actual file                           
+##   &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;                          
+## 1     2     1 a double a      /tmp/Rtmp26NYcx/file44e6af27558
+## 2     2     2 a double b      /tmp/Rtmp26NYcx/file44e6af27558</code></pre>
+</div>
+<div id="remember-that-messy-gene-list" class="section level1">
+<h1>Remember that messy gene list?</h1>
+<pre class="r"><code>file = &quot;../data/GeneList.tsv&quot;
+df1 = read_tsv(file, comment = &quot;%&quot;)</code></pre>
+<pre><code>## Rows: 6 Columns: 6
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;\t&quot;
+## chr (2): GeneName, Description
+## dbl (3): Exp1, Exp2, Exp3
+## lgl (1): Planned
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code># better than:
+# df1 = read.table(file, header=TRUE, comment.char = &quot;%&quot;, sep=&quot;\t&quot;, quote = &quot;\&quot;&quot;)
+
+# better still: know and define what to expect
+df1 = read_tsv(file, col_types = &quot;ccnnnn&quot;, comment=&quot;%&quot;)
+df1</code></pre>
+<pre><code>## # A tibble: 6 x 6
+##   GeneName Description  Exp1  Exp2  Exp3 Planned
+##   &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+## 1 ABC      unknown       1.2   1.5   1.3      NA
+## 2 DEF1     &lt;NA&gt;          1.3   4.7  NA        NA
+## 3 5&#39;XYZ    pseudogene   50    20    12        NA
+## 4 3&#39;UVW    &lt;NA&gt;         10    20    34        NA
+## 5 Sep7     &lt;NA&gt;         20    NA    22        NA
+## 6 Oct1     important     1     1     1        NA</code></pre>
+<pre class="r"><code>problems(df1)</code></pre>
+<pre><code>## # A tibble: 0 x 5
+## # ... with 5 variables: row &lt;int&gt;, col &lt;int&gt;, expected &lt;chr&gt;, actual &lt;chr&gt;,
+## #   file &lt;chr&gt;</code></pre>
+</div>
+<div id="readr-column-types" class="section level1">
+<h1>readr column types</h1>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Full name</th>
+<th align="center">Symbol</th>
+<th align="right">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>col_logical()</code></td>
+<td align="center">l</td>
+<td align="right"><code>T</code>, <code>F</code>, <code>TRUE</code>,
+<code>FALSE</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>col_integer()</code></td>
+<td align="center">i</td>
+<td align="right">0, 22, 45</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>col_double()</code></td>
+<td align="center">d</td>
+<td align="right">3.1415926536</td>
+</tr>
+<tr class="even">
+<td align="left"><code>col_character()</code></td>
+<td align="center">c</td>
+<td align="right">“I’m what’s called a string!”</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>col_skip()</code></td>
+<td align="center">_</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left"><code>col_number()</code></td>
+<td align="center">n</td>
+<td align="right">“500.25???”</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Open the xlsx file in eXcel/Openoffice
+<ul>
+<li>Multiple levels of headers?!?!</li>
+<li>Empty columns</li>
+<li>Missing values</li>
+<li>OMFG, there are commas instead of decimal points
+<ul>
+<li>Computers are Americans, they’re easily confused by your strange
+foreign ways</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>The experiment:</p>
+<ul>
+<li>Two groups of mice</li>
+<li>4/cage</li>
+<li>Food intake / weight measured over time</li>
+</ul>
+</div>
+<div id="readr-example-1" class="section level1">
+<h1>readr example</h1>
+<p>File structure:</p>
+<ul>
+<li>Two header lines (ignore)</li>
+<li>1 column of integers</li>
+<li>18 columns of measurements (group 1)</li>
+<li>1 blank column</li>
+<li>17 columns of measurements (group 2)</li>
+</ul>
+<pre class="r"><code>#I&#39;ve taken care of changing &quot;,&quot; to &quot;.&quot;, since this sometimes causes problems,
+#but note that you can handle different locales with locale=blah
+#blah = locale(&quot;en&quot;, decimal_mark=&quot;,&quot;) # stupid commas
+d = read_csv(&quot;../data/foodIntake2.csv&quot;, skip=1)</code></pre>
+<pre><code>## New names:
+## Rows: 33 Columns: 37
+## -- Column specification
+## -------------------------------------------------------- Delimiter: &quot;,&quot; dbl
+## (36): ...1, 528, 535, 559, 563, 570, 571, 572, 573, 583, 593, 595, 599, ... lgl
+## (1): ...20
+## i Use `spec()` to retrieve the full column specification for this data. i
+## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## * `` -&gt; `...1`
+## * `` -&gt; `...20`</code></pre>
+<pre class="r"><code>head(d, n=1)</code></pre>
+<pre><code>## # A tibble: 1 x 37
+##    ...1 `528` `535` `559` `563` `570` `571` `572` `573` `583` `593` `595` `599`
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     4  3.56  3.78  3.58  3.47  3.98  3.54  3.34  3.92  3.76  4.09  3.92  4.59
+## # ... with 24 more variables: `606` &lt;dbl&gt;, `614` &lt;dbl&gt;, `617` &lt;dbl&gt;,
+## #   `619` &lt;dbl&gt;, `649` &lt;dbl&gt;, `656` &lt;dbl&gt;, ...20 &lt;lgl&gt;, `661` &lt;dbl&gt;,
+## #   `662` &lt;dbl&gt;, `664` &lt;dbl&gt;, `665` &lt;dbl&gt;, `657` &lt;dbl&gt;, `658` &lt;dbl&gt;,
+## #   `659` &lt;dbl&gt;, `660` &lt;dbl&gt;, `666` &lt;dbl&gt;, `503` &lt;dbl&gt;, `506` &lt;dbl&gt;,
+## #   `518` &lt;dbl&gt;, `519` &lt;dbl&gt;, `523` &lt;dbl&gt;, `524` &lt;dbl&gt;, `525` &lt;dbl&gt;,
+## #   `526` &lt;dbl&gt;</code></pre>
+<pre class="r"><code>tail(d, n=1)</code></pre>
+<pre><code>## # A tibble: 1 x 37
+##    ...1 `528` `535` `559` `563` `570` `571` `572` `573` `583` `593` `595` `599`
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1    36    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## # ... with 24 more variables: `606` &lt;dbl&gt;, `614` &lt;dbl&gt;, `617` &lt;dbl&gt;,
+## #   `619` &lt;dbl&gt;, `649` &lt;dbl&gt;, `656` &lt;dbl&gt;, ...20 &lt;lgl&gt;, `661` &lt;dbl&gt;,
+## #   `662` &lt;dbl&gt;, `664` &lt;dbl&gt;, `665` &lt;dbl&gt;, `657` &lt;dbl&gt;, `658` &lt;dbl&gt;,
+## #   `659` &lt;dbl&gt;, `660` &lt;dbl&gt;, `666` &lt;dbl&gt;, `503` &lt;dbl&gt;, `506` &lt;dbl&gt;,
+## #   `518` &lt;dbl&gt;, `519` &lt;dbl&gt;, `523` &lt;dbl&gt;, `524` &lt;dbl&gt;, `525` &lt;dbl&gt;,
+## #   `526` &lt;dbl&gt;</code></pre>
+<p><code>readr</code> figured out the types and converted blanks to
+<code>NA</code> for us! Let’s fix the first column names:</p>
+<pre class="r"><code>colnames(d)[c(1,20)] = c(&quot;Week&quot;, &quot;Skip&quot;)</code></pre>
+</div>
+<div id="tidy-all-the-things" class="section level1">
+<h1>Tidy all the things</h1>
+<p>We loaded an ugly dataset, but how do we clean it.</p>
+<p><strong>tidyr</strong> and <strong>dplyr</strong>!</p>
+<pre class="r"><code>library(&quot;tidyr&quot;)
+library(&quot;dplyr&quot;, warn.conflicts = FALSE)</code></pre>
+</div>
+<div id="tidyrdplyr" class="section level1">
+<h1>tidyr/dplyr %&gt;%</h1>
+<p><strong>%&gt;%</strong> is called a “pipe”</p>
+<ul>
+<li>“Ctrl + shift + M” in RStudio</li>
+<li>From dplyr</li>
+</ul>
+<p>Old school: <strong>y = f(g(h(x)))</strong></p>
+<ul>
+<li>Hard to read from the inside out</li>
+</ul>
+<p>New school: <strong>x %&gt;% h() %&gt;% g() %&gt;% f()</strong></p>
+<blockquote>
+<ul>
+<li>More typing…</li>
+<li>but more logical</li>
+</ul>
+</blockquote>
+</div>
+<div id="tidyrdplyr-1" class="section level1">
+<h1>tidyr/dplyr %&gt;%</h1>
+<ul>
+<li><strong>%&gt;%</strong> passes input as the first argument
+<ul>
+<li><strong>x %&gt;% f(y)</strong> is the same as <strong>f(x,
+y)</strong></li>
+</ul></li>
+<li>This can be changed
+<ul>
+<li><strong>y %&gt;% f(x, ., z)</strong> is the same as <strong>f(x, y,
+z)</strong></li>
+</ul></li>
+</ul>
+</div>
+<div id="tidyr-gather" class="section level1">
+<h1>tidyr gather()</h1>
+<p>Let’s gather everything together so we have something like:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Week</th>
+<th align="center">Cage</th>
+<th align="right">Group</th>
+<th align="right">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">528</td>
+<td align="right">Control</td>
+<td align="right">3.558</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">535</td>
+<td align="right">Control</td>
+<td align="right">3.775</td>
+</tr>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">525</td>
+<td align="right">Treatment</td>
+<td align="right">3.478</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>d2 = d %&gt;% select(-Skip) %&gt;% gather(Cage, Value, -Week)
+head(d2) # or &quot;d2 %&gt;% head()&quot;</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##    Week Cage  Value
+##   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1     4 528    3.56
+## 2     5 528    3.41
+## 3     6 528    3.35
+## 4     7 528    3.24
+## 5     8 528    3.25
+## 6     9 528    2.89</code></pre>
+<pre class="r"><code>tail(d2)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##    Week Cage  Value
+##   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1    31 526      NA
+## 2    32 526      NA
+## 3    33 526      NA
+## 4    34 526      NA
+## 5    35 526      NA
+## 6    36 526      NA</code></pre>
+<p>The syntax for <code>gather()</code> is
+<code>d %&gt;% gather(Key, Value, ...)</code>. <code>Key</code> becomes
+a column containing the original column names. <code>Value</code> then
+becomes a column of the values, matched to their original columns.
+<code>...</code> defines columns for inclusion/exclusion. Excluding
+<code>Week</code> results in it being added as a new column.</p>
+<p>Add the group</p>
+<pre class="r"><code>d2$Group = c(rep(rep(&quot;Control&quot;, 33), 18), rep(rep(&quot;Treatment&quot;, 33), 17))</code></pre>
+</div>
+<div id="filtering" class="section level1">
+<h1>Filtering</h1>
+<p>There are a bunch of <code>NA</code>s, which it’d be nice to remove.
+We can use <code>filter()</code> for that.</p>
+<pre class="r"><code>d2 = d2 %&gt;% filter(!is.na(Value))
+tail(d2)</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##    Week Cage  Value Group    
+##   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;    
+## 1    21 526    3.54 Treatment
+## 2    22 526    3.29 Treatment
+## 3    23 526    3.36 Treatment
+## 4    24 526    3.35 Treatment
+## 5    25 526    3.39 Treatment
+## 6    26 526    3.24 Treatment</code></pre>
+<pre class="r"><code>dim(d2)</code></pre>
+<pre><code>## [1] 829   4</code></pre>
+</div>
+<div id="group-based-summarization" class="section level1">
+<h1>Group-based summarization</h1>
+<p>We’d like a group mean per week</p>
+<pre class="r"><code>d3 = d2 %&gt;% group_by(Week, Group) %&gt;% summarise(Val=mean(Value))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Week&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>head(d3)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+## # Groups:   Week [3]
+##    Week Group       Val
+##   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;
+## 1     4 Control    3.86
+## 2     4 Treatment  3.32
+## 3     5 Control    3.72
+## 4     5 Treatment  3.11
+## 5     6 Control    3.53
+## 6     6 Treatment  2.97</code></pre>
+</div>
+<div id="quick-exercise" class="section level1">
+<h1>Quick exercise</h1>
+<p>Load the <code>msleep_ggplot2.txt</code> dataset that’s in the
+<code>data/</code> folder. This is a dataset containing various animals,
+their genus/order, eating habits (<code>vore</code>: herbivore,
+carnivore, omnivore) and various sleeping properties
+(<code>sleep_total</code>: total sleep time (hours),
+<code>sleep_rem</code>: REM sleep (hours), <code>sleep_cycle</code>:
+length of a sleep cycle (hours), <code>awake</code>: time awake (hours),
+<code>brainwt</code>/<code>bodywt</code>: brain and body weight (kg)).
+This is a standard tab-separated file with a single line header.</p>
+<p>Use <code>filter()</code> to select only primates. How many of the
+animals in the table are primates (try the <code>nrow()</code>
+function)?</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+<br> <br> <br> <br> <br> <br> <br> <br></p>
+<pre class="r"><code>msleep = read_tsv(&quot;../data/msleep_ggplot2.txt&quot;)</code></pre>
+<pre><code>## Rows: 83 Columns: 11
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;\t&quot;
+## chr (5): name, genus, vore, order, conservation
+## dbl (6): sleep_total, sleep_rem, sleep_cycle, awake, brainwt, bodywt
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>head(msleep)</code></pre>
+<pre><code>## # A tibble: 6 x 11
+##   name  genus vore  order conse~1 sleep~2 sleep~3 sleep~4 awake  brainwt  bodywt
+##   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Chee~ Acin~ carni Carn~ lc         12.1    NA    NA      11.9 NA        50    
+## 2 Owl ~ Aotus omni  Prim~ &lt;NA&gt;       17       1.8  NA       7    0.0155    0.48 
+## 3 Moun~ Aplo~ herbi Rode~ nt         14.4     2.4  NA       9.6 NA         1.35 
+## 4 Grea~ Blar~ omni  Sori~ lc         14.9     2.3   0.133   9.1  0.00029   0.019
+## 5 Cow   Bos   herbi Arti~ domest~     4       0.7   0.667  20    0.423   600    
+## 6 Thre~ Brad~ herbi Pilo~ &lt;NA&gt;       14.4     2.2   0.767   9.6 NA         3.85 
+## # ... with abbreviated variable names 1: conservation, 2: sleep_total,
+## #   3: sleep_rem, 4: sleep_cycle</code></pre>
+<p>Now the filtering/counting:</p>
+<pre class="r"><code>msleep %&gt;% filter(order == &#39;Primates&#39;) %&gt;% nrow()</code></pre>
+<pre><code>## [1] 12</code></pre>
+<p>You can quickly get a lot of useful metrics by creating chains of
+simple commands like this.</p>
+</div>
+
+<br />
+<br />
+<hr>
+<p> Bioinfo Core @ MPI-IE Freiburg (2023) </p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
