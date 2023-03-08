@@ -46,7 +46,7 @@ After the course you will be able to
 * increase the value of your CV
 * produce figures such as
 
-![Typical examples from R.](../images/sample_plots.png)
+![Typical examples from R.](images/sample_plots.png)
 
 [//]: # http://www.r-graph-gallery.com/all-graphs/
 

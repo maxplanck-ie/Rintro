@@ -1,5 +1,6 @@
 name: Rintro2023
 output_dir: _site
+include: ["images"]
 
 navbar:
   title: "Rintro 2023"

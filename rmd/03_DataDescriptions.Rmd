@@ -16,7 +16,7 @@ output:
 # Famous Data Sets
 R has a large range of pre-defined data sets. They are frequently used to illustrate the functionality of code and software packages. Just type "data()" to get an overview. Let's first focus on the "iris" data set
 
-![Flower Measurements](../images/sepal_petal.jpeg) 
+![Flower Measurements](images/sepal_petal.jpeg) 
 
 (Image from blog of mathieu.guillame-bert.com)
 

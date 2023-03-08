@@ -14,7 +14,7 @@ knitr::opts_chunk$set(cache=TRUE)
 
 # Recap
 
-![Achievments](../images/sample_plots.png)
+![Achievments](images/sample_plots.png)
 
 
 # Main points so far
@@ -39,7 +39,7 @@ heatmap(M,scale="none", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
 * maximal variance: look for direction in which data shows maximal variation
 * minimal error: allow accurate reconstruction of original data 
 
-![PCA goal](../images/PCA.gif)
+![PCA goal](images/PCA.gif)
 from amoeba @ https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues
 ```{r}
 pca=prcomp(M, scale=TRUE)

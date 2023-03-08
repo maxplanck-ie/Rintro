@@ -189,5 +189,5 @@ which(L[[1]]!=2)
 which(L[[3]])
 ```
 # Summary: Data Types
-![Image adopted from Michael Stadler](../images/DataTypes.png) 
+![Image adopted from Michael Stadler](images/DataTypes.png) 
 This image is adopted from Michael Stadler (FMI).
