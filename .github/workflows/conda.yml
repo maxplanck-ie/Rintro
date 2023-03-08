@@ -23,9 +23,10 @@ jobs:
 
       - name: Install Rintro
         run: |
-          pwd
-	        ls
+          pwd; ls
           echo "begin: PATH=$PATH;"
+          which R || true
+
           #conda install mamba
           #mamba create -y --name Rintro r-base=4.1.3
 
