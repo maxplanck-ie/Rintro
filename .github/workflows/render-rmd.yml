@@ -15,6 +15,8 @@ jobs:
         r-version: '4.1.3'
     - name: Install R packages
       run: Rscript -e "install.packages(c('rmarkdown', 'knitr', 'tidyverse', 'pheatmap','upsetr'))"
+    - name: Check WD
+      run: pwd; ls
     - name: Render R Markdown and Move Site
       run: Rscript -e "rmarkdown::render_site('rmd')" ; mv rmd/_site .
     - name: Deploy to GitHub Pages
