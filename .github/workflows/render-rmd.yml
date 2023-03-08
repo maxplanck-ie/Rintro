@@ -1,4 +1,4 @@
-name: Render Rintro to HTML
+name: Rintro2HTML
 run-name: ${{ github.actor }} is testing
 
 on:
@@ -27,39 +27,42 @@ jobs:
       - name: Check yaml
         run: |
           cat conda_config.yml || true
-      - uses: conda-incubator/setup-miniconda@v2
+      - name: Install Conda environment with Micromamba
+        uses: mamba-org/provision-with-micromamba@main
         with:
-          miniconda-version: "latest"
-          channels: bioconda, conda-forge, defaults
-          use-only-tar-bz2: true 
-          auto-update-conda: true
-          auto-activate-base: true
-      - name: Configure conda
-        run: |
-          conda init bash
-          cat $HOME/.bashrc
-          # exec bash
-          conda env list
+          environment-file: conda_config.yml
+          # environment-name: Rintro2023
+      # - uses: conda-incubator/setup-miniconda@v2
+      #   with:
+      #     miniconda-version: "latest"
+      #     channels: bioconda, conda-forge, defaults
+      #     use-only-tar-bz2: true 
+      #     auto-update-conda: true
+      #     auto-activate-base: true
+      # - name: Configure conda
+      #   run: |
+      #     conda init bash
+      #     cat $HOME/.bashrc
+      #     # exec bash
+      #     conda env list
 
       # - name: Install Mamba
       #   run: |
       #     conda install mamba
       #     conda info --envs
 
-      - name: Install Requirements
-        run: |
-          conda env create --name Rintro2023 -f conda_config.yml
-          conda info --envs
-          conda activate Rintro2023 
+      # - name: Install Requirements
+      #   run: |
+      #     conda env create --name Rintro2023 -f conda_config.yml
+      #     conda info --envs
+      #     conda activate Rintro2023 
 
       - name: List Available Environment
-        run: 
-          conda info --envs
-          conda env list
+        shell: bash -l {0}
+        run: micromamba list
 
       - name: Activate Environment
-        run: 
-          conda activate Rintro2023 || true
+        run: micromamba activate Rintro2023
 
       - name: Check Installation
         run: |
