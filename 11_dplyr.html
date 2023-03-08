@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Devon P. Ryan" />
+
+<meta name="date" content="2023-03-08" />
+
+<title>Manipulating datasets with dplyr</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Rintro 2023</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Modules
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_Introduction.html">00_Introduction</a>
+    </li>
+    <li>
+      <a href="01_FirstSteps.html">01_FirstSteps</a>
+    </li>
+    <li>
+      <a href="02_DataTypes.html">02_DataTypes</a>
+    </li>
+    <li>
+      <a href="03_DataDescriptions.html">03_DataDescriptions</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="04_DataModels.html">04_DataModels</a>
+    </li>
+    <li>
+      <a href="04_DataVisualization.html">04_DataVisualization</a>
+    </li>
+    <li>
+      <a href="05_DataManagement.html">05_DataManagement</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="10_tidyr.html">10_tidyr</a>
+    </li>
+    <li>
+      <a href="11_dplyr.html">11_dplyr</a>
+    </li>
+    <li>
+      <a href="12_ggplot2.html">12_ggplot2</a>
+    </li>
+    <li class="divider"></li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/maxplanck-ie/Rintro/tree/2023.03">
+    <span class="fa fa-github"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Manipulating datasets with dplyr</h1>
+<h4 class="author">Devon P. Ryan</h4>
+<h4 class="date">2023-03-08</h4>
+
+</div>
+
+
+<div id="initial-setup" class="section level1">
+<h1>Initial setup</h1>
+<p>If you’ve started a new session, please first do the following:</p>
+<pre class="r"><code>library(&quot;readr&quot;)
+library(&quot;tidyr&quot;)
+library(&quot;dplyr&quot;, warn.conflicts = FALSE)
+
+d = read_csv(&quot;../data/foodIntake2.csv&quot;, skip=1)</code></pre>
+<pre><code>## New names:
+## Rows: 33 Columns: 37
+## -- Column specification
+## -------------------------------------------------------- Delimiter: &quot;,&quot; dbl
+## (36): ...1, 528, 535, 559, 563, 570, 571, 572, 573, 583, 593, 595, 599, ... lgl
+## (1): ...20
+## i Use `spec()` to retrieve the full column specification for this data. i
+## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## * `` -&gt; `...1`
+## * `` -&gt; `...20`</code></pre>
+<pre class="r"><code>colnames(d)[c(1,20)] = c(&quot;Week&quot;, &quot;Skip&quot;)
+d2 = d %&gt;% select(-Skip) %&gt;% gather(Cage, Value, -Week)
+d2$Group = c(rep(rep(&quot;Control&quot;, 33), 18), rep(rep(&quot;Treatment&quot;, 33), 17))
+msleep = read_tsv(&quot;../data/msleep_ggplot2.txt&quot;)</code></pre>
+<pre><code>## Rows: 83 Columns: 11
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;\t&quot;
+## chr (5): name, genus, vore, order, conservation
+## dbl (6): sleep_total, sleep_rem, sleep_cycle, awake, brainwt, bodywt
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>This is the messy “food intake in two groups of mice over time”
+dataset from the tidyr section.</p>
+</div>
+<div id="what-dplyr-can-do" class="section level1">
+<h1>What dplyr can do</h1>
+<ul>
+<li>subset
+<ul>
+<li>columns</li>
+<li>rows</li>
+</ul></li>
+<li>summarization</li>
+<li>Grouping</li>
+<li>Variable creation</li>
+<li>Combining datasets</li>
+</ul>
+</div>
+<div id="dplyr-subset-columns" class="section level1">
+<h1>dplyr: Subset columns</h1>
+<p>It’s common to want to temporarily want to ignore columns (e.g.,
+excluding an outlier sample). <strong><code>select()</code></strong> can
+be used for this.</p>
+<pre class="r"><code>d2 %&gt;% select(Cage, Group) %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##   Cage  Group  
+##   &lt;chr&gt; &lt;chr&gt;  
+## 1 528   Control
+## 2 528   Control
+## 3 528   Control
+## 4 528   Control
+## 5 528   Control
+## 6 528   Control</code></pre>
+<p>You can also exclude columns:</p>
+<pre class="r"><code>d2 %&gt;% select(-Cage, -Group) %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##    Week Value
+##   &lt;dbl&gt; &lt;dbl&gt;
+## 1     4  3.56
+## 2     5  3.41
+## 3     6  3.35
+## 4     7  3.24
+## 5     8  3.25
+## 6     9  2.89</code></pre>
+</div>
+<div id="dplyr-fancy-column-selection" class="section level1">
+<h1>dplyr: Fancy column selection</h1>
+<p>Specifying columns manually can get annoying.</p>
+<pre class="r"><code>d2 %&gt;% select(matches(&quot;.a.&quot;))  %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##   Cage  Value
+##   &lt;chr&gt; &lt;dbl&gt;
+## 1 528    3.56
+## 2 528    3.41
+## 3 528    3.35
+## 4 528    3.24
+## 5 528    3.25
+## 6 528    2.89</code></pre>
+<p>“.a.” means “match any name with an ‘a’ in the middle”.</p>
+<p>Other options:</p>
+<ul>
+<li>Range (by number or name)</li>
+<li>Starts with</li>
+<li>Ends with</li>
+<li>Contains a string</li>
+</ul>
+</div>
+<div id="dplyr-subset-rows" class="section level1">
+<h1>dplyr: Subset rows</h1>
+<p>We did a bit of this previously in the tidyr section.</p>
+<pre class="r"><code>head(d2)</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##    Week Cage  Value Group  
+##   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  
+## 1     4 528    3.56 Control
+## 2     5 528    3.41 Control
+## 3     6 528    3.35 Control
+## 4     7 528    3.24 Control
+## 5     8 528    3.25 Control
+## 6     9 528    2.89 Control</code></pre>
+<pre class="r"><code>d2 %&gt;% filter(Group != &quot;Control&quot;) %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##    Week Cage  Value Group    
+##   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;    
+## 1     4 661    3.66 Treatment
+## 2     5 661    3.28 Treatment
+## 3     6 661    3.18 Treatment
+## 4     7 661    3.37 Treatment
+## 5     8 661    3.4  Treatment
+## 6     9 661    3.29 Treatment</code></pre>
+<p>Multiple filters can be applied</p>
+<pre class="r"><code>head(d2)</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##    Week Cage  Value Group  
+##   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  
+## 1     4 528    3.56 Control
+## 2     5 528    3.41 Control
+## 3     6 528    3.35 Control
+## 4     7 528    3.24 Control
+## 5     8 528    3.25 Control
+## 6     9 528    2.89 Control</code></pre>
+<pre class="r"><code>d2 %&gt;% filter(Group != &quot;Control&quot;, Value &gt; 4.0) %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##    Week Cage  Value Group    
+##   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;    
+## 1    28 662    4.28 Treatment
+## 2    20 665    4.6  Treatment
+## 3    21 665    4.03 Treatment
+## 4    22 665    4.45 Treatment
+## 5    20 666    4.24 Treatment
+## 6    29 506    4.05 Treatment</code></pre>
+<p>There are other options than simply
+<strong><code>filter()</code></strong></p>
+<pre class="r"><code>d2 %&gt;% select(Cage, Group) %&gt;% distinct() %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##   Cage  Group  
+##   &lt;chr&gt; &lt;chr&gt;  
+## 1 528   Control
+## 2 535   Control
+## 3 559   Control
+## 4 563   Control
+## 5 570   Control
+## 6 571   Control</code></pre>
+<ul>
+<li>Sample a fraction of rows:
+<strong><code>sample_frac()</code></strong></li>
+<li>Sample a number of rows:
+<strong><code>sample_n()</code></strong></li>
+<li>Select rows by position: <strong><code>slice()</code></strong>
+<ul>
+<li><strong><code>d2 %&gt;% slice(10:20)</code></strong> ==
+<strong><code>d2[c(10:20),]</code></strong></li>
+</ul></li>
+<li>Select the top N rows after sorting:
+<strong><code>top_n()</code></strong></li>
+</ul>
+<pre class="r"><code>d2 %&gt;% top_n(5, Value)</code></pre>
+<pre><code>## # A tibble: 5 x 4
+##    Week Cage  Value Group  
+##   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  
+## 1    24 528    5.6  Control
+## 2    30 535    4.92 Control
+## 3    26 563    5.4  Control
+## 4    29 617    4.82 Control
+## 5    33 617    4.97 Control</code></pre>
+</div>
+<div id="dplyr-summarizing-data" class="section level1">
+<h1>dplyr: Summarizing data</h1>
+<p>Long tables are nice for plotting, but we often want
+means/medians/counts/etc. of columns.</p>
+<pre class="r"><code>d2 %&gt;% count(Cage, Group) %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Cage  Group         n
+##   &lt;chr&gt; &lt;chr&gt;     &lt;int&gt;
+## 1 503   Treatment    33
+## 2 506   Treatment    33
+## 3 518   Treatment    33
+## 4 519   Treatment    33
+## 5 523   Treatment    33
+## 6 524   Treatment    33</code></pre>
+<pre class="r"><code>d2 %&gt;% filter(is.na(Value)) %&gt;% count(Cage, Group) %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Cage  Group         n
+##   &lt;chr&gt; &lt;chr&gt;     &lt;int&gt;
+## 1 503   Treatment     4
+## 2 506   Treatment     7
+## 3 518   Treatment     8
+## 4 519   Treatment    10
+## 5 523   Treatment     8
+## 6 524   Treatment     4</code></pre>
+<pre class="r"><code>d2 %&gt;% summarise(foo=n_distinct(Value))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##     foo
+##   &lt;int&gt;
+## 1   312</code></pre>
+<pre class="r"><code>d2 %&gt;% filter(!is.na(Value)) %&gt;% summarise(foo=n_distinct(Value))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##     foo
+##   &lt;int&gt;
+## 1   311</code></pre>
+<pre class="r"><code>d2 %&gt;% filter(!is.na(Value)) %&gt;% nrow() # or summarise(foo=n())</code></pre>
+<pre><code>## [1] 829</code></pre>
+<pre class="r"><code>d2 %&gt;% filter(!is.na(Value)) %&gt;% summarise(avg=median(Value))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##     avg
+##   &lt;dbl&gt;
+## 1   3.5</code></pre>
+</div>
+<div id="exercise" class="section level1">
+<h1>Exercise</h1>
+<p>Going back to the <code>msleep_ggplot2.txt</code> file that we loaded
+earlier, what’s the average time (in hours) that primates spend
+sleeping? <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<pre class="r"><code>msleep %&gt;% filter(order == &#39;Primates&#39;) %&gt;% summarise(ave=mean(sleep_total))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##     ave
+##   &lt;dbl&gt;
+## 1  10.5</code></pre>
+</div>
+<div id="dplyr-grouping-data" class="section level1">
+<h1>dplyr: Grouping data</h1>
+<p>We can create group and then summarize within them.</p>
+<pre class="r"><code>d2 %&gt;% filter(!is.na(Value), Week &lt; 10) %&gt;% group_by(Group) %&gt;% summarise(avg=mean(Value)) %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   Group       avg
+##   &lt;chr&gt;     &lt;dbl&gt;
+## 1 Control    3.60
+## 2 Treatment  3.18</code></pre>
+<p>We can group by multiple things.</p>
+<pre class="r"><code>d2 %&gt;% filter(!is.na(Value)) %&gt;% group_by(Group, Week) %&gt;% summarise(avg=mean(Value)) %&gt;% top_n(4, avg)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Group&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 8 x 3
+## # Groups:   Group [2]
+##   Group      Week   avg
+##   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+## 1 Control      24  4.03
+## 2 Control      26  4.01
+## 3 Control      32  4.72
+## 4 Control      33  4.97
+## 5 Treatment    12  3.54
+## 6 Treatment    20  3.85
+## 7 Treatment    28  3.76
+## 8 Treatment    32  3.81</code></pre>
+<p>There are 8 results. Why? What happens if we swap the order of
+<strong>Group</strong> and <strong>Week</strong> in
+<strong><code>group_by</code></strong>?</p>
+</div>
+<div id="exercise-1" class="section level1">
+<h1>Exercise</h1>
+<p>Again, using the <code>msleep_ggplot2.txt</code> dataset, what is the
+average sleep time per order? <br> <br> <br> <br> <br> <br> <br> <br>
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+<br></p>
+<pre class="r"><code>msleep %&gt;% group_by(order) %&gt;% summarise(ave=mean(sleep_total))</code></pre>
+<pre><code>## # A tibble: 19 x 2
+##    order             ave
+##    &lt;chr&gt;           &lt;dbl&gt;
+##  1 Afrosoricida    15.6 
+##  2 Artiodactyla     4.52
+##  3 Carnivora       10.1 
+##  4 Cetacea          4.5 
+##  5 Chiroptera      19.8 
+##  6 Cingulata       17.8 
+##  7 Didelphimorphia 18.7 
+##  8 Diprotodontia   12.4 
+##  9 Erinaceomorpha  10.2 
+## 10 Hyracoidea       5.67
+## 11 Lagomorpha       8.4 
+## 12 Monotremata      8.6 
+## 13 Perissodactyla   3.47
+## 14 Pilosa          14.4 
+## 15 Primates        10.5 
+## 16 Proboscidea      3.6 
+## 17 Rodentia        12.5 
+## 18 Scandentia       8.9 
+## 19 Soricomorpha    11.1</code></pre>
+</div>
+<div id="dplyr-adding-variables" class="section level1">
+<h1>dplyr: Adding variables</h1>
+<p>It’s often the case that we want to add on columns of summary
+variables. We can use <strong><code>mutate()</code></strong>.</p>
+<pre class="r"><code>d2 %&gt;% filter(!is.na(Value)) %&gt;% mutate(blah=2*Value) %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##    Week Cage  Value Group    blah
+##   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+## 1     4 528    3.56 Control  7.12
+## 2     5 528    3.41 Control  6.81
+## 3     6 528    3.35 Control  6.7 
+## 4     7 528    3.24 Control  6.48
+## 5     8 528    3.25 Control  6.5 
+## 6     9 528    2.89 Control  5.78</code></pre>
+<p>We can alternatively drop the used columns with
+<strong><code>transmute()</code></strong>.</p>
+<pre class="r"><code>d2 %&gt;% filter(!is.na(Value)) %&gt;% transmute(blah=2*Value) %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 6 x 1
+##    blah
+##   &lt;dbl&gt;
+## 1  7.12
+## 2  6.81
+## 3  6.7 
+## 4  6.48
+## 5  6.5 
+## 6  5.78</code></pre>
+<p>There are a lot of functions that could be applied.</p>
+<pre class="r"><code>d2 %&gt;% filter(!is.na(Value)) %&gt;% group_by(Cage) %&gt;% mutate(blah=min_rank(desc(Value))) %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 6 x 5
+## # Groups:   Cage [1]
+##    Week Cage  Value Group    blah
+##   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;int&gt;
+## 1     4 528    3.56 Control     7
+## 2     5 528    3.41 Control    13
+## 3     6 528    3.35 Control    15
+## 4     7 528    3.24 Control    19
+## 5     8 528    3.25 Control    18
+## 6     9 528    2.89 Control    21</code></pre>
+<p>There are a bunch of functions that one can use. An interesting one
+is <strong><code>ntile</code></strong>, which is chunks things by value
+into <strong>n</strong> groups. Send the following through
+<strong><code>View()</code></strong> rather than
+<strong><code>head()</code></strong>.</p>
+<pre class="r"><code>d2 %&gt;% filter(!is.na(Value)) %&gt;% group_by(Cage) %&gt;% mutate(blah=ntile(Value, 3)) %&gt;% head()</code></pre>
+<pre><code>## # A tibble: 6 x 5
+## # Groups:   Cage [1]
+##    Week Cage  Value Group    blah
+##   &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;int&gt;
+## 1     4 528    3.56 Control     3
+## 2     5 528    3.41 Control     2
+## 3     6 528    3.35 Control     1
+## 4     7 528    3.24 Control     1
+## 5     8 528    3.25 Control     1
+## 6     9 528    2.89 Control     1</code></pre>
+<p>What’s the per-tile median by group:</p>
+<pre class="r"><code>d2 %&gt;% filter(!is.na(Value)) %&gt;% group_by(Cage) %&gt;% mutate(blah=ntile(Value, 3)) %&gt;% group_by(Group, blah) %&gt;% summarise(avg=median(Value))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Group&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 6 x 3
+## # Groups:   Group [2]
+##   Group      blah   avg
+##   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt;
+## 1 Control       1  3.37
+## 2 Control       2  3.59
+## 3 Control       3  3.89
+## 4 Treatment     1  3.15
+## 5 Treatment     2  3.4 
+## 6 Treatment     3  3.61</code></pre>
+</div>
+<div id="dplyr-combining-datasets" class="section level1">
+<h1>dplyr: Combining datasets</h1>
+<p>Needing to combine datasets ends up being really really common. dplyr
+gives a <strong>bunch</strong> of options for that that are really
+fast.</p>
+<p>A common use-case:</p>
+<ul>
+<li>We had two groups of mice</li>
+<li>Did some RNAseq</li>
+<li>Mapped the reads, got some counts, and ran things through
+DESeq2</li>
+<li>The output looks like this:</li>
+</ul>
+<pre class="r"><code>tab = read_tsv(&quot;../data/DESeq2_example.txt&quot;)</code></pre>
+<pre><code>## Rows: 43629 Columns: 7
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;\t&quot;
+## chr (1): ENSEMBL
+## dbl (6): baseMean, log2FoldChange, lfcSE, stat, pvalue, padj
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>head(tab[order(tab$padj),], n=3)</code></pre>
+<pre><code>## # A tibble: 3 x 7
+##   ENSEMBL            baseMean log2FoldChange  lfcSE  stat      pvalue    padj
+##   &lt;chr&gt;                 &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt;
+## 1 ENSMUSG00000096929    1014.          0.497 0.0956  5.20 0.000000196 0.00212
+## 2 ENSMUSG00000025316     284.          0.548 0.110   4.99 0.000000608 0.00219
+## 3 ENSMUSG00000037362    1476.         -0.417 0.0833 -5.01 0.000000542 0.00219</code></pre>
+<blockquote>
+<ul>
+<li>Raise your hand if you know which gene ENSMUSG00000037362 is.</li>
+</ul>
+</blockquote>
+<p>We can use biomart to gene Ensembl gene IDs and their associated
+symbols/descriptions.</p>
+<pre class="r"><code>anno = read_tsv(&quot;../data/DESeq2_annotation.txt&quot;)</code></pre>
+<pre><code>## Rows: 48678 Columns: 4
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;\t&quot;
+## chr (3): Ensembl Gene ID, Associated Gene Name, Description
+## dbl (1): EntrezGene ID
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>Run <strong><code>head()</code></strong> or
+<strong><code>View()</code></strong> on these.</p>
+<pre class="r"><code>tab2 = left_join(tab, anno, by=c(&quot;ENSEMBL&quot; = &quot;Ensembl Gene ID&quot;))</code></pre>
+<pre><code>## Warning in left_join(tab, anno, by = c(ENSEMBL = &quot;Ensembl Gene ID&quot;)): Each row in `x` is expected to match at most 1 row in `y`.
+## i Row 211 of `x` matches multiple rows.
+## i If multiple matches are expected, set `multiple = &quot;all&quot;` to silence this
+##   warning.</code></pre>
+<pre class="r"><code>head(tab2[order(tab2$padj),])</code></pre>
+<pre><code>## # A tibble: 6 x 10
+##   ENSEMBL   baseM~1 log2F~2  lfcSE  stat  pvalue    padj Assoc~3 Descr~4 Entre~5
+##   &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;
+## 1 ENSMUSG0~   1014.   0.497 0.0956  5.20 1.96e-7 0.00212 A33002~ RIKEN ~      NA
+## 2 ENSMUSG0~    284.   0.548 0.110   4.99 6.08e-7 0.00219 Banp    BTG3 a~   53325
+## 3 ENSMUSG0~   1476.  -0.417 0.0833 -5.01 5.42e-7 0.00219 Nov     nephro~   18133
+## 4 ENSMUSG0~    449.   0.426 0.0906  4.70 2.57e-6 0.00484 Ftx     Ftx tr~      NA
+## 5 ENSMUSG0~    615.   0.471 0.0996  4.73 2.26e-6 0.00484 Pxdn    peroxi~   69675
+## 6 ENSMUSG0~    397.   0.663 0.141   4.69 2.68e-6 0.00484 Slit1   slit h~   20562
+## # ... with abbreviated variable names 1: baseMean, 2: log2FoldChange,
+## #   3: `Associated Gene Name`, 4: Description, 5: `EntrezGene ID`</code></pre>
+<blockquote>
+<ul>
+<li>Ah, ENSMUSG00000037362 is Nov, a gene involved in wound
+healing/oncogenesis/etc.</li>
+</ul>
+</blockquote>
+<p>There are a lot of different ways to combine datasets.</p>
+<pre class="r"><code>t1 = data_frame(x1=c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;), x2=c(1, 2, 3))</code></pre>
+<pre><code>## Warning: `data_frame()` was deprecated in tibble 1.1.0.
+## i Please use `tibble()` instead.</code></pre>
+<pre class="r"><code>t2 = data_frame(x1=c(&quot;A&quot;, &quot;B&quot;, &quot;D&quot;), x3=c(T, F, T))</code></pre>
+<ul>
+<li>Mutating joins</li>
+<li>Filtering joins</li>
+</ul>
+</div>
+<div id="dplyr-mutating-joins---left_join" class="section level1">
+<h1>dplyr: Mutating joins - left_join</h1>
+<p>We’ve already seen <strong><code>left_join()</code></strong></p>
+<pre class="r"><code>left_join(t1, t2)</code></pre>
+<pre><code>## Joining with `by = join_by(x1)`</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   x1       x2 x3   
+##   &lt;chr&gt; &lt;dbl&gt; &lt;lgl&gt;
+## 1 A         1 TRUE 
+## 2 B         2 FALSE
+## 3 C         3 NA</code></pre>
+<p>For a left join, the entire left table is output.</p>
+</div>
+<div id="dplyr-mutating-joins---right_join" class="section level1">
+<h1>dplyr: Mutating joins - right_join</h1>
+<p>If a left join joins to the left, guess what a right join does</p>
+<pre class="r"><code>right_join(t1, t2)</code></pre>
+<pre><code>## Joining with `by = join_by(x1)`</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   x1       x2 x3   
+##   &lt;chr&gt; &lt;dbl&gt; &lt;lgl&gt;
+## 1 A         1 TRUE 
+## 2 B         2 FALSE
+## 3 D        NA TRUE</code></pre>
+</div>
+<div id="dplyr-mutating-joins---inner_join" class="section level1">
+<h1>dplyr: Mutating joins - inner_join</h1>
+<p>Sometimes we only want the overlaps in the tables</p>
+<pre class="r"><code>inner_join(t1, t2)</code></pre>
+<pre><code>## Joining with `by = join_by(x1)`</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##   x1       x2 x3   
+##   &lt;chr&gt; &lt;dbl&gt; &lt;lgl&gt;
+## 1 A         1 TRUE 
+## 2 B         2 FALSE</code></pre>
+</div>
+<div id="dplyr-mutating-joins---full_join" class="section level1">
+<h1>dplyr: Mutating joins - full_join</h1>
+<p>But what if we want a single table with
+<strong>everything</strong>?</p>
+<pre class="r"><code>full_join(t1, t2)</code></pre>
+<pre><code>## Joining with `by = join_by(x1)`</code></pre>
+<pre><code>## # A tibble: 4 x 3
+##   x1       x2 x3   
+##   &lt;chr&gt; &lt;dbl&gt; &lt;lgl&gt;
+## 1 A         1 TRUE 
+## 2 B         2 FALSE
+## 3 C         3 NA   
+## 4 D        NA TRUE</code></pre>
+</div>
+<div id="dplyr-combining-datasets-1" class="section level1">
+<h1>dplyr: Combining datasets</h1>
+<p>You can get really fancy in your joins</p>
+<pre class="r"><code>t3 = data_frame(a=rep(c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;), 2),
+                b=rep(c(1,2), each=3),
+                c=runif(6))
+t4 = data_frame(d=rep(c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;), 2),
+                e=rep(c(1,2), each=3),
+                f=runif(6))
+inner_join(t3, t4, by=c(&quot;a&quot;=&quot;d&quot;, &quot;b&quot;=&quot;e&quot;))</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##   a         b      c     f
+##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1 A         1 0.495  0.392
+## 2 B         1 0.0399 0.723
+## 3 C         1 0.620  0.519
+## 4 A         2 0.743  0.459
+## 5 B         2 0.696  0.388
+## 6 C         2 0.454  0.291</code></pre>
+<p>By default, joins occur on all columns with the same name across
+tables!</p>
+</div>
+
+<br />
+<br />
+<hr>
+<p> Bioinfo Core @ MPI-IE Freiburg (2023) </p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

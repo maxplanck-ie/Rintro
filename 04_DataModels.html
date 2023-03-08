@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Thomas Manke" />
+
+
+<title>04: Data Modeling</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Rintro 2023</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Modules
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_Introduction.html">00_Introduction</a>
+    </li>
+    <li>
+      <a href="01_FirstSteps.html">01_FirstSteps</a>
+    </li>
+    <li>
+      <a href="02_DataTypes.html">02_DataTypes</a>
+    </li>
+    <li>
+      <a href="03_DataDescriptions.html">03_DataDescriptions</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="04_DataModels.html">04_DataModels</a>
+    </li>
+    <li>
+      <a href="04_DataVisualization.html">04_DataVisualization</a>
+    </li>
+    <li>
+      <a href="05_DataManagement.html">05_DataManagement</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="10_tidyr.html">10_tidyr</a>
+    </li>
+    <li>
+      <a href="11_dplyr.html">11_dplyr</a>
+    </li>
+    <li>
+      <a href="12_ggplot2.html">12_ggplot2</a>
+    </li>
+    <li class="divider"></li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/maxplanck-ie/Rintro/tree/2023.03">
+    <span class="fa fa-github"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">04: Data Modeling</h1>
+<h4 class="author">Thomas Manke</h4>
+<h4 class="date">Wed Mar 8 15:09:54 2023</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#recap-all-against-all-correlations"
+id="toc-recap-all-against-all-correlations">Recap: All-Against-All
+Correlations</a></li>
+<li><a href="#from-correlations-to-models"
+id="toc-from-correlations-to-models">From Correlations to
+Models</a></li>
+<li><a href="#reporting-the-fit-model"
+id="toc-reporting-the-fit-model">Reporting the fit (model)</a></li>
+<li><a href="#plotting-predictions-with-confidence-intervals"
+id="toc-plotting-predictions-with-confidence-intervals">Plotting
+predictions with confidence intervals</a></li>
+<li><a href="#example-of-a-poor-fit-replace-petal-with-sepal"
+id="toc-example-of-a-poor-fit-replace-petal-with-sepal">Example of a
+poor fit (replace “Petal” with “Sepal)</a></li>
+<li><a href="#run-predictions" id="toc-run-predictions">Run
+predictions:</a></li>
+<li><a href="#factorial-variables-as-predictors"
+id="toc-factorial-variables-as-predictors">Factorial variables as
+predictors</a></li>
+<li><a href="#more-complicated-models"
+id="toc-more-complicated-models">More complicated models</a></li>
+<li><a href="#anova" id="toc-anova">Anova</a></li>
+<li><a href="#model-checking" id="toc-model-checking">Model
+checking</a></li>
+<li><a href="#diagnostic-plots" id="toc-diagnostic-plots">Diagnostic
+Plots</a></li>
+<li><a href="#review" id="toc-review">Review:</a></li>
+</ul>
+</div>
+
+<div id="recap-all-against-all-correlations" class="section level1">
+<h1>Recap: All-Against-All Correlations</h1>
+<p><strong>Task</strong>: remove the Species variable from “iris” and
+store the result in a new data.frame “niris”</p>
+<pre class="r"><code>niris=iris[,-5]  # generate new data frame without species variable
+str(niris)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    150 obs. of  4 variables:
+##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...</code></pre>
+<p><strong>Task</strong>: Generate all-against-all correlation plot</p>
+<pre class="r"><code># assign species-colors to each observation 
+cols = iris$Species                        # understand how color is defined
+pairs(niris, col=cols, lower.panel=NULL)   # &quot;cols&quot; was defined in task above</code></pre>
+<p><img src="04_DataModels_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="from-correlations-to-models" class="section level1">
+<h1>From Correlations to Models</h1>
+<p>Goal: Model some dependent variables y as function of other
+explanatory variables x (features)</p>
+<p><span class="math inline">\(y = f(\theta, x) = \theta_1 x +
+\theta_0\)</span></p>
+<p>For <span class="math inline">\(N\)</span> data points, choose
+parameters <span class="math inline">\(\theta\)</span> by ordinary least
+squares:</p>
+<p><span class="math inline">\(RSS=\sum_{i=1}^{N} (y_i - y(\theta,
+x_i))^2 \to min\)</span></p>
+<pre class="r"><code>plot(Petal.Width ~ Petal.Length, data=iris, col=Species) # use model (&quot;formula&quot;) notation
+fit=lm(Petal.Width ~ Petal.Length, data=iris)       # fit a linear model
+abline(fit, lwd=3, lty=2)                           # add regression line</code></pre>
+<p><img src="04_DataModels_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><strong>Task</strong>: What kind of class / data type is the object
+“fit”? Extract the coefficients of the fitted line and determine the
+residual degrees of freedom.</p>
+<pre><code>##  (Intercept) Petal.Length 
+##   -0.3630755    0.4157554</code></pre>
+<pre><code>## [1] 148</code></pre>
+</div>
+<div id="reporting-the-fit-model" class="section level1">
+<h1>Reporting the fit (model)</h1>
+<pre class="r"><code>coefficients(fit)</code></pre>
+<pre><code>##  (Intercept) Petal.Length 
+##   -0.3630755    0.4157554</code></pre>
+<pre class="r"><code>confint(fit)   # Try to change the confidence level: ?confint</code></pre>
+<pre><code>##                   2.5 %     97.5 %
+## (Intercept)  -0.4416501 -0.2845010
+## Petal.Length  0.3968193  0.4346915</code></pre>
+<pre class="r"><code>summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Petal.Width ~ Petal.Length, data = iris)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.56515 -0.12358 -0.01898  0.13288  0.64272 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -0.363076   0.039762  -9.131  4.7e-16 ***
+## Petal.Length  0.415755   0.009582  43.387  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2065 on 148 degrees of freedom
+## Multiple R-squared:  0.9271, Adjusted R-squared:  0.9266 
+## F-statistic:  1882 on 1 and 148 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>This is a good fit - as suggested by a small residual standard error,
+a large coefficient of variation <span class="math inline">\(R^2 \in
+(0,1)\)</span>, a small p-value, (and by visualization).</p>
+<p><span class="math inline">\(R^2 = 1 - \frac{RSS}{TSS} = 1 -
+\frac{\sum_i(y_i - y(\theta,x_i))^2}{\sum_i(y_i-\bar{y})^2}\)</span></p>
+</div>
+<div id="plotting-predictions-with-confidence-intervals"
+class="section level1">
+<h1>Plotting predictions with confidence intervals</h1>
+<pre class="r"><code>x=iris$Petal.Length                       # explanatory variable from fit (here:Petal.Length)
+xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
+ndf=data.frame(Petal.Length=xn)           # put them into new data frame
+
+p=predict(fit, ndf, interval = &#39;confidence&#39; , level = 0.95)
+plot(Petal.Width ~ Petal.Length, data=iris, col=Species)
+lines(xn, p[,&quot;lwr&quot;] )
+lines(xn, p[,&quot;upr&quot;] )
+
+#some fancy filling
+#polygon(c(rev(xn), xn), c(rev(p[ ,&quot;upr&quot;]), p[ ,&quot;lwr&quot;]), col = rgb(1,0,0,0.5), border = NA)
+
+## using ggplot2 - full introduction later
+library(ggplot2)</code></pre>
+<p><img src="04_DataModels_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>g = ggplot(iris, aes(Petal.Length, Petal.Width, colour=Species))
+g + geom_point() + geom_smooth(method=&quot;lm&quot;, se=TRUE, color=&quot;red&quot;) + geom_smooth(method=&quot;loess&quot;, colour=&quot;blue&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
+## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="04_DataModels_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+</div>
+<div id="example-of-a-poor-fit-replace-petal-with-sepal"
+class="section level1">
+<h1>Example of a poor fit (replace “Petal” with “Sepal)</h1>
+<pre class="r"><code>plot(Sepal.Width ~ Sepal.Length, data=iris, col=cols)  
+fit1=lm(Sepal.Width ~ Sepal.Length, data=iris)     
+abline(fit1, lwd=3, lty=2)    </code></pre>
+<p><img src="04_DataModels_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>confint(fit1)                     # estimated slope is indistinguishable from zero</code></pre>
+<pre><code>##                   2.5 %     97.5 %
+## (Intercept)   2.9178767 3.92001694
+## Sepal.Length -0.1467928 0.02302323</code></pre>
+<pre class="r"><code>summary(fit1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Sepal.Width ~ Sepal.Length, data = iris)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.1095 -0.2454 -0.0167  0.2763  1.3338 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   3.41895    0.25356   13.48   &lt;2e-16 ***
+## Sepal.Length -0.06188    0.04297   -1.44    0.152    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.4343 on 148 degrees of freedom
+## Multiple R-squared:  0.01382,    Adjusted R-squared:  0.007159 
+## F-statistic: 2.074 on 1 and 148 DF,  p-value: 0.1519</code></pre>
+<p><em>Interpretation</em>: slope is not significantly distinct from
+0.</p>
+</div>
+<div id="run-predictions" class="section level1">
+<h1>Run predictions:</h1>
+<pre class="r"><code>x=iris$Sepal.Length                       # explanatory variable from fit (here:Sepal.Length)
+xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
+ndf=data.frame(Sepal.Length=xn)           # put them into data frame
+
+p=predict(fit1, ndf, interval = &#39;confidence&#39; , level = 0.95)  # predict values
+
+plot(Sepal.Width ~ Sepal.Length, data=iris, col=Species)
+lines(xn, p[,&quot;lwr&quot;] )
+lines(xn, p[,&quot;upr&quot;] )</code></pre>
+<p><img src="04_DataModels_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="factorial-variables-as-predictors" class="section level1">
+<h1>Factorial variables as predictors</h1>
+<p>In the iris example the “Species” variable is a factorial
+(categorical) variable with 3 levels. Other typical examples: different
+experimental conditions or treatments.</p>
+<pre class="r"><code>plot(Petal.Width ~ Species, data=iris)</code></pre>
+<p><img src="04_DataModels_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>fit=lm(Petal.Width ~ Species, data=iris)
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Petal.Width ~ Species, data = iris)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -0.626 -0.126 -0.026  0.154  0.474 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)        0.24600    0.02894    8.50 1.96e-14 ***
+## Speciesversicolor  1.08000    0.04093   26.39  &lt; 2e-16 ***
+## Speciesvirginica   1.78000    0.04093   43.49  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2047 on 147 degrees of freedom
+## Multiple R-squared:  0.9289, Adjusted R-squared:  0.9279 
+## F-statistic:   960 on 2 and 147 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><em>Interpretation</em>:</p>
+<p>“setosa” (1st species=reference) has mean Petal.Width=0.246(29). This
+is significantly different from 0 (p-value small. useless) “versicolor”
+(2nd species) has mean Petal.Width = Petal.Width(setosa) + 1.08(4) which
+is significantly larger (t~26. tiny p-value). there is a stat.
+significant difference between groups/species. “virginica” (3rd species)
+has mean Petal.Width = Petal.Width(setosa) + 1.78(4)</p>
+</div>
+<div id="more-complicated-models" class="section level1">
+<h1>More complicated models</h1>
+<p>Determine residual standard error for different fits with various
+complexity</p>
+<pre class="r"><code>fit=lm(Petal.Width ~ Petal.Length, data=iris)
+paste(toString(fit$call), sigma(fit))</code></pre>
+<pre><code>## [1] &quot;lm, Petal.Width ~ Petal.Length, iris 0.206484348913609&quot;</code></pre>
+<pre class="r"><code>fit=lm(Petal.Width ~ Petal.Length + Sepal.Length, data=iris)  # function of more than one variable
+paste(toString(fit$call), sigma(fit))</code></pre>
+<pre><code>## [1] &quot;lm, Petal.Width ~ Petal.Length + Sepal.Length, iris 0.204445704742963&quot;</code></pre>
+<pre class="r"><code>fit=lm(Petal.Width ~ Species, data=iris)                      # function of categorical variables
+paste(toString(fit$call), sigma(fit))</code></pre>
+<pre><code>## [1] &quot;lm, Petal.Width ~ Species, iris 0.204650024805914&quot;</code></pre>
+<pre class="r"><code>fit=lm(Petal.Width ~ . , data=iris)                          # function of all other variable (numerical and categorical)
+paste(toString(fit$call), sigma(fit))</code></pre>
+<pre><code>## [1] &quot;lm, Petal.Width ~ ., iris 0.166615943019283&quot;</code></pre>
+<p>… more complex models tend to have smaller residual standard error
+-&gt; “model selection” (AIC)</p>
+</div>
+<div id="anova" class="section level1">
+<h1>Anova</h1>
+<p>summary(fit) contains information on the individual coefficients.
+They are difficult to interpret</p>
+<pre class="r"><code>fit = lm(Petal.Width ~ Petal.Length + Sepal.Width + Sepal.Length + Species , data=iris) 
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Petal.Width ~ Petal.Length + Sepal.Width + Sepal.Length + 
+##     Species, data = iris)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.59239 -0.08288 -0.01349  0.08773  0.45239 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       -0.47314    0.17659  -2.679  0.00824 ** 
+## Petal.Length       0.24220    0.04884   4.959 1.97e-06 ***
+## Sepal.Width        0.24220    0.04776   5.072 1.20e-06 ***
+## Sepal.Length      -0.09293    0.04458  -2.084  0.03889 *  
+## Speciesversicolor  0.64811    0.12314   5.263 5.04e-07 ***
+## Speciesvirginica   1.04637    0.16548   6.323 3.03e-09 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1666 on 144 degrees of freedom
+## Multiple R-squared:  0.9538, Adjusted R-squared:  0.9522 
+## F-statistic: 594.9 on 5 and 144 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><strong>Question</strong>: Rather than looking at differences between
+different factor levels. Does the factor “Species” as a whole account
+for variation in the observed Petal.Width. Sum-of-squared analysis:
+Anova</p>
+<pre class="r"><code>anova(fit) </code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Petal.Width
+##               Df Sum Sq Mean Sq   F value    Pr(&gt;F)    
+## Petal.Length   1 80.260  80.260 2891.1136 &lt; 2.2e-16 ***
+## Sepal.Width    1  0.228   0.228    8.2248  0.004754 ** 
+## Sepal.Length   1  0.701   0.701   25.2683 1.459e-06 ***
+## Species        2  1.383   0.691   24.9043 5.143e-10 ***
+## Residuals    144  3.998   0.028                        
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># order of variable matters: the following is not the same
+# anova( lm(Petal.Width ~ . , data=iris) )</code></pre>
+<p><em>Interpretation</em>: Species account for much variation in the
+data (F(2, 147)=960. p tiny)</p>
+</div>
+<div id="model-checking" class="section level1">
+<h1>Model checking</h1>
+<p>Searching for patterns:</p>
+<pre class="r"><code>plot(resid(fit))                # residuals independent?</code></pre>
+<p><img src="04_DataModels_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre class="r"><code>plot(predict(fit), resid(fit))  # residuals (and variation) dependent on prediction?</code></pre>
+<p><img src="04_DataModels_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
+<pre class="r"><code>qqnorm(resid(fit))              # residuals normally distributed?</code></pre>
+<p><img src="04_DataModels_files/figure-html/unnamed-chunk-13-3.png" width="672" /></p>
+<p><strong>Task</strong>: Repeat the linear regression Petal.Width ~
+Petal.Length with an <em>outlier</em> in the data</p>
+<pre class="r"><code>irisout=rbind(iris,list(5.8,3, 4, 20, &quot;virginica&quot;))</code></pre>
+<pre><code>## &#39;data.frame&#39;:    151 obs. of  5 variables:
+##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ Species     : Factor w/ 3 levels &quot;setosa&quot;,&quot;versicolor&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre><code>##   Sepal.Length    Sepal.Width     Petal.Length   Petal.Width    
+##  Min.   :4.300   Min.   :2.000   Min.   :1.00   Min.   : 0.100  
+##  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.60   1st Qu.: 0.300  
+##  Median :5.800   Median :3.000   Median :4.30   Median : 1.300  
+##  Mean   :5.843   Mean   :3.057   Mean   :3.76   Mean   : 1.324  
+##  3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.10   3rd Qu.: 1.800  
+##  Max.   :7.900   Max.   :4.400   Max.   :6.90   Max.   :20.000  
+##        Species  
+##  setosa    :50  
+##  versicolor:50  
+##  virginica :51  
+##                 
+##                 
+## </code></pre>
+<p><img src="04_DataModels_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<pre><code>## 
+## Call:
+## lm(formula = Petal.Width ~ Petal.Length, data = irisout)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.7068 -0.2507 -0.1283  0.0070 18.5739 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -0.27563    0.29658  -0.929    0.354    
+## Petal.Length  0.42544    0.07149   5.951 1.83e-08 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.541 on 149 degrees of freedom
+## Multiple R-squared:  0.192,  Adjusted R-squared:  0.1866 
+## F-statistic: 35.41 on 1 and 149 DF,  p-value: 1.83e-08</code></pre>
+</div>
+<div id="diagnostic-plots" class="section level1">
+<h1>Diagnostic Plots</h1>
+<p>“fit” is a large object of the lm-class which contains also lots of
+diagnostic informmation. Notice how the behaviour of “plot” changes.</p>
+<pre class="r"><code>op=par(no.readonly=TRUE)  # safe only resettable graphical parameters, avoids many warnings
+par(mfrow=c(2,2))         # change graphical parameters: 2x2 images on device
+plot(fit2,col=irisout$Species)       # four plots rather than one</code></pre>
+<p><img src="04_DataModels_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<pre class="r"><code>par(op)                   # reset graphical parameters</code></pre>
+<p>more examples here: <a
+href="http://www.statmethods.net/stats/regression.html"
+class="uri">http://www.statmethods.net/stats/regression.html</a></p>
+<p>Linear models <span class="math inline">\(y_i=\theta_0 + \theta_1 x_i
++ \epsilon_i\)</span> make certain assumptions (<span
+class="math inline">\(\epsilon_i \propto N(0,\sigma^2)\)</span>)</p>
+<ul>
+<li>residuals <span class="math inline">\(\epsilon_i\)</span> are
+independent from each other (non-linear patterns?)</li>
+<li>residuals are normally distributed</li>
+<li>have equal variance <span class="math inline">\(\sigma^2\)</span>
+(homoscedascity)</li>
+<li>are there outliers (large residuals) or observations with strong
+influence on fit</li>
+</ul>
+<hr />
+</div>
+<div id="review" class="section level1">
+<h1>Review:</h1>
+<ul>
+<li>dependencies between variable can often be modeled</li>
+<li>linear model lm(): fitting, summary and interpretation</li>
+<li>correlation coefficients can be misleading</li>
+<li>linear models may not be appropriate. &gt;example(anscombe)</li>
+</ul>
+</div>
+
+<br />
+<br />
+<hr>
+<p> Bioinfo Core @ MPI-IE Freiburg (2023) </p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

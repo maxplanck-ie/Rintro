@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Thomas Manke" />
+
+
+<title>Data Exploration: Regulatory Modules from ChIP-seq</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Rintro 2023</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Modules
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_Introduction.html">00_Introduction</a>
+    </li>
+    <li>
+      <a href="01_FirstSteps.html">01_FirstSteps</a>
+    </li>
+    <li>
+      <a href="02_DataTypes.html">02_DataTypes</a>
+    </li>
+    <li>
+      <a href="03_DataDescriptions.html">03_DataDescriptions</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="04_DataModels.html">04_DataModels</a>
+    </li>
+    <li>
+      <a href="04_DataVisualization.html">04_DataVisualization</a>
+    </li>
+    <li>
+      <a href="05_DataManagement.html">05_DataManagement</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="10_tidyr.html">10_tidyr</a>
+    </li>
+    <li>
+      <a href="11_dplyr.html">11_dplyr</a>
+    </li>
+    <li>
+      <a href="12_ggplot2.html">12_ggplot2</a>
+    </li>
+    <li class="divider"></li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/maxplanck-ie/Rintro/tree/2023.03">
+    <span class="fa fa-github"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Data Exploration: Regulatory Modules from
+ChIP-seq</h1>
+<h4 class="author">Thomas Manke</h4>
+<h4 class="date">Wed Mar 8 15:10:21 2023</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#goal" id="toc-goal">Goal</a></li>
+<li><a href="#setup" id="toc-setup">Setup</a></li>
+<li><a href="#skipped-pre-processing"
+id="toc-skipped-pre-processing">Skipped: Pre-processing</a></li>
+<li><a href="#read-clean-data" id="toc-read-clean-data">Read Clean
+Data</a></li>
+<li><a href="#sanity-checks" id="toc-sanity-checks">Sanity Checks</a>
+<ul>
+<li><a href="#structure" id="toc-structure">Structure</a></li>
+<li><a href="#dimensions-names-strange-entries"
+id="toc-dimensions-names-strange-entries">Dimensions, Names, strange
+entries</a></li>
+<li><a href="#summary-plots" id="toc-summary-plots">Summary
+Plots</a></li>
+<li><a href="#show-me-all-the-data" id="toc-show-me-all-the-data">Show
+me all the data</a></li>
+</ul></li>
+<li><a href="#transformations"
+id="toc-transformations">Transformations</a></li>
+<li><a href="#filter" id="toc-filter">Filter</a></li>
+<li><a href="#show-me-the-processed-data"
+id="toc-show-me-the-processed-data">Show me the processed data</a></li>
+<li><a href="#main-results-all-correlations"
+id="toc-main-results-all-correlations">Main Results: All
+Correlations</a></li>
+<li><a href="#explore-specific-factor-combinations"
+id="toc-explore-specific-factor-combinations">Explore specific factor
+combinations</a></li>
+<li><a href="#contigency-tables" id="toc-contigency-tables">Contigency
+tables</a></li>
+<li><a href="#investigating-multiple-overlaps"
+id="toc-investigating-multiple-overlaps">Investigating Multiple
+Overlaps</a></li>
+<li><a href="#review" id="toc-review">Review</a></li>
+</ul>
+</div>
+
+<div id="goal" class="section level1">
+<h1>Goal</h1>
+<ul>
+<li>Input: genome-wide binding data for 113 transcription factors in
+yeast (ChIP-chip): –&gt; 6000 x 113 matrix</li>
+<li>Analysis: identify combinations of TF</li>
+<li>Output: a reproducible analysis document (Rmd) and report
+(html)</li>
+<li>Reference: Lee et al. (2002) Transcriptional Regulatory Networks in
+Saccharomyces cerevisea.</li>
+<li>Data Set: chip=“<a
+href="http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_gene.tsv"
+class="uri">http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_gene.tsv</a>”</li>
+</ul>
+</div>
+<div id="setup" class="section level1">
+<h1>Setup</h1>
+<p>Define libraries required for this project</p>
+<pre class="r"><code>library(pheatmap)</code></pre>
+</div>
+<div id="skipped-pre-processing" class="section level1">
+<h1>Skipped: Pre-processing</h1>
+<p>Steps: extract only p-values from full data, define proper names for
+rows, remove columns</p>
+<pre class="r"><code># define a filename (notice that R can read from http)
+# Beware: For slow network connections it will be faster to first download the file to local storage and work from there.
+
+chip=&quot;http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_gene.tsv&quot;
+
+###############################
+# Data munging: Trial and errors have been commented out 
+# first problem: two headers --&gt; skip first --&gt; skip line 1
+# D=read.table(file=chip, header=TRUE,  skip=1, sep=&quot;\t&quot;)
+# nrow(D)  # 511 &lt;&lt; 6000 !!!???
+
+# second problem: quote symbols in names (&#39;)
+# cf=count.fields(chip,sep=&quot;\t&quot;) # many NA --&gt; quoted fields got missing
+
+D=read.table(chip, header=TRUE,  sep=&quot;\t&quot;, quote=&quot;\&quot;&quot;, skip=1)
+rownames(D)=D[,1]          # ORF-symbols in column 1, keep them as rownames 
+ic=c(1:4,seq(6,230,by=2))  # define column indices to be excluded (only keep p-values)
+P=D[,-ic]                  # new data-frame of p-values, exclude superfluous columns and ratios
+###############################
+
+# save cleaned data for future use
+write.table(P,file=&quot;../data/chip.tsv&quot;, sep=&quot;\t&quot;, quote=FALSE)  # write p-values to file</code></pre>
+</div>
+<div id="read-clean-data" class="section level1">
+<h1>Read Clean Data</h1>
+<p>Let’s start with a cleaned-up data set.</p>
+<p>Now available at “<a
+href="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/chip.tsv"
+class="uri">https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/chip.tsv</a>”
+(you might want to locate the <em>raw</em> file on <a
+href="https://github.com/maxplanck-ie/Rintro/"
+class="uri">https://github.com/maxplanck-ie/Rintro/</a>).</p>
+<p>Faster: have it local</p>
+<pre class="r"><code>fn=&quot;https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/chip.tsv&quot;  # remote filename
+fn=&quot;../data/chip.tsv&quot;                                                            # local: same but faster
+P=read.table(file=fn, header=TRUE, sep=&quot;\t&quot;)</code></pre>
+</div>
+<div id="sanity-checks" class="section level1">
+<h1>Sanity Checks</h1>
+<p>Inspect data. You might want to do this on the console. So that you
+don’t clutter your notebook.</p>
+<div id="structure" class="section level2">
+<h2>Structure</h2>
+<pre class="r"><code>str(P) # you might want to do this on the console </code></pre>
+</div>
+<div id="dimensions-names-strange-entries" class="section level2">
+<h2>Dimensions, Names, strange entries</h2>
+<pre class="r"><code>dim(P)</code></pre>
+<pre><code>## [1] 6270  113</code></pre>
+<pre class="r"><code>colnames(P)</code></pre>
+<pre><code>##   [1] &quot;ABF1&quot;        &quot;ACE2&quot;        &quot;ADR1&quot;        &quot;ARG80&quot;       &quot;ARG81&quot;      
+##   [6] &quot;ARO80&quot;       &quot;ASH1&quot;        &quot;AZF1&quot;        &quot;BAS1&quot;        &quot;CAD1&quot;       
+##  [11] &quot;CBF1&quot;        &quot;CHA4&quot;        &quot;CIN5&quot;        &quot;CRZ1&quot;        &quot;CUP9&quot;       
+##  [16] &quot;DAL81&quot;       &quot;DAL82&quot;       &quot;DIG1&quot;        &quot;DOT6&quot;        &quot;ECM22&quot;      
+##  [21] &quot;FHL1&quot;        &quot;FKH1&quot;        &quot;FKH2&quot;        &quot;FZF1&quot;        &quot;GAL4&quot;       
+##  [26] &quot;GAT1&quot;        &quot;GAT3&quot;        &quot;GCN4&quot;        &quot;GCR1&quot;        &quot;GCR2&quot;       
+##  [31] &quot;GLN3&quot;        &quot;GRF10.Pho2.&quot; &quot;GTS1&quot;        &quot;HAA1&quot;        &quot;HAL9&quot;       
+##  [36] &quot;HAP2&quot;        &quot;HAP3&quot;        &quot;HAP4&quot;        &quot;HAP5&quot;        &quot;HIR1&quot;       
+##  [41] &quot;HIR2&quot;        &quot;HMS1&quot;        &quot;HSF1&quot;        &quot;IME4&quot;        &quot;INO2&quot;       
+##  [46] &quot;INO4&quot;        &quot;IXR1&quot;        &quot;LEU3&quot;        &quot;MAC1&quot;        &quot;MAL13&quot;      
+##  [51] &quot;MAL33&quot;       &quot;MATa1&quot;       &quot;MBP1&quot;        &quot;MCM1&quot;        &quot;MET31&quot;      
+##  [56] &quot;MET4&quot;        &quot;MIG1&quot;        &quot;MOT3&quot;        &quot;MSN1&quot;        &quot;MSN2&quot;       
+##  [61] &quot;MSN4&quot;        &quot;MSS11&quot;       &quot;MTH1&quot;        &quot;NDD1&quot;        &quot;NRG1&quot;       
+##  [66] &quot;PDR1&quot;        &quot;PHD1&quot;        &quot;PHO4&quot;        &quot;PUT3&quot;        &quot;RAP1&quot;       
+##  [71] &quot;RCS1&quot;        &quot;REB1&quot;        &quot;RFX1&quot;        &quot;RGM1&quot;        &quot;RGT1&quot;       
+##  [76] &quot;RIM101&quot;      &quot;RLM1&quot;        &quot;RME1&quot;        &quot;ROX1&quot;        &quot;RPH1&quot;       
+##  [81] &quot;RTG1&quot;        &quot;RTG3&quot;        &quot;RTS2&quot;        &quot;SFL1&quot;        &quot;SFP1&quot;       
+##  [86] &quot;SIG1&quot;        &quot;SIP4&quot;        &quot;SKN7&quot;        &quot;SKO1&quot;        &quot;SMP1&quot;       
+##  [91] &quot;SOK2&quot;        &quot;SRD1&quot;        &quot;STB1&quot;        &quot;STE12&quot;       &quot;STP1&quot;       
+##  [96] &quot;STP2&quot;        &quot;SUM1&quot;        &quot;SWI4&quot;        &quot;SWI5&quot;        &quot;SWI6&quot;       
+## [101] &quot;THI2&quot;        &quot;UGA3&quot;        &quot;USV1&quot;        &quot;YAP1&quot;        &quot;YAP3&quot;       
+## [106] &quot;YAP5&quot;        &quot;YAP6&quot;        &quot;YAP7&quot;        &quot;YBR267W&quot;     &quot;YFL044C&quot;    
+## [111] &quot;YJL206C&quot;     &quot;ZAP1&quot;        &quot;ZMS1&quot;</code></pre>
+<pre class="r"><code>anyNA(P)           # are there any undefined values</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>sum(P&lt;0 | P&gt;1)     # how many &quot;strange&quot; p-values --&gt; errors?</code></pre>
+<pre><code>## [1] 0</code></pre>
+</div>
+<div id="summary-plots" class="section level2">
+<h2>Summary Plots</h2>
+<pre class="r"><code>boxplot(P)         # distribution</code></pre>
+<p><img src="P01_DataExploration_short_files/figure-html/summary_plots-1.png" width="672" /></p>
+<pre class="r"><code>#hist(as.matrix(P)) # hist() requires matrix as input </code></pre>
+</div>
+<div id="show-me-all-the-data" class="section level2">
+<h2>Show me all the data</h2>
+<p>This might be slow.</p>
+<pre class="r"><code>pheatmap(P, show_rownames=FALSE)</code></pre>
+<p><img src="P01_DataExploration_short_files/figure-html/pheatmap-1.png" width="672" /></p>
+</div>
+</div>
+<div id="transformations" class="section level1">
+<h1>Transformations</h1>
+<pre class="r"><code>pt = 1e-3           # define P-value threshold
+B = P &lt; pt          # B is a Boolean matrix (FALSE/TRUE)</code></pre>
+</div>
+<div id="filter" class="section level1">
+<h1>Filter</h1>
+<p>Some genes (rows) have no associated TF. Some TF target no gene.</p>
+<pre class="r"><code>nt = rowSums(B)     # number of transcription factors targetting a gene
+ng = colSums(B)     # number of genes targetted by TF
+D = B[nt&gt;1, ng&gt;40]  # define filtered data
+dim(B)</code></pre>
+<pre><code>## [1] 6270  113</code></pre>
+<pre class="r"><code>dim(D)</code></pre>
+<pre><code>## [1] 932  31</code></pre>
+</div>
+<div id="show-me-the-processed-data" class="section level1">
+<h1>Show me the processed data</h1>
+<pre class="r"><code>pheatmap(D+0, show_rownames=FALSE) # D + 0 is trick to convert logical matrix to numeric matrix (FALSE=0, TRUE=1) </code></pre>
+<p><img src="P01_DataExploration_short_files/figure-html/plot-1.png" width="672" /></p>
+</div>
+<div id="main-results-all-correlations" class="section level1">
+<h1>Main Results: All Correlations</h1>
+<pre class="r"><code>C = cor(D)
+pheatmap(C)</code></pre>
+<p><img src="P01_DataExploration_short_files/figure-html/correlations-1.png" width="672" /></p>
+</div>
+<div id="explore-specific-factor-combinations" class="section level1">
+<h1>Explore specific factor combinations</h1>
+<pre class="r"><code>t1=&quot;FHL1&quot;
+t2=&quot;RAP1&quot;
+plot( P[,t1], P[,t2] )                     # not very meaningful</code></pre>
+<p><img src="P01_DataExploration_short_files/figure-html/smoothScatter-1.png" width="672" /></p>
+<pre class="r"><code>smoothScatter( log(P[,t1]), log(P[,t2]) )  # scatterplot of log(p-values) for two TF 
+abline(h=log(pt), v=log(pt), col=&quot;red&quot;)    # show thresholds</code></pre>
+<p><img src="P01_DataExploration_short_files/figure-html/smoothScatter-2.png" width="672" /></p>
+<p>Correlation Coefficient: 0.7312521.</p>
+</div>
+<div id="contigency-tables" class="section level1">
+<h1>Contigency tables</h1>
+<pre class="r"><code>table(B[,t1])               # 194 genes bound by t1=&quot;FHL1&quot;</code></pre>
+<pre><code>## 
+## FALSE  TRUE 
+##  6076   194</code></pre>
+<pre class="r"><code>names(which(B[,t1]))        # their names</code></pre>
+<pre><code>##   [1] &quot;YBL072C&quot;   &quot;YBL087C&quot;   &quot;YBL092W&quot;   &quot;YBL093C&quot;   &quot;YBR084C-A&quot; &quot;YBR085W&quot;  
+##   [7] &quot;YBR116C&quot;   &quot;YBR117C&quot;   &quot;YBR118W&quot;   &quot;YBR126C&quot;   &quot;YBR181C&quot;   &quot;YBR188C&quot;  
+##  [13] &quot;YBR189W&quot;   &quot;YBR190W&quot;   &quot;YBR191W&quot;   &quot;YDL060W&quot;   &quot;YDL061C&quot;   &quot;YDL075W&quot;  
+##  [19] &quot;YDL076C&quot;   &quot;YDL082W&quot;   &quot;YDL083C&quot;   &quot;YDL130W&quot;   &quot;YDL133C-A&quot; &quot;YDL133W&quot;  
+##  [25] &quot;YDL136W&quot;   &quot;YDL184C&quot;   &quot;YDL191W&quot;   &quot;YDR024W&quot;   &quot;YDR025W&quot;   &quot;YDR064W&quot;  
+##  [31] &quot;YDR384C&quot;   &quot;YDR385W&quot;   &quot;YDR418W&quot;   &quot;YDR447C&quot;   &quot;YDR448W&quot;   &quot;YDR449C&quot;  
+##  [37] &quot;YDR450W&quot;   &quot;YDR470C&quot;   &quot;YDR471W&quot;   &quot;YDR500C&quot;   &quot;YDR501W&quot;   &quot;YEL008W&quot;  
+##  [43] &quot;YEL009C&quot;   &quot;YEL054C&quot;   &quot;YER056C-A&quot; &quot;YER074W&quot;   &quot;YER101C&quot;   &quot;YER102W&quot;  
+##  [49] &quot;YER116C&quot;   &quot;YER117W&quot;   &quot;YER130C&quot;   &quot;YER131W&quot;   &quot;YFL034C-A&quot; &quot;YFL034W&quot;  
+##  [55] &quot;YFR031C-A&quot; &quot;YFR032C-A&quot; &quot;YGL030W&quot;   &quot;YGL031C&quot;   &quot;YGL100W&quot;   &quot;YGL103W&quot;  
+##  [61] &quot;YGL104C&quot;   &quot;YGL123W&quot;   &quot;YGL124C&quot;   &quot;YGL135W&quot;   &quot;YGL136C&quot;   &quot;YGL147C&quot;  
+##  [67] &quot;YGL189C&quot;   &quot;YGR027C&quot;   &quot;YGR033C&quot;   &quot;YGR034W&quot;   &quot;YGR085C&quot;   &quot;YGR117C&quot;  
+##  [73] &quot;YGR118W&quot;   &quot;YGR148C&quot;   &quot;YGR149W&quot;   &quot;YGR213C&quot;   &quot;YGR214W&quot;   &quot;YHL001W&quot;  
+##  [79] &quot;YHL015W&quot;   &quot;YHL016C&quot;   &quot;YHL033C&quot;   &quot;YHR021C&quot;   &quot;YHR021W-A&quot; &quot;YHR141C&quot;  
+##  [85] &quot;YHR142W&quot;   &quot;YHR203C&quot;   &quot;YHR204W&quot;   &quot;YIL018W&quot;   &quot;YIL069C&quot;   &quot;YIL133C&quot;  
+##  [91] &quot;YIL148W&quot;   &quot;YIL149C&quot;   &quot;YJL134W&quot;   &quot;YJL135W&quot;   &quot;YJL136C&quot;   &quot;YJL177W&quot;  
+##  [97] &quot;YJL178C&quot;   &quot;YJL189W&quot;   &quot;YJL190C&quot;   &quot;YJL191W&quot;   &quot;YJL192C&quot;   &quot;YJR123W&quot;  
+## [103] &quot;YJR145C&quot;   &quot;YJR146W&quot;   &quot;YJR147W&quot;   &quot;YKL006C-A&quot; &quot;YKL006W&quot;   &quot;YKL156W&quot;  
+## [109] &quot;YKL180W&quot;   &quot;YKR057W&quot;   &quot;YKR094C&quot;   &quot;YKR095W&quot;   &quot;YLL043W&quot;   &quot;YLL045C&quot;  
+## [115] &quot;YLR029C&quot;   &quot;YLR030W&quot;   &quot;YLR047C&quot;   &quot;YLR048W&quot;   &quot;YLR061W&quot;   &quot;YLR074C&quot;  
+## [121] &quot;YLR075W&quot;   &quot;YLR166C&quot;   &quot;YLR167W&quot;   &quot;YLR183C&quot;   &quot;YLR184W&quot;   &quot;YLR185W&quot;  
+## [127] &quot;YLR264W&quot;   &quot;YLR287C-A&quot; &quot;YLR325C&quot;   &quot;YLR326W&quot;   &quot;YLR333C&quot;   &quot;YLR337C&quot;  
+## [133] &quot;YLR340W&quot;   &quot;YLR344W&quot;   &quot;YLR367W&quot;   &quot;YLR387C&quot;   &quot;YLR388W&quot;   &quot;YLR406C&quot;  
+## [139] &quot;YLR407W&quot;   &quot;YLR441C&quot;   &quot;YLR447C&quot;   &quot;YLR448W&quot;   &quot;YML024W&quot;   &quot;YML025C&quot;  
+## [145] &quot;YML026C&quot;   &quot;YML063W&quot;   &quot;YML064C&quot;   &quot;YML073C&quot;   &quot;YMR116C&quot;   &quot;YMR142C&quot;  
+## [151] &quot;YMR143W&quot;   &quot;YMR194W&quot;   &quot;YMR229C&quot;   &quot;YMR230W&quot;   &quot;YMR242C&quot;   &quot;YNL067W&quot;  
+## [157] &quot;YNL068C&quot;   &quot;YNL069C&quot;   &quot;YNL096C&quot;   &quot;YNL162W&quot;   &quot;YNL163C&quot;   &quot;YNL178W&quot;  
+## [163] &quot;YNL302C&quot;   &quot;YOL039W&quot;   &quot;YOL040C&quot;   &quot;YOL120C&quot;   &quot;YOL121C&quot;   &quot;YOL127W&quot;  
+## [169] &quot;YOL128C&quot;   &quot;YOR095C&quot;   &quot;YOR096W&quot;   &quot;YOR182C&quot;   &quot;YOR183W&quot;   &quot;YOR234C&quot;  
+## [175] &quot;YOR235W&quot;   &quot;YOR292C&quot;   &quot;YOR293W&quot;   &quot;YOR312C&quot;   &quot;YOR355W&quot;   &quot;YOR369C&quot;  
+## [181] &quot;YPL079W&quot;   &quot;YPL080C&quot;   &quot;YPL090C&quot;   &quot;YPL131W&quot;   &quot;YPL143W&quot;   &quot;YPL199C&quot;  
+## [187] &quot;YPL249C-A&quot; &quot;YPR042C&quot;   &quot;YPR043W&quot;   &quot;YPR080W&quot;   &quot;YPR102C&quot;   &quot;YPR103W&quot;  
+## [193] &quot;YPR131C&quot;   &quot;YPR132W&quot;</code></pre>
+<pre class="r"><code>tb=table(B[,t1],B[,t2])     # contingency table: 119 genes bound by FHL1 and RAP1
+tb</code></pre>
+<pre><code>##        
+##         FALSE TRUE
+##   FALSE  5989   87
+##   TRUE     75  119</code></pre>
+<pre class="r"><code>fisher.test(tb)             # a test at last: the overlap is highly unexpected</code></pre>
+<pre><code>## 
+##  Fisher&#39;s Exact Test for Count Data
+## 
+## data:  tb
+## p-value &lt; 2.2e-16
+## alternative hypothesis: true odds ratio is not equal to 1
+## 95 percent confidence interval:
+##   75.19957 157.98637
+## sample estimates:
+## odds ratio 
+##   108.6888</code></pre>
+</div>
+<div id="investigating-multiple-overlaps" class="section level1">
+<h1>Investigating Multiple Overlaps</h1>
+<p>upsetR is better (more general) than Venn diagrams</p>
+<pre class="r"><code>library(UpSetR)
+upset( as.data.frame(B+0), sets = c(&quot;FHL1&quot;, &quot;RAP1&quot;, &quot;MCM1&quot;, &quot;STE12&quot;) )</code></pre>
+<p><img src="P01_DataExploration_short_files/figure-html/upsetR-1.png" width="672" /></p>
+</div>
+<div id="review" class="section level1">
+<h1>Review</h1>
+<ul>
+<li>Data munging: typically requires basic processing and filtering
+steps ==&gt; use clean data</li>
+<li>data exploration and visualization: heatmap(), smoothScatter()</li>
+<li>quantitative data descriptions: cor(), table()</li>
+<li>some tests: fisher.test()</li>
+<li>R notebooks: run code chunks interactively, or generate full
+reports</li>
+</ul>
+</div>
+
+<br />
+<br />
+<hr>
+<p> Bioinfo Core @ MPI-IE Freiburg (2023) </p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

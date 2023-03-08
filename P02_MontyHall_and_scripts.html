@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="T. Manke" />
+
+<meta name="date" content="2016-02-24" />
+
+<title>Sampling: Monty Hall Problem</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="../css/test.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Rintro 2023</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Modules
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="00_Introduction.html">00_Introduction</a>
+    </li>
+    <li>
+      <a href="01_FirstSteps.html">01_FirstSteps</a>
+    </li>
+    <li>
+      <a href="02_DataTypes.html">02_DataTypes</a>
+    </li>
+    <li>
+      <a href="03_DataDescriptions.html">03_DataDescriptions</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="04_DataModels.html">04_DataModels</a>
+    </li>
+    <li>
+      <a href="04_DataVisualization.html">04_DataVisualization</a>
+    </li>
+    <li>
+      <a href="05_DataManagement.html">05_DataManagement</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="10_tidyr.html">10_tidyr</a>
+    </li>
+    <li>
+      <a href="11_dplyr.html">11_dplyr</a>
+    </li>
+    <li>
+      <a href="12_ggplot2.html">12_ggplot2</a>
+    </li>
+    <li class="divider"></li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/maxplanck-ie/Rintro/tree/2023.03">
+    <span class="fa fa-github"></span>
+     
+    GitHub
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Sampling: Monty Hall Problem</h1>
+<h4 class="author">T. Manke</h4>
+<h4 class="date">24 Feb 2016</h4>
+
+</div>
+
+
+<div id="the-game" class="section level1">
+<h1>The Game:</h1>
+<p>A showmaster presents three closed doors (1,2,3) to a candidate. Only
+behind one random door is a price (i.e a car). The canddiate is asked to
+pick one of the doors. Afterwards, the showmaster opens one of the other
+two doors which does not contain the price. Now two doors are still
+closed and the candidate has the choice to <em>either stick</em> to the
+original choice, <em>or switch</em> to the other closed door. Question:
+which strategy is more likely to succeed in winning the price?</p>
+</div>
+<div id="simulation-in-r" class="section level1">
+<h1>Simulation in R</h1>
+<p>Define the three doors, only one of which hides a price - the winning
+door “W”. The other two doors are loosers (L1 and L2)</p>
+<pre class="r"><code>doors=c(&quot;W&quot;,&quot;L1&quot;,&quot;L2&quot;)
+doors</code></pre>
+<pre><code>## [1] &quot;W&quot;  &quot;L1&quot; &quot;L2&quot;</code></pre>
+<p>First assume that the doors are shuffled randomly</p>
+<pre class="r"><code>doors=sample(doors) # Why does this amount to shuffling?
+doors</code></pre>
+<pre><code>## [1] &quot;L2&quot; &quot;W&quot;  &quot;L1&quot;</code></pre>
+<p>Now the candidate picks a random door “pick” (hoping that it might be
+the winning door)</p>
+<pre class="r"><code>pick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)
+pick</code></pre>
+<pre><code>## [1] &quot;L2&quot;</code></pre>
+<p>Only the show master knows the winning door. Depending on the picked
+door, the show master will reveal one door that does <em>not</em>
+contain the price, and <em>not</em> the picked door. This is a more
+complex task than simple samping - so let’s write a function that
+depends on “pick” and the doors content</p>
+<pre class="r"><code>open_door = function(pick, doors) {
+  # masters choices are limited: do not reveal &quot;win&quot; and do not reveal &quot;pick&quot;
+  choices = doors[ doors != &quot;W&quot; &amp; doors != pick ]
+  return (sample(choices,1))
+}</code></pre>
+<p>Now let’s use the function to open a door</p>
+<pre class="r"><code>open = open_door(pick,doors)
+open</code></pre>
+<pre><code>## [1] &quot;L1&quot;</code></pre>
+<p>Notice that the showmaster does not really have a choice when the
+candidate has picked a loosing door (2/3 of the time).</p>
+<p>Now the candidate has the choice to switch to the other remaining
+door (not open, not previously picked). The question is: Will the
+switching strategy be more successful?</p>
+<pre class="r"><code>switch=doors[ doors != pick &amp; doors != open]  
+paste(switch)</code></pre>
+<pre><code>## [1] &quot;W&quot;</code></pre>
+<p>With three doors, the candidate has only two choices to stay with
+“pick” or to switch to “switch”</p>
+<p>The above results from sampling will vary (for each candiate and
+participant of the R-course). Now let’s play this game N times. The goal
+is to count the number of successes for the switching strategy.</p>
+<div id="the-first-r-script" class="section level2">
+<h2>The first R-script</h2>
+<p>We want to execute the commands above repeatedly. To this end the
+console is not very useful. Therefore we leave the console for a moment,
+and first collect the individual commands in a file (an Rscript).
+Thankfully Rstudio also has an editor for such purposes.</p>
+<p><strong>Task</strong>: Open (a new and empty) Rscript file. Include
+the definition of the function “open_door” and save the lines below in a
+file called MontyHall.R.</p>
+<p><strong>Tip</strong>: Almost all command lines are already in your
+history, where you have tested that they are working properly. In the
+history panel, you can select those lines and send them “To Source”, i.e
+the newly opened file. This should avoid redundant typing and errors.
+All you need to do is to wrap the commands into the <em>for</em>
+loop.</p>
+<pre class="r"><code>#Comment Line: A small Rscript to simulate the Monty Hall Problem
+doors=c(&quot;W&quot;,&quot;L1&quot;,&quot;L2&quot;)
+N=10000
+success=0
+for (i in 1:N){
+  doors = sample(doors)                           # shuffle doors
+  pick  = sample(doors,1)                         # candidate picks one door at random
+  open  = open_door(pick,doors)                   # show master picks one other door (!= pick != win)
+  switch= doors[ doors != pick &amp; doors != open]   # candidate has choice to switch
+  if (switch==&quot;W&quot;) { success=success+1}           # count if switching strategy is successful (= &quot;win&quot;)
+}
+
+cat(&quot;successes with switching= &quot;,success, &quot;success_rate: &quot;, success/N, &quot;\n&quot;)</code></pre>
+<p>Congratulations! You have just written your first “R script”. Save it
+with some suitable name. Return to the console and execute the script
+using the <em>source</em> command</p>
+<pre class="r"><code>source(&quot;MontyHall.R&quot;)</code></pre>
+<pre><code>## successes with switching=  6651 success_rate:  0.6651 
+## successes with switching=  6668 success_rate:  0.6668</code></pre>
+<p>You can share the script easily with all people who speak R –
+especially those who don’t like to switch.</p>
+</div>
+</div>
+<div id="bayesian-treatment" class="section level1">
+<h1>Bayesian Treatment:</h1>
+<p>If you prefer paper and pencil, this is how to solve this problem
+analytically.</p>
+<ul>
+<li><strong>prior probailities</strong>:
+Pr(1=car)=Pr(2=car)=Pr(3=car)=<span
+class="math inline">\(\frac{1}{3}\)</span></li>
+</ul>
+<p>Assume that the candidate picks door 1 and the showmaster opens door
+2 (up to relabeling). Now the candidate would like to know</p>
+<ul>
+<li><p><strong>posterior probability</strong>: Pr(3=car|2=shown)=
+?</p></li>
+<li><p><strong>Bayes Theorem</strong> (on updating probabilities):
+Pr(A,B)=Pr(A|B)Pr(B)=Pr(B|A)Pr(A)</p></li>
+<li><p>Pr(3=car|2=shown)=<span
+class="math inline">\(\frac{\mbox{Pr(2=shown|3=car)Pr(3=car)}
+}{\mbox{Pr(2=shown)}}\)</span></p></li>
+<li><p><strong>law of total probability
+(marginalization):</strong></p></li>
+<li><p>Pr(2=shown)=Pr(2=shown|1=car)Pr(1=car) +
+Pr(2=shown|2=car)Pr(2=car) + Pr(2=shown|3=car)Pr(3=car)</p></li>
+<li><p>Pr(2=shown)=<span class="math inline">\(\frac{1}{2} \cdot
+\frac{1}{3} + 0 \cdot \frac{1}{3} + 1 \cdot \frac{1}{3} =
+\frac{1}{2}\)</span></p></li>
+<li><p>Pr(3=car|2=shown)=<span class="math inline">\(\frac{ 1 \cdot
+\frac{1}{3} }{ \frac{1}{2} } = \frac{2}{3}\)</span></p></li>
+<li><p>Pr(1=car|2=shown)= 1 - Pr(2=car|2=shown)-Pr(3=car|2=shown)= 1 - 0
+- <span class="math inline">\(\frac{2}{3}=\frac{1}{3}\)</span></p></li>
+</ul>
+<div class="important blue">
+<p><br> Pr(3=car|2=shown) = 2 <span
+class="math inline">\(\times\)</span> Pr(1=car|2=shown) <br> <br></p>
+</div>
+</div>
+<div id="did-you-understand" class="section level1">
+<h1>Did you understand?</h1>
+<ul>
+<li>solving problems (in R) with simulations</li>
+<li>writing functions to encapsulate more complex tasks</li>
+<li>loops (for) and conditionals (if)</li>
+<li>which()</li>
+<li>selection/exclusion in vector</li>
+<li>sample()</li>
+<li>writing and sharing R-scripts.</li>
+<li>source(“Rscript.R”)</li>
+<li>prior and posterior (conditional) probabilities</li>
+<li>Bayes Theorem and updating probabilities</li>
+</ul>
+</div>
+
+<br />
+<br />
+<hr>
+<p> Bioinfo Core @ MPI-IE Freiburg (2023) </p>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
