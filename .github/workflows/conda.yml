@@ -30,16 +30,16 @@ jobs:
           use-only-tar-bz2: true 
           auto-update-conda: true
           auto-activate-base: true
-      # - name: Install Rintro
-      #   run: |
-      #     pwd; ls
-      #     echo "begin: PATH=$PATH;"
-      #     which R || true
+      - name: Install Requirements
+        run: |
+          pwd; ls
+          echo "begin: PATH=$PATH;"
+          which R || true
 
-      #     conda install mamba
-      #     mamba create -y --name Rintro r-base=4.1.3
+          conda install mamba
+          mamba env create -f conda_config.yml  
+          conda activate Rintro2023 || true
 
-      #     conda activate Rintro || true
-      #     echo "after conda activate Rintro: PATH=$PATH;"
-      #     which R || true
-      #     R --version || true
+          echo "after conda activate Rintro: PATH=$PATH;"
+          which R || true
+          R --version || true
