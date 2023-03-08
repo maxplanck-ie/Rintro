@@ -11,11 +11,18 @@ jobs:
   build:
     name: Conda Tests
     runs-on: ubuntu-latest
-    # defaults:
-    #   run:
-    #     shell: bash -l {0}
-    # container: node:latest
+    defaults:
+       run:
+         shell: bash -l {0}
+    container: node:latest
+
     steps:
+      - name: Print shell information
+        run: |
+          echo "Shell: $SHELL"
+          echo "Shell version: $($SHELL --version)"
+          uname -a || true
+
       - uses: actions/checkout@v2
       - name: Check yaml
         run: |
@@ -27,11 +34,21 @@ jobs:
           use-only-tar-bz2: true 
           auto-update-conda: true
           auto-activate-base: true
+      - name: Configure conda
+        run: |
+          conda init bash
+          echo ". /opt/conda/etc/profile.d/conda.sh" >> $HOME/.bashrc
+          echo "conda activate base" >> $HOME/.bashrc
+          cat $HOME/.bashrc
+          exec bash
           
       - name: Install Requirements
         run: |
           conda install mamba
-          mamba env create -f conda_config.yml  
+          mamba env create -f conda_config.yml 
+
+      - name: Activate Environment
+        run: 
           conda activate Rintro2023 || true
 
       - name: Check Installation
