@@ -332,11 +332,6 @@ Visualizations</h1>
 
 <div id="TOC">
 <ul>
-<li><a href="#global-caching-is-discouraged---use-very-carefully"
-id="toc-global-caching-is-discouraged---use-very-carefully">global
-caching is discouraged - use very carefully</a></li>
-<li><a href="#httpsbookdown.orgyihuirmarkdown-cookbookcache.html"
-id="toc-httpsbookdown.orgyihuirmarkdown-cookbookcache.html">https://bookdown.org/yihui/rmarkdown-cookbook/cache.html</a></li>
 <li><a href="#famous-data-sets" id="toc-famous-data-sets">Famous Data
 Sets</a></li>
 <li><a href="#descriptive-statistics"
@@ -355,15 +350,6 @@ Correlations</a></li>
 </ul>
 </div>
 
-<div id="global-caching-is-discouraged---use-very-carefully"
-class="section level1">
-<h1>global caching is discouraged - use very carefully</h1>
-</div>
-<div id="httpsbookdown.orgyihuirmarkdown-cookbookcache.html"
-class="section level1">
-<h1><a href="https://bookdown.org/yihui/rmarkdown-cookbook/cache.html"
-class="uri">https://bookdown.org/yihui/rmarkdown-cookbook/cache.html</a></h1>
-</div>
 <div id="famous-data-sets" class="section level1">
 <h1>Famous Data Sets</h1>
 <p>R has a large range of pre-defined data sets. They are frequently
@@ -445,7 +431,7 @@ which are internally represented as integers.</p>
 <pre class="r"><code>ts=table(iris$Species)  # returns a contigency table ~&gt; histogram for categorical data
 barplot(ts, col=rainbow(3), ylab=&quot;observations&quot;, cex.names=0.9)</code></pre>
 <p><img src="03_DataDescriptions_files/figure-html/factors-1.png" width="672" /></p>
-<pre class="r"><code>pie(ts,col=rainbow(3))</code></pre>
+<pre class="r"><code>pie(ts,col=rainbow(3))  # if you really must</code></pre>
 <p><img src="03_DataDescriptions_files/figure-html/factors-2.png" width="672" /></p>
 <hr />
 <p>Boxplot understands factors in data frames</p>

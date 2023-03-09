@@ -13,7 +13,7 @@
 
 <meta name="date" content="2023-03-09" />
 
-<title>00: Introduction</title>
+<title>02: Getting Data In and Out</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -35,6 +35,8 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -321,7 +323,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">00: Introduction</h1>
+<h1 class="title toc-ignore">02: Getting Data In and Out</h1>
 <h4 class="author">Thomas Manke</h4>
 <h4 class="date">2023-03-09</h4>
 
@@ -329,122 +331,172 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#overview-of-r-course"
-id="toc-overview-of-r-course">Overview of R-course</a></li>
-<li><a href="#goals" id="toc-goals">Goals:</a></li>
-<li><a href="#non-goals" id="toc-non-goals">Non-Goals:</a></li>
-<li><a href="#why-r" id="toc-why-r">Why R ?</a></li>
-<li><a href="#embrace-the-learning-curve"
-id="toc-embrace-the-learning-curve">Embrace the learning curve</a></li>
-<li><a href="#start-rstudio" id="toc-start-rstudio">Start
-Rstudio</a></li>
+<li><a href="#csv-files" id="toc-csv-files">CSV files</a></li>
+<li><a href="#from-url" id="toc-from-url">From URL</a></li>
+<li><a href="#compressed-formats" id="toc-compressed-formats">Compressed
+formats</a></li>
+<li><a href="#rdata" id="toc-rdata">RData</a></li>
+<li><a href="#r-scripts" id="toc-r-scripts">R Scripts</a></li>
+<li><a href="#review" id="toc-review">Review</a></li>
 </ul>
 </div>
 
-<div id="overview-of-r-course" class="section level1">
-<h1>Overview of R-course</h1>
-<div id="block-1-groundwork" class="section level3">
-<h3>Block 1: Groundwork</h3>
-<ul>
-<li>Starting RStudio: a GUI for R</li>
-<li>Getting data: I/O</li>
-<li>function structures (understanding output)</li>
-</ul>
+<p><strong>Goal</strong>: Ultimately we want to access our own data and
+write results to file.</p>
+<div id="csv-files" class="section level2">
+<h2>CSV files</h2>
+<p>Comma-separated text files (ASCII) are both human and machine
+readible. Other separators may be chosen (tab or “|”). This format is
+frequently used for simple data, such as rows of different
+samples/observations and columns of multiple variables (per sample)</p>
+<p><strong>Important:</strong> Make sure that you know the precise
+location of your data file and provide this as filename.</p>
+<p>Topics: - home and working directory - relative and absolute path</p>
+<pre class="r"><code>getwd()                     # working directory
+dir()                       # display content
+filename=&#39;../data/iris.csv&#39; # relative to wd
+d = read.csv(filename)      # file content --&gt; memory (d)
+str(d)</code></pre>
+<p>There are many different ways to load such data into memory and to
+customize the loading.</p>
+<p><strong>Tasks:</strong> - Explore ?read.csv to get a first overview
+how this function can be customized. - How would you read only the first
+10 lines? - Explore the data object d - <em>Optional bonus:</em> try
+your own file and brace! Is it clean enough?</p>
 </div>
-<div id="block-2-speaking-about-data" class="section level3">
-<h3>Block 2: Speaking about Data</h3>
-<ul>
-<li>Data Descriptions</li>
-<li>Data Visualization: simple plots and advanced heatmaps</li>
-<li>Data Models: linear models</li>
-</ul>
+<div id="from-url" class="section level2">
+<h2>From URL</h2>
+<p>Notice that files do not need to be available locally, but might be
+provided by some URL.</p>
+<p>Be aware that in those cases there might be significant reduced
+loading speed, depending on your network connections.</p>
+<pre class="r"><code>filename=&#39;https://raw.githubusercontent.com/maxplanck-ie/Rintro/2023.03/data/iris.tsv&#39;
+d = read.csv(filename, sep=&#39;\t&#39;)  
+str(d)</code></pre>
 </div>
-<div id="block-3-open-the-universe" class="section level3">
-<h3>Block 3: Open the universe</h3>
-<ul>
-<li>installing and using packages</li>
-<li>manipulating data: cleaning, filtering, merging</li>
-</ul>
+<div id="compressed-formats" class="section level2">
+<h2>Compressed formats</h2>
+<p>Especially for big data it is common to store them in compressed
+format (e.g. *gz) to reduced the storage footprint and speed-up data
+transfer. Such files are not human readable (binary) can also be
+read</p>
+<pre class="r"><code>cmd = &quot;gunzip -c ../data/iris.tsv.gz&quot;   # command to uncompress
+d = read.csv(pipe(cmd), sep=&#39;\t&#39;)       # read as pipe
+str(d)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
+##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ Species     : chr  &quot;setosa&quot; &quot;setosa&quot; &quot;setosa&quot; &quot;setosa&quot; ...</code></pre>
 </div>
-<div id="block-4-advanced-topics-and-case-studies"
-class="section level3">
-<h3>Block 4: Advanced topics and case studies</h3>
+<div id="rdata" class="section level2">
+<h2>RData</h2>
+<p>In the context of the R-programming language, Rdata is a very
+convenient format that can be used to save multiple data structures or
+even whole environments It’s very efficient when you exchange your data
+with other R-users (or your future self)</p>
+<div id="specific-objects" class="section level3">
+<h3>Specific objects</h3>
+<pre class="r"><code>d = iris              # copy of iris data
+fn=&quot;iris.RData&quot;       # filename (and extension) of choice
+save(d, file=fn)
+rm(d)                 # remove object d for illustration - and watch global env
+load(fn)              # reload object d from file - and watch global env</code></pre>
+</div>
+<div id="task-all-objects" class="section level3">
+<h3>Task: All objects</h3>
+<p>Sometimes we want to save all objects and variable that have
+accumulated in the “Global Environment” - just to be sure. This task
+test some jargon, familiarity with directory structure and ability to
+find help. Please try it yourself.</p>
 <ul>
-<li>from interactive use to programming and simple scripts</li>
-<li>data exploration</li>
+<li>Create a new data object for the iris data set as before
+<em>and</em> additional variables for your favorite numbers and perhaps
+some favorite strings.</li>
+<li>Save the whole environment (using <code>save.image()</code>)</li>
+<li>Delete the whole environment aka “workspace”; e.g. using
+<code>rm(list=ls())</code></li>
+<li>Reload the environment and confirm that you successfully recreated
+all objects</li>
+<li>Determine your current working directory (&gt;getwd())</li>
+<li>Locate saved image on disk and inspect its size. Delete it if you
+prefer.</li>
 </ul>
+<pre class="r"><code># your code snippet here</code></pre>
+<p><strong>Notice</strong>: The suffix is not strictly necessary, but it
+is good practised and used consistently by the community.</p>
 <hr />
 </div>
 </div>
-<div id="goals" class="section level1">
-<h1>Goals:</h1>
-<p>After the course you will be able to</p>
+<div id="r-scripts" class="section level1">
+<h1>R Scripts</h1>
+<p>Typical data analyses involve many successive steps.<br />
+To record everything that was done - and ultimately to be able to
+reproduce this - we use scripts.</p>
+<p>Basically these are just lines of code that are collected in a text
+file.</p>
+<p>In Rstudio the can be creates using
+<code>File &gt; New File &gt; Rscript</code></p>
+<p><strong>Task</strong>:</p>
 <ul>
-<li>understand the basic syntax of R</li>
-<li>find help for more nifty problems</li>
-<li>install and use packages for your specific questions</li>
-<li>see the limitations of EXCEL</li>
-<li>understand the importance of structured data</li>
-<li>understand some bioinformatics jargon</li>
-<li>understand common difficulties in data analysis</li>
-<li>increase the value of your CV</li>
-<li>produce figures such as</li>
-</ul>
-<div class="figure">
-<img src="images/sample_plots.png" alt="" />
-<p class="caption">Typical examples from R.</p>
-</div>
-<hr />
-</div>
-<div id="non-goals" class="section level1">
-<h1>Non-Goals:</h1>
-<p>This course does <em>not</em> teach</p>
+<li>Create a new R-script <code>filter_iris.R</code> to do the
+following:
 <ul>
-<li>programming new tools: focus on existing tools</li>
-<li>bioinformatics: BSc course (3 yrs ++)</li>
-<li>NGS analysis: other programs (Linux, Galaxy, deepTools)</li>
-</ul>
-<hr />
-</div>
-<div id="why-r" class="section level1">
-<h1>Why R ?</h1>
-<ul>
-<li>Standard software for data analysis, statistics, and
-visualization</li>
-<li>free and community support</li>
-<li>many packages available (for data I/O, manipulation, high-end:
-expression analysis)</li>
-<li>good compromise between flexibility (programming) and box-solutions
-(packages)</li>
-<li>suitable for very large dataset (filtering, merging)</li>
-<li>interactive and scripting</li>
-<li>not the best solution for everything (e.g. mapping)</li>
-<li>frequent requirement during (bioinformatics) hiring</li>
-</ul>
-<hr />
-</div>
-<div id="embrace-the-learning-curve" class="section level1">
-<h1>Embrace the learning curve</h1>
-<ul>
-<li>steep (but rewarding)</li>
-<li>First hurdles:
-<ul>
-<li>it’s a new language: vocabulary &amp; grammar</li>
-<li>choices: many ways to say (to program) the same things</li>
-<li>more choices: many (redundant) packages</li>
-<li>computers are stubborn and stupid: they do not think along</li>
+<li>Starting from the pre-compiled <code>iris</code> data, create a new
+<code>data_frame d</code> of all flowers where <code>Sepal.Length</code>
+is greater or equal to 7 cm.</li>
+<li>determine the number flower in the new <code>data_frame</code>. Save
+this number as variable <code>nf</code></li>
+<li>How many different species are in the new data_frame. Save this
+number as variable <code>ns</code></li>
+<li>write the new <code>data_frame d</code> in tab seperated file
+<code>iris_big_sepal.tsv</code></li>
+<li>save the whole environment in a file <code>analysis.Rdata</code>
+(hint:)</li>
+<li>delete all variables in the environment</li>
+<li>report the output of sessionInfo()</li>
 </ul></li>
-<li>More hurdles
+<li>Save the script and run it (source)</li>
+<li>Bonus: Delete all whole environment reload it from the image
+file</li>
+</ul>
+<p><strong>Query</strong>:</p>
 <ul>
-<li>case sensitivity: <span class="math inline">\(a \ne A\)</span></li>
-<li>parameter sensitivity</li>
-<li>sofware dependencies</li>
-</ul></li>
+<li>How many rows? How many columns?</li>
+<li>Which data yp</li>
 </ul>
 <hr />
 </div>
-<div id="start-rstudio" class="section level1">
-<h1>Start Rstudio</h1>
+<div id="review" class="section level1">
+<h1>Review</h1>
+<ul>
+<li>Many data sources, different formats &amp; structures
+<ul>
+<li>text files: <em>.tsv, </em>.csv, …</li>
+<li>compressed files: *.bed.gz</li>
+<li>application specific: .<em>Rdata, (.</em>xls)</li>
+</ul></li>
+<li>Many ways to read data
+<ul>
+<li>read.csv, read.table(), scan(), … more to come</li>
+<li>from URL</li>
+</ul></li>
+<li>Writing Data
+<ul>
+<li>write.table</li>
+<li>save()</li>
+<li>save.image()</li>
+</ul></li>
+<li>Data I/O can be challenging:
+<ul>
+<li>file <span class="math inline">\(\to\)</span> memory</li>
+<li>know your paths, format, type, size</li>
+<li>ensure clean and structured data</li>
+<li>bring time and patience</li>
+</ul></li>
+<li>R scripts: writing and running (source)</li>
+</ul>
 </div>
 
 <br />
@@ -486,7 +538,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeCodeFolding("hide" === "show");
+  window.initializeCodeFolding("show" === "show");
 });
 </script>
 

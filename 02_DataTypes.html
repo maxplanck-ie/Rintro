@@ -11,6 +11,7 @@
 
 <meta name="author" content="Thomas Manke" />
 
+<meta name="date" content="2023-03-09" />
 
 <title>02: Data Types</title>
 
@@ -31,6 +32,7 @@
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -222,6 +224,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -306,14 +311,57 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">02: Data Types</h1>
 <h4 class="author">Thomas Manke</h4>
-<h4 class="date">Thu Mar 9 12:08:33 2023</h4>
+<h4 class="date">2023-03-09</h4>
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#from-vectors-to-matrices"
+id="toc-from-vectors-to-matrices">From Vectors to Matrices</a></li>
+<li><a href="#added-information-for-matrices"
+id="toc-added-information-for-matrices">Added information for
+matrices</a></li>
+<li><a href="#matrices-vectors" id="toc-matrices-vectors">Matrices !=
+Vectors</a></li>
+<li><a href="#combining-and-appending-matrices"
+id="toc-combining-and-appending-matrices">Combining and appending
+matrices</a></li>
+<li><a href="#naming-matrices" id="toc-naming-matrices">Naming
+Matrices</a></li>
+<li><a href="#powerful-subsetting" id="toc-powerful-subsetting">Powerful
+Subsetting</a></li>
+<li><a href="#new-functionalities-for-matrices"
+id="toc-new-functionalities-for-matrices">New functionalities for
+matrices</a></li>
+<li><a href="#matrix-magic" id="toc-matrix-magic">Matrix Magic</a></li>
+<li><a href="#data-frames" id="toc-data-frames">Data Frames</a></li>
+<li><a href="#accessing-data-frames"
+id="toc-accessing-data-frames">Accessing Data Frames</a></li>
+<li><a href="#lists" id="toc-lists">Lists</a>
+<ul>
+<li><a href="#list-can-be-recursive" id="toc-list-can-be-recursive">List
+can be recursive</a></li>
+<li><a href="#list-access-options-and-confusions"
+id="toc-list-access-options-and-confusions">List Access: Options and
+Confusions</a></li>
+</ul></li>
+<li><a href="#summary-data-types" id="toc-summary-data-types">Summary:
+Data Types</a></li>
+</ul>
+</div>
 
 <div id="from-vectors-to-matrices" class="section level1">
 <h1>From Vectors to Matrices</h1>
@@ -646,6 +694,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
