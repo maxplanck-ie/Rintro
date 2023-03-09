@@ -342,7 +342,7 @@ doors</code></pre>
 the winning door)</p>
 <pre class="r"><code>pick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)
 pick</code></pre>
-<pre><code>## [1] &quot;L1&quot;</code></pre>
+<pre><code>## [1] &quot;W&quot;</code></pre>
 <p>Only the show master knows the winning door. Depending on the picked
 door, the show master will reveal one door that does <em>not</em>
 contain the price, and <em>not</em> the picked door. This is a more
@@ -364,7 +364,7 @@ door (not open, not previously picked). The question is: Will the
 switching strategy be more successful?</p>
 <pre class="r"><code>switch=doors[ doors != pick &amp; doors != open]  
 paste(switch)</code></pre>
-<pre><code>## [1] &quot;W&quot;</code></pre>
+<pre><code>## [1] &quot;L1&quot;</code></pre>
 <p>With three doors, the candidate has only two choices to stay with
 “pick” or to switch to “switch”</p>
 <p>The above results from sampling will vary (for each candiate and
@@ -402,8 +402,8 @@ cat(&quot;successes with switching= &quot;,success, &quot;success_rate: &quot;, 
 with some suitable name. Return to the console and execute the script
 using the <em>source</em> command</p>
 <pre class="r"><code>source(&quot;MontyHall.R&quot;)</code></pre>
-<pre><code>## successes with switching=  6654 success_rate:  0.6654 
-## successes with switching=  6768 success_rate:  0.6768</code></pre>
+<pre><code>## successes with switching=  6644 success_rate:  0.6644 
+## successes with switching=  6632 success_rate:  0.6632</code></pre>
 <p>You can share the script easily with all people who speak R –
 especially those who don’t like to switch.</p>
 </div>

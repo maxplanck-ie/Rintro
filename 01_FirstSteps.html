@@ -350,7 +350,9 @@ Vectors</a></li>
 Generation</a></li>
 <li><a href="#vector-operations" id="toc-vector-operations">Vector
 Operations</a></li>
-<li><a href="#misc" id="toc-misc">Misc</a></li>
+<li><a href="#misc-concepts-and-pecularities"
+id="toc-misc-concepts-and-pecularities">Misc: Concepts and
+Pecularities</a></li>
 <li><a href="#learning-curve" id="toc-learning-curve">Learning
 Curve:</a></li>
 </ul>
@@ -360,8 +362,8 @@ Curve:</a></li>
 <h1>Create R project</h1>
 <p>It is good practice that each R project should have their dedicated
 directory. This directory will hold code, data, results etc.</p>
-<p><strong>Task</strong>: Open a new project with File &gt; New Project
-…</p>
+<p><strong>Task</strong>: Open a new project with “File &gt; New Project
+…”</p>
 <p>Notice the following distinction:</p>
 <ul>
 <li>When running Rstudio locally, the project directory will reside on
@@ -371,16 +373,19 @@ that server.</li>
 </ul>
 <p><strong>Task</strong>: Familiarize yourself with the layout and the
 various panels in Rstudio.</p>
+<p><strong>Query</strong>: Utilization: <a
+href="https://pollev.com/thomasmanke101"
+class="uri">https://pollev.com/thomasmanke101</a></p>
+</div>
+<div id="console-and-commands" class="section level1">
+<h1>Console and Commands</h1>
 <p>For now, the most important panel is the so-called “Console” with the
 prompt (“&gt;”).</p>
 <p>This is where the first interactions with the R-software will take
 place.</p>
 <p>The other panels are for: output, help and other information.</p>
-</div>
-<div id="console-and-commands" class="section level1">
-<h1>Console and Commands</h1>
-<p>In the Console try to repeat and understand the following
-operations</p>
+<p><strong>Task</strong>: In the Console try to repeat and understand
+the following operations</p>
 <pre class="r"><code>2+2</code></pre>
 <pre><code>## [1] 4</code></pre>
 <pre class="r"><code>2^3        # This is a comment: try also 2**3</code></pre>
@@ -433,7 +438,7 @@ class="uri">http://www.r-bloggers.com/</a></li>
 <h1>SessionInfo</h1>
 <p>Every language operates in a certain context and is
 context-dependent.</p>
-<p>Software depends on other software and libraries.</p>
+<p>Software depends on other software and packages.</p>
 <p>It is important to be aware of those (often complex)
 dependencies.</p>
 <p>One way to communicate this context is with the output from
@@ -463,7 +468,8 @@ sessionInfo().</p>
 </div>
 <div id="assigning-values-to-objects" class="section level1">
 <h1>Assigning values to objects</h1>
-<p>Goal: store results of computation in new variables</p>
+<p><strong>Goal</strong>: store results of computation in new
+variables</p>
 <pre class="r"><code>x &lt;- 2*pi # pre-defined constant pi
 x         # see value of object x = show(x) </code></pre>
 <pre><code>## [1] 6.283185</code></pre>
@@ -478,6 +484,11 @@ x      # x was overwritten</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <pre class="r"><code>x+x    # passing objects to functions (+)</code></pre>
 <pre><code>## [1] 4</code></pre>
+<p><strong>Task</strong>: look at the following objects and understand
+the differences</p>
+<pre class="r"><code>pi 
+hi
+&quot;hi&quot;</code></pre>
 <hr />
 </div>
 <div id="simple-vectors" class="section level1">
@@ -537,12 +548,16 @@ v1+v2      # elementwise addition
 v1*v2      # ... multiplication
 v1 &gt; v2    # ... comparisons
 v1 %*% v2  # scalar product</code></pre>
+<p><strong>Task</strong>: Define your own vectors and explore some
+numerical operations</p>
 </div>
-<div id="misc" class="section level1">
-<h1>Misc</h1>
+<div id="misc-concepts-and-pecularities" class="section level1">
+<h1>Misc: Concepts and Pecularities</h1>
 <pre class="r"><code>v=1:4                    # Vector Definition
-v+c(10,20)               # Recycling
-v+c(10,20,30)            # Warning != Error
+
+v + 10                   # Recycling
+v + c(10,20)             # Recycling
+v + c(10,20,30)          # Warning != Error
 
 #v %*% c(10,20,30)        # Error = Error
 
@@ -560,7 +575,8 @@ rev(v)                   # reverse vectors</code></pre>
 <ul>
 <li>Rstudio: Starting an R project</li>
 <li>work with console</li>
-<li>simple functions (input, output) and logical operation</li>
+<li>simple functions (input, output), logical operations and
+parameters</li>
 <li>creating simple objects and assigning values</li>
 <li>inspecting objects: v, str(v), typeof(v), length(v)</li>
 <li>flexible creation of vectors</li>
@@ -569,7 +585,8 @@ rev(v)                   # reverse vectors</code></pre>
 <li>undefined values: NaN, NA</li>
 <li>functions can behave differently on different input: summary()</li>
 <li>see warning messages and errors</li>
-<li>use help to understand about functions: ?sqrt</li>
+<li>getting help: ?sqrt</li>
+<li>software dependencies and the importance of sesssionInfo()</li>
 </ul>
 </div>
 
