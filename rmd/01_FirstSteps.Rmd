@@ -13,7 +13,7 @@ output:
 It is good practice that each R project should have their dedicated directory.
 This directory will hold code, data, results etc.
 
-**Task**: Open a new project with File > New Project ...
+**Task**: Open a new project with "File > New Project ..."
 
 Notice the following distinction:
 
@@ -22,15 +22,17 @@ Notice the following distinction:
 
 **Task**: Familiarize yourself with the layout and the various panels in Rstudio. 
 
+**Query**: Utilization: https://pollev.com/thomasmanke101
+
+# Console and Commands
+
 For now, the most important panel is the so-called "Console" with the prompt (">"). 
 
 This is where the first interactions with the R-software will take place. 
 
 The other panels are for: output, help and other information.
 
-
-# Console and Commands
-In the Console try to repeat and understand the following operations
+**Task**: In the Console try to repeat and understand the following operations
 ```{r console}
 2+2
 2^3        # This is a comment: try also 2**3
@@ -66,7 +68,7 @@ Use help to find out more about: sqrt, exp or anything else of interest.
 # SessionInfo
 Every language operates in a certain context and is context-dependent.
 
-Software depends on other software and libraries.
+Software depends on other software and packages.
 
 It is important to be aware of those (often complex) dependencies.
 
@@ -79,8 +81,9 @@ sessionInfo()
 ****
 
 # Assigning values to objects
-Goal: store results of computation in new variables
-```{r}
+
+**Goal**: store results of computation in new variables
+```{r simple_obejcts}
 x <- 2*pi # pre-defined constant pi
 x         # see value of object x = show(x) 
 
@@ -93,6 +96,14 @@ x      # x was overwritten
 x==3   # another logical comparison (x unchanged)
 
 x+x    # passing objects to functions (+)
+```
+
+
+**Task**: look at the following objects and understand the differences
+```{r more_obejects, eval=FALSE, echo=TRUE}
+pi 
+hi
+"hi"
 ```
 
 ****
@@ -157,12 +168,15 @@ v1 > v2    # ... comparisons
 v1 %*% v2  # scalar product
 ```
 
+**Task**: Define your own vectors and explore some numerical operations
 
-# Misc
+# Misc: Concepts and Pecularities
 ```{r misc, eval=FALSE}
 v=1:4                    # Vector Definition
-v+c(10,20)               # Recycling
-v+c(10,20,30)            # Warning != Error
+
+v + 10                   # Recycling
+v + c(10,20)             # Recycling
+v + c(10,20,30)          # Warning != Error
 
 #v %*% c(10,20,30)        # Error = Error
 
@@ -180,7 +194,7 @@ rev(v)                   # reverse vectors
 # Learning Curve:
 * Rstudio: Starting an R project
 * work with console 
-* simple functions (input, output) and logical operation
+* simple functions (input, output), logical operations and parameters
 * creating simple objects and assigning values
 * inspecting objects: v, str(v), typeof(v), length(v)
 * flexible creation of vectors
@@ -189,4 +203,5 @@ rev(v)                   # reverse vectors
 * undefined values: NaN, NA
 * functions can behave differently on different input: summary()
 * see warning messages and errors
-* use help to understand about functions: ?sqrt
+* getting help: ?sqrt
+* software dependencies and the importance of sesssionInfo()
