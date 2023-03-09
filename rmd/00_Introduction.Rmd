@@ -12,7 +12,7 @@ output:
 # Overview of R-course
 
 ### Block 1: Groundwork
-* Intro to RStudio: a GUI for R
+* Starting RStudio: a GUI for R
 * Getting data: I/O
 * function structures (understanding output)
 

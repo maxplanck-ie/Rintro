@@ -1,0 +1,241 @@
+---
+title: "02: Getting Data "
+author: "Thomas Manke"
+date:  '`r Sys.Date()`'
+output:
+  html_document:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_depth: 2
+---
+
+```{r, child="_setup.Rmd"}
+```
+   
+**Goal**: Real data is much more complx than simple vectors of numbers of strings.
+Here we introduce new data structures, important functtions and some jargon.
+
+**Goal**: Read data means to load data from some storage into memory such that it can be processed
+and analysed by various software tools.
+
+## data()
+R comes with many pre-defined data sets. They are often used to illustrate statistical problems, data science concepts and functionality of software packages. Just type "data()" to get an overview. 
+
+```{r data_pre, eval=FALSE, echo=TRUE}
+data()
+```
+
+
+One particularly famous data set is "iris". We will use it throughout this course:
+
+![Flower Measurements](images/sepal_petal.jpeg) 
+
+(Image from blog of mathieu.guillame-bert.com)
+
+
+**Tasks**: Explore the `iris` data set
+
+- Try `?iris` to learn more about this data set.
+- Type `iris` or `View(iris)`. Why is this not the best way to explore data? 
+
+
+**Query:** How many samples and variables does this data set contain?
+
+**Notice**:   
+This iris data is a more complex object than just a simple number or vector discussed before.
+Typical commands to explore new data objects are:
+
+```{r explore}
+str(iris)      # the structure
+head(iris)     # the first few lines
+tail(iris,n=3) # last n lines
+
+
+class(iris)    # what class of object
+summary(iris)  # works well with data_frames
+dim(iris)      # data frames ar 2D objects: rows x columns
+```
+
+Data Frames are lists of vectors with identical lengths.
+
+### Data Access
+
+Programmatic access to specific subsets of data is key to all analyses.  
+There are many basic ways to achieve this - and even more in later sections.
+
+```{r iris_access}
+d=iris    # just to reduce typing
+
+ir=1:3    # vector of row indices
+ic=c(2,5) # vector of col indices
+d[ir,ic]  # selecting specific elements in 2D data frame
+d[,-5]    # unselecting column 5
+d$Species # selecting col "Species"  = d[,"Species"]
+```
+### Conditional Access
+Usually we want to access if certain conditions are met
+
+```{r cond_access}
+# select only species "setosa"
+ib = d$Species == "setosa" 
+d[ib,]
+
+# select species "setosa" and "small Sepal.Width")
+ib=(d$Species=="setosa") & (d$Sepal.Width<3)
+d[ib,]
+```
+**Task**:
+
+- Look at the vector `ib` in the above examples and understand what is meant with "access by truth value". 
+- Modify the criteria and try your own selections.
+
+
+## CSV files
+These are comma-separated text files (ASCII) that are both human and machine readible.
+Other separators may be chosen: e.g. tab (tsv) or "|".
+This format is frequently used for simple data formats, such as rows of different samples/observations and columns of multiple variables (per sample)
+
+Important: Make sure that you know the precise location of your data file and provide this as filename.
+
+Topics: 
+- home and working directory
+- relative and absolute path
+
+```{r csv, eval=FALSE}
+getwd()
+dir()
+filename="example.csv"
+d = read.csv(filename) # load file to data object d
+```
+
+
+There are many different ways to load such data into memory and to customize the loading.
+Tasks:
+- Explore ?read.csv to get a first overview how this function can be customized.
+- How would you read only the first 10 lines?
+- Explore the data object d
+
+## JSON
+Json is a popular text format that is often used to store more complicated data structures. 
+It is also human re
+
+```{r json}
+
+```
+
+
+## URL
+Notice that files do not need to be available locally, but might be provided by some URL.
+
+Be aware that in those cases there might be significant reduced loading speed, depending on your network connections.
+```{r url, eval=FALSE}
+con <- url("http://some.where.net/R/data/example.rda") # open connection
+print(load(con))
+close(con) 
+```
+
+
+## HTML
+
+```{r html}
+
+```
+
+
+## Compressed formats
+
+Especially for big data it is common to store them in compressed format (e.g. *gz) to reduced the storage footprint and speed-up data transfer.
+Such files are not human readable (binary) can also be read
+
+```{r gzip}
+
+```
+
+## Rdata
+In the context of the R-programming language, Rdata is a very convenient format that can be used to save multiple data structures or even whole environments 
+It's very efficient when you exchange your data with other R-users (or your future self)
+
+```{r rdata}
+d = iris              # copy of iris data
+fn="iris_data.Rdata"  # filename of choice (arbitrary)
+save(d, file=fn)
+rm(d)                 # remove object d for illustration
+load(fn)              # reload file
+```
+
+
+
+## Tasks (15 min)
+
+- Create a new data object for the iris data set as before *and* additional variables for your favorite numbers and perhaps some favorite strings.
+- Save the whole environment (using save.image())
+- Delete the whole environment (e.g. using >rm(list=ls()))
+- Reload the environment and confirm that you successfully recreated all objects 
+- Determine your current working directory (>getwd())
+- Locate saved image on disk and inspect its size. Delete it if you prefer.
+
+Notice: The suffix is not strictly necessary, but it is good practised and used consistently by the community.
+
+```{r rdat_env, eval=FALSE, echo=FALSE}
+d = iris
+s = "Hello Thomas"
+n = 42
+getwd()
+
+save.image("my_test.Rdata")   # default filename = ".Rdata"
+rm(list=ls())
+load("my_test.Rdata")
+```
+   
+    
+
+
+***
+
+# R Scripts
+
+Typical data analyses involve many successive steps.  
+To record everything that was done - and ultimately to be able to reproduce this - we use scripts.
+
+Basically these are just lines of code that are collected in a text file.
+
+In Rstudio the can be creates using `File > New File > Rscript` 
+
+**Task**: 
+
+* Create a new R-script `filter_iris.R` to do the following: 
+  - Starting from the pre-compiled `iris` data, create a new `data_frame d` of all flowers where `Sepal.Length` is greater or equal to 7 cm.
+  - determine the number flower in the new `data_frame`. Save this number as variable `nf`
+  - How many different species are in the new data_frame. Save this number as variable `ns`
+  - write the new `data_frame d` in tab seperated file `iris_big_sepal.tsv`
+  - save the whole environment in a file `analysis.Rdata` (hint:)
+  - delete all variables in the environment
+  - report the output of sessionInfo()
+* Save the script and run it (source)
+* Bonus: Delete all whole environment reload it from the image file
+
+**Query**:
+
+  - How many rows? How many columns?
+  - Which data yp
+
+
+***
+# Review
+* Many data sources, formats & structures
+  - precompiled lists: iris, mtcars, ... 
+  - text files: *.tsv, *.csv, ...
+  - compressed files: *.bed.gz
+  - application specific: .*Rdata, (.*xls)
+* Many ways to read data
+  - read.table(), scan(), ... more to come
+  - from URL
+* Writing Data
+  - write.table
+* Data I/O can be challenging:
+  - file $\to$ memory
+  - know your paths, format, type, size
+  - ensure clean and structured data
+  - bring time and patience
+* R scripts: writing and running (source)

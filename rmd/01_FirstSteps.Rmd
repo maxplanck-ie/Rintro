@@ -10,8 +10,8 @@ output:
 ---
 
 # Create R project
-It is good practice that each R project should have their dedicated directory.
-This directory will hold code, data, results etc.
+**Best practice:**   
+Each R project should have their dedicated directory. This directory will hold code, data, results etc.
 
 **Task**: Open a new project with "File > New Project ..."
 
@@ -200,7 +200,7 @@ rev(v)                   # reverse vectors
 * flexible creation of vectors
 * vector indices and subsetting
 * vector operations and recycling
-* undefined values: NaN, NA
+* special values: Inf, NaN, NA
 * functions can behave differently on different input: summary()
 * see warning messages and errors
 * getting help: ?sqrt

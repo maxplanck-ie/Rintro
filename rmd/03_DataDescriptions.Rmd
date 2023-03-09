@@ -66,7 +66,7 @@ class(iris$Species)
 typeof(iris$Species)
 ts=table(iris$Species)  # returns a contigency table ~> histogram for categorical data
 barplot(ts, col=rainbow(3), ylab="observations", cex.names=0.9)
-pie(ts,col=rainbow(3))
+pie(ts,col=rainbow(3))  # if you really must
 ```
 
 ***
