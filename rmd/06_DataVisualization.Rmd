@@ -1,5 +1,5 @@
 ---
-title: "Data Visualization"
+title: "06: Data Visualization"
 author: "Thomas Manke"
 date: '`r Sys.Date()`'
 output:
@@ -22,7 +22,7 @@ The image() function maps numbers to colours. Try it on the iris data frame and 
 ```{r image}
 niris=iris[,-5]     # define numeric iris data
 M=as.matrix(niris)  # there are many as.* functions that convert among data structures
-image(M)
+image(M)            # image takes only matrix objects (data frame with single type "numeric")
 ```
 
 Be aware:
@@ -34,9 +34,9 @@ Be aware:
 
 Below we are re-scaling the iris-matrix
 ```{r scaling}
-S=scale(M)            # scales column-wise
-br=seq(-5,7,by=0.5)   # set common break points for the histograms below
-hist(M[,"Sepal.Width"], breaks = br)
+S=scale(M)                                                     # scales column-wise
+br=seq(-5,7,by=0.5)                                            # set common break points for the histograms below
+hist(M[,"Sepal.Width"], breaks = br)                           # illustrate scaling for specific column
 hist(S[,"Sepal.Width"], breaks = br, add=TRUE, col="red")      # add histogram to current plot
 legend("topright", c("orig","scaled"), fill=c("white", "red"))
 
@@ -46,7 +46,7 @@ image(S,main="Normalized IRIS data", axes=FALSE)              # as before, suppr
 #axis(4,at=seq(0,1,length.out=ncol(S)), labels=colnames(S), las=2) # Understand this command
 ```
 
-## Heatmaps
+# Heatmaps
 Heatmaps are advanced images in which rows and columns are re-ordered according
 to some distance measure (default: Euclidean) and hierarchical clustering method (default: complete) 
 ```{r heatmap}
@@ -59,11 +59,19 @@ Notice that:
 * heatmap scales all rows by default (for visuzalization)
 * frequently needs many customizations: label size, remove row-names, ...
 * there is an implicit colour scheme: "numerical value $\to$ colour"
-* there are multiple extensions of this in other R-packages: e.g. gplots::heatmap.2
 ```{r heatmap_with_col}
 cols = rainbow(3)[iris$Species]            # understand how color is defined
 heatmap(S,scale="none", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
 ```
+
+There are multiple powerful extension in other R-packages.
+If time allows try this. And if you have lots of time read "?pheatmap" 
+```{r pheatmap, echo=TRUE}
+#install.packages("pheatmap")  # That's how we install new packages - more later
+library(pheatmap)
+pheatmap(scale(iris[,-5])) # works also with data frames
+```
+
 
 # Sending plots to files
 In Rstudio, we can export figures from the "Plots" tab. On the console we can define a pdf file as a new device for all subsequent figures. This is usually done only *after* the image is sufficiently optimized
@@ -72,6 +80,8 @@ pdf("../data/heatmap.pdf") # similar for jpeg, png, ...
 heatmap(S,scale="none", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
 dev.off()  # close device = pdf file
 ```
+
+
 
 # Dimensional Reduction: PCA
 ```{r}
@@ -93,39 +103,31 @@ pca=prcomp(M, scale=TRUE)
 *Task*: What kind of object is pca?
 
 ```{r}
-R=pca$rotation  # rotation matrix
-S=pca$x         # score matrix = rotated scaled data matrix = Ds %*% R
-pairs(S, col=s) # 
-plot(R[,1:2], main="Rotations")
-arrows(0,0,R[,1], R[,2], col="red")  # add arrows: ?arrows
+S=pca$x          # score matrix = rotated and scaled data matrix
+
+pairs(S, col=s)
+
+pheatmap(cov(M)) # original covariance matrix
+
 # covariance matrix of scores is diagonal (by design)
 # --> principal components are uncorrelated
-CS=cov(S)   # = t(S) %*% S / (nrow(S) - 1)
-CS
-
+pheatmap(cov(S)) 
 ```
 
-Covariance: $Cov(X)= \frac{1}{N-1} X_c^T X_c~~~;~~~ X_c \equiv X-\bar X ~~~({\rm centered})$
-
-Correlation $Cor(X)=\frac{1}{N-1}X_s^T X_s~~~;~~~ X_s \equiv (X-\bar X)/\sigma ~~~({\rm scaled})$
 
 Notice that the higher components do not add much to the variance, so we may as well represent the transformed data in only the first two dimensions:
 ```{r}
 plot(S[,1:2],pch=21, bg=s)  # score-plot
 ```
 
-A biplot represents both the observations and the old variables in a new coordinate system (up-to-rescaling)
-```{r}
-biplot(pca, pc.biplot = TRUE) 
-```
-
 
 ***
 
-# Review:
+# Review
 * use image() and heatmap() to visualize matrices
-* customization of plots again: colours, legends
-* fallacies of colour-scaling
+* scaling transformation and customizations
+* installing packages for extra functionalitty: pheatmap
+* be careful with colour-scaling
 * exporting figures as publication-ready files
 * dimensional reduction with PCA
 
