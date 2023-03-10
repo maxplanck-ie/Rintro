@@ -264,20 +264,20 @@ $(document).ready(function () {
       <a href="01_FirstSteps.html">01_FirstSteps</a>
     </li>
     <li>
-      <a href="02_DataTypes.html">02_DataTypes</a>
+      <a href="02_HighDimData.html">02_HighDimData</a>
     </li>
     <li>
-      <a href="03_DataDescriptions.html">03_DataDescriptions</a>
+      <a href="03_GettingData.html">03_GettingData</a>
     </li>
     <li class="divider"></li>
     <li>
-      <a href="04_DataModels.html">04_DataModels</a>
+      <a href="04_DataDescriptions.html">04_DataDescriptions</a>
     </li>
     <li>
-      <a href="04_DataVisualization.html">04_DataVisualization</a>
+      <a href="05_DataModels.html">05_DataModels</a>
     </li>
     <li>
-      <a href="05_DataManagement.html">05_DataManagement</a>
+      <a href="06_DataVisualization.html">06_DataVisualization</a>
     </li>
     <li class="divider"></li>
     <li>
@@ -337,12 +337,12 @@ doors</code></pre>
 <p>First assume that the doors are shuffled randomly</p>
 <pre class="r"><code>doors=sample(doors) # Why does this amount to shuffling?
 doors</code></pre>
-<pre><code>## [1] &quot;W&quot;  &quot;L2&quot; &quot;L1&quot;</code></pre>
+<pre><code>## [1] &quot;L2&quot; &quot;W&quot;  &quot;L1&quot;</code></pre>
 <p>Now the candidate picks a random door “pick” (hoping that it might be
 the winning door)</p>
 <pre class="r"><code>pick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)
 pick</code></pre>
-<pre><code>## [1] &quot;W&quot;</code></pre>
+<pre><code>## [1] &quot;L1&quot;</code></pre>
 <p>Only the show master knows the winning door. Depending on the picked
 door, the show master will reveal one door that does <em>not</em>
 contain the price, and <em>not</em> the picked door. This is a more
@@ -356,7 +356,7 @@ depends on “pick” and the doors content</p>
 <p>Now let’s use the function to open a door</p>
 <pre class="r"><code>open = open_door(pick,doors)
 open</code></pre>
-<pre><code>## [1] &quot;L1&quot;</code></pre>
+<pre><code>## [1] &quot;L2&quot;</code></pre>
 <p>Notice that the showmaster does not really have a choice when the
 candidate has picked a loosing door (2/3 of the time).</p>
 <p>Now the candidate has the choice to switch to the other remaining
@@ -364,7 +364,7 @@ door (not open, not previously picked). The question is: Will the
 switching strategy be more successful?</p>
 <pre class="r"><code>switch=doors[ doors != pick &amp; doors != open]  
 paste(switch)</code></pre>
-<pre><code>## [1] &quot;L2&quot;</code></pre>
+<pre><code>## [1] &quot;W&quot;</code></pre>
 <p>With three doors, the candidate has only two choices to stay with
 “pick” or to switch to “switch”</p>
 <p>The above results from sampling will vary (for each candiate and
@@ -402,8 +402,8 @@ cat(&quot;successes with switching= &quot;,success, &quot;success_rate: &quot;, 
 with some suitable name. Return to the console and execute the script
 using the <em>source</em> command</p>
 <pre class="r"><code>source(&quot;MontyHall.R&quot;)</code></pre>
-<pre><code>## successes with switching=  6696 success_rate:  0.6696 
-## successes with switching=  6679 success_rate:  0.6679</code></pre>
+<pre><code>## successes with switching=  6658 success_rate:  0.6658 
+## successes with switching=  6626 success_rate:  0.6626</code></pre>
 <p>You can share the script easily with all people who speak R –
 especially those who don’t like to switch.</p>
 </div>
