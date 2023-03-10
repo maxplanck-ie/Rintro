@@ -342,7 +342,7 @@ doors</code></pre>
 the winning door)</p>
 <pre class="r"><code>pick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)
 pick</code></pre>
-<pre><code>## [1] &quot;L1&quot;</code></pre>
+<pre><code>## [1] &quot;L2&quot;</code></pre>
 <p>Only the show master knows the winning door. Depending on the picked
 door, the show master will reveal one door that does <em>not</em>
 contain the price, and <em>not</em> the picked door. This is a more
@@ -356,7 +356,7 @@ depends on “pick” and the doors content</p>
 <p>Now let’s use the function to open a door</p>
 <pre class="r"><code>open = open_door(pick,doors)
 open</code></pre>
-<pre><code>## [1] &quot;L2&quot;</code></pre>
+<pre><code>## [1] &quot;L1&quot;</code></pre>
 <p>Notice that the showmaster does not really have a choice when the
 candidate has picked a loosing door (2/3 of the time).</p>
 <p>Now the candidate has the choice to switch to the other remaining
@@ -402,8 +402,8 @@ cat(&quot;successes with switching= &quot;,success, &quot;success_rate: &quot;, 
 with some suitable name. Return to the console and execute the script
 using the <em>source</em> command</p>
 <pre class="r"><code>source(&quot;MontyHall.R&quot;)</code></pre>
-<pre><code>## successes with switching=  6658 success_rate:  0.6658 
-## successes with switching=  6626 success_rate:  0.6626</code></pre>
+<pre><code>## successes with switching=  6711 success_rate:  0.6711 
+## successes with switching=  6768 success_rate:  0.6768</code></pre>
 <p>You can share the script easily with all people who speak R –
 especially those who don’t like to switch.</p>
 </div>

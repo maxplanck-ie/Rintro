@@ -12,7 +12,7 @@
 <meta name="author" content="Thomas Manke" />
 
 
-<title>Data Exploration: Regulatory Modules from ChIP-seq</title>
+<title>P01: Data Exploration: Regulatory Modules from ChIP-seq</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -320,10 +320,10 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Data Exploration: Regulatory Modules from
-ChIP-seq</h1>
+<h1 class="title toc-ignore">P01: Data Exploration: Regulatory Modules
+from ChIP-seq</h1>
 <h4 class="author">Thomas Manke</h4>
-<h4 class="date">Fri Mar 10 14:14:22 2023</h4>
+<h4 class="date">Fri Mar 10 16:11:07 2023</h4>
 
 </div>
 
@@ -335,12 +335,9 @@ ChIP-seq</h1>
 id="toc-skipped-pre-processing">Skipped: Pre-processing</a></li>
 <li><a href="#read-clean-data" id="toc-read-clean-data">Read Clean
 Data</a></li>
-<li><a href="#sanity-checks" id="toc-sanity-checks">Sanity Checks</a>
+<li><a href="#tasks-sanity-checks" id="toc-tasks-sanity-checks">Tasks:
+Sanity Checks</a>
 <ul>
-<li><a href="#structure" id="toc-structure">Structure</a></li>
-<li><a href="#dimensions-names-strange-entries"
-id="toc-dimensions-names-strange-entries">Dimensions, Names, strange
-entries</a></li>
 <li><a href="#summary-plots" id="toc-summary-plots">Summary
 Plots</a></li>
 <li><a href="#show-me-all-the-data" id="toc-show-me-all-the-data">Show
@@ -390,28 +387,19 @@ class="uri">http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_ge
 <h1>Skipped: Pre-processing</h1>
 <p>Steps: extract only p-values from full data, define proper names for
 rows, remove columns</p>
-<pre class="r"><code># define a filename (notice that R can read from http)
-# Beware: For slow network connections it will be faster to first download the file to local storage and work from there.
-
+<pre class="r"><code># Beware of slow connections ! 
 chip=&quot;http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_gene.tsv&quot;
+D=read.csv(chip, sep=&quot;\t&quot;, skip=1) # skip first line
 
-###############################
-# Data munging: Trial and errors have been commented out 
-# first problem: two headers --&gt; skip first --&gt; skip line 1
-# D=read.table(file=chip, header=TRUE,  skip=1, sep=&quot;\t&quot;)
-# nrow(D)  # 511 &lt;&lt; 6000 !!!???
+### some filtering
+rownames(D)=D[,1]                  # ORF-symbols in column 1, keep them as rownames 
+ic=c(1:4,seq(6,230,by=2))          # define column indices to be excluded (only keep p-values)
+P=D[,-ic]                          # new data-frame of p-values, exclude superfluous columns and ratios
+####
 
-# second problem: quote symbols in names (&#39;)
-# cf=count.fields(chip,sep=&quot;\t&quot;) # many NA --&gt; quoted fields got missing
-
-D=read.table(chip, header=TRUE,  sep=&quot;\t&quot;, quote=&quot;\&quot;&quot;, skip=1)
-rownames(D)=D[,1]          # ORF-symbols in column 1, keep them as rownames 
-ic=c(1:4,seq(6,230,by=2))  # define column indices to be excluded (only keep p-values)
-P=D[,-ic]                  # new data-frame of p-values, exclude superfluous columns and ratios
-###############################
-
-# save cleaned data for future use
-write.table(P,file=&quot;../data/chip.tsv&quot;, sep=&quot;\t&quot;, quote=FALSE)  # write p-values to file</code></pre>
+# save cleaned data (only p-values) to file - for future use
+# use write.table instead of write.csv - as I want to have tab-seperation
+write.table(P, file=&quot;../data/chip.tsv&quot;, sep=&quot;\t&quot;, quote=FALSE) </code></pre>
 </div>
 <div id="read-clean-data" class="section level1">
 <h1>Read Clean Data</h1>
@@ -425,49 +413,20 @@ class="uri">https://github.com/maxplanck-ie/Rintro/</a>).</p>
 <p>Faster: have it local</p>
 <pre class="r"><code>fn=&quot;https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/chip.tsv&quot;  # remote filename
 fn=&quot;../data/chip.tsv&quot;                                                            # local: same but faster
-P=read.table(file=fn, header=TRUE, sep=&quot;\t&quot;)</code></pre>
+P=read.csv(file=fn, sep=&quot;\t&quot;)</code></pre>
 </div>
-<div id="sanity-checks" class="section level1">
-<h1>Sanity Checks</h1>
-<p>Inspect data. You might want to do this on the console. So that you
-don’t clutter your notebook.</p>
-<div id="structure" class="section level2">
-<h2>Structure</h2>
-<pre class="r"><code>str(P) # you might want to do this on the console </code></pre>
-</div>
-<div id="dimensions-names-strange-entries" class="section level2">
-<h2>Dimensions, Names, strange entries</h2>
-<pre class="r"><code>dim(P)</code></pre>
-<pre><code>## [1] 6270  113</code></pre>
-<pre class="r"><code>colnames(P)</code></pre>
-<pre><code>##   [1] &quot;ABF1&quot;        &quot;ACE2&quot;        &quot;ADR1&quot;        &quot;ARG80&quot;       &quot;ARG81&quot;      
-##   [6] &quot;ARO80&quot;       &quot;ASH1&quot;        &quot;AZF1&quot;        &quot;BAS1&quot;        &quot;CAD1&quot;       
-##  [11] &quot;CBF1&quot;        &quot;CHA4&quot;        &quot;CIN5&quot;        &quot;CRZ1&quot;        &quot;CUP9&quot;       
-##  [16] &quot;DAL81&quot;       &quot;DAL82&quot;       &quot;DIG1&quot;        &quot;DOT6&quot;        &quot;ECM22&quot;      
-##  [21] &quot;FHL1&quot;        &quot;FKH1&quot;        &quot;FKH2&quot;        &quot;FZF1&quot;        &quot;GAL4&quot;       
-##  [26] &quot;GAT1&quot;        &quot;GAT3&quot;        &quot;GCN4&quot;        &quot;GCR1&quot;        &quot;GCR2&quot;       
-##  [31] &quot;GLN3&quot;        &quot;GRF10.Pho2.&quot; &quot;GTS1&quot;        &quot;HAA1&quot;        &quot;HAL9&quot;       
-##  [36] &quot;HAP2&quot;        &quot;HAP3&quot;        &quot;HAP4&quot;        &quot;HAP5&quot;        &quot;HIR1&quot;       
-##  [41] &quot;HIR2&quot;        &quot;HMS1&quot;        &quot;HSF1&quot;        &quot;IME4&quot;        &quot;INO2&quot;       
-##  [46] &quot;INO4&quot;        &quot;IXR1&quot;        &quot;LEU3&quot;        &quot;MAC1&quot;        &quot;MAL13&quot;      
-##  [51] &quot;MAL33&quot;       &quot;MATa1&quot;       &quot;MBP1&quot;        &quot;MCM1&quot;        &quot;MET31&quot;      
-##  [56] &quot;MET4&quot;        &quot;MIG1&quot;        &quot;MOT3&quot;        &quot;MSN1&quot;        &quot;MSN2&quot;       
-##  [61] &quot;MSN4&quot;        &quot;MSS11&quot;       &quot;MTH1&quot;        &quot;NDD1&quot;        &quot;NRG1&quot;       
-##  [66] &quot;PDR1&quot;        &quot;PHD1&quot;        &quot;PHO4&quot;        &quot;PUT3&quot;        &quot;RAP1&quot;       
-##  [71] &quot;RCS1&quot;        &quot;REB1&quot;        &quot;RFX1&quot;        &quot;RGM1&quot;        &quot;RGT1&quot;       
-##  [76] &quot;RIM101&quot;      &quot;RLM1&quot;        &quot;RME1&quot;        &quot;ROX1&quot;        &quot;RPH1&quot;       
-##  [81] &quot;RTG1&quot;        &quot;RTG3&quot;        &quot;RTS2&quot;        &quot;SFL1&quot;        &quot;SFP1&quot;       
-##  [86] &quot;SIG1&quot;        &quot;SIP4&quot;        &quot;SKN7&quot;        &quot;SKO1&quot;        &quot;SMP1&quot;       
-##  [91] &quot;SOK2&quot;        &quot;SRD1&quot;        &quot;STB1&quot;        &quot;STE12&quot;       &quot;STP1&quot;       
-##  [96] &quot;STP2&quot;        &quot;SUM1&quot;        &quot;SWI4&quot;        &quot;SWI5&quot;        &quot;SWI6&quot;       
-## [101] &quot;THI2&quot;        &quot;UGA3&quot;        &quot;USV1&quot;        &quot;YAP1&quot;        &quot;YAP3&quot;       
-## [106] &quot;YAP5&quot;        &quot;YAP6&quot;        &quot;YAP7&quot;        &quot;YBR267W&quot;     &quot;YFL044C&quot;    
-## [111] &quot;YJL206C&quot;     &quot;ZAP1&quot;        &quot;ZMS1&quot;</code></pre>
-<pre class="r"><code>anyNA(P)           # are there any undefined values</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>sum(P&lt;0 | P&gt;1)     # how many &quot;strange&quot; p-values --&gt; errors?</code></pre>
-<pre><code>## [1] 0</code></pre>
-</div>
+<div id="tasks-sanity-checks" class="section level1">
+<h1>Tasks: Sanity Checks</h1>
+<p>Inspect data. Below are some ideas.<br />
+Try this iteratively on the console. So that you don’t clutter your
+notebook.</p>
+<pre class="r"><code>str(P)             # structure
+dim(P)             # dimensions
+colnames(P)        # TF
+anyNA(P)           # are there any undefined values
+sum(P&lt;0 | P&gt;1)     # how many &quot;strange&quot; p-values --&gt; errors?</code></pre>
+<p><strong>Query</strong>: How many genes (actually: intergenic regions)
+are in this data frame?</p>
 <div id="summary-plots" class="section level2">
 <h2>Summary Plots</h2>
 <pre class="r"><code>boxplot(P)         # distribution</code></pre>
@@ -491,15 +450,13 @@ B = P &lt; pt          # B is a Boolean matrix (FALSE/TRUE)</code></pre>
 <p>Some genes (rows) have no associated TF. Some TF target no gene.</p>
 <pre class="r"><code>nt = rowSums(B)     # number of transcription factors targetting a gene
 ng = colSums(B)     # number of genes targetted by TF
-D = B[nt&gt;1, ng&gt;40]  # define filtered data
-dim(B)</code></pre>
-<pre><code>## [1] 6270  113</code></pre>
-<pre class="r"><code>dim(D)</code></pre>
-<pre><code>## [1] 932  31</code></pre>
+D = B[nt&gt;1, ng&gt;40]  # define filtered data</code></pre>
+<p><strong>Query</strong>: What is the dimension of the filtered matrix
+B</p>
 </div>
 <div id="show-me-the-processed-data" class="section level1">
 <h1>Show me the processed data</h1>
-<pre class="r"><code>pheatmap(D+0, show_rownames=FALSE) # D + 0 is trick to convert logical matrix to numeric matrix (FALSE=0, TRUE=1) </code></pre>
+<pre class="r"><code>pheatmap(D+0, show_rownames=FALSE) # D + 0 is my trick to convert logical matrix to numeric matrix (FALSE=0, TRUE=1) </code></pre>
 <p><img src="P01_DataExploration_short_files/figure-html/plot-1.png" width="672" /></p>
 </div>
 <div id="main-results-all-correlations" class="section level1">
