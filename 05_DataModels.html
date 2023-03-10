@@ -11,8 +11,9 @@
 
 <meta name="author" content="Thomas Manke" />
 
+<meta name="date" content="2023-03-10" />
 
-<title>04: Data Modeling</title>
+<title>05: Data Modeling</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -320,9 +321,9 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">04: Data Modeling</h1>
+<h1 class="title toc-ignore">05: Data Modeling</h1>
 <h4 class="author">Thomas Manke</h4>
-<h4 class="date">Fri Mar 10 11:11:06 2023</h4>
+<h4 class="date">2023-03-10</h4>
 
 </div>
 
@@ -336,25 +337,20 @@ id="toc-from-correlations-to-models">From Correlations to
 Models</a></li>
 <li><a href="#reporting-the-fit-model"
 id="toc-reporting-the-fit-model">Reporting the fit (model)</a></li>
-<li><a href="#plotting-predictions-with-confidence-intervals"
-id="toc-plotting-predictions-with-confidence-intervals">Plotting
-predictions with confidence intervals</a></li>
-<li><a href="#example-of-a-poor-fit-replace-petal-with-sepal"
-id="toc-example-of-a-poor-fit-replace-petal-with-sepal">Example of a
-poor fit (replace “Petal” with “Sepal)</a></li>
-<li><a href="#run-predictions" id="toc-run-predictions">Run
-predictions:</a></li>
+<li><a href="#predictions-with-confidence-intervals"
+id="toc-predictions-with-confidence-intervals">Predictions (with
+confidence intervals)</a></li>
+<li><a href="#poor-fit" id="toc-poor-fit">Poor Fit</a></li>
 <li><a href="#factorial-variables-as-predictors"
 id="toc-factorial-variables-as-predictors">Factorial variables as
 predictors</a></li>
+<li><a href="#anova" id="toc-anova">Anova</a></li>
 <li><a href="#more-complicated-models"
 id="toc-more-complicated-models">More complicated models</a></li>
-<li><a href="#anova" id="toc-anova">Anova</a></li>
-<li><a href="#model-checking" id="toc-model-checking">Model
-checking</a></li>
-<li><a href="#diagnostic-plots" id="toc-diagnostic-plots">Diagnostic
+<li><a href="#model-checking-diagnostic-plots"
+id="toc-model-checking-diagnostic-plots">Model Checking: Diagnostic
 Plots</a></li>
-<li><a href="#review" id="toc-review">Review:</a></li>
+<li><a href="#review" id="toc-review">Review</a></li>
 </ul>
 </div>
 
@@ -373,24 +369,28 @@ str(niris)</code></pre>
 <pre class="r"><code># assign species-colors to each observation 
 cols = iris$Species                        # understand how color is defined
 pairs(niris, col=cols, lower.panel=NULL)   # &quot;cols&quot; was defined in task above</code></pre>
-<p><img src="04_DataModels_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="05_DataModels_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <hr />
 </div>
 <div id="from-correlations-to-models" class="section level1">
 <h1>From Correlations to Models</h1>
-<p>Goal: Model some dependent variables y as function of other
-explanatory variables x (features)</p>
-<p><span class="math inline">\(y = f(\theta, x) = \theta_1 x +
-\theta_0\)</span></p>
+<p><strong>Goal:</strong></p>
+<p>Model some dependent variable y as function of other explanatory
+variables x (features)</p>
+<p><span class="math display">\[
+y = f(\theta, x) = \theta_1 x +  \theta_0
+\]</span></p>
 <p>For <span class="math inline">\(N\)</span> data points, choose
 parameters <span class="math inline">\(\theta\)</span> by ordinary least
 squares:</p>
-<p><span class="math inline">\(RSS=\sum_{i=1}^{N} (y_i - y(\theta,
-x_i))^2 \to min\)</span></p>
+<p><span class="math display">\[
+RSS=\sum_{i=1}^{N} (y_i - f(\theta, x_i))^2 \to min
+\]</span></p>
+<p>Easy in R:</p>
 <pre class="r"><code>plot(Petal.Width ~ Petal.Length, data=iris, col=Species) # use model (&quot;formula&quot;) notation
 fit=lm(Petal.Width ~ Petal.Length, data=iris)       # fit a linear model
 abline(fit, lwd=3, lty=2)                           # add regression line</code></pre>
-<p><img src="04_DataModels_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="05_DataModels_files/figure-html/ols-1.png" width="672" /></p>
 <p><strong>Task</strong>: What kind of class / data type is the object
 “fit”? Extract the coefficients of the fitted line and determine the
 residual degrees of freedom.</p>
@@ -400,14 +400,7 @@ residual degrees of freedom.</p>
 </div>
 <div id="reporting-the-fit-model" class="section level1">
 <h1>Reporting the fit (model)</h1>
-<pre class="r"><code>coefficients(fit)</code></pre>
-<pre><code>##  (Intercept) Petal.Length 
-##   -0.3630755    0.4157554</code></pre>
-<pre class="r"><code>confint(fit)   # Try to change the confidence level: ?confint</code></pre>
-<pre><code>##                   2.5 %     97.5 %
-## (Intercept)  -0.4416501 -0.2845010
-## Petal.Length  0.3968193  0.4346915</code></pre>
-<pre class="r"><code>summary(fit)</code></pre>
+<pre class="r"><code>summary(fit)        # summary() behaves differently for fit objects</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = Petal.Width ~ Petal.Length, data = iris)
@@ -426,15 +419,28 @@ residual degrees of freedom.</p>
 ## Residual standard error: 0.2065 on 148 degrees of freedom
 ## Multiple R-squared:  0.9271, Adjusted R-squared:  0.9266 
 ## F-statistic:  1882 on 1 and 148 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>This is a good fit - as suggested by a small residual standard error,
-a large coefficient of variation <span class="math inline">\(R^2 \in
-(0,1)\)</span>, a small p-value, (and by visualization).</p>
-<p><span class="math inline">\(R^2 = 1 - \frac{RSS}{TSS} = 1 -
-\frac{\sum_i(y_i - y(\theta,x_i))^2}{\sum_i(y_i-\bar{y})^2}\)</span></p>
+<pre class="r"><code>coefficients(fit)   # more functions for specific elements</code></pre>
+<pre><code>##  (Intercept) Petal.Length 
+##   -0.3630755    0.4157554</code></pre>
+<pre class="r"><code>confint(fit)        # Try to change the confidence level: ?confint</code></pre>
+<pre><code>##                   2.5 %     97.5 %
+## (Intercept)  -0.4416501 -0.2845010
+## Petal.Length  0.3968193  0.4346915</code></pre>
+<p>This is a good fit as suggested by a</p>
+<ul>
+<li>small residual standard error</li>
+<li>a large coefficient of variation <span
+class="math inline">\(R^2\)</span></li>
+<li>a small p-value</li>
+<li>and by visualization</li>
+</ul>
+<p><span class="math display">\[
+R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{\sum_i(y_i -
+y(\theta,x_i))^2}{\sum_i(y_i-\bar{y})^2}
+\]</span></p>
 </div>
-<div id="plotting-predictions-with-confidence-intervals"
-class="section level1">
-<h1>Plotting predictions with confidence intervals</h1>
+<div id="predictions-with-confidence-intervals" class="section level1">
+<h1>Predictions (with confidence intervals)</h1>
 <pre class="r"><code>x=iris$Petal.Length                       # explanatory variable from fit (here:Petal.Length)
 xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
 ndf=data.frame(Petal.Length=xn)           # put them into new data frame
@@ -445,24 +451,20 @@ lines(xn, p[,&quot;lwr&quot;] )
 lines(xn, p[,&quot;upr&quot;] )
 
 #some fancy filling
-#polygon(c(rev(xn), xn), c(rev(p[ ,&quot;upr&quot;]), p[ ,&quot;lwr&quot;]), col = rgb(1,0,0,0.5), border = NA)
-
-## using ggplot2 - full introduction later
-library(ggplot2)</code></pre>
-<p><img src="04_DataModels_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-<pre class="r"><code>g = ggplot(iris, aes(Petal.Length, Petal.Width, colour=Species))
-g + geom_point() + geom_smooth(method=&quot;lm&quot;, se=TRUE, color=&quot;red&quot;) + geom_smooth(method=&quot;loess&quot;, colour=&quot;blue&quot;)</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
-## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="04_DataModels_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+polygon(c(rev(xn), xn), c(rev(p[ ,&quot;upr&quot;]), p[ ,&quot;lwr&quot;]), col = rgb(1,0,0,0.5), border = NA)</code></pre>
+<p><img src="05_DataModels_files/figure-html/predictions-1.png" width="672" /></p>
+<pre class="r"><code>## using ggplot2 - full introduction later
+#library(ggplot2)
+#g = ggplot(iris, aes(Petal.Length, Petal.Width, colour=Species))
+#g + geom_point() + geom_smooth(method=&quot;lm&quot;, se=TRUE, color=&quot;red&quot;) + geom_smooth(method=&quot;loess&quot;, colour=&quot;blue&quot;)</code></pre>
 </div>
-<div id="example-of-a-poor-fit-replace-petal-with-sepal"
-class="section level1">
-<h1>Example of a poor fit (replace “Petal” with “Sepal)</h1>
+<div id="poor-fit" class="section level1">
+<h1>Poor Fit</h1>
+<p>Just replace “Petal” with “Sepal”</p>
 <pre class="r"><code>plot(Sepal.Width ~ Sepal.Length, data=iris, col=cols)  
 fit1=lm(Sepal.Width ~ Sepal.Length, data=iris)     
 abline(fit1, lwd=3, lty=2)    </code></pre>
-<p><img src="04_DataModels_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="05_DataModels_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <pre class="r"><code>confint(fit1)                     # estimated slope is indistinguishable from zero</code></pre>
 <pre><code>##                   2.5 %     97.5 %
 ## (Intercept)   2.9178767 3.92001694
@@ -488,19 +490,9 @@ abline(fit1, lwd=3, lty=2)    </code></pre>
 ## F-statistic: 2.074 on 1 and 148 DF,  p-value: 0.1519</code></pre>
 <p><em>Interpretation</em>: slope is not significantly distinct from
 0.</p>
-</div>
-<div id="run-predictions" class="section level1">
-<h1>Run predictions:</h1>
-<pre class="r"><code>x=iris$Sepal.Length                       # explanatory variable from fit (here:Sepal.Length)
-xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
-ndf=data.frame(Sepal.Length=xn)           # put them into data frame
-
-p=predict(fit1, ndf, interval = &#39;confidence&#39; , level = 0.95)  # predict values
-
-plot(Sepal.Width ~ Sepal.Length, data=iris, col=Species)
-lines(xn, p[,&quot;lwr&quot;] )
-lines(xn, p[,&quot;upr&quot;] )</code></pre>
-<p><img src="04_DataModels_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><strong>Task</strong>: Use the above template to make predictions for
+the new poor fit.
+<img src="05_DataModels_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 <div id="factorial-variables-as-predictors" class="section level1">
 <h1>Factorial variables as predictors</h1>
@@ -508,7 +500,7 @@ lines(xn, p[,&quot;upr&quot;] )</code></pre>
 (categorical) variable with 3 levels. Other typical examples: different
 experimental conditions or treatments.</p>
 <pre class="r"><code>plot(Petal.Width ~ Species, data=iris)</code></pre>
-<p><img src="04_DataModels_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="05_DataModels_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <pre class="r"><code>fit=lm(Petal.Width ~ Species, data=iris)
 summary(fit)</code></pre>
 <pre><code>## 
@@ -531,17 +523,36 @@ summary(fit)</code></pre>
 ## Multiple R-squared:  0.9289, Adjusted R-squared:  0.9279 
 ## F-statistic:   960 on 2 and 147 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><em>Interpretation</em>:</p>
-<p>“setosa” (1st species=reference) has mean Petal.Width=0.246(29). This
-is significantly different from 0 (p-value small. useless) “versicolor”
-(2nd species) has mean Petal.Width = Petal.Width(setosa) + 1.08(4) which
-is significantly larger (t~26. tiny p-value). there is a stat.
-significant difference between groups/species. “virginica” (3rd species)
-has mean Petal.Width = Petal.Width(setosa) + 1.78(4)</p>
+<ul>
+<li>“setosa” (1st species) has mean Petal.Width=0.246(29) - reference
+baseline</li>
+<li>“versicolor” (2nd species) has mean Petal.Width =
+Petal.Width(setosa) + 1.08(4)</li>
+<li>“virginica” (3rd species) has mean Petal.Width = Petal.Width(setosa)
++ 1.78(4)</li>
+</ul>
+</div>
+<div id="anova" class="section level1">
+<h1>Anova</h1>
+<p><code>summary(fit)</code> contains information on the individual
+coefficients. They are difficult to interpret</p>
+<pre class="r"><code>anova(fit)    </code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Petal.Width
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Species     2 80.413  40.207  960.01 &lt; 2.2e-16 ***
+## Residuals 147  6.157   0.042                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><strong>Interpretation</strong>: variable “Species” accounts for much
+variation in “Petal.Width”</p>
+<hr />
 </div>
 <div id="more-complicated-models" class="section level1">
 <h1>More complicated models</h1>
-<p>Determine residual standard error for different fits with various
-complexity</p>
+<p>Determine residual standard error <code>sigma</code> for different
+fits with various complexity</p>
 <pre class="r"><code>fit=lm(Petal.Width ~ Petal.Length, data=iris)
 paste(toString(fit$call), sigma(fit))</code></pre>
 <pre><code>## [1] &quot;lm, Petal.Width ~ Petal.Length, iris 0.206484348913609&quot;</code></pre>
@@ -551,123 +562,23 @@ paste(toString(fit$call), sigma(fit))</code></pre>
 <pre class="r"><code>fit=lm(Petal.Width ~ Species, data=iris)                      # function of categorical variables
 paste(toString(fit$call), sigma(fit))</code></pre>
 <pre><code>## [1] &quot;lm, Petal.Width ~ Species, iris 0.204650024805914&quot;</code></pre>
-<pre class="r"><code>fit=lm(Petal.Width ~ . , data=iris)                          # function of all other variable (numerical and categorical)
+<pre class="r"><code>fit=lm(Petal.Width ~ . , data=iris)                           # function of all other variable (numerical and categorical)
 paste(toString(fit$call), sigma(fit))</code></pre>
 <pre><code>## [1] &quot;lm, Petal.Width ~ ., iris 0.166615943019283&quot;</code></pre>
 <p>… more complex models tend to have smaller residual standard error
--&gt; “model selection” (AIC)</p>
+(overfitting?)</p>
+<hr />
 </div>
-<div id="anova" class="section level1">
-<h1>Anova</h1>
-<p>summary(fit) contains information on the individual coefficients.
-They are difficult to interpret</p>
-<pre class="r"><code>fit = lm(Petal.Width ~ Petal.Length + Sepal.Width + Sepal.Length + Species , data=iris) 
-summary(fit)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = Petal.Width ~ Petal.Length + Sepal.Width + Sepal.Length + 
-##     Species, data = iris)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.59239 -0.08288 -0.01349  0.08773  0.45239 
-## 
-## Coefficients:
-##                   Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)       -0.47314    0.17659  -2.679  0.00824 ** 
-## Petal.Length       0.24220    0.04884   4.959 1.97e-06 ***
-## Sepal.Width        0.24220    0.04776   5.072 1.20e-06 ***
-## Sepal.Length      -0.09293    0.04458  -2.084  0.03889 *  
-## Speciesversicolor  0.64811    0.12314   5.263 5.04e-07 ***
-## Speciesvirginica   1.04637    0.16548   6.323 3.03e-09 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 0.1666 on 144 degrees of freedom
-## Multiple R-squared:  0.9538, Adjusted R-squared:  0.9522 
-## F-statistic: 594.9 on 5 and 144 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p><strong>Question</strong>: Rather than looking at differences between
-different factor levels. Does the factor “Species” as a whole account
-for variation in the observed Petal.Width. Sum-of-squared analysis:
-Anova</p>
-<pre class="r"><code>anova(fit) </code></pre>
-<pre><code>## Analysis of Variance Table
-## 
-## Response: Petal.Width
-##               Df Sum Sq Mean Sq   F value    Pr(&gt;F)    
-## Petal.Length   1 80.260  80.260 2891.1136 &lt; 2.2e-16 ***
-## Sepal.Width    1  0.228   0.228    8.2248  0.004754 ** 
-## Sepal.Length   1  0.701   0.701   25.2683 1.459e-06 ***
-## Species        2  1.383   0.691   24.9043 5.143e-10 ***
-## Residuals    144  3.998   0.028                        
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre class="r"><code># order of variable matters: the following is not the same
-# anova( lm(Petal.Width ~ . , data=iris) )</code></pre>
-<p><em>Interpretation</em>: Species account for much variation in the
-data (F(2, 147)=960. p tiny)</p>
-</div>
-<div id="model-checking" class="section level1">
-<h1>Model checking</h1>
-<p>Searching for patterns:</p>
-<pre class="r"><code>plot(resid(fit))                # residuals independent?</code></pre>
-<p><img src="04_DataModels_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<pre class="r"><code>plot(predict(fit), resid(fit))  # residuals (and variation) dependent on prediction?</code></pre>
-<p><img src="04_DataModels_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
-<pre class="r"><code>qqnorm(resid(fit))              # residuals normally distributed?</code></pre>
-<p><img src="04_DataModels_files/figure-html/unnamed-chunk-13-3.png" width="672" /></p>
-<p><strong>Task</strong>: Repeat the linear regression Petal.Width ~
-Petal.Length with an <em>outlier</em> in the data</p>
-<pre class="r"><code>irisout=rbind(iris,list(5.8,3, 4, 20, &quot;virginica&quot;))</code></pre>
-<pre><code>## &#39;data.frame&#39;:    151 obs. of  5 variables:
-##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
-##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
-##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
-##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
-##  $ Species     : Factor w/ 3 levels &quot;setosa&quot;,&quot;versicolor&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
-<pre><code>##   Sepal.Length    Sepal.Width     Petal.Length   Petal.Width    
-##  Min.   :4.300   Min.   :2.000   Min.   :1.00   Min.   : 0.100  
-##  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.60   1st Qu.: 0.300  
-##  Median :5.800   Median :3.000   Median :4.30   Median : 1.300  
-##  Mean   :5.843   Mean   :3.057   Mean   :3.76   Mean   : 1.324  
-##  3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.10   3rd Qu.: 1.800  
-##  Max.   :7.900   Max.   :4.400   Max.   :6.90   Max.   :20.000  
-##        Species  
-##  setosa    :50  
-##  versicolor:50  
-##  virginica :51  
-##                 
-##                 
-## </code></pre>
-<p><img src="04_DataModels_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<pre><code>## 
-## Call:
-## lm(formula = Petal.Width ~ Petal.Length, data = irisout)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -0.7068 -0.2507 -0.1283  0.0070 18.5739 
-## 
-## Coefficients:
-##              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  -0.27563    0.29658  -0.929    0.354    
-## Petal.Length  0.42544    0.07149   5.951 1.83e-08 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 1.541 on 149 degrees of freedom
-## Multiple R-squared:  0.192,  Adjusted R-squared:  0.1866 
-## F-statistic: 35.41 on 1 and 149 DF,  p-value: 1.83e-08</code></pre>
-</div>
-<div id="diagnostic-plots" class="section level1">
-<h1>Diagnostic Plots</h1>
+<div id="model-checking-diagnostic-plots" class="section level1">
+<h1>Model Checking: Diagnostic Plots</h1>
 <p>“fit” is a large object of the lm-class which contains also lots of
 diagnostic informmation. Notice how the behaviour of “plot” changes.</p>
-<pre class="r"><code>op=par(no.readonly=TRUE)  # safe only resettable graphical parameters, avoids many warnings
-par(mfrow=c(2,2))         # change graphical parameters: 2x2 images on device
-plot(fit2,col=irisout$Species)       # four plots rather than one</code></pre>
-<p><img src="04_DataModels_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
-<pre class="r"><code>par(op)                   # reset graphical parameters</code></pre>
+<pre class="r"><code>fit=lm(Petal.Width ~ ., data=iris)
+op=par(no.readonly=TRUE)   # safe only resettable graphical parameters, avoids many warnings
+par(mfrow=c(2,2))          # change graphical parameters: 2x2 images on device
+plot(fit,col=iris$Species) # four plots rather than one</code></pre>
+<p><img src="05_DataModels_files/figure-html/fit_diag-1.png" width="672" /></p>
+<pre class="r"><code>par(op)                    # reset graphical parameters</code></pre>
 <p>more examples here: <a
 href="http://www.statmethods.net/stats/regression.html"
 class="uri">http://www.statmethods.net/stats/regression.html</a></p>
@@ -686,7 +597,7 @@ influence on fit</li>
 <hr />
 </div>
 <div id="review" class="section level1">
-<h1>Review:</h1>
+<h1>Review</h1>
 <ul>
 <li>dependencies between variable can often be modeled</li>
 <li>linear model lm(): fitting, summary and interpretation</li>

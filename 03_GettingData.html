@@ -335,9 +335,12 @@ $(document).ready(function () {
 <li><a href="#from-url" id="toc-from-url">From URL</a></li>
 <li><a href="#compressed-formats" id="toc-compressed-formats">Compressed
 formats</a></li>
+<li><a href="#writing-data" id="toc-writing-data">Writing data</a></li>
 <li><a href="#rdata" id="toc-rdata">RData</a></li>
 <li><a href="#r-scripts" id="toc-r-scripts">R Scripts</a></li>
 <li><a href="#review" id="toc-review">Review</a></li>
+<li><a href="#appendix-reality-of-io"
+id="toc-appendix-reality-of-io">Appendix: reality of I/O</a></li>
 </ul>
 </div>
 
@@ -390,12 +393,27 @@ str(d)</code></pre>
 ##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
 ##  $ Species     : chr  &quot;setosa&quot; &quot;setosa&quot; &quot;setosa&quot; &quot;setosa&quot; ...</code></pre>
 </div>
+<div id="writing-data" class="section level2">
+<h2>Writing data</h2>
+<p>There are many ways to save data to text files. One of the simplest
+uses <code>write.csv</code>.</p>
+<pre class="r"><code>write.csv(iris, file=&quot;iris.csv&quot;, row.names=FALSE, quote=FALSE)</code></pre>
+<p>For large data you may prefer to write compressed version:</p>
+<pre class="r"><code>write.csv(iris, gzfile(&quot;iris.csv.gz&quot;))</code></pre>
+<p><strong>Task</strong>:</p>
+<ul>
+<li>Change some of the parameters (row.names, quote) and observed their
+effect on the resulting file</li>
+<li>Save only the subset of flowers where Species=“setosa” to a file
+setosa.tsv</li>
+</ul>
+</div>
 <div id="rdata" class="section level2">
 <h2>RData</h2>
 <p>In the context of the R-programming language, Rdata is a very
-convenient format that can be used to save multiple data structures or
-even whole environments It’s very efficient when you exchange your data
-with other R-users (or your future self)</p>
+convenient (binary) format that can be used to save multiple data
+structures or even whole environments It’s very efficient when you
+exchange your data with other R-users (or your future self)</p>
 <div id="specific-objects" class="section level3">
 <h3>Specific objects</h3>
 <pre class="r"><code>d = iris              # copy of iris data
@@ -494,6 +512,34 @@ many species are left?</p>
 <li>bring time and patience</li>
 </ul></li>
 <li>R scripts: writing and running (source)</li>
+</ul>
+<hr />
+<p><br><br><br></p>
+</div>
+<div id="appendix-reality-of-io" class="section level1">
+<h1>Appendix: reality of I/O</h1>
+<p>Many external data is badly formatted, leading to much wasted time -
+before any analysis.</p>
+<p>The code snippets below are not run - but try them out</p>
+<pre class="r"><code>file=&quot;../data/GeneList.tsv&quot;     
+# file=&quot;https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/GeneList.tsv&quot;  
+read.csv(file)      
+read.csv(file, comment.char = &quot;%&quot;)                        # comment lines
+read.csv(file, comment.char = &quot;%&quot;, sep=&quot;\t&quot;)              # separators</code></pre>
+<pre class="r"><code># use ncol, is.na(), na.omit()
+ic = colSums(is.na(d)) == ncol(d) # columns where all enries are NA
+d1 = d[, !ic]                     # exclude those columns
+
+d1
+na.omit(d) 
+na.omit(d1)</code></pre>
+<p><strong>Messages:</strong></p>
+<ul>
+<li>This file is a mess</li>
+<li>Many data come like this</li>
+<li>read functions have many parameters for better control</li>
+<li>there are also other dedicated software packages to help
+(somewhat)</li>
 </ul>
 </div>
 

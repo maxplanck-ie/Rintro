@@ -352,7 +352,7 @@ frame and understand the error.</p>
 <pre class="r"><code>niris=iris[,-5]     # define numeric iris data
 M=as.matrix(niris)  # there are many as.* functions that convert among data structures
 image(M)</code></pre>
-<p><img src="04_DataVisualization_files/figure-html/image-1.png" width="672" /></p>
+<p><img src="06_DataVisualization_files/figure-html/image-1.png" width="672" /></p>
 <p>Be aware:</p>
 <ul>
 <li>Columns (=variables) appear as rows in image(). How could this be
@@ -369,9 +369,9 @@ br=seq(-5,7,by=0.5)   # set common break points for the histograms below
 hist(M[,&quot;Sepal.Width&quot;], breaks = br)
 hist(S[,&quot;Sepal.Width&quot;], breaks = br, add=TRUE, col=&quot;red&quot;)      # add histogram to current plot
 legend(&quot;topright&quot;, c(&quot;orig&quot;,&quot;scaled&quot;), fill=c(&quot;white&quot;, &quot;red&quot;))</code></pre>
-<p><img src="04_DataVisualization_files/figure-html/scaling-1.png" width="672" /></p>
+<p><img src="06_DataVisualization_files/figure-html/scaling-1.png" width="672" /></p>
 <pre class="r"><code>image(S,main=&quot;Normalized IRIS data&quot;, axes=FALSE)              # as before, suppress axes</code></pre>
-<p><img src="04_DataVisualization_files/figure-html/scaling-2.png" width="672" /></p>
+<p><img src="06_DataVisualization_files/figure-html/scaling-2.png" width="672" /></p>
 <pre class="r"><code>#add axes flexibly
 #axis(4,at=seq(0,1,length.out=ncol(S)), labels=colnames(S), las=2) # Understand this command</code></pre>
 <div id="heatmaps" class="section level2">
@@ -380,7 +380,7 @@ legend(&quot;topright&quot;, c(&quot;orig&quot;,&quot;scaled&quot;), fill=c(&quo
 according to some distance measure (default: Euclidean) and hierarchical
 clustering method (default: complete)</p>
 <pre class="r"><code>heatmap(S)</code></pre>
-<p><img src="04_DataVisualization_files/figure-html/heatmap-1.png" width="672" /></p>
+<p><img src="06_DataVisualization_files/figure-html/heatmap-1.png" width="672" /></p>
 <p>Notice that:</p>
 <ul>
 <li>unlike image(), the heatmap is already in the “canonical”
@@ -395,7 +395,7 @@ e.g. gplots::heatmap.2</li>
 </ul>
 <pre class="r"><code>cols = rainbow(3)[iris$Species]            # understand how color is defined
 heatmap(S,scale=&quot;none&quot;, RowSideColors=cols,labRow=FALSE, cexCol=0.9)</code></pre>
-<p><img src="04_DataVisualization_files/figure-html/heatmap_with_col-1.png" width="672" /></p>
+<p><img src="06_DataVisualization_files/figure-html/heatmap_with_col-1.png" width="672" /></p>
 </div>
 </div>
 <div id="sending-plots-to-files" class="section level1">
@@ -433,10 +433,10 @@ class="uri">https://stats.stackexchange.com/questions/2691/making-sense-of-princ
 <pre class="r"><code>R=pca$rotation  # rotation matrix
 S=pca$x         # score matrix = rotated scaled data matrix = Ds %*% R
 pairs(S, col=s) # </code></pre>
-<p><img src="04_DataVisualization_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="06_DataVisualization_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre class="r"><code>plot(R[,1:2], main=&quot;Rotations&quot;)
 arrows(0,0,R[,1], R[,2], col=&quot;red&quot;)  # add arrows: ?arrows</code></pre>
-<p><img src="04_DataVisualization_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<p><img src="06_DataVisualization_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
 <pre class="r"><code># covariance matrix of scores is diagonal (by design)
 # --&gt; principal components are uncorrelated
 CS=cov(S)   # = t(S) %*% S / (nrow(S) - 1)
@@ -454,11 +454,11 @@ X_s~~~;~~~ X_s \equiv (X-\bar X)/\sigma ~~~({\rm scaled})\)</span></p>
 we may as well represent the transformed data in only the first two
 dimensions:</p>
 <pre class="r"><code>plot(S[,1:2],pch=21, bg=s)  # score-plot</code></pre>
-<p><img src="04_DataVisualization_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="06_DataVisualization_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>A biplot represents both the observations and the old variables in a
 new coordinate system (up-to-rescaling)</p>
 <pre class="r"><code>biplot(pca, pc.biplot = TRUE) </code></pre>
-<p><img src="04_DataVisualization_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="06_DataVisualization_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <hr />
 </div>
 <div id="review" class="section level1">

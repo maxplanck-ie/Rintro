@@ -13,7 +13,7 @@
 
 <meta name="date" content="2023-03-10" />
 
-<title>03: Data Descriptions and Visualizations</title>
+<title>04: Data Descriptions and Visualizations</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -323,7 +323,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">03: Data Descriptions and
+<h1 class="title toc-ignore">04: Data Descriptions and
 Visualizations</h1>
 <h4 class="author">Thomas Manke</h4>
 <h4 class="date">2023-03-10</h4>
@@ -333,8 +333,8 @@ Visualizations</h1>
 <div id="TOC">
 <ul>
 <li><a href="#r-markdown" id="toc-r-markdown">R Markdown</a></li>
-<li><a href="#lecture-materials" id="toc-lecture-materials">Lecture
-materials</a></li>
+<li><a href="#lecture-material" id="toc-lecture-material">Lecture
+material</a></li>
 <li><a href="#descriptive-statistics"
 id="toc-descriptive-statistics">Descriptive Statistics</a></li>
 <li><a href="#boxplot-a-more-condensed-summary"
@@ -347,7 +347,7 @@ categorical variables</a></li>
 <li><a href="#all-against-all-correlations"
 id="toc-all-against-all-correlations">All-Against-All
 Correlations</a></li>
-<li><a href="#review" id="toc-review">Review:</a></li>
+<li><a href="#review" id="toc-review">Review</a></li>
 </ul>
 </div>
 
@@ -356,31 +356,46 @@ Correlations</a></li>
 <p>R scripts (.R) help to define and run reproducible analysis
 workflows, but they lack documentation (other than comments).</p>
 <p>R Markdown files (*.Rmd) combine scripts with powerful text
-formatting. They can be run (=“rendered”=“knit”) to produce html and
-pdf.</p>
-<p><strong>Task</strong>: In Rstudio, open a new R markdown document
-with <code>File &gt; New File &gt; R Markdown...</code>.<br />
-This will open a template for an Rmd file that can be knit</p>
-<p><strong>Notice</strong>:<br />
-- To convert this file into html press <code>Knit</code> - try it out!
-You may have to save it first as - e.g. “first.Rmd” - There is a
-<code>YAML</code> header that contains parameters which will affect the
-rendering process - customize them - In R studio the code blocks can be
-run individually using the embedded “Play” button - try it out</p>
+formatting. They can be rendered (=“knit”) to produce html and pdf.</p>
+<p><strong>Task</strong>: In Rstudio,</p>
+<ul>
+<li>open a new R markdown document with
+<code>File &gt; New File &gt; R Markdown...</code>. (This will open a
+template for an Rmd file that can be knit)</li>
+<li>To convert this file into html press <code>Knit</code> - try it out!
+You may have to save it first as - e.g. “first.Rmd”</li>
+<li>There is a <code>YAML</code> header that contains parameters which
+will affect the rendering process - customize them</li>
+<li>The rest of the document are text blocks (with simple format
+instructions) and code blocks (with R code)</li>
+<li>In R studio, the code blocks can be run individually using the
+embedded “Play” button - try it out</li>
+<li>Play time: Modify the yaml header, text blocks or code - or all of
+it. “knit” the documnt and observe changes.</li>
+</ul>
 </div>
-<div id="lecture-materials" class="section level1">
-<h1>Lecture materials</h1>
+<div id="lecture-material" class="section level1">
+<h1>Lecture material</h1>
 <p>This lecture series is written in R Markdown and is publically
 available on github: <a
 href="https://github.com/maxplanck-ie/Rintro.git"
 class="uri">https://github.com/maxplanck-ie/Rintro.git</a> (!branch:
 2023.03!)</p>
-<p>You can access this material in various different ways - download as
-zip archive and unpack - Console (advanced): git clone -b 2023.03 <a
+<p>You can access this material in various different ways:</p>
+<ul>
+<li>download as zip archive and unpack</li>
+<li>Console (advanced): git clone -b 2023.03 <a
 href="https://github.com/maxplanck-ie/Rintro.git"
-class="uri">https://github.com/maxplanck-ie/Rintro.git</a> - Rstudio
-(recommended): open a new Rproject (“New Project &gt; Version Control
-&gt; Git &gt; ) and provide the same link as Repository URL</p>
+class="uri">https://github.com/maxplanck-ie/Rintro.git</a></li>
+<li>Rstudio (recommended): open a new Rproject (“New Project &gt;
+Version Control &gt; Git &gt; ) and provide the same link as Repository
+URL</li>
+</ul>
+<p><strong>Notice</strong>:<br />
+The rmd files are provided for your convenience. This should save some
+typing (and common errors).<br />
+However, this is an <strong>interactive</strong> course, so please use
+the code, understand it, change it, and break it !</p>
 </div>
 <div id="descriptive-statistics" class="section level1">
 <h1>Descriptive Statistics</h1>
@@ -461,29 +476,30 @@ store the result in a new data.frame “niris”</p>
 ##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
 ##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
 ##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...</code></pre>
-<pre class="r"><code>cor(niris)   # correlation matrix. Which correlation coefficient?</code></pre>
+<pre class="r"><code>cor(niris)  # correlation matrix. Which correlation coefficient?</code></pre>
 <pre><code>##              Sepal.Length Sepal.Width Petal.Length Petal.Width
 ## Sepal.Length    1.0000000  -0.1175698    0.8717538   0.8179411
 ## Sepal.Width    -0.1175698   1.0000000   -0.4284401  -0.3661259
 ## Petal.Length    0.8717538  -0.4284401    1.0000000   0.9628654
 ## Petal.Width     0.8179411  -0.3661259    0.9628654   1.0000000</code></pre>
-<pre class="r"><code>pairs(niris) # provide a visualization, try also plot(iris)</code></pre>
+<pre class="r"><code>plot(niris) # provide a visualization for data frames, try also pairs(iris)</code></pre>
 <p><img src="04_DataDescriptions_files/figure-html/all_against_all-1.png" width="672" /></p>
 <pre class="r"><code># assign species-colors to each observation 
 cols = iris$Species                        # understand how color is defined
-pairs(niris, col=cols, lower.panel=NULL)   # &quot;cols&quot; was defined in task above</code></pre>
+plot(niris, col=cols, lower.panel=NULL)   # &quot;cols&quot; was defined in task above</code></pre>
 <p><img src="04_DataDescriptions_files/figure-html/all_against_all-2.png" width="672" /></p>
 <hr />
 </div>
 <div id="review" class="section level1">
-<h1>Review:</h1>
+<h1>Review</h1>
 <ul>
-<li>use and understand frequently used data sets (iris)</li>
+<li>R markdown files extend scripts and can be converted to
+html/pdf</li>
 <li>summary for descriptive statistics</li>
-<li>plot() for X-Y plots and overloading for other classes (lm)</li>
-<li>hist(), boxplot()</li>
-<li>customize arguments: line width, colours, …</li>
-<li>correlations: cor()</li>
+<li>simple plots with simple commands: plot(), hist(), …</li>
+<li>lots of parameters for customization: line width, colours, …</li>
+<li>correlation between variables: cor(), plot() - class specific
+behaviour</li>
 <li>Notice that the data used was extremely clean and structured:
 data()</li>
 </ul>
