@@ -11,7 +11,7 @@
 
 <meta name="author" content="Thomas Manke" />
 
-<meta name="date" content="2023-03-09" />
+<meta name="date" content="2023-03-10" />
 
 <title>03: Data Descriptions and Visualizations</title>
 
@@ -326,14 +326,15 @@ $(document).ready(function () {
 <h1 class="title toc-ignore">03: Data Descriptions and
 Visualizations</h1>
 <h4 class="author">Thomas Manke</h4>
-<h4 class="date">2023-03-09</h4>
+<h4 class="date">2023-03-10</h4>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#famous-data-sets" id="toc-famous-data-sets">Famous Data
-Sets</a></li>
+<li><a href="#r-markdown" id="toc-r-markdown">R Markdown</a></li>
+<li><a href="#lecture-materials" id="toc-lecture-materials">Lecture
+materials</a></li>
 <li><a href="#descriptive-statistics"
 id="toc-descriptive-statistics">Descriptive Statistics</a></li>
 <li><a href="#boxplot-a-more-condensed-summary"
@@ -350,37 +351,36 @@ Correlations</a></li>
 </ul>
 </div>
 
-<div id="famous-data-sets" class="section level1">
-<h1>Famous Data Sets</h1>
-<p>R has a large range of pre-defined data sets. They are frequently
-used to illustrate the functionality of code and software packages. Just
-type “data()” to get an overview. Let’s first focus on the “iris” data
-set</p>
-<div class="figure">
-<img src="images/sepal_petal.jpeg" alt="" />
-<p class="caption">Flower Measurements</p>
+<div id="r-markdown" class="section level1">
+<h1>R Markdown</h1>
+<p>R scripts (.R) help to define and run reproducible analysis
+workflows, but they lack documentation (other than comments).</p>
+<p>R Markdown files (*.Rmd) combine scripts with powerful text
+formatting. They can be run (=“rendered”=“knit”) to produce html and
+pdf.</p>
+<p><strong>Task</strong>: In Rstudio, open a new R markdown document
+with <code>File &gt; New File &gt; R Markdown...</code>.<br />
+This will open a template for an Rmd file that can be knit</p>
+<p><strong>Notice</strong>:<br />
+- To convert this file into html press <code>Knit</code> - try it out!
+You may have to save it first as - e.g. “first.Rmd” - There is a
+<code>YAML</code> header that contains parameters which will affect the
+rendering process - customize them - In R studio the code blocks can be
+run individually using the embedded “Play” button - try it out</p>
 </div>
-<p>(Image from blog of mathieu.guillame-bert.com)</p>
-<p>Try <code>?iris</code> to learn more about this data set.</p>
-<p>Type <code>iris</code> or <code>View(iris)</code>. Why is this not
-the best way to explore data?</p>
-<pre class="r"><code>str(iris)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
-##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
-##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
-##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
-##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
-##  $ Species     : Factor w/ 3 levels &quot;setosa&quot;,&quot;versicolor&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
-<pre class="r"><code>head(iris)</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Sepal.Length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sepal.Width"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Petal.Length"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Petal.Width"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Species"],"name":[5],"type":["fct"],"align":["left"]}],"data":[{"1":"5.1","2":"3.5","3":"1.4","4":"0.2","5":"setosa","_rn_":"1"},{"1":"4.9","2":"3.0","3":"1.4","4":"0.2","5":"setosa","_rn_":"2"},{"1":"4.7","2":"3.2","3":"1.3","4":"0.2","5":"setosa","_rn_":"3"},{"1":"4.6","2":"3.1","3":"1.5","4":"0.2","5":"setosa","_rn_":"4"},{"1":"5.0","2":"3.6","3":"1.4","4":"0.2","5":"setosa","_rn_":"5"},{"1":"5.4","2":"3.9","3":"1.7","4":"0.4","5":"setosa","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-<p><strong>Task</strong>: explore this data set in terms of data
-structures and observables. How many rows and columns does this data
-frame have? Of which type and class. How do you access the data for all
-petal lengths?</p>
+<div id="lecture-materials" class="section level1">
+<h1>Lecture materials</h1>
+<p>This lecture series is written in R Markdown and is publically
+available on github: <a
+href="https://github.com/maxplanck-ie/Rintro.git"
+class="uri">https://github.com/maxplanck-ie/Rintro.git</a> (!branch:
+2023.03!)</p>
+<p>You can access this material in various different ways - download as
+zip archive and unpack - Console (advanced): git clone -b 2023.03 <a
+href="https://github.com/maxplanck-ie/Rintro.git"
+class="uri">https://github.com/maxplanck-ie/Rintro.git</a> - Rstudio
+(recommended): open a new Rproject (“New Project &gt; Version Control
+&gt; Git &gt; ) and provide the same link as Repository URL</p>
 </div>
 <div id="descriptive-statistics" class="section level1">
 <h1>Descriptive Statistics</h1>
@@ -400,9 +400,9 @@ petal lengths?</p>
 ##                 
 ## </code></pre>
 <pre class="r"><code>plot(iris$Petal.Length) # a plot at last. Simple, but many arguments: ?plot </code></pre>
-<p><img src="03_DataDescriptions_files/figure-html/descriptive-1.png" width="672" /></p>
+<p><img src="04_DataDescriptions_files/figure-html/descriptive-1.png" width="672" /></p>
 <pre class="r"><code>hist(iris$Petal.Length) # and a histogram</code></pre>
-<p><img src="03_DataDescriptions_files/figure-html/descriptive-2.png" width="672" /></p>
+<p><img src="04_DataDescriptions_files/figure-html/descriptive-2.png" width="672" /></p>
 <p><strong>Task</strong> hist() can have many arguments. Use help to
 find out how the histogram can be customized (e.g. number of break
 points, title, colors). Try some of it.</p>
@@ -410,13 +410,13 @@ points, title, colors). Try some of it.</p>
 <div id="boxplot-a-more-condensed-summary" class="section level1">
 <h1>Boxplot: a more condensed summary</h1>
 <pre class="r"><code>boxplot(iris$Petal.Length)</code></pre>
-<p><img src="03_DataDescriptions_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="04_DataDescriptions_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p><strong>Task</strong>: The boxplot above is for <em>all</em> data.
 Create a boxplot of petal length for species “setosa” only.
-<img src="03_DataDescriptions_files/figure-html/boxplot-1.png" width="672" /></p>
+<img src="04_DataDescriptions_files/figure-html/boxplot-1.png" width="672" /></p>
 <p>Boxplot understands data frames</p>
 <pre class="r"><code>boxplot(iris) # What does the boxplot for Species mean?</code></pre>
-<p><img src="03_DataDescriptions_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="04_DataDescriptions_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
 <div id="interlude-factors-categorical-variables"
 class="section level1">
@@ -430,15 +430,15 @@ which are internally represented as integers.</p>
 <pre><code>## [1] &quot;integer&quot;</code></pre>
 <pre class="r"><code>ts=table(iris$Species)  # returns a contigency table ~&gt; histogram for categorical data
 barplot(ts, col=rainbow(3), ylab=&quot;observations&quot;, cex.names=0.9)</code></pre>
-<p><img src="03_DataDescriptions_files/figure-html/factors-1.png" width="672" /></p>
+<p><img src="04_DataDescriptions_files/figure-html/factors-1.png" width="672" /></p>
 <pre class="r"><code>pie(ts,col=rainbow(3))  # if you really must</code></pre>
-<p><img src="03_DataDescriptions_files/figure-html/factors-2.png" width="672" /></p>
+<p><img src="04_DataDescriptions_files/figure-html/factors-2.png" width="672" /></p>
 <hr />
 <p>Boxplot understands factors in data frames</p>
 <pre class="r"><code>boxplot( Petal.Length ~ Species, data = iris, las=2) # what does las=2 do ?</code></pre>
-<p><img src="03_DataDescriptions_files/figure-html/boxplot_factors-1.png" width="672" /></p>
+<p><img src="04_DataDescriptions_files/figure-html/boxplot_factors-1.png" width="672" /></p>
 <p><strong>Task</strong>: Use help to add three different colors:
-<img src="03_DataDescriptions_files/figure-html/colored_boxplot-1.png" width="672" /></p>
+<img src="04_DataDescriptions_files/figure-html/colored_boxplot-1.png" width="672" /></p>
 </div>
 <div id="correlations" class="section level1">
 <h1>Correlations</h1>
@@ -448,7 +448,7 @@ understand their correlations structure</p>
 y=iris$Petal.Width
 plot(x,y)                              # again: this can be customized
 abline(v=mean(x),h=mean(y),col=&quot;red&quot;)  # add vertical/horizontal lines</code></pre>
-<p><img src="03_DataDescriptions_files/figure-html/corr-1.png" width="672" /></p>
+<p><img src="04_DataDescriptions_files/figure-html/corr-1.png" width="672" /></p>
 <pre class="r"><code>cor(x,y)                               # a correlation coefficient: which one?</code></pre>
 <pre><code>## [1] 0.9628654</code></pre>
 </div>
@@ -468,11 +468,11 @@ store the result in a new data.frame “niris”</p>
 ## Petal.Length    0.8717538  -0.4284401    1.0000000   0.9628654
 ## Petal.Width     0.8179411  -0.3661259    0.9628654   1.0000000</code></pre>
 <pre class="r"><code>pairs(niris) # provide a visualization, try also plot(iris)</code></pre>
-<p><img src="03_DataDescriptions_files/figure-html/all_against_all-1.png" width="672" /></p>
+<p><img src="04_DataDescriptions_files/figure-html/all_against_all-1.png" width="672" /></p>
 <pre class="r"><code># assign species-colors to each observation 
 cols = iris$Species                        # understand how color is defined
 pairs(niris, col=cols, lower.panel=NULL)   # &quot;cols&quot; was defined in task above</code></pre>
-<p><img src="03_DataDescriptions_files/figure-html/all_against_all-2.png" width="672" /></p>
+<p><img src="04_DataDescriptions_files/figure-html/all_against_all-2.png" width="672" /></p>
 <hr />
 </div>
 <div id="review" class="section level1">

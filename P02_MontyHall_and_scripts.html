@@ -337,7 +337,7 @@ doors</code></pre>
 <p>First assume that the doors are shuffled randomly</p>
 <pre class="r"><code>doors=sample(doors) # Why does this amount to shuffling?
 doors</code></pre>
-<pre><code>## [1] &quot;W&quot;  &quot;L1&quot; &quot;L2&quot;</code></pre>
+<pre><code>## [1] &quot;L1&quot; &quot;L2&quot; &quot;W&quot;</code></pre>
 <p>Now the candidate picks a random door “pick” (hoping that it might be
 the winning door)</p>
 <pre class="r"><code>pick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)
@@ -402,8 +402,8 @@ cat(&quot;successes with switching= &quot;,success, &quot;success_rate: &quot;, 
 with some suitable name. Return to the console and execute the script
 using the <em>source</em> command</p>
 <pre class="r"><code>source(&quot;MontyHall.R&quot;)</code></pre>
-<pre><code>## successes with switching=  6649 success_rate:  0.6649 
-## successes with switching=  6663 success_rate:  0.6663</code></pre>
+<pre><code>## successes with switching=  6686 success_rate:  0.6686 
+## successes with switching=  6635 success_rate:  0.6635</code></pre>
 <p>You can share the script easily with all people who speak R –
 especially those who don’t like to switch.</p>
 </div>

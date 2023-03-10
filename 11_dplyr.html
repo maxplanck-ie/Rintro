@@ -11,7 +11,7 @@
 
 <meta name="author" content="Devon P. Ryan" />
 
-<meta name="date" content="2023-03-09" />
+<meta name="date" content="2023-03-10" />
 
 <title>Manipulating datasets with dplyr</title>
 
@@ -311,7 +311,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Manipulating datasets with dplyr</h1>
 <h4 class="author">Devon P. Ryan</h4>
-<h4 class="date">2023-03-09</h4>
+<h4 class="date">2023-03-10</h4>
 
 </div>
 
@@ -816,14 +816,14 @@ t4 = data_frame(d=rep(c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;), 2),
                 f=runif(6))
 inner_join(t3, t4, by=c(&quot;a&quot;=&quot;d&quot;, &quot;b&quot;=&quot;e&quot;))</code></pre>
 <pre><code>## # A tibble: 6 x 4
-##   a         b       c        f
-##   &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
-## 1 A         1 0.405   0.489   
-## 2 B         1 0.121   0.949   
-## 3 C         1 0.630   0.000326
-## 4 A         2 0.00323 0.0402  
-## 5 B         2 0.469   0.0150  
-## 6 C         2 0.724   0.0100</code></pre>
+##   a         b       c      f
+##   &lt;chr&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+## 1 A         1 0.445   0.0470
+## 2 B         1 0.940   0.660 
+## 3 C         1 0.928   0.221 
+## 4 A         2 0.953   0.226 
+## 5 B         2 0.0883  0.449 
+## 6 C         2 0.00167 0.394</code></pre>
 <p>By default, joins occur on all columns with the same name across
 tables!</p>
 </div>

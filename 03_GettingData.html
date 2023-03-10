@@ -11,7 +11,7 @@
 
 <meta name="author" content="Thomas Manke" />
 
-<meta name="date" content="2023-03-09" />
+<meta name="date" content="2023-03-10" />
 
 <title>02: Getting Data In and Out</title>
 
@@ -325,7 +325,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">02: Getting Data In and Out</h1>
 <h4 class="author">Thomas Manke</h4>
-<h4 class="date">2023-03-09</h4>
+<h4 class="date">2023-03-10</h4>
 
 </div>
 
@@ -425,7 +425,7 @@ prefer.</li>
 </ul>
 <pre class="r"><code># your code snippet here</code></pre>
 <p><strong>Notice</strong>: The suffix is not strictly necessary, but it
-is good practised and used consistently by the community.</p>
+is best practice and used consistently by the community.</p>
 <hr />
 </div>
 </div>
@@ -436,8 +436,8 @@ To record everything that was done - and ultimately to be able to
 reproduce this - we use scripts.</p>
 <p>Basically these are just lines of code that are collected in a text
 file.</p>
-<p>In Rstudio the can be creates using
-<code>File &gt; New File &gt; Rscript</code></p>
+<p>In Rstudio they can be created using
+<code>File &gt; New File &gt; R script</code></p>
 <p><strong>Task</strong>:</p>
 <ul>
 <li>Create a new R-script <code>filter_iris.R</code> to do the
@@ -455,36 +455,34 @@ number as variable <code>ns</code></li>
 <li>save the whole environment in a file <code>analysis.Rdata</code>
 (hint:)</li>
 <li>delete all variables in the environment</li>
-<li>report the output of sessionInfo()</li>
 </ul></li>
 <li>Save the script and run it (source)</li>
 <li>Bonus: Delete all whole environment reload it from the image
 file</li>
 </ul>
-<p><strong>Query</strong>:</p>
-<ul>
-<li>How many rows? How many columns?</li>
-<li>Which data yp</li>
-</ul>
+<p><strong>Query</strong>: After the filtering, how many flowers and how
+many species are left?</p>
 <hr />
 </div>
 <div id="review" class="section level1">
 <h1>Review</h1>
 <ul>
-<li>Many data sources, different formats &amp; structures
+<li>Many different data sources, formats &amp; structures
 <ul>
 <li>text files: <em>.tsv, </em>.csv, …</li>
 <li>compressed files: *.bed.gz</li>
-<li>application specific: .<em>Rdata, (.</em>xls)</li>
+<li>application specific: .<em>RData, (.</em>xls)</li>
 </ul></li>
-<li>Many ways to read data
+<li>Reading Data: many ways
 <ul>
-<li>read.csv, read.table(), scan(), … more to come</li>
+<li>read.csv(), read.table(), scan(), …</li>
 <li>from URL</li>
+<li>customization with parameters</li>
+<li>and there is more: special packages</li>
 </ul></li>
-<li>Writing Data
+<li>Writing Data: many ways
 <ul>
-<li>write.table</li>
+<li>write.csv</li>
 <li>save()</li>
 <li>save.image()</li>
 </ul></li>
