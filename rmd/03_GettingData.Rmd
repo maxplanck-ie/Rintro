@@ -66,8 +66,30 @@ d = read.csv(pipe(cmd), sep='\t')       # read as pipe
 str(d)
 ```
 
+## Writing data
+There are many ways to save data to text files. One of the simplest uses `write.csv`.
+```{r write_csv, eval=FALSE}
+write.csv(iris, file="iris.csv", row.names=FALSE, quote=FALSE)
+```
+
+For large data you may prefer to write compressed version:
+```{r write_gz, eval=FALSE}
+write.csv(iris, gzfile("iris.csv.gz"))
+```
+
+
+**Task**: 
+
+- Change some of the parameters (row.names, quote) and observed their effect on the resulting file
+- Save only the subset of flowers where Species="setosa" to a file setosa.tsv
+
+```{r, eval=FALSE, echo=FALSE}
+write.csv(iris[iris$Species=="setosa",], file="setosa.csv", row.names=FALSE, quote=FALSE)
+```
+
+
 ## RData
-In the context of the R-programming language, Rdata is a very convenient format that can be used to save multiple data structures or even whole environments 
+In the context of the R-programming language, Rdata is a very convenient (binary) format that can be used to save multiple data structures or even whole environments 
 It's very efficient when you exchange your data with other R-users (or your future self)
 
 ### Specific objects
@@ -159,3 +181,35 @@ In Rstudio they can be created using `File > New File > R script`
   - ensure clean and structured data
   - bring time and patience
 * R scripts: writing and running (source)
+
+***
+<br><br><br>
+
+# Appendix: reality of I/O
+Many external data is badly formatted, leading to much wasted time - before any analysis. 
+
+The code snippets below are not run - but try them out
+```{r trial_and_error, eval=FALSE, error=TRUE}
+file="../data/GeneList.tsv"     
+# file="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/GeneList.tsv"  
+read.csv(file)      
+read.csv(file, comment.char = "%")                        # comment lines
+read.csv(file, comment.char = "%", sep="\t")              # separators
+```
+
+
+```{r process_NA, eval=FALSE}
+# use ncol, is.na(), na.omit()
+ic = colSums(is.na(d)) == ncol(d) # columns where all enries are NA
+d1 = d[, !ic]                     # exclude those columns
+
+d1
+na.omit(d) 
+na.omit(d1)
+```
+**Messages:**
+
+- This file is a mess
+- Many data come like this
+- read functions have many parameters for better control
+- there are also other dedicated software packages to help (somewhat)

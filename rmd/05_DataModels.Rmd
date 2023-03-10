@@ -1,7 +1,7 @@
 ---
-title: "04: Data Modeling"
+title: "05: Data Modeling"
 author: "Thomas Manke"
-date:  "`r date() `"
+date:  '`r Sys.Date()`'
 output: 
   html_document:
     toc: true
@@ -32,16 +32,22 @@ pairs(niris, col=cols, lower.panel=NULL)   # "cols" was defined in task above
 
 # From Correlations to Models
 
-Goal: Model some dependent variables y as function of other explanatory variables x (features)
+**Goal:** 
 
-$y = f(\theta, x) = \theta_1 x +  \theta_0$
+Model some dependent variable y as function of other explanatory variables x (features)
+
+$$
+y = f(\theta, x) = \theta_1 x +  \theta_0
+$$
 
 For $N$ data points, choose parameters $\theta$ by ordinary least squares: 
 
-$RSS=\sum_{i=1}^{N} (y_i - y(\theta, x_i))^2 \to min$
+$$
+RSS=\sum_{i=1}^{N} (y_i - f(\theta, x_i))^2 \to min
+$$
 
-
-```{r}
+Easy in R:
+```{r ols}
 plot(Petal.Width ~ Petal.Length, data=iris, col=Species) # use model ("formula") notation
 fit=lm(Petal.Width ~ Petal.Length, data=iris)       # fit a linear model
 abline(fit, lwd=3, lty=2)                           # add regression line
@@ -55,19 +61,26 @@ fit$df.residual
 ```
 
 # Reporting the fit (model)
-```{r}
-coefficients(fit)
-confint(fit)   # Try to change the confidence level: ?confint
-summary(fit)
+```{r lm_summary}
+summary(fit)        # summary() behaves differently for fit objects
+coefficients(fit)   # more functions for specific elements
+confint(fit)        # Try to change the confidence level: ?confint
 ```
 
-This is a good fit - as suggested by a small residual standard error, a large coefficient of variation $R^2 \in (0,1)$, a small p-value, (and by visualization).  
+This is a good fit as suggested by a 
 
-$R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{\sum_i(y_i - y(\theta,x_i))^2}{\sum_i(y_i-\bar{y})^2}$
+- small residual standard error
+- a large coefficient of variation $R^2$ 
+- a small p-value 
+- and by visualization
+
+$$
+R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{\sum_i(y_i - y(\theta,x_i))^2}{\sum_i(y_i-\bar{y})^2}
+$$
 
 
-# Plotting predictions with confidence intervals
-```{r}
+# Predictions (with confidence intervals)
+```{r predictions}
 x=iris$Petal.Length                       # explanatory variable from fit (here:Petal.Length)
 xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
 ndf=data.frame(Petal.Length=xn)           # put them into new data frame
@@ -78,15 +91,17 @@ lines(xn, p[,"lwr"] )
 lines(xn, p[,"upr"] )
 
 #some fancy filling
-#polygon(c(rev(xn), xn), c(rev(p[ ,"upr"]), p[ ,"lwr"]), col = rgb(1,0,0,0.5), border = NA)
+polygon(c(rev(xn), xn), c(rev(p[ ,"upr"]), p[ ,"lwr"]), col = rgb(1,0,0,0.5), border = NA)
 
 ## using ggplot2 - full introduction later
-library(ggplot2)
-g = ggplot(iris, aes(Petal.Length, Petal.Width, colour=Species))
-g + geom_point() + geom_smooth(method="lm", se=TRUE, color="red") + geom_smooth(method="loess", colour="blue")
+#library(ggplot2)
+#g = ggplot(iris, aes(Petal.Length, Petal.Width, colour=Species))
+#g + geom_point() + geom_smooth(method="lm", se=TRUE, color="red") + geom_smooth(method="loess", colour="blue")
 ```
 
-# Example of a poor fit (replace "Petal" with "Sepal)
+# Poor Fit
+
+Just replace "Petal" with "Sepal"
 ```{r}
 plot(Sepal.Width ~ Sepal.Length, data=iris, col=cols)  
 fit1=lm(Sepal.Width ~ Sepal.Length, data=iris)     
@@ -96,8 +111,9 @@ summary(fit1)
 ```
 *Interpretation*: slope is not significantly distinct from 0.
 
-# Run predictions:
-```{r}
+
+**Task**: Use the above template to make predictions for the new poor fit.
+```{r echo=FALSE}
 x=iris$Sepal.Length                       # explanatory variable from fit (here:Sepal.Length)
 xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
 ndf=data.frame(Sepal.Length=xn)           # put them into data frame
@@ -121,12 +137,24 @@ summary(fit)
 ```
 *Interpretation*:
 
-"setosa" (1st species=reference) has mean Petal.Width=0.246(29). This is significantly different from 0 (p-value small. useless)
-"versicolor" (2nd species) has mean Petal.Width = Petal.Width(setosa) + 1.08(4) which is significantly larger (t~26. tiny p-value). there is a stat. significant difference between groups/species.
-"virginica" (3rd species) has mean Petal.Width = Petal.Width(setosa) + 1.78(4)
+- "setosa"     (1st species) has mean Petal.Width=0.246(29) - reference baseline
+- "versicolor" (2nd species) has mean Petal.Width = Petal.Width(setosa) + 1.08(4) 
+- "virginica"  (3rd species) has mean Petal.Width = Petal.Width(setosa) + 1.78(4)
+
+# Anova
+`summary(fit)` contains information on the individual coefficients. They are difficult to interpret
+
+```{r anova}
+anova(fit)    
+```
+
+**Interpretation**: variable "Species" accounts for much variation in "Petal.Width"
+
+***
 
 # More complicated models
-Determine residual standard error for different fits with various complexity
+Determine residual standard error `sigma` for different fits with various complexity
+
 ```{r}
 fit=lm(Petal.Width ~ Petal.Length, data=iris)
 paste(toString(fit$call), sigma(fit))
@@ -134,60 +162,23 @@ fit=lm(Petal.Width ~ Petal.Length + Sepal.Length, data=iris)  # function of more
 paste(toString(fit$call), sigma(fit))
 fit=lm(Petal.Width ~ Species, data=iris)                      # function of categorical variables
 paste(toString(fit$call), sigma(fit))
-fit=lm(Petal.Width ~ . , data=iris)                          # function of all other variable (numerical and categorical)
+fit=lm(Petal.Width ~ . , data=iris)                           # function of all other variable (numerical and categorical)
 paste(toString(fit$call), sigma(fit))
 ```
 
-... more complex models tend to have smaller residual standard error -> "model selection" (AIC)
+... more complex models tend to have smaller residual standard error (overfitting?)
 
+***
 
-# Anova
-summary(fit) contains information on the individual coefficients. They are difficult to interpret
-
-```{r}
-fit = lm(Petal.Width ~ Petal.Length + Sepal.Width + Sepal.Length + Species , data=iris) 
-summary(fit)
-```
-
-**Question**: Rather than looking at differences between different factor levels. Does the factor "Species" as a whole account for variation in the observed Petal.Width. Sum-of-squared analysis: Anova  
-```{r}
-anova(fit) 
-
-# order of variable matters: the following is not the same
-# anova( lm(Petal.Width ~ . , data=iris) )
-```
-*Interpretation*: Species account for much variation in the data (F(2, 147)=960. p tiny)
-
-# Model checking
-
-Searching for patterns:
-```{r}
-plot(resid(fit))                # residuals independent?
-plot(predict(fit), resid(fit))  # residuals (and variation) dependent on prediction?
-qqnorm(resid(fit))              # residuals normally distributed?
-```
-
-**Task**: Repeat the linear regression Petal.Width ~ Petal.Length with an *outlier* in the data 
-```{r}
-irisout=rbind(iris,list(5.8,3, 4, 20, "virginica"))
-```
-
-```{r, echo=FALSE}
-str(irisout)
-summary(irisout)
-plot(Petal.Width ~ Petal.Length, data=irisout, col=Species)
-fit2=lm(Petal.Width ~ Petal.Length, data=irisout)
-abline(fit2, lwd=3, lty=2)    
-summary(fit2)
-```
-
-# Diagnostic Plots
-"fit" is a large object of the lm-class which contains also lots of diagnostic informmation. Notice how the behaviour of "plot" changes.
-```{r}
-op=par(no.readonly=TRUE)  # safe only resettable graphical parameters, avoids many warnings
-par(mfrow=c(2,2))         # change graphical parameters: 2x2 images on device
-plot(fit2,col=irisout$Species)       # four plots rather than one
-par(op)                   # reset graphical parameters
+# Model Checking: Diagnostic Plots
+"fit" is a large object of the lm-class which contains also lots of diagnostic informmation. 
+Notice how the behaviour of "plot" changes.
+```{r fit_diag}
+fit=lm(Petal.Width ~ ., data=iris)
+op=par(no.readonly=TRUE)   # safe only resettable graphical parameters, avoids many warnings
+par(mfrow=c(2,2))          # change graphical parameters: 2x2 images on device
+plot(fit,col=iris$Species) # four plots rather than one
+par(op)                    # reset graphical parameters
 ```
 more examples here: http://www.statmethods.net/stats/regression.html
 
@@ -199,7 +190,8 @@ Linear models $y_i=\theta_0 + \theta_1  x_i + \epsilon_i$ make certain assumptio
 * are there outliers (large residuals) or observations with strong influence on fit
 
 ***
-# Review:
+
+# Review
 * dependencies between variable can often be modeled
 * linear model lm(): fitting, summary and interpretation
 * correlation coefficients can be misleading

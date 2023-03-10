@@ -1,5 +1,5 @@
 ---
-title: "03: Data Descriptions and Visualizations"
+title: "04: Data Descriptions and Visualizations"
 author: "Thomas Manke"
 date:  '`r Sys.Date()`'
 output:
@@ -18,25 +18,34 @@ output:
 R scripts (.R) help to define and run reproducible analysis workflows, but they lack documentation (other than comments).
 
 R Markdown files (*.Rmd) combine scripts with powerful text formatting.
-They can be run (="rendered"="knit") to produce html and pdf.
+They can be rendered (="knit") to produce html and pdf.
 
 
 **Task**:
-In Rstudio, open a new R markdown document with `File > New File > R Markdown...`.   
-This will open a template for an Rmd file that can be knit 
+In Rstudio, 
 
-**Notice**:  
+- open a new R markdown document with `File > New File > R Markdown...`.
+(This will open a template for an Rmd file that can be knit)
 - To convert this file into html press `Knit` - try it out! You may have to save it first as - e.g. "first.Rmd"
 - There is a `YAML` header that contains parameters which will affect the rendering process - customize them
-- In R studio the code blocks can be run individually using the embedded "Play" button - try it out
+- The rest of the document are text blocks (with simple format instructions) and code blocks (with R code)
+- In R studio, the code blocks can be run individually using the embedded "Play" button - try it out
+- Play time: Modify the yaml header, text blocks or code - or all of it. "knit" the documnt and observe changes. 
 
-# Lecture materials
+
+# Lecture material
 This lecture series is written in R Markdown and is publically available on github: https://github.com/maxplanck-ie/Rintro.git  (!branch: 2023.03!)
 
-You can access this material in various different ways
+You can access this material in various different ways:  
+
 - download as zip archive and unpack
 - Console (advanced): git clone -b 2023.03 https://github.com/maxplanck-ie/Rintro.git
 - Rstudio (recommended): open a new Rproject ("New Project > Version Control > Git > ) and provide the same link as Repository URL
+
+**Notice**:   
+The rmd files are provided for your convenience. This should save some typing (and common errors).   
+However, this is an **interactive** course, so please use the code, understand it, change it, and break it !
+
 
 # Descriptive Statistics
 ```{r descriptive}
@@ -106,21 +115,20 @@ str(niris)
 ```
 
 ```{r all_against_all}
-cor(niris)   # correlation matrix. Which correlation coefficient?
-pairs(niris) # provide a visualization, try also plot(iris)
+cor(niris)  # correlation matrix. Which correlation coefficient?
+plot(niris) # provide a visualization for data frames, try also pairs(iris)
 
 # assign species-colors to each observation 
 cols = iris$Species                        # understand how color is defined
-pairs(niris, col=cols, lower.panel=NULL)   # "cols" was defined in task above
+plot(niris, col=cols, lower.panel=NULL)   # "cols" was defined in task above
 ```
 
 
 ***
-# Review:
-* use and understand frequently used data sets (iris)
-* summary  for descriptive statistics
-* plot() for X-Y plots and overloading for other classes (lm)
-* hist(), boxplot()
-* customize arguments: line width, colours, ...
-* correlations: cor()
+# Review
+* R markdown files extend scripts and can be converted to html/pdf
+* summary for descriptive statistics
+* simple plots with simple commands: plot(), hist(), ...
+* lots of parameters for customization: line width, colours, ...
+* correlation between variables: cor(), plot() - class specific behaviour
 * Notice that the data used was extremely clean and structured: data()
