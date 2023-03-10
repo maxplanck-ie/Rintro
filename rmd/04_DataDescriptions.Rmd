@@ -13,26 +13,30 @@ output:
 ```{r, child="_setup.Rmd"}
 ```
     
-# Famous Data Sets
-R has a large range of pre-defined data sets. They are frequently used to illustrate the functionality of code and software packages. Just type "data()" to get an overview. Let's first focus on the "iris" data set
+# R Markdown
 
-![Flower Measurements](images/sepal_petal.jpeg) 
+R scripts (.R) help to define and run reproducible analysis workflows, but they lack documentation (other than comments).
 
-(Image from blog of mathieu.guillame-bert.com)
-
-Try `?iris` to learn more about this data set.
-
-Type `iris` or `View(iris)`. Why is this not the best way to explore data? 
+R Markdown files (*.Rmd) combine scripts with powerful text formatting.
+They can be run (="rendered"="knit") to produce html and pdf.
 
 
+**Task**:
+In Rstudio, open a new R markdown document with `File > New File > R Markdown...`.   
+This will open a template for an Rmd file that can be knit 
 
+**Notice**:  
+- To convert this file into html press `Knit` - try it out! You may have to save it first as - e.g. "first.Rmd"
+- There is a `YAML` header that contains parameters which will affect the rendering process - customize them
+- In R studio the code blocks can be run individually using the embedded "Play" button - try it out
 
-```{r explore}
-str(iris)
-head(iris)
-```
-**Task**: explore this data set in terms of data structures and observables.
-How many rows and columns does this data frame have? Of which type and class. How do you access the data for all petal lengths?
+# Lecture materials
+This lecture series is written in R Markdown and is publically available on github: https://github.com/maxplanck-ie/Rintro.git  (!branch: 2023.03!)
+
+You can access this material in various different ways
+- download as zip archive and unpack
+- Console (advanced): git clone -b 2023.03 https://github.com/maxplanck-ie/Rintro.git
+- Rstudio (recommended): open a new Rproject ("New Project > Version Control > Git > ) and provide the same link as Repository URL
 
 # Descriptive Statistics
 ```{r descriptive}

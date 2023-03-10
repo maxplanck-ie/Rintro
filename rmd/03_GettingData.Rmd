@@ -109,18 +109,18 @@ rm(list=ls())               # remove everything = sweep global environment
 load("my_env.RData")        # recreate all 
 ```
 
-**Notice**: The suffix is not strictly necessary, but it is good practised and used consistently by the community.
+**Notice**: The suffix is not strictly necessary, but it is best practice and used consistently by the community.
 
 ***
 
 # R Scripts
 
 Typical data analyses involve many successive steps.  
-To record everything that was done - and ultimately to be able to reproduce this - we use scripts.
+To record everything that was done - and ultimately to be able to reproduce this - we use scripts.  
 
 Basically these are just lines of code that are collected in a text file.
 
-In Rstudio the can be creates using `File > New File > Rscript` 
+In Rstudio they can be created using `File > New File > R script` 
 
 **Task**: 
 
@@ -131,27 +131,26 @@ In Rstudio the can be creates using `File > New File > Rscript`
   - write the new `data_frame d` in tab seperated file `iris_big_sepal.tsv`
   - save the whole environment in a file `analysis.Rdata` (hint:)
   - delete all variables in the environment
-  - report the output of sessionInfo()
 * Save the script and run it (source)
 * Bonus: Delete all whole environment reload it from the image file
 
-**Query**:
+**Query**: After the filtering, how many flowers and how many species are left?
 
-  - How many rows? How many columns?
-  - Which data yp
 
 
 ***
 # Review
-* Many data sources, different formats & structures
+* Many different data sources, formats & structures
   - text files: *.tsv, *.csv, ...
   - compressed files: *.bed.gz
-  - application specific: .*Rdata, (.*xls)
-* Many ways to read data
-  - read.csv, read.table(), scan(), ... more to come
+  - application specific: .*RData, (.*xls)
+* Reading Data: many ways
+  - read.csv(), read.table(), scan(), ... 
   - from URL
-* Writing Data
-  - write.table
+  - customization with parameters
+  - and there is more: special packages
+* Writing Data: many ways
+  - write.csv
   - save()
   - save.image()
 * Data I/O can be challenging:
