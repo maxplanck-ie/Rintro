@@ -3,3 +3,7 @@
 .RData
 .Ruserdata
 tmp/
+*_cache/
+*_files/
+rmd/*RData
+rmd/_site
