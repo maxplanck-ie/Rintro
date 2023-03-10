@@ -816,14 +816,14 @@ t4 = data_frame(d=rep(c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;), 2),
                 f=runif(6))
 inner_join(t3, t4, by=c(&quot;a&quot;=&quot;d&quot;, &quot;b&quot;=&quot;e&quot;))</code></pre>
 <pre><code>## # A tibble: 6 x 4
-##   a         b     c     f
-##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 A         1 0.517 0.233
-## 2 B         1 0.206 0.744
-## 3 C         1 0.994 0.285
-## 4 A         2 0.741 0.642
-## 5 B         2 0.942 0.139
-## 6 C         2 0.626 0.146</code></pre>
+##   a         b      c      f
+##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 A         1 0.204  0.207 
+## 2 B         1 0.425  0.274 
+## 3 C         1 0.812  0.170 
+## 4 A         2 0.232  0.326 
+## 5 B         2 0.901  0.0780
+## 6 C         2 0.0827 0.129</code></pre>
 <p>By default, joins occur on all columns with the same name across
 tables!</p>
 </div>
