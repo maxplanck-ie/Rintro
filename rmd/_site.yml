@@ -16,17 +16,17 @@ navbar:
         href: 00_Introduction.html
       - text: 01_FirstSteps
         href: 01_FirstSteps.html
-      - text: 02_DataTypes
-        href: 02_DataTypes.html
-      - text: 03_DataDescriptions
-        href: 03_DataDescriptions.html
+      - text: 02_HighDimData
+        href: 02_HighDimData.html
+      - text: 03_GettingData
+        href: 03_GettingData.html
       - text: ------
-      - text: 04_DataModels
-        href: 04_DataModels.html
-      - text: 04_DataVisualization
-        href: 04_DataVisualization.html
-      - text: 05_DataManagement
-        href: 05_DataManagement.html
+      - text: 04_DataDescriptions
+        href: 04_DataDescriptions.html
+      - text: 05_DataModels
+        href: 05_DataModels.html
+      - text: 06_DataVisualization
+        href: 06_DataVisualization.html
       - text: ------
       - text: 10_tidyr
         href: 10_tidyr.html
