@@ -53,12 +53,15 @@ fit=lm(Petal.Width ~ Petal.Length, data=iris)       # fit a linear model
 abline(fit, lwd=3, lty=2)                           # add regression line
 ```
 
-**Task**: What kind of class / data type is the object "fit"? Extract the coefficients of the fitted line and determine the residual degrees of freedom.
+**Query**: What class is the object `fit`?
+
+**Task**: Extract the coefficients of the fitted line.
 
 ```{r, echo=FALSE}
 fit$coefficients
-fit$df.residual
+coef(fit)
 ```
+
 
 # Reporting the fit (model)
 ```{r lm_summary}
@@ -77,6 +80,10 @@ This is a good fit as suggested by a
 $$
 R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{\sum_i(y_i - y(\theta,x_i))^2}{\sum_i(y_i-\bar{y})^2}
 $$
+There are manny more methods to access information for the `lm` class
+```{r class_methods}
+methods(class='lm')
+```
 
 
 # Predictions (with confidence intervals)

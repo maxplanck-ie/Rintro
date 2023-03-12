@@ -30,7 +30,7 @@ Be aware:
 * Columns (=variables) appear as rows in image(). How could this be changed?
 * the axes are meaningless. Default: $0 \ldots 1$
 * there is a large difference in scales for the different variables
-* there is an implicit color-scheme: which one?
+* there is an implicit color-scheme
 
 Below we are re-scaling the iris-matrix
 ```{r scaling}
@@ -68,7 +68,7 @@ There are multiple powerful extension in other R-packages.
 If time allows try this. And if you have lots of time read "?pheatmap" 
 ```{r pheatmap, echo=TRUE}
 #install.packages("pheatmap")  # That's how we install new packages - more later
-library(pheatmap)
+library(pheatmap)              # make packaged functions available
 pheatmap(scale(iris[,-5])) # works also with data frames
 ```
 

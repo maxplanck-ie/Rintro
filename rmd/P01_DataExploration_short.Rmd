@@ -1,7 +1,7 @@
 ---
 title: "P01: Data Exploration: Regulatory Modules from ChIP-seq"
 author: "Thomas Manke"
-date: "`r date()`"
+date: '`r Sys.Date()`'
 output: 
   html_document:
     code_folding: hide
