@@ -30,6 +30,14 @@ install.packages("dslabs")
 <https://www.edx.org/bio/rafael-irizarry>
 :::
 
+## Following along
+
+- For each module, please create a separate R script and type in and execute the commands that are to follow along. 
+
+- The code from some slides depends on the previous slides! 
+
+- You can execute each line individually using Command-Enter on Mac, alt-Enter on Workbench. 
+
 ## Data Import in the Tidyverse
 
 The first step for any analysis is importing the data into a machine-readable format. The tidyverse offers the `readr::` and `readxl::` packages, as we have just recently seen.

@@ -15,17 +15,17 @@ editor: visual
 
 ## Graph components {auto-animate="true"}
 
-- Plots in **ggplot2** consist of 3 main components:
-  - Data: The dataset being summarized
-  - Geometry: The type of plot (scatterplot, boxplot, barplot, histogram, qqplot, smooth density, etc.)
-  - Aesthetic mapping: Variables mapped to visual cues, such as x-axis and y-axis values and color
+-   Plots in **ggplot2** consist of 3 main components:
+    -   Data: The dataset being summarized
+    -   Geometry: The type of plot (scatterplot, boxplot, barplot, histogram, qqplot, smooth density, etc.)
+    -   Aesthetic mapping: Variables mapped to visual cues, such as x-axis and y-axis values and color
 
 ## Graph components {auto-animate="true"}
 
-- There are additional components:
-  - Scale
-  - Labels, Title, Legend
-  - Theme/Style
+-   There are additional components:
+    -   Scale
+    -   Labels, Title, Legend
+    -   Theme/Style
 
 ## Creating a new plot
 
@@ -38,11 +38,11 @@ editor: visual
     x |> ggplot()
 ```
 
-You can associate a dataset `x` with a ggplot object with any of these 4 commands. 
+You can associate a dataset `x` with a ggplot object with any of these 4 commands.
 
 ## Murders dataset {auto-animate="true"}
 
-Let's load some libraries and load the `murders` dataset. Take a look around with `head()`. 
+Let's load some libraries and load the `murders` dataset. Take a look around with `head()`.
 
 ```{r}
 #| echo: true
@@ -54,7 +54,7 @@ head(murders)
 
 ## Murders dataset {auto-animate="true"}
 
-Let's now create a basic ggplot object, called p.  
+Let's now create a basic ggplot object, called p.
 
 ```{r}
 #| echo: true
@@ -67,8 +67,7 @@ class(p)
 
 ## Murders dataset {auto-animate="true"}
 
-As you can see, just passing the dataset `murders` to ggplot 
-doesn't do anything by itself. We need to add additional layers! 
+As you can see, just passing the dataset `murders` to ggplot doesn't do anything by itself. We need to add additional layers!
 
 ```{r}
 #| echo: true
@@ -77,7 +76,7 @@ p
 
 ## Layers {auto-animate="true"}
 
-- In ggplot2, graphs are created by adding layers to the ggplot object:
+-   In ggplot2, graphs are created by adding layers to the ggplot object:
 
 ```{r}
 #| echo: true
@@ -85,13 +84,13 @@ p
 DATA %>% ggplot() + LAYER_1 + LAYER_2 + ... + LAYER_N
 ```
 
-- The geometry layer defines the plot type and takes the format `geom_X` where X is the plot type.
+-   The geometry layer defines the plot type and takes the format `geom_X` where X is the plot type.
 
 ## Layers {auto-animate="true"}
 
-- Aesthetic mappings describe how properties of the data connect with features of the graph (axis position, color, size, etc.)
-- Define aesthetic mappings with the `aes()` function.
-- `aes()` uses variable names from the object component (for example, `total` rather than `murders$total`).
+-   Aesthetic mappings describe how properties of the data connect with features of the graph (axis position, color, size, etc.)
+-   Define aesthetic mappings with the `aes()` function.
+-   `aes()` uses variable names from the object component (for example, `total` rather than `murders$total`).
 
 ## Layers {auto-animate="true"}
 
@@ -106,7 +105,308 @@ p + geom_point(aes(population/10^6, total))
 
 ```{r}
 #| echo: true
-# add points layer to predefined ggplot object
+# add text layer to scatterplot
 p <- ggplot(data = murders)
-p + geom_point(aes(population/10^6, total)) +  geom_text(aes(population/10^6, total, label = abb))
+p + 
+  geom_point(aes(population/10^6, total)) +
+  geom_text(aes(population/10^6, total, label = abb))
+```
+
+## Example of `aes()` behavior {auto-animate="true"}
+
+If you come from another programming language, this syntax is really weird! 
+
+```{r}
+#| echo: true
+# no error from this call
+p_test <- p + geom_text(aes(population/10^6, total, label = abb))
+```
+
+::: footer
+<http://adv-r.had.co.nz/Computing-on-the-language.html>
+:::
+
+## Example of `aes()` behavior {auto-animate="true"}
+
+If you come from another programming language, this syntax is really weird! 
+
+```{r}
+#| echo: true
+#| error: true
+# error - "abb" is not a globally defined variable 
+# and cannot be found outside of aes
+p_test <- p + geom_text(aes(population/10^6, total), label = abb)
+```
+
+::: footer
+<https://www.r-bloggers.com/2019/07/bang-bang-how-to-program-with-dplyr/>
+:::
+
+## Aesthetics scoping {auto-animate="true"}
+
+- Each geometry function has its own arguments that can be used
+to tinker with the visualization
+- These arguments are not aesthetic mappings: they affect all data points the same way. 
+
+## Aesthetics scoping {auto-animate="true"}
+
+- *Global aesthetic mappings* apply to *all* geometries and can be defined when you initially call `ggplot()`.  
+- *Local aesthetic mappings* are called within the geometry function add additional information or override the default mappings. 
+
+## Building a plot using layers {auto-animate="true"}
+
+```{r}
+#| echo: true
+p <- murders %>% ggplot(aes(population/10^6, total, label = abb))
+p
+```
+
+## Add points {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  geom_point(size = 3)
+```
+
+## Log the axes {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  geom_point(size = 3) +
+  scale_x_continuous(trans = "log10") +
+  scale_y_continuous(trans = "log10")
+```
+
+## Shorthand for logging axes {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10()
+```
+
+## Add labels {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10() +
+  geom_text()
+```
+
+## Nudge the labels {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10() +
+  geom_text(nudge_x = 0.075)
+```
+
+## Add axis labels {auto-animate="true"}
+
+```{r}
+#| echo: true
+p <- p +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10() +
+  geom_text(nudge_x = 0.075) + 
+  xlab("Population in millions (log scale)") +
+  ylab("Total number of murders (log scale)")
+p
+```
+
+## Add a title {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  ggtitle("US Gun Murders in 2010")
+```
+
+## Turn all points blue {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  ggtitle("US Gun Murders in 2010") + 
+  geom_point(size = 3, color = "blue")
+```
+
+## Color by region {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  ggtitle("US Gun Murders in 2010") + 
+  geom_point(aes(color = region), size = 3)
+```
+
+## Add a line with average murder rate {auto-animate="true"}
+
+```{r}
+#| echo: true
+# define average murder rate
+r <- murders %>%
+    summarize(rate = sum(total) / sum(population) * 10^6) %>%
+    pull(rate)
+r
+```
+
+
+## Add a line with average murder rate {auto-animate="true"}
+
+```{r}
+#| echo: true
+# basic line with average murder rate for the country
+p +
+  ggtitle("US Gun Murders in 2010") + 
+  geom_point(aes(color = region), size = 3) + 
+  geom_abline(intercept = log10(r)) # slope is default of 1
+```
+
+## Edit appearance of line {auto-animate="true"}
+
+```{r}
+#| echo: true
+# basic line with average murder rate for the country
+p +
+  ggtitle("US Gun Murders in 2010") + 
+  geom_point(aes(color = region), size = 3) + 
+  geom_abline(intercept = log10(r), lty = 2, color = "darkgrey")
+```
+
+## Edit legend
+
+```{r}
+#| echo: true
+# basic line with average murder rate for the country
+p <- p +
+  ggtitle("US Gun Murders in 2010") + 
+  geom_point(aes(color = region), size = 3) + 
+  geom_abline(intercept = log10(r), lty = 2, color = "darkgrey") + 
+  scale_color_discrete(name = "Region")
+p
+```
+
+## Themes
+
+`install.packages("ggthemes")`
+`install.packages("ggrepel")`
+
+## Themes {auto-animate="true"}
+
+```{r}
+#| echo: true
+library(ggthemes)
+p + 
+  theme_economist()
+```
+
+## Themes {auto-animate="true"}
+
+```{r}
+#| echo: true
+library(ggthemes)
+p + 
+  theme_fivethirtyeight()
+```
+
+## More useful geoms
+
+- `geom_histogram()` for histograms
+  - use `binwidth` to change binwidth
+- `geom_density()` for smooth density plots
+- `geom_qq()` creates a quantile-quantile plot. 
+  - use `sample` argument. 
+  - By default, the data are compared to a normal distribution with a mean of 0 and standard deviation of 1
+  - This can be changed with the `dparams` argument
+
+## `geom_histogram()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+data(heights)
+
+# define p
+p <- heights %>%
+    filter(sex == "Male") %>%
+    ggplot(aes(x = height))
+```
+
+## `geom_histogram()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# basic histograms
+p + geom_histogram()
+```
+
+## `geom_histogram()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# basic histograms
+p + geom_histogram(binwidth = 1)
+```
+
+## `geom_histogram()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# histogram with blue fill, black outline, labels and title
+p + 
+  geom_histogram(binwidth = 1, fill = "blue", col = "black") +
+  xlab("Male heights in inches") +
+  ggtitle("Histogram")
+```
+
+## `geom_density()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+p + geom_density()
+```
+
+## `geom_density()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+p + geom_density(fill = "blue")
+```
+
+## `geom_qq()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| layout: [[80], [80]]
+# basic QQ-plot
+p <- heights %>% 
+  filter(sex == "Male") %>%
+  ggplot(aes(sample = height)) # we require sample param! 
+p + geom_qq()
+```
+
+## `geom_qq()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| layout: [[80], [80]]
+# QQ-plot against a normal distribution with same mean/sd as data
+params <- heights %>%
+    filter(sex == "Male") %>%
+    summarize(mean = mean(height), sd = sd(height))
+
+p + 
+  geom_qq(dparams = params) +
+  geom_abline()
 ```

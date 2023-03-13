@@ -91,7 +91,7 @@ murders %>%
 - Piping is shorthand to pass the output of one function as input to the next
 - `h(g(f(x)))` becomes `x %>% f() %>% g() %>% h()`
 - There are two pipes:
-  - `%>%` (from `magrittr`)
+  - `%>%` (from `magrittr`) - Ctrl-shift-M! 
   - `|>` (native to R, introduced in R 4.1)
 - We will use `%>%` going forward, but feel free to read about the differences and use what you need
 
