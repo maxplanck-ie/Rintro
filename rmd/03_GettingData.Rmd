@@ -15,6 +15,32 @@ output:
    
 **Goal**: Ultimately we want to access our own data and write results to file.
 
+# Lecture material
+This lecture series is written in R Markdown and is publically available as github repository. 
+
+
+![Github link. https://github.com/maxplanck-ie/Rintro.git  --> branch: 2023.03 !!](images/Rintro2023_QR.png)
+
+>  Be aware that this course has seen various iterations - selecting the **correct** branch
+is crucial to avoid mix ups 
+
+
+You can access this material in various different ways:  
+
+- download as zip archive and unpack
+- Rstudio/Git: open a new Rproject ("New Project > Version Control > Git > ) and provide the same link as Repository URL. Find the `git` tab and make sure to select the relevant branch "2023.03"
+
+**Notice 1**:   
+The rmd files are provided for your convenience. This should save some typing (and common errors).   
+However, this is an **interactive** course, so please use the code, understand it, change it, and break it !
+
+**Notice 2**:  
+We may update this material during the course ! 
+If you want to retain and edit your own material make sure to save it somewhere differently.   
+If you use git you might want to checkout a **different** local branch and pull only to the original branch if an update is announced.
+
+***
+
 
 ## CSV files
 Comma-separated text files (ASCII) are both human and machine readible.
@@ -66,6 +92,8 @@ cmd = "gunzip -c ../data/iris.tsv.gz"   # command to uncompress
 d = read.csv(pipe(cmd), sep='\t')       # read as pipe
 str(d)
 ```
+
+***
 
 ## Writing data
 There are many ways to save data to text files. One of the simplest uses `write.csv`.
@@ -162,6 +190,8 @@ In Rstudio they can be created using `File > New File > R script`
 
 
 ***
+
+
 # Review
 * Many different data sources, formats & structures
   - text files: *.tsv, *.csv, ...
