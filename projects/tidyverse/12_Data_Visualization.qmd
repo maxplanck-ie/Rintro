@@ -1,0 +1,112 @@
+---
+title: "Data visualization with ggplot2"
+author: "David Koppstein"
+format: revealjs
+editor: visual
+---
+
+## What is ggplot2?
+
+-   ggplot2 is part of the *tidyverse*, a set of packages created by Hadley Wickham.
+-   ggplot2 implements a *grammar of graphics* to enable creation of plots from modular building blocks
+-   ggplot2 is designed to work with *tidy data* (we'll get into this later today).
+
+![](images/ggplot2.png){.absolute bottom="25" left="100" width="150"} ![](images/hadley.jpg){.absolute bottom="25" left="800" width="250"}
+
+## Graph components {auto-animate="true"}
+
+- Plots in **ggplot2** consist of 3 main components:
+  - Data: The dataset being summarized
+  - Geometry: The type of plot (scatterplot, boxplot, barplot, histogram, qqplot, smooth density, etc.)
+  - Aesthetic mapping: Variables mapped to visual cues, such as x-axis and y-axis values and color
+
+## Graph components {auto-animate="true"}
+
+- There are additional components:
+  - Scale
+  - Labels, Title, Legend
+  - Theme/Style
+
+## Creating a new plot
+
+```{r}
+#| eval: false
+#| echo: true
+    ggplot(data = x)
+    ggplot(x)
+    x %>% ggplot()
+    x |> ggplot()
+```
+
+You can associate a dataset `x` with a ggplot object with any of these 4 commands. 
+
+## Murders dataset {auto-animate="true"}
+
+Let's load some libraries and load the `murders` dataset. Take a look around with `head()`. 
+
+```{r}
+#| echo: true
+library(tidyverse)
+library(dslabs)
+data(murders)
+head(murders)
+```
+
+## Murders dataset {auto-animate="true"}
+
+Let's now create a basic ggplot object, called p.  
+
+```{r}
+#| echo: true
+# ggplot(data = murders)
+# murders %>% ggplot()
+
+p <- ggplot(data = murders)
+class(p)
+```
+
+## Murders dataset {auto-animate="true"}
+
+As you can see, just passing the dataset `murders` to ggplot 
+doesn't do anything by itself. We need to add additional layers! 
+
+```{r}
+#| echo: true
+p
+```
+
+## Layers {auto-animate="true"}
+
+- In ggplot2, graphs are created by adding layers to the ggplot object:
+
+```{r}
+#| echo: true
+#| eval: false
+DATA %>% ggplot() + LAYER_1 + LAYER_2 + ... + LAYER_N
+```
+
+- The geometry layer defines the plot type and takes the format `geom_X` where X is the plot type.
+
+## Layers {auto-animate="true"}
+
+- Aesthetic mappings describe how properties of the data connect with features of the graph (axis position, color, size, etc.)
+- Define aesthetic mappings with the `aes()` function.
+- `aes()` uses variable names from the object component (for example, `total` rather than `murders$total`).
+
+## Layers {auto-animate="true"}
+
+```{r}
+#| echo: true
+# add points layer to predefined ggplot object
+p <- ggplot(data = murders)
+p + geom_point(aes(population/10^6, total))
+```
+
+## Layers {auto-animate="true"}
+
+```{r}
+#| echo: true
+# add points layer to predefined ggplot object
+p <- ggplot(data = murders)
+p + geom_point(aes(population/10^6, total)) +  geom_text(aes(population/10^6, total, label = abb))
+```

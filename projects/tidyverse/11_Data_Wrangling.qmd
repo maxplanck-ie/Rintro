@@ -6,23 +6,23 @@ editor: visual
 
 ## Introduction to Dplyr {auto-animate="true"}
 
-Dplyr uses a functions that act as verbs to transform data frames in ways to facilitate data analysis. 
+Dplyr uses a functions that act as verbs to transform data frames in ways to facilitate data analysis.
 
-The six main verbs are: 
+The six main verbs are:
 
-- `mutate()`: creates new columns
-- `filter()`: filters rows based on criteria
-- `select()`: selects columns
+-   `mutate()`: creates new columns
+-   `filter()`: filters rows based on criteria
+-   `select()`: selects columns
 
 ## Introduction to Dplyr {auto-animate="true"}
 
-Dplyr uses a functions that act as verbs to transform data frames in ways to facilitate data analysis. 
+Dplyr uses a functions that act as verbs to transform data frames in ways to facilitate data analysis.
 
-The six main verbs are: 
+The six main verbs are:
 
-- `summarize()`: creates summary statistics
-- `group_by()`: does analysis on subsets of the dataframe based on the contents of a column 
-- `arrange()`: sorts rows
+-   `summarize()`: creates summary statistics
+-   `group_by()`: does analysis on subsets of the dataframe based on the contents of a column
+-   `arrange()`: sorts rows
 
 ## Dplyr in action {auto-animate="true"}
 
@@ -75,7 +75,6 @@ new_table <- select(murders, -state, -region)
 head(new_table)
 ```
 
-
 ## Dplyr in action - using the pipe {auto-animate="true"}
 
 ```{r}
@@ -87,12 +86,26 @@ murders %>%
   head()
 ```
 
+## A note about pipes
+
+- Piping is shorthand to pass the output of one function as input to the next
+- `h(g(f(x)))` becomes `x %>% f() %>% g() %>% h()`
+- There are two pipes:
+  - `%>%` (from `magrittr`)
+  - `|>` (native to R, introduced in R 4.1)
+- We will use `%>%` going forward, but feel free to read about the differences and use what you need
+
+::: footer
+[https://stackoverflow.com/questions/67633022/what-are-the-differences-between-rs-new-native-pipe-and-the-magrittr-pipe](https://stackoverflow.com/questions/67633022/what-are-the-differences-between-rs-new-native-pipe-and-the-magrittr-pipe)
+:::
+
+
 ## A quick look at the data {auto-animate="true"}
 
 ```{r}
 #| echo: true
 # a simple scatterplot of total murders versus population
-x <- murders$population /10^6
+x <- murders$population / 10^6
 y <- murders$total
 plot(x, y)
 ```
@@ -166,7 +179,7 @@ us_murder_rate
 
 ## `pull()` in action
 
-We can also use `pull` to return the numerical value of a given column directly. 
+We can also use `pull` to return the numerical value of a given column directly.
 
 ```{r}
 #| echo: true
@@ -179,14 +192,13 @@ us_murder_rate
 
 ## The dot placeholder {auto-animate="true"}
 
-Another way to access the rate column directly is to use the dot placeholder: 
+Another way to access the rate column directly is to use the dot placeholder:
 
-`.` 
+`.`
 
-This is a feature of the `magrittr` pipe `%>%`, and allows passing the previously piped value to the next function at the specific location specified rather than as the first value as usual. 
+This is a feature of the `magrittr` pipe `%>%`, and allows passing the previously piped value to the next function at the specific location specified rather than as the first value as usual.
 
-NB: In R4.2, the `|>` operator uses `_` instead of `.`
-Use this going forward! 
+NB: In R4.2, the `|>` operator uses `_` instead of `.` Use this going forward!
 
 ## The dot placeholder {auto-animate="true"}
 
@@ -296,12 +308,12 @@ murders <- mutate(murders, rate = total / population * 10^5)
 murders %>% arrange(desc(rate)) %>% top_n(10)
 ```
 
-Side note: Why would Washington DC have a much higher murder rate than all the other states? 
+Side note: Why would Washington DC have a much higher murder rate than all the other states?
 
 ## Consider urban area!
 
 ![](images/murder_rates_dc.png)
 
-## Any questions? 
+## Any questions?
 
-Next, we will learn about data visualization techniques with ggplot2. 
+Next, we will learn about data visualization techniques with ggplot2.

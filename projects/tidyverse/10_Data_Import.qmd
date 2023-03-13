@@ -4,11 +4,35 @@ format: revealjs
 editor: visual
 ---
 
+## Before we begin
+
+-   If you haven't already, please execute the following code:
+
+```{r}
+#| eval: false
+#| echo: true
+install.packages("tidyverse")
+install.packages("dslabs")
+```
+
+-   The first command will install a large set of packages that are designed to work together, including ggplot2.
+-   The second command installs some datasets we will use from Rafael Irizarry's book, "Introduction to Data Science."
+
+## Credit
+
+-   This presentation is heavily influenced by Rafael Irizarry's book [Introduction to Data Science](https://rafalab.dfci.harvard.edu/dsbook) and his corresponding course on EdX.
+-   It also draws on material from previous MPI R courses given by Devon Ryan.
+
+![](images/irizarry.jpg){.absolute bottom="25" left="100" width="250"} 
+![](images/devon.jpg){.absolute bottom="25" left="800" width="250"}
+
+::: footer
+<https://www.edx.org/bio/rafael-irizarry>
+:::
+
 ## Data Import in the Tidyverse
 
-The first step for any analysis is importing the data 
-into a machine-readable format. The tidyverse offers
-the `readr::` and `readxl::` packages, as we have just recently seen. 
+The first step for any analysis is importing the data into a machine-readable format. The tidyverse offers the `readr::` and `readxl::` packages, as we have just recently seen.
 
 ## Data Import in the Tidyverse
 
@@ -22,8 +46,8 @@ list.files(path)
 
 ## File operations
 
-- Use the `file.path()` function to generate a full path from a relative path and a file name. Use `file.path()` instead of `paste()` because `file.path()` is aware of your operating system and will use the correct slashes to navigate your machine.
-- The `file.copy()` function copies a file to a new path.
+-   Use the `file.path()` function to generate a full path from a relative path and a file name. Use `file.path()` instead of `paste()` because `file.path()` is aware of your operating system and will use the correct slashes to navigate your machine.
+-   The `file.copy()` function copies a file to a new path.
 
 ## File operations in practice
 
@@ -43,11 +67,9 @@ file.exists(filename)
 
 ## `readr::` {auto-animate="true"}
 
-- `readr::` is the Tidyverse library for reading data 
-from text formats. 
-- `read_csv()`, `read_tsv()`, `read_table()`, and `read_delim()` are 
-some of the functions provided
-- `read_csv2()` allows for reading of European-style CSV files (e.g. using `;`)
+-   `readr::` is the Tidyverse library for reading data from text formats.
+-   `read_csv()`, `read_tsv()`, `read_table()`, and `read_delim()` are some of the functions provided
+-   `read_csv2()` allows for reading of European-style CSV files (e.g. using `;`)
 
 ## `readr::` in action {auto-animate="true"}
 
@@ -65,13 +87,13 @@ dat <- read_csv(fullpath)
 head(dat, n = 4)
 ```
 
-## What is a tibble? 
+## What is a tibble?
 
-- Tibbles are like data frames, but more modern, and are built for the Tidyverse
-- The interface is the same, using e.g. `$` for columns
-- Tibbles can contain more complex objects than just strings, numbers, or booleans, like lists or functions
-- Tibbles can be grouped
-- You can see the types of each column in a tibble
+-   Tibbles are like data frames, but more modern, and are built for the Tidyverse
+-   The interface is the same, using e.g. `$` for columns
+-   Tibbles can contain more complex objects than just strings, numbers, or booleans, like lists or functions
+-   Tibbles can be grouped
+-   You can see the types of each column in a tibble
 
 ## Quick exercise {auto-animate="true"}
 
@@ -134,14 +156,12 @@ tbl <- read_table(full_path, col_names = c("star", "magnitude", "temp", "type"))
 head(tbl)
 ```
 
-
 ## `readxl::` {auto-animate="true"}
 
-- `readxl::` is the Tidyverse library for reading data 
-from Excel formats. 
-- `read_excel()`, `read_xls()` and `read_xlsx()` are some of the functions provided
-- The `excel_sheets()` function yields the names of the sheets in the Excel file. These names are passed to the `sheet` argument for the **readxl** functions
-- The `read_lines()` function shows the first few lines of a file in R.
+-   `readxl::` is the Tidyverse library for reading data from Excel formats.
+-   `read_excel()`, `read_xls()` and `read_xlsx()` are some of the functions provided
+-   The `excel_sheets()` function yields the names of the sheets in the Excel file. These names are passed to the `sheet` argument for the **readxl** functions
+-   The `read_lines()` function shows the first few lines of a file in R.
 
 ## `readxl::` in action {auto-animate="true"}
 
@@ -164,9 +184,9 @@ sheet_one
 
 ## `readxl::` {auto-animate="true"}
 
-- `read_xls()` is for xls files, `read_xlsx` for XML-based xlsx files
-- you can use `read_excel()` if you are unsure of the format
+-   `read_xls()` is for xls files, `read_xlsx` for XML-based xlsx files
+-   you can use `read_excel()` if you are unsure of the format
 
-## Any questions? 
+## Any questions?
 
-We will next talk about how to manipulate data in data frames using the Tidyverse. 
+We will next talk about how to manipulate data in data frames using the Tidyverse.
