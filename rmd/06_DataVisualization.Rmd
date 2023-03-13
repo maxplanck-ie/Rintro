@@ -76,7 +76,7 @@ pheatmap(scale(iris[,-5])) # works also with data frames
 # Sending plots to files
 In Rstudio, we can export figures from the "Plots" tab. On the console we can define a pdf file as a new device for all subsequent figures. This is usually done only *after* the image is sufficiently optimized
 ```{r pdf}
-pdf("../data/heatmap.pdf") # similar for jpeg, png, ...
+pdf("heatmap.pdf") # similar for jpeg, png, ...
 heatmap(S,scale="none", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
 dev.off()  # close device = pdf file
 ```

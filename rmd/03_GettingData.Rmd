@@ -118,7 +118,7 @@ write.csv(iris[iris$Species=="setosa",], file="setosa.csv", row.names=FALSE, quo
 
 
 ## RData
-In the context of the R-programming language, Rdata is a very convenient (binary) format that can be used to save multiple data structures or even whole environments 
+In the context of the R-programming language, RData is a very convenient (binary) format that can be used to save multiple data structures or even whole environments 
 It's very efficient when you exchange your data with other R-users (or your future self)
 
 ### Specific objects
@@ -155,7 +155,7 @@ n = 42
 v = 1:1000
 getwd()                     # make sure you know where you writing to
 
-save.image("my_env.RData")  # default image_name = ".Rdata"
+save.image("my_env.RData")  # default image_name = ".RData"
 rm(list=ls())               # remove everything = sweep global environment
 load("my_env.RData")        # recreate all 
 ```
@@ -173,14 +173,14 @@ Basically these are just lines of code that are collected in a text file.
 
 In Rstudio they can be created using `File > New File > R script` 
 
-**Task**: 
+**Task** (10 min): 
 
 * Create a new R-script `filter_iris.R` to do the following: 
   - Starting from the pre-compiled `iris` data, create a new `data_frame d` of all flowers where `Sepal.Length` is greater or equal to 7 cm.
   - determine the number flower in the new `data_frame`. Save this number as variable `nf`
   - How many different species are in the new data_frame. Save this number as variable `ns`
   - write the new `data_frame d` in tab seperated file `iris_big_sepal.tsv`
-  - save the whole environment in a file `analysis.Rdata` (hint:)
+  - save the whole environment in a file `analysis.RData` (hint:)
   - delete all variables in the environment
 * Save the script and run it (source)
 * Bonus: Delete all whole environment reload it from the image file
