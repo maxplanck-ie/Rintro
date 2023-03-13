@@ -18,9 +18,9 @@ navbar:
         href: 01_FirstSteps.html
       - text: 02_HighDimData
         href: 02_HighDimData.html
+      - text: ------
       - text: 03_GettingData
         href: 03_GettingData.html
-      - text: ------
       - text: 04_DataDescriptions
         href: 04_DataDescriptions.html
       - text: 05_DataModels
@@ -34,6 +34,11 @@ navbar:
         href: 11_dplyr.html
       - text: 12_ggplot2
         href: 12_ggplot2.html
+      - text: ------
+      - text: P01_DataExploration_short
+        href: P01_DataExploration_short.html
+      - text: P02_MontyHall_and_scripts
+        href: P02_MontyHall_and_scripts.html
       - text: ------
 
   right:
