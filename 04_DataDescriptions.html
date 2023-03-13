@@ -11,7 +11,7 @@
 
 <meta name="author" content="Thomas Manke" />
 
-<meta name="date" content="2023-03-10" />
+<meta name="date" content="2023-03-13" />
 
 <title>04: Data Descriptions and Visualizations</title>
 
@@ -326,7 +326,7 @@ $(document).ready(function () {
 <h1 class="title toc-ignore">04: Data Descriptions and
 Visualizations</h1>
 <h4 class="author">Thomas Manke</h4>
-<h4 class="date">2023-03-10</h4>
+<h4 class="date">2023-03-13</h4>
 
 </div>
 
@@ -366,10 +366,10 @@ template for an Rmd file that can be knit)</li>
 You may have to save it first as - e.g. “first.Rmd”</li>
 <li>There is a <code>YAML</code> header that contains parameters which
 will affect the rendering process - customize them</li>
-<li>The rest of the document are text blocks (with simple format
-instructions) and code blocks (with R code)</li>
-<li>In R studio, the code blocks can be run individually using the
-embedded “Play” button - try it out</li>
+<li>The rest of the document are <code>text blocks</code> (with simple
+format instructions) and <code>code blocks</code> (with R code)</li>
+<li>In R studio, the code blocks can also be run individually using the
+embedded <code>Play</code> button - try it out</li>
 <li>Play time: Modify the yaml header, text blocks or code - or all of
 it. “knit” the documnt and observe changes.</li>
 </ul>
@@ -377,25 +377,39 @@ it. “knit” the documnt and observe changes.</li>
 <div id="lecture-material" class="section level1">
 <h1>Lecture material</h1>
 <p>This lecture series is written in R Markdown and is publically
-available on github: <a
+available as github repository.</p>
+<div class="figure">
+<img src="images/Rintro2023_QR.png" alt="" />
+<p class="caption">Github link. <a
 href="https://github.com/maxplanck-ie/Rintro.git"
-class="uri">https://github.com/maxplanck-ie/Rintro.git</a> (!branch:
-2023.03!)</p>
+class="uri">https://github.com/maxplanck-ie/Rintro.git</a> (!!branch:
+2023.03!!)</p>
+</div>
+<blockquote>
+<p>Be aware that this course has seen various iterations - selecting the
+<strong>correct</strong> branch is crucial to avoid mix ups</p>
+</blockquote>
 <p>You can access this material in various different ways:</p>
 <ul>
 <li>download as zip archive and unpack</li>
-<li>Console (advanced): git clone -b 2023.03 <a
-href="https://github.com/maxplanck-ie/Rintro.git"
-class="uri">https://github.com/maxplanck-ie/Rintro.git</a></li>
-<li>Rstudio (recommended): open a new Rproject (“New Project &gt;
-Version Control &gt; Git &gt; ) and provide the same link as Repository
-URL</li>
+<li>Rstudio/Git: open a new Rproject (“New Project &gt; Version Control
+&gt; Git &gt; ) and provide the same link as Repository URL. Find the
+<code>git</code> tab and make sure to select the relevant
+branch”2023.03”</li>
 </ul>
-<p><strong>Notice</strong>:<br />
+<p><strong>Notice 1</strong>:<br />
 The rmd files are provided for your convenience. This should save some
 typing (and common errors).<br />
 However, this is an <strong>interactive</strong> course, so please use
 the code, understand it, change it, and break it !</p>
+<p><strong>Notice 2</strong>:<br />
+We may update this material during the course ! If you want to retain
+and edit your own material make sure to save it somewhere
+differently.<br />
+If you use git you might want to checkout a <strong>different</strong>
+local branch and pull only to the original branch if an update is
+announced.</p>
+<hr />
 </div>
 <div id="descriptive-statistics" class="section level1">
 <h1>Descriptive Statistics</h1>
@@ -430,8 +444,9 @@ points, title, colors). Try some of it.</p>
 Create a boxplot of petal length for species “setosa” only.
 <img src="04_DataDescriptions_files/figure-html/boxplot-1.png" width="672" /></p>
 <p>Boxplot understands data frames</p>
-<pre class="r"><code>boxplot(iris) # What does the boxplot for Species mean?</code></pre>
+<pre class="r"><code>boxplot(iris) </code></pre>
 <p><img src="04_DataDescriptions_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><strong>Query</strong>: What does the boxplot for Species mean?</p>
 </div>
 <div id="interlude-factors-categorical-variables"
 class="section level1">

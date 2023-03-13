@@ -11,7 +11,7 @@
 
 <meta name="author" content="Thomas Manke" />
 
-<meta name="date" content="2023-03-10" />
+<meta name="date" content="2023-03-13" />
 
 <title>05: Data Modeling</title>
 
@@ -323,7 +323,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">05: Data Modeling</h1>
 <h4 class="author">Thomas Manke</h4>
-<h4 class="date">2023-03-10</h4>
+<h4 class="date">2023-03-13</h4>
 
 </div>
 
@@ -391,12 +391,14 @@ RSS=\sum_{i=1}^{N} (y_i - f(\theta, x_i))^2 \to min
 fit=lm(Petal.Width ~ Petal.Length, data=iris)       # fit a linear model
 abline(fit, lwd=3, lty=2)                           # add regression line</code></pre>
 <p><img src="05_DataModels_files/figure-html/ols-1.png" width="672" /></p>
-<p><strong>Task</strong>: What kind of class / data type is the object
-“fit”? Extract the coefficients of the fitted line and determine the
-residual degrees of freedom.</p>
+<p><strong>Query</strong>: What class is the object
+<code>fit</code>?</p>
+<p><strong>Task</strong>: Extract the coefficients of the fitted
+line.</p>
 <pre><code>##  (Intercept) Petal.Length 
 ##   -0.3630755    0.4157554</code></pre>
-<pre><code>## [1] 148</code></pre>
+<pre><code>##  (Intercept) Petal.Length 
+##   -0.3630755    0.4157554</code></pre>
 </div>
 <div id="reporting-the-fit-model" class="section level1">
 <h1>Reporting the fit (model)</h1>
@@ -437,7 +439,18 @@ class="math inline">\(R^2\)</span></li>
 <p><span class="math display">\[
 R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{\sum_i(y_i -
 y(\theta,x_i))^2}{\sum_i(y_i-\bar{y})^2}
-\]</span></p>
+\]</span> There are manny more methods to access information for the
+<code>lm</code> class</p>
+<pre class="r"><code>methods(class=&#39;lm&#39;)</code></pre>
+<pre><code>##  [1] add1           alias          anova          case.names     coerce        
+##  [6] confint        cooks.distance deviance       dfbeta         dfbetas       
+## [11] drop1          dummy.coef     effects        extractAIC     family        
+## [16] formula        hatvalues      influence      initialize     kappa         
+## [21] labels         logLik         model.frame    model.matrix   nobs          
+## [26] plot           predict        print          proj           qr            
+## [31] residuals      rstandard      rstudent       show           simulate      
+## [36] slotsFromS3    summary        variable.names vcov          
+## see &#39;?methods&#39; for accessing help and source code</code></pre>
 </div>
 <div id="predictions-with-confidence-intervals" class="section level1">
 <h1>Predictions (with confidence intervals)</h1>

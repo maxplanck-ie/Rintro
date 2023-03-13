@@ -11,7 +11,7 @@
 
 <meta name="author" content="Thomas Manke" />
 
-<meta name="date" content="2023-03-10" />
+<meta name="date" content="2023-03-13" />
 
 <title>06: Data Visualization</title>
 
@@ -325,7 +325,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">06: Data Visualization</h1>
 <h4 class="author">Thomas Manke</h4>
-<h4 class="date">2023-03-10</h4>
+<h4 class="date">2023-03-13</h4>
 
 </div>
 
@@ -359,7 +359,7 @@ changed?</li>
 \ldots 1\)</span></li>
 <li>there is a large difference in scales for the different
 variables</li>
-<li>there is an implicit color-scheme: which one?</li>
+<li>there is an implicit color-scheme</li>
 </ul>
 <p>Below we are re-scaling the iris-matrix</p>
 <pre class="r"><code>S=scale(M)                                                     # scales column-wise
@@ -396,7 +396,7 @@ heatmap(S,scale=&quot;none&quot;, RowSideColors=cols,labRow=FALSE, cexCol=0.9)</
 <p>There are multiple powerful extension in other R-packages. If time
 allows try this. And if you have lots of time read “?pheatmap”</p>
 <pre class="r"><code>#install.packages(&quot;pheatmap&quot;)  # That&#39;s how we install new packages - more later
-library(pheatmap)
+library(pheatmap)              # make packaged functions available
 pheatmap(scale(iris[,-5])) # works also with data frames</code></pre>
 <p><img src="06_DataVisualization_files/figure-html/pheatmap-1.png" width="672" /></p>
 </div>

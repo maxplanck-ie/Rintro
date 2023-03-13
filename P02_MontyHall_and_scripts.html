@@ -9,9 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="T. Manke" />
+<meta name="author" content="Thomas Manke" />
 
-<meta name="date" content="2016-02-24" />
+<meta name="date" content="2023-03-13" />
 
 <title>Sampling: Monty Hall Problem</title>
 
@@ -32,6 +32,7 @@
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -224,6 +225,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -308,24 +312,48 @@ $(document).ready(function () {
 
 <div id="header">
 
-
-
-<h1 class="title toc-ignore">Sampling: Monty Hall Problem</h1>
-<h4 class="author">T. Manke</h4>
-<h4 class="date">24 Feb 2016</h4>
-
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
 </div>
 
 
+
+<h1 class="title toc-ignore">Sampling: Monty Hall Problem</h1>
+<h4 class="author">Thomas Manke</h4>
+<h4 class="date">2023-03-13</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#the-game" id="toc-the-game">The Game</a></li>
+<li><a href="#simulation-in-r" id="toc-simulation-in-r">Simulation in
+R</a>
+<ul>
+<li><a href="#sampling" id="toc-sampling">Sampling</a></li>
+<li><a href="#a-function" id="toc-a-function">A Function</a></li>
+<li><a href="#an-r-script" id="toc-an-r-script">An R-script</a></li>
+</ul></li>
+<li><a href="#bayesian-treatment" id="toc-bayesian-treatment">Bayesian
+Treatment</a></li>
+<li><a href="#review" id="toc-review">Review</a></li>
+</ul>
+</div>
+
 <div id="the-game" class="section level1">
-<h1>The Game:</h1>
+<h1>The Game</h1>
 <p>A showmaster presents three closed doors (1,2,3) to a candidate. Only
 behind one random door is a price (i.e a car). The canddiate is asked to
 pick one of the doors. Afterwards, the showmaster opens one of the other
 two doors which does not contain the price. Now two doors are still
 closed and the candidate has the choice to <em>either stick</em> to the
-original choice, <em>or switch</em> to the other closed door. Question:
-which strategy is more likely to succeed in winning the price?</p>
+original choice, <em>or switch</em> to the other closed door.</p>
+<p><strong>Query</strong>: which strategy is more likely to succeed in
+winning the price?</p>
 </div>
 <div id="simulation-in-r" class="section level1">
 <h1>Simulation in R</h1>
@@ -334,15 +362,20 @@ door “W”. The other two doors are loosers (L1 and L2)</p>
 <pre class="r"><code>doors=c(&quot;W&quot;,&quot;L1&quot;,&quot;L2&quot;)
 doors</code></pre>
 <pre><code>## [1] &quot;W&quot;  &quot;L1&quot; &quot;L2&quot;</code></pre>
+<div id="sampling" class="section level2">
+<h2>Sampling</h2>
 <p>First assume that the doors are shuffled randomly</p>
 <pre class="r"><code>doors=sample(doors) # Why does this amount to shuffling?
 doors</code></pre>
-<pre><code>## [1] &quot;L2&quot; &quot;W&quot;  &quot;L1&quot;</code></pre>
+<pre><code>## [1] &quot;W&quot;  &quot;L2&quot; &quot;L1&quot;</code></pre>
 <p>Now the candidate picks a random door “pick” (hoping that it might be
 the winning door)</p>
 <pre class="r"><code>pick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)
 pick</code></pre>
-<pre><code>## [1] &quot;L2&quot;</code></pre>
+<pre><code>## [1] &quot;L1&quot;</code></pre>
+</div>
+<div id="a-function" class="section level2">
+<h2>A Function</h2>
 <p>Only the show master knows the winning door. Depending on the picked
 door, the show master will reveal one door that does <em>not</em>
 contain the price, and <em>not</em> the picked door. This is a more
@@ -356,12 +389,13 @@ depends on “pick” and the doors content</p>
 <p>Now let’s use the function to open a door</p>
 <pre class="r"><code>open = open_door(pick,doors)
 open</code></pre>
-<pre><code>## [1] &quot;L1&quot;</code></pre>
+<pre><code>## [1] &quot;L2&quot;</code></pre>
 <p>Notice that the showmaster does not really have a choice when the
 candidate has picked a loosing door (2/3 of the time).</p>
 <p>Now the candidate has the choice to switch to the other remaining
-door (not open, not previously picked). The question is: Will the
-switching strategy be more successful?</p>
+door (not open, not previously picked).</p>
+<p>To repeat the <strong>question</strong>: Will the switching strategy
+be more successful?</p>
 <pre class="r"><code>switch=doors[ doors != pick &amp; doors != open]  
 paste(switch)</code></pre>
 <pre><code>## [1] &quot;W&quot;</code></pre>
@@ -370,8 +404,9 @@ paste(switch)</code></pre>
 <p>The above results from sampling will vary (for each candiate and
 participant of the R-course). Now let’s play this game N times. The goal
 is to count the number of successes for the switching strategy.</p>
-<div id="the-first-r-script" class="section level2">
-<h2>The first R-script</h2>
+</div>
+<div id="an-r-script" class="section level2">
+<h2>An R-script</h2>
 <p>We want to execute the commands above repeatedly. To this end the
 console is not very useful. Therefore we leave the console for a moment,
 and first collect the individual commands in a file (an Rscript).
@@ -402,61 +437,60 @@ cat(&quot;successes with switching= &quot;,success, &quot;success_rate: &quot;, 
 with some suitable name. Return to the console and execute the script
 using the <em>source</em> command</p>
 <pre class="r"><code>source(&quot;MontyHall.R&quot;)</code></pre>
-<pre><code>## successes with switching=  6711 success_rate:  0.6711 
-## successes with switching=  6768 success_rate:  0.6768</code></pre>
+<pre><code>## successes with switching=  6727 success_rate:  0.6727 
+## successes with switching=  6696 success_rate:  0.6696</code></pre>
 <p>You can share the script easily with all people who speak R –
 especially those who don’t like to switch.</p>
+<hr />
 </div>
 </div>
 <div id="bayesian-treatment" class="section level1">
-<h1>Bayesian Treatment:</h1>
+<h1>Bayesian Treatment</h1>
 <p>If you prefer paper and pencil, this is how to solve this problem
 analytically.</p>
-<ul>
-<li><strong>prior probailities</strong>:
-Pr(1=car)=Pr(2=car)=Pr(3=car)=<span
-class="math inline">\(\frac{1}{3}\)</span></li>
-</ul>
+<p><strong>Prior Probabilities</strong>:</p>
+<p><span class="math display">\[
+Pr(1=car)=Pr(2=car)=Pr(3=car)=\frac{1}{3}
+\]</span></p>
 <p>Assume that the candidate picks door 1 and the showmaster opens door
 2 (up to relabeling). Now the candidate would like to know</p>
-<ul>
-<li><p><strong>posterior probability</strong>: Pr(3=car|2=shown)=
-?</p></li>
-<li><p><strong>Bayes Theorem</strong> (on updating probabilities):
-Pr(A,B)=Pr(A|B)Pr(B)=Pr(B|A)Pr(A)</p></li>
-<li><p>Pr(3=car|2=shown)=<span
-class="math inline">\(\frac{\mbox{Pr(2=shown|3=car)Pr(3=car)}
-}{\mbox{Pr(2=shown)}}\)</span></p></li>
-<li><p><strong>law of total probability
-(marginalization):</strong></p></li>
-<li><p>Pr(2=shown)=Pr(2=shown|1=car)Pr(1=car) +
-Pr(2=shown|2=car)Pr(2=car) + Pr(2=shown|3=car)Pr(3=car)</p></li>
-<li><p>Pr(2=shown)=<span class="math inline">\(\frac{1}{2} \cdot
-\frac{1}{3} + 0 \cdot \frac{1}{3} + 1 \cdot \frac{1}{3} =
-\frac{1}{2}\)</span></p></li>
-<li><p>Pr(3=car|2=shown)=<span class="math inline">\(\frac{ 1 \cdot
-\frac{1}{3} }{ \frac{1}{2} } = \frac{2}{3}\)</span></p></li>
-<li><p>Pr(1=car|2=shown)= 1 - Pr(2=car|2=shown)-Pr(3=car|2=shown)= 1 - 0
-- <span class="math inline">\(\frac{2}{3}=\frac{1}{3}\)</span></p></li>
-</ul>
-<div class="important blue">
-<p><br> Pr(3=car|2=shown) = 2 <span
-class="math inline">\(\times\)</span> Pr(1=car|2=shown) <br> <br></p>
+<p><strong>Posterior Probability</strong>: <span
+class="math inline">\(Pr(3=car|2=shown)= ?\)</span></p>
+<p><strong>Bayes Theorem</strong> (on updating probabilities): <span
+class="math display">\[
+Pr(A,B) = Pr(A|B)Pr(B) = Pr(B|A)Pr(A)
+\]</span></p>
+<p><span class="math display">\[
+Pr(3=car|2=shown)=\frac{Pr(2=shown|3=car)Pr(3=car) }{Pr(2=shown)}
+\]</span></p>
+<p><strong>Law of Total Probability (marginalization):</strong> <span
+class="math display">\[
+Pr(2=shown) = \sum_A Pr(2=shown|A) = \\
+Pr(2=shown|1=car)Pr(1=car) + Pr(2=shown|2=car)Pr(2=car) +
+Pr(2=shown|3=car)Pr(3=car) \\
+Pr(2=shown) = \frac{1}{2} \cdot \frac{1}{3}   + 0 \cdot \frac{1}{3} + 1
+\cdot \frac{1}{3} = \frac{1}{2}
+\]</span></p>
+<p><span class="math display">\[
+Pr(3=car|2=shown)= \frac{ 1 \cdot \frac{1}{3} }{ \frac{1}{2} } =
+\frac{2}{3} \\
+Pr(1=car|2=shown)= 1 - Pr(2=car|2=shown) - Pr(3=car|2=shown)= \\
+1 - 0 -\frac{2}{3}=\frac{1}{3}
+\]</span></p>
+<p><strong>Result</strong> <span class="math display">\[
+Pr(3=car|2=shown) = 2 \times Pr(1=car|2=shown)
+\]</span></p>
 </div>
-</div>
-<div id="did-you-understand" class="section level1">
-<h1>Did you understand?</h1>
+<div id="review" class="section level1">
+<h1>Review</h1>
 <ul>
 <li>solving problems (in R) with simulations</li>
 <li>writing functions to encapsulate more complex tasks</li>
 <li>loops (for) and conditionals (if)</li>
-<li>which()</li>
 <li>selection/exclusion in vector</li>
 <li>sample()</li>
-<li>writing and sharing R-scripts.</li>
-<li>source(“Rscript.R”)</li>
-<li>prior and posterior (conditional) probabilities</li>
-<li>Bayes Theorem and updating probabilities</li>
+<li>writing and running R-scripts: <code>source("Rscript.R")</code></li>
+<li>(Bayes Theorem: updating probabilities)</li>
 </ul>
 </div>
 
@@ -497,6 +531,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
