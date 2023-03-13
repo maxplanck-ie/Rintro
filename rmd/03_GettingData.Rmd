@@ -15,7 +15,7 @@ output:
    
 **Goal**: Ultimately we want to access our own data and write results to file.
 
-# Lecture material
+## Lecture material
 This lecture series is written in R Markdown and is publically available as github repository. 
 
 
