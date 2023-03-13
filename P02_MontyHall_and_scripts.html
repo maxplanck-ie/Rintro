@@ -374,12 +374,12 @@ doors</code></pre>
 <p>First assume that the doors are shuffled randomly</p>
 <pre class="r"><code>doors=sample(doors) # Why does this amount to shuffling?
 doors</code></pre>
-<pre><code>## [1] &quot;W&quot;  &quot;L2&quot; &quot;L1&quot;</code></pre>
+<pre><code>## [1] &quot;W&quot;  &quot;L1&quot; &quot;L2&quot;</code></pre>
 <p>Now the candidate picks a random door “pick” (hoping that it might be
 the winning door)</p>
 <pre class="r"><code>pick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)
 pick</code></pre>
-<pre><code>## [1] &quot;W&quot;</code></pre>
+<pre><code>## [1] &quot;L2&quot;</code></pre>
 </div>
 <div id="a-function" class="section level2">
 <h2>A Function</h2>
@@ -396,7 +396,7 @@ depends on “pick” and the doors content</p>
 <p>Now let’s use the function to open a door</p>
 <pre class="r"><code>open = open_door(pick,doors)
 open</code></pre>
-<pre><code>## [1] &quot;L2&quot;</code></pre>
+<pre><code>## [1] &quot;L1&quot;</code></pre>
 <p>Notice that the showmaster does not really have a choice when the
 candidate has picked a loosing door (2/3 of the time).</p>
 <p>Now the candidate has the choice to switch to the other remaining
@@ -405,7 +405,7 @@ door (not open, not previously picked).</p>
 be more successful?</p>
 <pre class="r"><code>switch=doors[ doors != pick &amp; doors != open]  
 paste(switch)</code></pre>
-<pre><code>## [1] &quot;L1&quot;</code></pre>
+<pre><code>## [1] &quot;W&quot;</code></pre>
 <p>With three doors, the candidate has only two choices to stay with
 “pick” or to switch to “switch”</p>
 <p>The above results from sampling will vary (for each candiate and
@@ -444,8 +444,8 @@ cat(&quot;successes with switching= &quot;,success, &quot;success_rate: &quot;, 
 with some suitable name. Return to the console and execute the script
 using the <em>source</em> command</p>
 <pre class="r"><code>source(&quot;MontyHall.R&quot;)</code></pre>
-<pre><code>## successes with switching=  6698 success_rate:  0.6698 
-## successes with switching=  6734 success_rate:  0.6734</code></pre>
+<pre><code>## successes with switching=  6606 success_rate:  0.6606 
+## successes with switching=  6620 success_rate:  0.662</code></pre>
 <p>You can share the script easily with all people who speak R –
 especially those who don’t like to switch.</p>
 <hr />
@@ -463,29 +463,24 @@ Pr(1=car)=Pr(2=car)=Pr(3=car)=\frac{1}{3}
 2 (up to relabeling). Now the candidate would like to know</p>
 <p><strong>Posterior Probability</strong>: <span
 class="math inline">\(Pr(3=car|2=shown)= ?\)</span></p>
-<p><strong>Bayes Theorem</strong> (on updating probabilities): <span
-class="math display">\[
+<p><strong>Bayes Theorem</strong> (for events <span
+class="math inline">\(A\)</span> and <span
+class="math inline">\(B\)</span>): <span class="math display">\[
 Pr(A,B) = Pr(A|B)Pr(B) = Pr(B|A)Pr(A)
 \]</span></p>
-<p><span class="math display">\[
-Pr(3=car|2=shown)=\frac{Pr(2=shown|3=car)Pr(3=car) }{Pr(2=shown)}
-\]</span></p>
-<p><strong>Law of Total Probability (marginalization):</strong> <span
+<p>Updating Probabilities (given new data): <span
 class="math display">\[
-Pr(2=shown) = \sum_A Pr(2=shown|A) = \\
-Pr(2=shown|1=car)Pr(1=car) + Pr(2=shown|2=car)Pr(2=car) +
-Pr(2=shown|3=car)Pr(3=car) \\
-Pr(2=shown) = \frac{1}{2} \cdot \frac{1}{3}   + 0 \cdot \frac{1}{3} + 1
-\cdot \frac{1}{3} = \frac{1}{2}
+Pr(3=car|2=shown)=\frac{Pr(2=shown|3=car)Pr(3=car) }{Pr(2=shown)}\\
+Pr(1=car|2=shown)=\frac{Pr(2=shown|1=car)Pr(1=car) }{Pr(2=shown)}
 \]</span></p>
+<p>Updating ratios: <span class="math display">\[
+\frac{Pr(3=car|2=shown)} {Pr(1=car|2=shown)} =\frac{Pr(2=shown|3=car)
+}{Pr(2=shown|1=car) } \frac{Pr(3=car)} {Pr(1=car)} \\
+= \frac{1}{1/2} = 2
+\]</span></p>
+<p><strong>Result</strong></p>
 <p><span class="math display">\[
-Pr(3=car|2=shown)= \frac{ 1 \cdot \frac{1}{3} }{ \frac{1}{2} } =
-\frac{2}{3} \\
-Pr(1=car|2=shown)= 1 - Pr(2=car|2=shown) - Pr(3=car|2=shown)= \\
-1 - 0 -\frac{2}{3}=\frac{1}{3}
-\]</span></p>
-<p><strong>Result</strong> <span class="math display">\[
-Pr(3=car|2=shown) = 2 \times Pr(1=car|2=shown)
+      Pr(3=car|2=shown) = 2 \times Pr(1=car|2=shown)
 \]</span></p>
 </div>
 <div id="review" class="section level1">
