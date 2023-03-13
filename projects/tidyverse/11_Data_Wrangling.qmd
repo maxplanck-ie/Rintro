@@ -1,0 +1,307 @@
+---
+title: "Data Wrangling with Dplyr"
+format: revealjs
+editor: visual
+---
+
+## Introduction to Dplyr {auto-animate="true"}
+
+Dplyr uses a functions that act as verbs to transform data frames in ways to facilitate data analysis. 
+
+The six main verbs are: 
+
+- `mutate()`: creates new columns
+- `filter()`: filters rows based on criteria
+- `select()`: selects columns
+
+## Introduction to Dplyr {auto-animate="true"}
+
+Dplyr uses a functions that act as verbs to transform data frames in ways to facilitate data analysis. 
+
+The six main verbs are: 
+
+- `summarize()`: creates summary statistics
+- `group_by()`: does analysis on subsets of the dataframe based on the contents of a column 
+- `arrange()`: sorts rows
+
+## Dplyr in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+library(dplyr)
+library(dslabs)
+data("murders")
+
+head(murders)
+```
+
+## Dplyr in action - `mutate()` {auto-animate="true"}
+
+```{r}
+#| echo: true
+library(dplyr)
+library(dslabs)
+data("murders")
+
+# adding a column with mutate
+murders <- mutate(murders, rate = total / population * 100000)
+head(murders)
+```
+
+## Dplyr in action - `filter()` {auto-animate="true"}
+
+```{r}
+#| echo: true
+# subsetting with filter
+filtered_murders <- filter(murders, rate <= 0.71)
+head(filtered_murders)
+```
+
+## Dplyr in action - `select()` {auto-animate="true"}
+
+```{r}
+#| echo: true
+# selecting columns with select
+new_table <- select(murders, state, region, rate)
+head(new_table)
+```
+
+## Dplyr in action - `select()` {auto-animate="true"}
+
+```{r}
+#| echo: true
+# selecting all columns except specified ones
+new_table <- select(murders, -state, -region)
+head(new_table)
+```
+
+
+## Dplyr in action - using the pipe {auto-animate="true"}
+
+```{r}
+#| echo: true
+# using the pipe
+murders %>% 
+  select(state, region, rate) %>%
+  filter(rate <= 0.71) %>%
+  head()
+```
+
+## A quick look at the data {auto-animate="true"}
+
+```{r}
+#| echo: true
+# a simple scatterplot of total murders versus population
+x <- murders$population /10^6
+y <- murders$total
+plot(x, y)
+```
+
+## A quick look at the data {auto-animate="true"}
+
+```{r}
+#| echo: true
+# a histogram of murder rates
+murder_rates <- mutate(murders, rate = total / population * 100000)
+hist(murder_rates$rate)
+```
+
+## A quick look at the data {auto-animate="true"}
+
+```{r}
+#| echo: true
+# boxplots of murder rates by region
+boxplot(rate~region, data = murder_rates)
+```
+
+## Dplyr in action - `summarize()`
+
+```{r}
+#| echo: true
+murder_summary <- murder_rates %>%
+  filter(region == "West") %>%
+  summarize(minimum = min(rate),
+            median = median(rate),
+            maximum = max(rate))
+murder_summary
+```
+
+## Dplyr in action - `summarize()`
+
+```{r}
+#| echo: true
+murder_summary <- murder_rates %>%
+  filter(region == "West") %>%
+  summarize(minimum = min(rate),
+            median = median(rate),
+            maximum = max(rate))
+murder_summary
+```
+
+## Quick exercise {auto-animate="true"}
+
+What is the average murder rate in the United States?
+
+## Quick exercise {auto-animate="true"}
+
+What is the average murder rate in the United States?
+
+```{r}
+#| echo: true
+# average rate unadjusted by population size
+mean(murders$rate)
+```
+
+## Quick exercise {auto-animate="true"}
+
+What is the average murder rate in the United States?
+
+```{r}
+#| echo: true
+# average rate adjusted by population size
+us_murder_rate <- murders %>% 
+  summarize(rate = sum(total) / sum(population) * 10^5)
+us_murder_rate
+```
+
+## `pull()` in action
+
+We can also use `pull` to return the numerical value of a given column directly. 
+
+```{r}
+#| echo: true
+# average rate adjusted by population size
+us_murder_rate <- murders %>% 
+  summarize(rate = sum(total) / sum(population) * 10^5) %>%
+  pull(rate)
+us_murder_rate
+```
+
+## The dot placeholder {auto-animate="true"}
+
+Another way to access the rate column directly is to use the dot placeholder: 
+
+`.` 
+
+This is a feature of the `magrittr` pipe `%>%`, and allows passing the previously piped value to the next function at the specific location specified rather than as the first value as usual. 
+
+NB: In R4.2, the `|>` operator uses `_` instead of `.`
+Use this going forward! 
+
+## The dot placeholder {auto-animate="true"}
+
+```{r}
+#| echo: true
+# average rate adjusted by population size
+us_murder_rate <- murders %>% 
+  summarize(rate = sum(total) / sum(population) * 10^5) %>%
+  .$rate
+us_murder_rate
+```
+
+## Using the dot place holder for formulas
+
+```{r}
+#| echo: true
+
+fit <- mtcars %>%
+	lm(mpg ~ disp, data = .)
+
+plot(mtcars$disp, mtcars$mpg)
+abline(fit, col = "red")
+```
+
+## Group then summarize {auto-animate="true"}
+
+```{r}
+#| echo: true
+# group by region
+murders %>% group_by(region)
+```
+
+## Group then summarize {auto-animate="true"}
+
+```{r}
+#| echo: true
+# summarize after grouping
+murders %>% 
+  group_by(region) %>%
+  summarize(median = median(rate))
+```
+
+## `arrange()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+murders <- mutate(murders, rate = total / population * 10^5)
+```
+
+## `arrange()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+murders <- mutate(murders, rate = total / population * 10^5)
+
+# order the states by population size
+murders %>% arrange(population) %>% head()
+```
+
+## `arrange()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+murders <- mutate(murders, rate = total / population * 10^5)
+
+# order the states by murder rate - the default is ascending order
+murders %>% arrange(rate) %>% head()
+```
+
+## `arrange()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+murders <- mutate(murders, rate = total / population * 10^5)
+
+# order the states by murder rate in descending order
+murders %>% arrange(desc(rate)) %>% head()
+```
+
+## `arrange()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+murders <- mutate(murders, rate = total / population * 10^5)
+
+# order the states by region and then by murder rate within region
+murders %>% arrange(region, rate) %>% head()
+```
+
+## `arrange()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+murders <- mutate(murders, rate = total / population * 10^5)
+
+# return the top 10 states by murder rate
+murders %>% top_n(10, rate)
+```
+
+## `arrange()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+murders <- mutate(murders, rate = total / population * 10^5)
+
+# return the top 10 states ranked by murder rate, sorted by murder rate
+murders %>% arrange(desc(rate)) %>% top_n(10)
+```
+
+Side note: Why would Washington DC have a much higher murder rate than all the other states? 
+
+## Consider urban area!
+
+![](images/murder_rates_dc.png)
+
+## Any questions? 
+
+Next, we will learn about data visualization techniques with ggplot2. 
