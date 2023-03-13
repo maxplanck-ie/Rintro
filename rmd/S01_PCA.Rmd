@@ -1,16 +1,20 @@
 ---
 title: "Recap (2021.04.22)"
 author: "Thomas Manke"
-date: "`r date() `"
+date: '`r Sys.Date()`'
 output:
   html_document:
     df_print: paged
     code_folding: show
 ---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache=TRUE)
+```
 
 # Recap
 
-![Achievments](../images/sample_plots.png)
+![Achievments](images/sample_plots.png)
 
 
 # Main points so far
@@ -35,7 +39,7 @@ heatmap(M,scale="none", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
 * maximal variance: look for direction in which data shows maximal variation
 * minimal error: allow accurate reconstruction of original data 
 
-![PCA goal](../images/PCA.gif)
+![PCA goal](images/PCA.gif)
 from amoeba @ https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues
 ```{r}
 pca=prcomp(M, scale=TRUE)

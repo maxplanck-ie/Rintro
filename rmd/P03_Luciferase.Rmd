@@ -6,7 +6,13 @@ output:
   html_document:
     code_folding: show
     toc: yes
+    toc_depth: 2
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache=TRUE)
+```
 
 # Read the data
 ```{r read}

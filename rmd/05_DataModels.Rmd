@@ -1,0 +1,206 @@
+---
+title: "05: Data Modeling"
+author: "Thomas Manke"
+date:  '`r Sys.Date()`'
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    code_folding: hide   # code for which echo=TRUE will not be shown but folded
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache=TRUE)
+```
+
+# Recap: All-Against-All Correlations
+**Task**: remove the Species variable from "iris" and store the result in a new data.frame "niris"
+```{r}
+niris=iris[,-5]  # generate new data frame without species variable
+str(niris)
+```
+
+**Task**: Generate all-against-all correlation plot
+```{r}
+# assign species-colors to each observation 
+cols = iris$Species                        # understand how color is defined
+pairs(niris, col=cols, lower.panel=NULL)   # "cols" was defined in task above
+```
+
+***
+
+# From Correlations to Models
+
+**Goal:** 
+
+Model some dependent variable y as function of other explanatory variables x (features)
+
+$$
+y = f(\theta, x) = \theta_1 x +  \theta_0
+$$
+
+For $N$ data points, choose parameters $\theta$ by ordinary least squares: 
+
+$$
+RSS=\sum_{i=1}^{N} (y_i - f(\theta, x_i))^2 \to min
+$$
+
+Easy in R:
+```{r ols}
+plot(Petal.Width ~ Petal.Length, data=iris, col=Species) # use model ("formula") notation
+fit=lm(Petal.Width ~ Petal.Length, data=iris)       # fit a linear model
+abline(fit, lwd=3, lty=2)                           # add regression line
+```
+
+**Query**: What class is the object `fit`?
+
+**Task**: Extract the coefficients of the fitted line.
+
+```{r, echo=FALSE}
+fit$coefficients
+coef(fit)
+```
+
+
+# Reporting the fit (model)
+```{r lm_summary}
+summary(fit)        # summary() behaves differently for fit objects
+coefficients(fit)   # more functions for specific elements
+confint(fit)        # Try to change the confidence level: ?confint
+```
+
+This is a good fit as suggested by a 
+
+- small residual standard error
+- a large coefficient of variation $R^2$ 
+- a small p-value 
+- and by visualization
+
+$$
+R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{\sum_i(y_i - y(\theta,x_i))^2}{\sum_i(y_i-\bar{y})^2}
+$$
+There are manny more methods to access information for the `lm` class
+```{r class_methods}
+methods(class='lm')
+```
+
+
+# Predictions (with confidence intervals)
+```{r predictions}
+x=iris$Petal.Length                       # explanatory variable from fit (here:Petal.Length)
+xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
+ndf=data.frame(Petal.Length=xn)           # put them into new data frame
+
+p=predict(fit, ndf, interval = 'confidence' , level = 0.95)
+plot(Petal.Width ~ Petal.Length, data=iris, col=Species)
+lines(xn, p[,"lwr"] )
+lines(xn, p[,"upr"] )
+
+#some fancy filling
+polygon(c(rev(xn), xn), c(rev(p[ ,"upr"]), p[ ,"lwr"]), col = rgb(1,0,0,0.5), border = NA)
+
+## using ggplot2 - full introduction later
+#library(ggplot2)
+#g = ggplot(iris, aes(Petal.Length, Petal.Width, colour=Species))
+#g + geom_point() + geom_smooth(method="lm", se=TRUE, color="red") + geom_smooth(method="loess", colour="blue")
+```
+
+# Poor Fit
+
+Just replace "Petal" with "Sepal"
+```{r}
+plot(Sepal.Width ~ Sepal.Length, data=iris, col=cols)  
+fit1=lm(Sepal.Width ~ Sepal.Length, data=iris)     
+abline(fit1, lwd=3, lty=2)    
+confint(fit1)                     # estimated slope is indistinguishable from zero
+summary(fit1)
+```
+*Interpretation*: slope is not significantly distinct from 0.
+
+
+**Task**: Use the above template to make predictions for the new poor fit.
+```{r echo=FALSE}
+x=iris$Sepal.Length                       # explanatory variable from fit (here:Sepal.Length)
+xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
+ndf=data.frame(Sepal.Length=xn)           # put them into data frame
+
+p=predict(fit1, ndf, interval = 'confidence' , level = 0.95)  # predict values
+
+plot(Sepal.Width ~ Sepal.Length, data=iris, col=Species)
+lines(xn, p[,"lwr"] )
+lines(xn, p[,"upr"] )
+```
+
+
+# Factorial variables as predictors
+In the iris example the "Species" variable is a factorial (categorical) variable with 3 levels.
+Other typical examples: different experimental conditions or treatments.
+
+```{r}
+plot(Petal.Width ~ Species, data=iris)
+fit=lm(Petal.Width ~ Species, data=iris)
+summary(fit)
+```
+*Interpretation*:
+
+- "setosa"     (1st species) has mean Petal.Width=0.246(29) - reference baseline
+- "versicolor" (2nd species) has mean Petal.Width = Petal.Width(setosa) + 1.08(4) 
+- "virginica"  (3rd species) has mean Petal.Width = Petal.Width(setosa) + 1.78(4)
+
+# Anova
+`summary(fit)` contains information on the individual coefficients. They are difficult to interpret
+
+```{r anova}
+anova(fit)    
+```
+
+**Interpretation**: variable "Species" accounts for much variation in "Petal.Width"
+
+***
+
+# More complicated models
+Determine residual standard error `sigma` for different fits with various complexity
+
+```{r}
+fit=lm(Petal.Width ~ Petal.Length, data=iris)
+paste(toString(fit$call), sigma(fit))
+fit=lm(Petal.Width ~ Petal.Length + Sepal.Length, data=iris)  # function of more than one variable
+paste(toString(fit$call), sigma(fit))
+fit=lm(Petal.Width ~ Species, data=iris)                      # function of categorical variables
+paste(toString(fit$call), sigma(fit))
+fit=lm(Petal.Width ~ . , data=iris)                           # function of all other variable (numerical and categorical)
+paste(toString(fit$call), sigma(fit))
+```
+
+... more complex models tend to have smaller residual standard error (overfitting?)
+
+***
+
+# Model Checking: Diagnostic Plots
+"fit" is a large object of the lm-class which contains also lots of diagnostic informmation. 
+Notice how the behaviour of "plot" changes.
+```{r fit_diag}
+fit=lm(Petal.Width ~ ., data=iris)
+op=par(no.readonly=TRUE)   # safe only resettable graphical parameters, avoids many warnings
+par(mfrow=c(2,2))          # change graphical parameters: 2x2 images on device
+plot(fit,col=iris$Species) # four plots rather than one
+par(op)                    # reset graphical parameters
+```
+more examples here: http://www.statmethods.net/stats/regression.html
+
+Linear models $y_i=\theta_0 + \theta_1  x_i + \epsilon_i$ make certain assumptions ($\epsilon_i \propto N(0,\sigma^2)$)
+
+* residuals $\epsilon_i$ are independent from each other (non-linear patterns?)
+* residuals are normally distributed
+* have equal variance $\sigma^2$ (homoscedascity)
+* are there outliers (large residuals) or observations with strong influence on fit
+
+***
+
+# Review
+* dependencies between variable can often be modeled
+* linear model lm(): fitting, summary and interpretation
+* correlation coefficients can be misleading
+* linear models may not be appropriate.  >example(anscombe)
+

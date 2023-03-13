@@ -1,16 +1,20 @@
 ---
 title: "Sampling: Monty Hall Problem"
-author: "T. Manke"
-date: "24 Feb 2016"
-output: html_document
+author: "Thomas Manke"
+date: '`r Sys.Date()`'
+output: 
+  html_document:
+    code_folding: hide
+    toc: yes
 css: ../css/test.css
 ---
 
-# The Game:
+# The Game
 A showmaster presents three closed doors (1,2,3) to a candidate. Only behind one random door is a price (i.e a car).
 The canddiate is asked to pick one of the doors. Afterwards, the showmaster opens one of the other two doors which does not contain the price.
-Now two doors are still closed and the candidate has the choice to *either stick* to the original choice, *or switch* to the other closed door.
-Question: which strategy is more likely to succeed in winning the price?
+Now two doors are still closed and the candidate has the choice to *either stick* to the original choice, *or switch* to the other closed door.  
+
+**Query**: which strategy is more likely to succeed in winning the price?
 
 
 # Simulation in R
@@ -20,6 +24,7 @@ doors=c("W","L1","L2")
 doors
 ```
 
+## Sampling
 First assume that the doors are shuffled randomly
 ```{r}
 doors=sample(doors) # Why does this amount to shuffling?
@@ -32,9 +37,11 @@ pick=sample(doors,1) # Notice the difference between sample(doors) and sample(do
 pick
 ```
 
+
+## A Function
 Only the show master knows the winning door. Depending on the picked door, the show master will reveal one door that does _not_ contain the price, and _not_ the picked door. This is a more complex task than simple samping - so let's write a function that depends on "pick" and the doors content
 
-```{r}
+```{r function_open_door}
 open_door = function(pick, doors) {
   # masters choices are limited: do not reveal "win" and do not reveal "pick"
   choices = doors[ doors != "W" & doors != pick ]
@@ -49,8 +56,9 @@ open
 ```
 Notice that the showmaster does not really have a choice when the candidate has picked a loosing door (2/3 of the time).
 
-Now the candidate has the choice to switch to the other remaining door (not open, not previously picked).
-The question is: Will the switching strategy be more successful?
+Now the candidate has the choice to switch to the other remaining door (not open, not previously picked).  
+
+To repeat the **question**: Will the switching strategy be more successful?
 ```{r}
 switch=doors[ doors != pick & doors != open]  
 paste(switch)
@@ -60,7 +68,7 @@ With three doors, the candidate has only two choices to stay with "pick" or to s
 
 The above results from sampling will vary (for each candiate and participant of the R-course). Now let's play this game N times. The goal is to count the number of successes for the switching strategy. 
 
-## The first R-script
+## An R-script
 We want to execute the commands above repeatedly.
 To this end the console is not very useful. Therefore we leave the console for a moment, and first collect the individual commands in a file (an Rscript). Thankfully Rstudio also has an editor for such purposes.
 
@@ -92,42 +100,56 @@ source("MontyHall.R")
 
 You can share the script easily with all people who speak R -- especially those who don't like to switch.
 
-# Bayesian Treatment:
+***
+
+# Bayesian Treatment
 If you prefer paper and pencil, this is how to solve this problem analytically.
 
-* **prior probailities**: Pr(1=car)=Pr(2=car)=Pr(3=car)=$\frac{1}{3}$
+**Prior Probabilities**: 
+
+$$
+Pr(1=car)=Pr(2=car)=Pr(3=car)=\frac{1}{3}
+$$
 
 Assume that the candidate picks door 1 and the showmaster opens door 2 (up to relabeling). Now the candidate would like to know
 
-* **posterior probability**: Pr(3=car|2=shown)= ?
+**Posterior Probability**: $Pr(3=car|2=shown)= ?$
 
-* **Bayes Theorem** (on updating probabilities): Pr(A,B)=Pr(A|B)Pr(B)=Pr(B|A)Pr(A)
+**Bayes Theorem** (on updating probabilities): 
+$$
+Pr(A,B) = Pr(A|B)Pr(B) = Pr(B|A)Pr(A)
+$$
 
-* Pr(3=car|2=shown)=$\frac{\mbox{Pr(2=shown|3=car)Pr(3=car)} }{\mbox{Pr(2=shown)}}$
+$$
+Pr(3=car|2=shown)=\frac{Pr(2=shown|3=car)Pr(3=car) }{Pr(2=shown)}
+$$
 
-* **law of total probability (marginalization):**
-* Pr(2=shown)=Pr(2=shown|1=car)Pr(1=car) + Pr(2=shown|2=car)Pr(2=car) + Pr(2=shown|3=car)Pr(3=car) 
-* Pr(2=shown)=$\frac{1}{2} \cdot \frac{1}{3}   + 0 \cdot \frac{1}{3} + 1 \cdot \frac{1}{3} = \frac{1}{2}$
-* Pr(3=car|2=shown)=$\frac{ 1 \cdot \frac{1}{3} }{ \frac{1}{2} } = \frac{2}{3}$
-* Pr(1=car|2=shown)= 1 - Pr(2=car|2=shown)-Pr(3=car|2=shown)= 1 - 0 - $\frac{2}{3}=\frac{1}{3}$
+**Law of Total Probability (marginalization):**
+$$
+Pr(2=shown) = \sum_A Pr(2=shown|A) = \\
+Pr(2=shown|1=car)Pr(1=car) + Pr(2=shown|2=car)Pr(2=car) + Pr(2=shown|3=car)Pr(3=car) \\
+Pr(2=shown) = \frac{1}{2} \cdot \frac{1}{3}   + 0 \cdot \frac{1}{3} + 1 \cdot \frac{1}{3} = \frac{1}{2}
+$$
+
+
+$$
+Pr(3=car|2=shown)= \frac{ 1 \cdot \frac{1}{3} }{ \frac{1}{2} } = \frac{2}{3} \\
+Pr(1=car|2=shown)= 1 - Pr(2=car|2=shown) - Pr(3=car|2=shown)= \\
+1 - 0 -\frac{2}{3}=\frac{1}{3}
+$$
 
 
 
+**Result**
+$$
+Pr(3=car|2=shown) = 2 \times Pr(1=car|2=shown)
+$$
 
-<div class="important blue">
-<br>
-Pr(3=car|2=shown) = 2 $\times$ Pr(1=car|2=shown)
-<br> <br>
-</div>
-
-# Did you understand?
+# Review
 * solving problems (in R) with simulations
 * writing functions to encapsulate more complex tasks
 * loops (for) and conditionals (if)
-* which()
 * selection/exclusion in vector
 * sample()
-* writing and sharing R-scripts.
-* source("Rscript.R")
-* prior and posterior (conditional) probabilities
-* Bayes Theorem and updating probabilities 
+* writing and running R-scripts: `source("Rscript.R")`
+* (Bayes Theorem: updating probabilities)

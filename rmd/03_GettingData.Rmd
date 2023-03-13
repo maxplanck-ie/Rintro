@@ -1,0 +1,215 @@
+---
+title: "02: Getting Data In and Out"
+author: "Thomas Manke"
+date:  '`r Sys.Date()`'
+output:
+  html_document:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_depth: 2
+---
+
+```{r, child="_setup.Rmd"}
+```
+   
+**Goal**: Ultimately we want to access our own data and write results to file.
+
+
+## CSV files
+Comma-separated text files (ASCII) are both human and machine readible.
+Other separators may be chosen (tab or "|").
+This format is frequently used for simple data, such as rows of different samples/observations and columns of multiple variables (per sample)
+
+**Important:** 
+Make sure that you know the precise location of your data file and provide this as filename.
+
+Topics: 
+- home and working directory
+- relative and absolute path
+
+```{r csv, eval=FALSE}
+getwd()                     # working directory
+dir()                       # display content
+filename='../data/iris.csv' # relative to wd
+d = read.csv(filename)      # file content --> memory (d)
+str(d)
+```
+
+
+There are many different ways to load such data into memory and to customize the loading.
+
+**Tasks:**
+- Explore ?read.csv to get a first overview how this function can be customized.
+- How would you read only the first 10 lines?
+- Explore the data object d
+- *Optional bonus:* try your own file and brace! Is it clean enough?
+
+## From URL
+Notice that files do not need to be available locally, but might be provided by some URL.
+
+Be aware that in those cases there might be significant reduced loading speed, depending on your network connections.
+```{r url, eval=FALSE}
+filename='https://raw.githubusercontent.com/maxplanck-ie/Rintro/2023.03/data/iris.tsv'
+d = read.csv(filename, sep='\t')  
+str(d)
+```
+
+## Compressed formats
+
+Especially for big data it is common to store them in compressed format (e.g. *gz) to reduced the storage footprint and speed-up data transfer.
+Such files are not human readable (binary) can also be read
+
+```{r gzip}
+cmd = "gunzip -c ../data/iris.tsv.gz"   # command to uncompress
+d = read.csv(pipe(cmd), sep='\t')       # read as pipe
+str(d)
+```
+
+## Writing data
+There are many ways to save data to text files. One of the simplest uses `write.csv`.
+```{r write_csv, eval=FALSE}
+write.csv(iris, file="iris.csv", row.names=FALSE, quote=FALSE)
+```
+
+For large data you may prefer to write compressed version:
+```{r write_gz, eval=FALSE}
+write.csv(iris, gzfile("iris.csv.gz"))
+```
+
+
+**Task**: 
+
+- Change some of the parameters (row.names, quote) and observed their effect on the resulting file
+- Save only the subset of flowers where Species="setosa" to a file setosa.tsv
+
+```{r, eval=FALSE, echo=FALSE}
+write.csv(iris[iris$Species=="setosa",], file="setosa.csv", row.names=FALSE, quote=FALSE)
+```
+
+
+## RData
+In the context of the R-programming language, Rdata is a very convenient (binary) format that can be used to save multiple data structures or even whole environments 
+It's very efficient when you exchange your data with other R-users (or your future self)
+
+### Specific objects
+```{r rdata}
+d = iris              # copy of iris data
+fn="iris.RData"       # filename (and extension) of choice
+save(d, file=fn)
+rm(d)                 # remove object d for illustration - and watch global env
+load(fn)              # reload object d from file - and watch global env
+```
+
+
+### Task: All objects
+Sometimes we want to save all objects and variable that have accumulated in the "Global Environment" - just to be sure.
+This task test some jargon, familiarity with directory structure and ability to find help.
+Please try it yourself.
+
+- Create a new data object for the iris data set as before *and* additional variables for your favorite numbers and perhaps some favorite strings.
+- Save the whole environment (using `save.image()`)
+- Delete the whole environment aka "workspace"; e.g. using `rm(list=ls())`
+- Reload the environment and confirm that you successfully recreated all objects 
+- Determine your current working directory (>getwd())
+- Locate saved image on disk and inspect its size. Delete it if you prefer.
+
+```{r}
+# your code snippet here
+```
+
+```{r rdat_env, eval=FALSE, echo=FALSE}
+# define some variables
+d = iris
+s = "Hello Thomas"
+n = 42
+v = 1:1000
+getwd()                     # make sure you know where you writing to
+
+save.image("my_env.RData")  # default image_name = ".Rdata"
+rm(list=ls())               # remove everything = sweep global environment
+load("my_env.RData")        # recreate all 
+```
+
+**Notice**: The suffix is not strictly necessary, but it is best practice and used consistently by the community.
+
+***
+
+# R Scripts
+
+Typical data analyses involve many successive steps.  
+To record everything that was done - and ultimately to be able to reproduce this - we use scripts.  
+
+Basically these are just lines of code that are collected in a text file.
+
+In Rstudio they can be created using `File > New File > R script` 
+
+**Task**: 
+
+* Create a new R-script `filter_iris.R` to do the following: 
+  - Starting from the pre-compiled `iris` data, create a new `data_frame d` of all flowers where `Sepal.Length` is greater or equal to 7 cm.
+  - determine the number flower in the new `data_frame`. Save this number as variable `nf`
+  - How many different species are in the new data_frame. Save this number as variable `ns`
+  - write the new `data_frame d` in tab seperated file `iris_big_sepal.tsv`
+  - save the whole environment in a file `analysis.Rdata` (hint:)
+  - delete all variables in the environment
+* Save the script and run it (source)
+* Bonus: Delete all whole environment reload it from the image file
+
+**Query**: After the filtering, how many flowers and how many species are left?
+
+
+
+***
+# Review
+* Many different data sources, formats & structures
+  - text files: *.tsv, *.csv, ...
+  - compressed files: *.bed.gz
+  - application specific: .*RData, (.*xls)
+* Reading Data: many ways
+  - read.csv(), read.table(), scan(), ... 
+  - from URL
+  - customization with parameters
+  - and there is more: special packages
+* Writing Data: many ways
+  - write.csv
+  - save()
+  - save.image()
+* Data I/O can be challenging:
+  - file $\to$ memory
+  - know your paths, format, type, size
+  - ensure clean and structured data
+  - bring time and patience
+* R scripts: writing and running (source)
+
+***
+<br><br><br>
+
+# Appendix: reality of I/O
+Many external data is badly formatted, leading to much wasted time - before any analysis. 
+
+The code snippets below are not run - but try them out
+```{r trial_and_error, eval=FALSE, error=TRUE}
+file="../data/GeneList.tsv"     
+# file="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/GeneList.tsv"  
+read.csv(file)      
+read.csv(file, comment.char = "%")                        # comment lines
+read.csv(file, comment.char = "%", sep="\t")              # separators
+```
+
+
+```{r process_NA, eval=FALSE}
+# use ncol, is.na(), na.omit()
+ic = colSums(is.na(d)) == ncol(d) # columns where all enries are NA
+d1 = d[, !ic]                     # exclude those columns
+
+d1
+na.omit(d) 
+na.omit(d1)
+```
+**Messages:**
+
+- This file is a mess
+- Many data come like this
+- read functions have many parameters for better control
+- there are also other dedicated software packages to help (somewhat)

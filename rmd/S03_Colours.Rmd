@@ -7,6 +7,11 @@ output:
     df_print: paged
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache=TRUE)
+```
+
 # Colours
 Colours can be referenced in different ways:
 ```{r color}

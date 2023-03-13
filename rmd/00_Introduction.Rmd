@@ -1,28 +1,32 @@
 ---
-title: "Introduction"
+title: "00: Introduction"
 author: "Thomas Manke"
-date: "`r date() `"
-output: html_document
+date: '`r Sys.Date()`'
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    code_folding: hide   # code for which echo=TRUE will not be shown but folded
 ---
+
 # Overview of R-course
 
-## Block 1: Groundwork
-* Intro to RStudio: a GUI for R
-* The Basics: data types and classes
-* function structures (understanding output)
+### Block 1: Groundwork
+* Starting RStudio: a GUI for R
+* Simple functions (input, output, parameters & help)
+* Data: I/O, Types, Formats & Structures
 
-## Block 2: Basic 
+### Block 2: Speaking about Data 
 * Data Descriptions
 * Data Visualization: simple plots and advanced heatmaps
 * Data Models: linear models
-* Data Management: getting data in and out
 
-## Block 3: Open the universe
+### Block 3: Open the universe
 * installing and using packages
 * manipulating data: cleaning, filtering, merging
 
-## Block 4: Advanced topics and case studies
-* from interactive use to programming and simple scripts
+### Block 4: Advanced topics and case studies
+* R scripts, R markdown & reproducible analyses
 * data exploration
 
 
@@ -42,9 +46,11 @@ After the course you will be able to
 * increase the value of your CV
 * produce figures such as
 
-![Typical examples from R.](../images/sample_plots.png)
+![Typical examples from R.](images/sample_plots.png)
 
 [//]: # http://www.r-graph-gallery.com/all-graphs/
+
+***
 
 # Non-Goals:
 This course does *not* teach 
@@ -65,12 +71,21 @@ This course does *not* teach
 * not the best solution for everything (e.g. mapping)
 * frequent requirement during (bioinformatics) hiring
 
-# First hurdles
-* its a new language: vocabulary & grammar
-* computers are stuborn and stupid: they do not think along
-* case sensitivity: $a \ne A$
-* choices: many ways to say (to program) things
-* more choices: 3000 (redundant) packages
-* learning curve: steep (but rewarding)
+***
+
+# Embrace the learning curve 
+
+*  steep (but rewarding)
+* First hurdles:
+  * it's a new language: vocabulary & grammar
+  * choices: many ways to say (to program) the same things
+  * more choices: many (redundant) packages
+  * computers are stubborn and stupid: they do not think along
+* More hurdles
+  * case sensitivity: $a \ne A$
+  * parameter sensitivity
+  * sofware dependencies
+
+***
 
 # Start Rstudio

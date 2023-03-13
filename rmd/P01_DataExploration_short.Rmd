@@ -1,12 +1,18 @@
 ---
-title: "Data Exploration: Regulatory Modules from ChIP-seq"
+title: "P01: Data Exploration: Regulatory Modules from ChIP-seq"
 author: "Thomas Manke"
-date: "`r date()`"
+date: '`r Sys.Date()`'
 output: 
   html_document:
     code_folding: hide
     toc: yes
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache=TRUE)
+```
+
 # Goal 
 - Input:  genome-wide binding data for 113 transcription factors in yeast (ChIP-chip): --> 6000 x 113 matrix
 - Analysis: identify combinations of TF
@@ -24,28 +30,19 @@ library(pheatmap)
 # Skipped: Pre-processing
 Steps: extract only p-values from full data, define proper names for rows, remove columns 
 ```{r preprocessing, eval=FALSE}
-# define a filename (notice that R can read from http)
-# Beware: For slow network connections it will be faster to first download the file to local storage and work from there.
-
+# Beware of slow connections ! 
 chip="http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_gene.tsv"
+D=read.csv(chip, sep="\t", skip=1) # skip first line
 
-###############################
-# Data munging: Trial and errors have been commented out 
-# first problem: two headers --> skip first --> skip line 1
-# D=read.table(file=chip, header=TRUE,  skip=1, sep="\t")
-# nrow(D)  # 511 << 6000 !!!???
+### some filtering
+rownames(D)=D[,1]                  # ORF-symbols in column 1, keep them as rownames 
+ic=c(1:4,seq(6,230,by=2))          # define column indices to be excluded (only keep p-values)
+P=D[,-ic]                          # new data-frame of p-values, exclude superfluous columns and ratios
+####
 
-# second problem: quote symbols in names (')
-# cf=count.fields(chip,sep="\t") # many NA --> quoted fields got missing
-
-D=read.table(chip, header=TRUE,  sep="\t", quote="\"", skip=1)
-rownames(D)=D[,1]          # ORF-symbols in column 1, keep them as rownames 
-ic=c(1:4,seq(6,230,by=2))  # define column indices to be excluded (only keep p-values)
-P=D[,-ic]                  # new data-frame of p-values, exclude superfluous columns and ratios
-###############################
-
-# save cleaned data for future use
-write.table(P,file="../data/chip.tsv", sep="\t", quote=FALSE)  # write p-values to file
+# save cleaned data (only p-values) to file - for future use
+# use write.table instead of write.csv - as I want to have tab-seperation
+write.table(P, file="../data/chip.tsv", sep="\t", quote=FALSE) 
 ```
 
 # Read Clean Data
@@ -59,26 +56,24 @@ Faster: have it local
 ```{r read}
 fn="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/chip.tsv"  # remote filename
 fn="../data/chip.tsv"                                                            # local: same but faster
-P=read.table(file=fn, header=TRUE, sep="\t")
+P=read.csv(file=fn, sep="\t")
 ```
 
 
-# Sanity Checks
-Inspect data. You might want to do this on the console.
-So that you don't clutter your notebook.
+# Tasks: Sanity Checks
+Inspect data. Below are some ideas.   
+Try this iteratively on the console. So that you don't clutter your notebook.
 
-## Structure
-```{r str, eval=FALSE}
-str(P) # you might want to do this on the console 
-```
-
-## Dimensions, Names, strange entries
-```{r checks}
-dim(P)
-colnames(P)
+```{r sanity, eval=FALSE}
+str(P)             # structure
+dim(P)             # dimensions
+colnames(P)        # TF
 anyNA(P)           # are there any undefined values
 sum(P<0 | P>1)     # how many "strange" p-values --> errors?
 ```
+
+**Query**: How many genes (actually: intergenic regions) are in this data frame?
+
 
 ## Summary Plots
 ```{r summary_plots}
@@ -88,7 +83,7 @@ boxplot(P)         # distribution
 
 ## Show me all the data
 This might be slow.
-```{r pheatmap}
+```{r pheatmap, cache=TRUE}
 pheatmap(P, show_rownames=FALSE)
 ```
 
@@ -104,13 +99,18 @@ Some genes (rows) have no associated TF. Some TF target no gene.
 nt = rowSums(B)     # number of transcription factors targetting a gene
 ng = colSums(B)     # number of genes targetted by TF
 D = B[nt>1, ng>40]  # define filtered data
+
+```
+
+**Query**: What is the dimension of the filtered matrix B 
+```{r filtered_dim, eval=FALSE, echo=FALSE}
 dim(B)
 dim(D)
 ```
 
 # Show me the processed data
 ```{r plot}
-pheatmap(D+0, show_rownames=FALSE) # D + 0 is trick to convert logical matrix to numeric matrix (FALSE=0, TRUE=1) 
+pheatmap(D+0, show_rownames=FALSE) # D + 0 is my trick to convert logical matrix to numeric matrix (FALSE=0, TRUE=1) 
 ```
 
 # Main Results: All Correlations

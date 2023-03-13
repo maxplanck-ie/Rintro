@@ -1,129 +1,150 @@
 ---
-title: "First Steps"
+title: "01: First Steps"
 author: "Thomas Manke"
-date: "`r date() `"
-output: html_document
+date: '`r Sys.Date()`'
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    code_folding: hide   # code for which echo=TRUE will not be shown but folded
 ---
 
-Familiarize yourself with the layout of the various panels in Rstudio. The most important window is the so-called "Console" with the prompt (">"). This is where much of the interaction with the R-software will take place. The other windows are for: output, help and other information.
+# Create R project
+**Best practice:**   
+Each R project should have their dedicated directory. This directory will hold code, data, results etc.
 
+**Task**: Open a new project with "File > New Project ..."
 
-# A pocket calculator
-In the Console try to repeat and understand the following operations
-```{r}
+Notice the following distinction:
+
+- When running Rstudio locally, the project directory will reside on your **local** computer.
+- When accessing a web server, the project directory will also be on that server.
+
+**Task**: Familiarize yourself with the layout and the various panels in Rstudio. 
+
+**Query**: Utilization: https://pollev.com/thomasmanke101
+
+# Console and Commands
+
+For now, the most important panel is the so-called "Console" with the prompt (">"). 
+
+This is where the first interactions with the R-software will take place. 
+
+The other panels are for: output, help and other information.
+
+**Task**: In the Console try to repeat and understand the following operations
+```{r console}
 2+2
-2^3      # This is a comment: try also 2**3
-1+2+3/6  # beware of precedences
-sin(pi/2)  # more complicated functions and built-in constants
-sqrt(2)
-factorial(20) # some big numbers. Notation?
-sqrt(-1)
-sqrt(-1 + 0i)  # complex numbers
+2^3        # This is a comment: try also 2**3
+1+2+3/6    # beware of precedence rules
+sqrt(2)    # functions
+sin(pi/2)  # functions and built-in constants
+
+# Special values
+1/0        # R knows infinity! Try 1/Inf and 1/inf
+0/0        # Not a number!     Try sqrt(-1)
 ```
 
-Euler Equation: $1+e^{-i\pi}=0$
-
-```{r}
-1+exp(-1i*pi) # Why is this not zero?
-```
-
-## History
+# Command History
 All R-commands are tracked in a *history*. It maybe accessed using the cursors (or the history panel in RStudio). This is extremely useful to navigate to previous commands, repeat them, or change them slightly.
 
 **Task**: Using the history, determine $\sqrt 3$.
 
-## First help
+# First help
 There are various different ways to get help
-```{r, echo=TRUE}
-?exp
-??exp
-# example(exp)  # later
+```{r help, eval=FALSE}
+?sin
 ```
 
-Use help to find out more about: sin, or factorial, or anything else of interest.
+Use help to find out more about: sqrt, exp or anything else of interest.
 
-## Community help and References
-* online courses: https://www.datacamp.com, http://software-carpentry.org/lessons
-* bootcamp: http://www.r-bloggers.com/r-bootcamp-materials  http://jaredknowles.com/r-bootcamp 
-* software carpentry: http://swcarpentry.github.io/r-novice-gapminder
-* http://stackoverflow.com, http://www.r-bloggers.com/
+# Community help
+* online courses: http://software-carpentry.org/lessons, Coursera, Udacity, ...
+* bootcamp: https://github.com/jknowles/r_tutorial_ed
 * QuickR: http://www.statmethods.net 
-* Used here: https://github.com/jknowles/r_tutorial_ed/
+* http://stackoverflow.com, http://www.r-bloggers.com/
 
 
-When seeking help from the community, it is important to also send the output of
+# SessionInfo
+Every language operates in a certain context and is context-dependent.
 
-```{r}
+Software depends on other software and packages.
+
+It is important to be aware of those (often complex) dependencies.
+
+One way to communicate this context is with the output from sessionInfo().
+
+```{r sessionInfo}
 sessionInfo()
 ```
 
 ****
 
 # Assigning values to objects
-Goal: store results of computation in new variables
-```{r}
-x <- 2*pi
-2*pi -> x
 
-x      # see value of object x = show(x) 
+**Goal**: store results of computation in new variables
+```{r simple_obejcts}
+x <- 2*pi # pre-defined constant pi
+x         # see value of object x = show(x) 
 
-# What is the value of object "X"?
-
-x < -2 # Careful: what's going on here?
+x < -2    # Careful: what's going on here?
 x
 
-x=2 # similar in most other languages. Notice that x is overwritten
-x
-x==3  # annother logical comparison
-y=x+x # passing objects to functions (+)
+x = 2  # "=" as in most other languages.  
+x      # x was overwritten
+
+x==3   # another logical comparison (x unchanged)
+
+x+x    # passing objects to functions (+)
+```
 
 
-# defining character objects
-u="a" 
-v="b" 
-
-
-# adding character objects
-w=paste(u,v) # more options? Try ?paste
+**Task**: look at the following objects and understand the differences
+```{r more_obejects, eval=FALSE, echo=TRUE}
+pi 
+hi
+"hi"
 ```
 
 ****
 
 # Simple Vectors
-Vectors illustrate how complex data structures can be built from smaller blocks. Here we learn how to create and inspect vectors.
-```{r}
+Vectors illustrate how complex data structures can be built from smaller blocks. 
+Here we learn how to create and inspect vectors.
+```{r vectors}
 v=c(1,2)            # combine arguments into vector
 v                   # display v
-str(v)              # inspect structure of  v (especially useful for long and structured objects)
-typeof(v)           # inspect type of v ( ~ storage mode)
-class(v)            # inspect class of v (determines how certain functions will work with v)
 
-is.vector(v)        # a function with a logical result: TRUE/FALSE
+# functions for vectors
+str(v)              # structure of v (especially useful for long and structured objects)
+typeof(v)           # type of v ( ~ storage mode)
+class(v)            # class of v (determines how certain functions will work with v)
 length(v)
 sum(v)
 summary(v)
 ```
-
-
-```{r}
-v=c(1,pi,"hello")  # what happens here?     
-str(v)
-typeof(v)
-summary(v)        # notice the changed behaviour of summary()
+# Accessing Vectors
+Frequently we need to access specific elements from a vector
+```{r access}
+v[1]
 ```
 
-# Efficient Vector Generation
-```{r}
+**Task**:  access the following vector elements: v[1], v[2], v[3], v[1:3], v[-1]
+
+# Vector Generation
+```{r vector_generation}
 v=c(1,2,3,4,5)    # combining many elements can get cumbersome
-v=1:5             # same much easier
-v=10:-10          # intuitive
+v=1:5             # more efficient
 
 v=seq(from=1, to=5, by=1) # same as before but more flexibilty
-v=seq(1,5,0.5)            # short-hand
-?seq                      # understand other parameter options for seq()
+v=seq(1,5,0.5)            # short-hand defaults
 ```
 
-**Task**: Create a vector with 5 numbers equally spaced from +2 to -1.9
+**Tasks**: 
+
+- Explore the seq() function and inspect other parameter options. 
+- Create a vector with 5 numbers equally spaced from +2 to -1.9
+
 ```{r, echo=FALSE}
 v=seq(2,-1.9,length.out=5)
 v
@@ -135,108 +156,52 @@ v1=1:10-1
 v2=1:(10-1)
 ```
 
-# Accessing Vectors
-Frequently we need to access specific elements from a vector
+
+# Vector Operations
 ```{r eval=FALSE}
-v=1:5             
-v[2]              # extract second element from vector
-i=1:3             # define an index vector
-v[i]              # accessing multiple elements
-v[-i]             # what's this ?
-v[5:6]            # Careful: what happens here ?
+v1=1:3      # = c(1,2,3)
+v2=rep(2,3) # = c(2,2,2)
+
+v1+v2      # elementwise addition
+v1*v2      # ... multiplication
+v1 > v2    # ... comparisons
+v1 %*% v2  # scalar product
 ```
 
+**Task**: Define your own vectors and explore some numerical operations
 
-### Vectors elements can be named
-This can be useful for easier access to vector element
-```{r eval=FALSE}
-v=c(Thomas=2, Devon=1)
-names(v)
-v[1]
-v["Devon"]
-names(v)[1]="TJ"  # renaming names
-v
+# Misc: Concepts and Pecularities
+```{r misc, eval=FALSE}
+v=1:4                    # Vector Definition
+
+v + 10                   # Recycling
+v + c(10,20)             # Recycling
+v + c(10,20,30)          # Warning != Error
+
+#v %*% c(10,20,30)        # Error = Error
+
+letters                  # built-in vector. Try LETTERS 
+typeof(letters)          # there is more than numbers
+
+names(v)=letters[1:4]    # naming of vector elements (for convenience)
+v["b"]                   # index by name
+
+rev(v)                   # reverse vectors
 ```
 
-
-R also knows some *built-in* vectors: e.g. letters
-```{r}
-letters
-```
-
-**Task**: Name the elements of vector $v=1:15$ with the first letters of the alphabet.
-```{r echo=FALSE}
-v=1:15
-names(v)=letters[1:15]
-v
-```
-
-
-```{r}
-v=-2:2
-names(v)=letters[1:4]    # can you see all 4 vectors?
-str(v)
-names(v)[5]              # what is this ?
-names(v)=LETTERS[20:24]  # another built-in vector
-```
-
-
-### Type Conversion
-The types of variables and vectors can be changed. Try to understand the following commands
-```{r eval=FALSE}
-as.character(1:10)
-as.logical(LETTERS)
-as.logical(c(-1,0,0.1,2,NaN,NA))
-```
-
-### Vector Operations
-```{r eval=FALSE}
-x=c(1,2,3)
-y=c(2,2,2)
-x+y     # elementwise addition
-x*y     # ... multiplication
-x^y     # ... exponentiation
-x > y   # ... comparisons
-x %% 2  # modulo operators: try y %% 2
-x %*% y # scalar product
-
-```
-
-### Vectors can be recycled. 
-```{r eval=FALSE}
-v=1:4
-v+1
-v+c(10,20)
-v+c(10,20,30)  # Notice and understand the warning message
-v %*% c(10,20) # Error: why?
-```
-
-**Task**: Create a *reverse* vector
-```{r, echo=FALSE}
-rev(LETTERS)
-```
-
-Actually, even single variables are vectors (with length=1)
-```{r}
-is.vector("a")
-is.vector(pi)
-is.vector(NaN)
-```
 ****
 
 # Learning Curve:
-* work with console and R output
-* simple functions (input, output) and logical operation
-* numerical precision
+* Rstudio: Starting an R project
+* work with console 
+* simple functions (input, output), logical operations and parameters
 * creating simple objects and assigning values
-* inspecting objects: v, str(v), typeof(v), lenght(v)
-* case-sensitivity
+* inspecting objects: v, str(v), typeof(v), length(v)
 * flexible creation of vectors
 * vector indices and subsetting
-* naming vector elements
 * vector operations and recycling
-* undefined values: NaN, NA
-* type conversions: numbers->characters->logical
+* special values: Inf, NaN, NA
 * functions can behave differently on different input: summary()
 * see warning messages and errors
-* use help to understand about functions: ?exp
+* getting help: ?sqrt
+* software dependencies and the importance of sesssionInfo()

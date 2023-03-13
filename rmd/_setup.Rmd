@@ -1,0 +1,6 @@
+```{r setup, include=FALSE}
+# global caching is discouraged - use very carefully
+# https://bookdown.org/yihui/rmarkdown-cookbook/cache.html
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache=TRUE)
+```
