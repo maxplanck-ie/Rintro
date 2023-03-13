@@ -1,5 +1,5 @@
 ---
-title: "02: Getting Data In and Out"
+title: "03: Getting Data In and Out"
 author: "Thomas Manke"
 date:  '`r Sys.Date()`'
 output:
@@ -24,7 +24,8 @@ This format is frequently used for simple data, such as rows of different sample
 **Important:** 
 Make sure that you know the precise location of your data file and provide this as filename.
 
-Topics: 
+Topics:  
+
 - home and working directory
 - relative and absolute path
 
