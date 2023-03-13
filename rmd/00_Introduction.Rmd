@@ -13,8 +13,8 @@ output:
 
 ### Block 1: Groundwork
 * Starting RStudio: a GUI for R
-* Getting data: I/O
-* function structures (understanding output)
+* Simple functions (input, output, parameters & help)
+* Data: I/O, Types, Formats & Structures
 
 ### Block 2: Speaking about Data 
 * Data Descriptions
@@ -26,7 +26,7 @@ output:
 * manipulating data: cleaning, filtering, merging
 
 ### Block 4: Advanced topics and case studies
-* from interactive use to programming and simple scripts
+* R scripts, R markdown & reproducible analyses
 * data exploration
 
 
