@@ -7,3 +7,5 @@ tmp/
 *_files/
 rmd/*RData
 rmd/_site
+rmd/*.csv
+rmd/*.csv.gz
