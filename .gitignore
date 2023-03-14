@@ -1,5 +1,4 @@
 projects/tidyverse/murders.csv
-*_files/
 .Rproj.user
 .Rhistory
 .RData
@@ -8,4 +7,3 @@ tmp/
 *_cache/
 rmd/*RData
 rmd/_site
-projects/tidyverse/*.html
