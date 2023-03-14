@@ -366,6 +366,7 @@ Side note: Why would Washington DC have a much higher murder rate than all the o
 -   The `gapminder` dataset was developed by Hans Rosling, a famous sociologist and health expert, to help visualize global socioeconomic data
 
 ```{r}
+#| echo: true
 data(gapminder)
 head(gapminder)
 ```
@@ -400,11 +401,11 @@ gapminder %>%
   pull()
 ```
 
-## Rank the following countries based on their mortality rate in 2012. {auto-animate="true"}
+## Rank the following countries based on their infant  mortality rate in 2012. {auto-animate="true"}
 
 Turkey, Argentina, South Korea, Georgia, Thailand, Australia
 
-## Rank the following countries based on their mortality rate in 2012. {auto-animate="true"}
+## Rank the following countries based on their infant mortality rate in 2012. {auto-animate="true"}
 
 Turkey, Argentina, South Korea, Georgia, Thailand, Australia
 
