@@ -16,7 +16,9 @@ output:
 
 # Goal 1: Show me all the data
 
-**Scaling**: It's good practice to normalize the different variables
+## Scaling 
+
+It's good practice to normalize the different variables
 ```{r scaling}
 d=iris[,-5]   # numerical iris data (without speciee) 
 ds=scale(d)   # scaled iris data (column-wise)
@@ -27,7 +29,7 @@ hist(ds[,"Sepal.Width"], breaks = br, add=TRUE, col="red")    # add histogram to
 legend("topright", c("orig","scaled"), fill=c("white", "red"))
 ```
 
-# Heatmaps
+## Heatmaps
 Heatmaps are color-coded representations of numerical matrices. 
 
 Typically the rows and columns are re-ordered according to some distance measure (default: Euclidean) 
@@ -58,7 +60,7 @@ There is many more parameters for more control - if you have lots of time read "
 
 ***
 
-# Sending plots to files
+## Sending plots to files
 In Rstudio, we can export figures from the "Plots" tab. On the console we can define a pdf file as a new device for all subsequent figures. This is usually done only *after* the image is sufficiently optimized
 ```{r pdf}
 pdf("heatmap.pdf")                                        # similar for jpeg, png, ...
@@ -82,13 +84,23 @@ s=iris[,5]                 # species attributes (factor)
 
 ![PCA goal](images/PCA.gif)
 from amoeba @ https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues
-```{r}
-pca=prcomp(M, scale=TRUE)
+
+## PCA with R
+```{r run_pca}
+pca = prcomp(M, scale=TRUE)
 ```
 
-*Task*: What kind of object is pca?
+**Task**: What kind of object is pca?
 
-```{r}
+```{r pca_obj, echo=FALSE, eval=FALSE}
+class(pca)
+typeof(pca)
+str(pca)
+methods(class="prcomp")
+```
+
+## Covariance Structure
+```{r pca_cov}
 S=pca$x          # score matrix = rotated and scaled data matrix
 
 pairs(S, col=s)
@@ -101,8 +113,9 @@ pheatmap(cov(S))
 ```
 
 
-Notice that the higher components do not add much to the variance, so we may as well represent the transformed data in only the first two dimensions:
-```{r}
+Notice that the higher components do not add much to the variance, so we may as well represent the transformed data in only the **first two dimensions**:
+
+```{r plot_PC1_PC2}
 plot(S[,1:2],pch=21, bg=s)  # score-plot
 ```
 
@@ -111,9 +124,9 @@ plot(S[,1:2],pch=21, bg=s)  # score-plot
 
 # Review
 * use heatmaps to visualize large matrices
-* scaling transformation
+* data transformation: scale()
 * installing packages: pheatmap
-* exporting figures as publication-ready files
-* dimensional reduction with PCA
+* exporting figures as publication-ready files: pdf()
+* dimensional reduction (PCA): prcomp()
 
 
