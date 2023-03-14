@@ -285,13 +285,16 @@ $(document).ready(function () {
     </li>
     <li class="divider"></li>
     <li>
-      <a href="10_tidyr.html">10_tidyr</a>
+      <a href="10_Data_Import.html">10_Data_Import</a>
     </li>
     <li>
-      <a href="11_dplyr.html">11_dplyr</a>
+      <a href="11_Data_Wrangling.html">11_Data_Wrangling</a>
     </li>
     <li>
-      <a href="12_ggplot2.html">12_ggplot2</a>
+      <a href="12_Data_Visualization.html">12_Data_Visualization</a>
+    </li>
+    <li>
+      <a href="13_Tidy_Data.html">13_Tidy_Data</a>
     </li>
     <li class="divider"></li>
     <li>
@@ -374,12 +377,12 @@ doors</code></pre>
 <p>First assume that the doors are shuffled randomly</p>
 <pre class="r"><code>doors=sample(doors) # Why does this amount to shuffling?
 doors</code></pre>
-<pre><code>## [1] &quot;L1&quot; &quot;W&quot;  &quot;L2&quot;</code></pre>
+<pre><code>## [1] &quot;L2&quot; &quot;L1&quot; &quot;W&quot;</code></pre>
 <p>Now the candidate picks a random door “pick” (hoping that it might be
 the winning door)</p>
 <pre class="r"><code>pick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)
 pick</code></pre>
-<pre><code>## [1] &quot;L1&quot;</code></pre>
+<pre><code>## [1] &quot;W&quot;</code></pre>
 </div>
 <div id="a-function" class="section level2">
 <h2>A Function</h2>
@@ -396,7 +399,7 @@ depends on “pick” and the doors content</p>
 <p>Now let’s use the function to open a door</p>
 <pre class="r"><code>open = open_door(pick,doors)
 open</code></pre>
-<pre><code>## [1] &quot;L2&quot;</code></pre>
+<pre><code>## [1] &quot;L1&quot;</code></pre>
 <p>Notice that the showmaster does not really have a choice when the
 candidate has picked a loosing door (2/3 of the time).</p>
 <p>Now the candidate has the choice to switch to the other remaining
@@ -405,7 +408,7 @@ door (not open, not previously picked).</p>
 be more successful?</p>
 <pre class="r"><code>switch=doors[ doors != pick &amp; doors != open]  
 paste(switch)</code></pre>
-<pre><code>## [1] &quot;W&quot;</code></pre>
+<pre><code>## [1] &quot;L2&quot;</code></pre>
 <p>With three doors, the candidate has only two choices to stay with
 “pick” or to switch to “switch”</p>
 <p>The above results from sampling will vary (for each candiate and
@@ -444,8 +447,8 @@ cat(&quot;successes with switching= &quot;,success, &quot;success_rate: &quot;, 
 with some suitable name. Return to the console and execute the script
 using the <em>source</em> command</p>
 <pre class="r"><code>source(&quot;MontyHall.R&quot;)</code></pre>
-<pre><code>## successes with switching=  6610 success_rate:  0.661 
-## successes with switching=  6759 success_rate:  0.6759</code></pre>
+<pre><code>## successes with switching=  6660 success_rate:  0.666 
+## successes with switching=  6684 success_rate:  0.6684</code></pre>
 <p>You can share the script easily with all people who speak R –
 especially those who don’t like to switch.</p>
 <hr />
