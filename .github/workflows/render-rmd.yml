@@ -49,13 +49,15 @@ jobs:
       - name: Render R Markdown and Move Site
         run: | 
           Rscript -e "rmarkdown::render_site('rmd')"  
-          # mv rmd/_site .
+          mv projects/tidyverse/*_files projects/tidyverse/*.html projects/tidyverse/styles.css rmd/_site/
+          mv projects/tidyverse/images/* rmd/_site/images/
 
       - name: Show all files
         run: ls -Ral
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
+        if: ${{ !env.ACT }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: |
