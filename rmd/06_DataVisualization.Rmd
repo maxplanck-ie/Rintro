@@ -16,80 +16,68 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(cache=TRUE)
 ```
 
-# Image: Show me all the data
-The image() function maps numbers to colours. Try it on the iris data frame and understand the error.
 
-```{r image}
-niris=iris[,-5]     # define numeric iris data
-M=as.matrix(niris)  # there are many as.* functions that convert among data structures
-image(M)            # image takes only matrix objects (data frame with single type "numeric")
-```
+# Goal 1: Show me all the data
 
-Be aware:
 
-* Columns (=variables) appear as rows in image(). How could this be changed?
-* the axes are meaningless. Default: $0 \ldots 1$
-* there is a large difference in scales for the different variables
-* there is an implicit color-scheme
-
-Below we are re-scaling the iris-matrix
+**Scaling**: It's good practice to normalize the different variables
 ```{r scaling}
-S=scale(M)                                                     # scales column-wise
+S=scale(d)                                                     # scales column-wise
+
 br=seq(-5,7,by=0.5)                                            # set common break points for the histograms below
-hist(M[,"Sepal.Width"], breaks = br)                           # illustrate scaling for specific column
+hist(d[,"Sepal.Width"], breaks = br)                           # illustrate scaling for specific column
 hist(S[,"Sepal.Width"], breaks = br, add=TRUE, col="red")      # add histogram to current plot
 legend("topright", c("orig","scaled"), fill=c("white", "red"))
-
-image(S,main="Normalized IRIS data", axes=FALSE)              # as before, suppress axes
-
-#add axes flexibly
-#axis(4,at=seq(0,1,length.out=ncol(S)), labels=colnames(S), las=2) # Understand this command
 ```
 
 # Heatmaps
-Heatmaps are advanced images in which rows and columns are re-ordered according
-to some distance measure (default: Euclidean) and hierarchical clustering method (default: complete) 
-```{r heatmap}
-heatmap(S)
-```
+Heatmaps are color-coded representations of numerical matrices. 
 
-Notice that:
+Typically the rows and columns are re-ordered according to some distance measure (default: Euclidean) 
+and hierarchical clustering method (default: complete) 
 
-* unlike image(), the heatmap is already in the "canonical" orientation
-* heatmap scales all rows by default (for visuzalization)
-* frequently needs many customizations: label size, remove row-names, ...
-* there is an implicit colour scheme: "numerical value $\to$ colour"
-```{r heatmap_with_col}
-cols = rainbow(3)[iris$Species]            # understand how color is defined
-heatmap(S,scale="none", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
-```
+There are many tools to draw heatmaps in R.
+Here we use the `pheatmap` package to provide this powerful functionality
 
-There are multiple powerful extension in other R-packages.
-If time allows try this. And if you have lots of time read "?pheatmap" 
-```{r pheatmap, echo=TRUE}
+```{r pheatmap}
 #install.packages("pheatmap")  # That's how we install new packages - more later
 library(pheatmap)              # make packaged functions available
-pheatmap(scale(iris[,-5])) # works also with data frames
+
+S   = scale(iris[,-5])                # scaled data for heatmap
+ann = data.frame(Species = iris[,5])  # meta data for annotations
+
+# explicitly set rownames to retain association between data and metadata
+rownames(S)=rownames(iris)
+rownames(ann)=rownames(iris)
+
+pheatmap(S, 
+         annotation_row = ann,
+         show_rownames = FALSE
+         )
 ```
 
+There is many more parameters for more control - if you have lots of time read "?pheatmap" 
+
+***
 
 # Sending plots to files
 In Rstudio, we can export figures from the "Plots" tab. On the console we can define a pdf file as a new device for all subsequent figures. This is usually done only *after* the image is sufficiently optimized
 ```{r pdf}
 pdf("heatmap.pdf") # similar for jpeg, png, ...
-heatmap(S,scale="none", RowSideColors=cols,labRow=FALSE, cexCol=0.9)
+pheatmap(S, annotation_row = ann, show_rownames = FALSE)
 dev.off()  # close device = pdf file
 ```
 
+***
 
+# Goal 2: Show me all the data (in lower dimensions)
 
-# Dimensional Reduction: PCA
 ```{r}
 M=as.matrix(iris[,-5])     # numerical data, some operations below require matrices not data frames (%*%)
 s=iris[,5]                 # species attributes (factor)
 ```
 
-# Goals:
+## PCA Goals
 * simplify description of data matrix $M$: data reduction & extract most important information
 * maximal variance: look for direction in which data shows maximal variation
 * minimal error: allow accurate reconstruction of original data 
@@ -124,10 +112,9 @@ plot(S[,1:2],pch=21, bg=s)  # score-plot
 ***
 
 # Review
-* use image() and heatmap() to visualize matrices
-* scaling transformation and customizations
-* installing packages for extra functionalitty: pheatmap
-* be careful with colour-scaling
+* use heatmaps to visualize large matrices
+* scaling transformation
+* installing packages: pheatmap
 * exporting figures as publication-ready files
 * dimensional reduction with PCA
 
