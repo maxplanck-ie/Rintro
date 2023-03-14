@@ -1,11 +1,11 @@
 projects/tidyverse/murders.csv
-*_files/
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
 tmp/
-*_cache/
+rmd/*_cache/
+rmd/*_files
 rmd/*RData
 rmd/_site
 rmd/*.csv
