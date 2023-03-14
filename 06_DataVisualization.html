@@ -11,7 +11,7 @@
 
 <meta name="author" content="Thomas Manke" />
 
-<meta name="date" content="2023-03-13" />
+<meta name="date" content="2023-03-14" />
 
 <title>06: Data Visualization</title>
 
@@ -332,80 +332,68 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">06: Data Visualization</h1>
 <h4 class="author">Thomas Manke</h4>
-<h4 class="date">2023-03-13</h4>
+<h4 class="date">2023-03-14</h4>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#image-show-me-all-the-data"
-id="toc-image-show-me-all-the-data">Image: Show me all the data</a></li>
+<li><a href="#goal-1-show-me-all-the-data"
+id="toc-goal-1-show-me-all-the-data">Goal 1: Show me all the
+data</a></li>
 <li><a href="#heatmaps" id="toc-heatmaps">Heatmaps</a></li>
 <li><a href="#sending-plots-to-files"
 id="toc-sending-plots-to-files">Sending plots to files</a></li>
-<li><a href="#dimensional-reduction-pca"
-id="toc-dimensional-reduction-pca">Dimensional Reduction: PCA</a></li>
-<li><a href="#goals" id="toc-goals">Goals:</a></li>
+<li><a href="#goal-2-show-me-all-the-data-in-lower-dimensions"
+id="toc-goal-2-show-me-all-the-data-in-lower-dimensions">Goal 2: Show me
+all the data (in lower dimensions)</a>
+<ul>
+<li><a href="#pca-goals" id="toc-pca-goals">PCA Goals</a></li>
+</ul></li>
 <li><a href="#review" id="toc-review">Review</a></li>
 </ul>
 </div>
 
-<div id="image-show-me-all-the-data" class="section level1">
-<h1>Image: Show me all the data</h1>
-<p>The image() function maps numbers to colours. Try it on the iris data
-frame and understand the error.</p>
-<pre class="r"><code>niris=iris[,-5]     # define numeric iris data
-M=as.matrix(niris)  # there are many as.* functions that convert among data structures
-image(M)            # image takes only matrix objects (data frame with single type &quot;numeric&quot;)</code></pre>
-<p><img src="06_DataVisualization_files/figure-html/image-1.png" width="672" /></p>
-<p>Be aware:</p>
-<ul>
-<li>Columns (=variables) appear as rows in image(). How could this be
-changed?</li>
-<li>the axes are meaningless. Default: <span class="math inline">\(0
-\ldots 1\)</span></li>
-<li>there is a large difference in scales for the different
-variables</li>
-<li>there is an implicit color-scheme</li>
-</ul>
-<p>Below we are re-scaling the iris-matrix</p>
-<pre class="r"><code>S=scale(M)                                                     # scales column-wise
-br=seq(-5,7,by=0.5)                                            # set common break points for the histograms below
-hist(M[,&quot;Sepal.Width&quot;], breaks = br)                           # illustrate scaling for specific column
-hist(S[,&quot;Sepal.Width&quot;], breaks = br, add=TRUE, col=&quot;red&quot;)      # add histogram to current plot
+<div id="goal-1-show-me-all-the-data" class="section level1">
+<h1>Goal 1: Show me all the data</h1>
+<p><strong>Scaling</strong>: It’s good practice to normalize the
+different variables</p>
+<pre class="r"><code>d=iris[,-5]   # numerical iris data (without speciee) 
+ds=scale(d)   # scaled iris data (column-wise)
+
+br=seq(-5,7,by=0.5)                                           # set common break points for the histograms below
+hist(d[,&quot;Sepal.Width&quot;], breaks = br)                          # illustrate scaling for specific column
+hist(ds[,&quot;Sepal.Width&quot;], breaks = br, add=TRUE, col=&quot;red&quot;)    # add histogram to current plot
 legend(&quot;topright&quot;, c(&quot;orig&quot;,&quot;scaled&quot;), fill=c(&quot;white&quot;, &quot;red&quot;))</code></pre>
 <p><img src="06_DataVisualization_files/figure-html/scaling-1.png" width="672" /></p>
-<pre class="r"><code>image(S,main=&quot;Normalized IRIS data&quot;, axes=FALSE)              # as before, suppress axes</code></pre>
-<p><img src="06_DataVisualization_files/figure-html/scaling-2.png" width="672" /></p>
-<pre class="r"><code>#add axes flexibly
-#axis(4,at=seq(0,1,length.out=ncol(S)), labels=colnames(S), las=2) # Understand this command</code></pre>
 </div>
 <div id="heatmaps" class="section level1">
 <h1>Heatmaps</h1>
-<p>Heatmaps are advanced images in which rows and columns are re-ordered
-according to some distance measure (default: Euclidean) and hierarchical
-clustering method (default: complete)</p>
-<pre class="r"><code>heatmap(S)</code></pre>
-<p><img src="06_DataVisualization_files/figure-html/heatmap-1.png" width="672" /></p>
-<p>Notice that:</p>
-<ul>
-<li>unlike image(), the heatmap is already in the “canonical”
-orientation</li>
-<li>heatmap scales all rows by default (for visuzalization)</li>
-<li>frequently needs many customizations: label size, remove row-names,
-…</li>
-<li>there is an implicit colour scheme: “numerical value <span
-class="math inline">\(\to\)</span> colour”</li>
-</ul>
-<pre class="r"><code>cols = rainbow(3)[iris$Species]            # understand how color is defined
-heatmap(S,scale=&quot;none&quot;, RowSideColors=cols,labRow=FALSE, cexCol=0.9)</code></pre>
-<p><img src="06_DataVisualization_files/figure-html/heatmap_with_col-1.png" width="672" /></p>
-<p>There are multiple powerful extension in other R-packages. If time
-allows try this. And if you have lots of time read “?pheatmap”</p>
+<p>Heatmaps are color-coded representations of numerical matrices.</p>
+<p>Typically the rows and columns are re-ordered according to some
+distance measure (default: Euclidean) and hierarchical clustering method
+(default: complete)</p>
+<p>There are many tools to draw heatmaps in R. Here we use the
+<code>pheatmap</code> package to provide this powerful functionality</p>
 <pre class="r"><code>#install.packages(&quot;pheatmap&quot;)  # That&#39;s how we install new packages - more later
 library(pheatmap)              # make packaged functions available
-pheatmap(scale(iris[,-5])) # works also with data frames</code></pre>
+paste(&#39;loaded pheatmap version:&#39;, packageVersion(&#39;pheatmap&#39;))</code></pre>
+<pre><code>## [1] &quot;loaded pheatmap version: 1.0.12&quot;</code></pre>
+<pre class="r"><code>ds  = scale(iris[,-5])                # scaled data for heatmap
+ann = data.frame(Species = iris[,5])  # meta data for annotations
+
+# explicitly set rownames to retain association between data and metadata
+rownames(ds)=rownames(iris)
+rownames(ann)=rownames(iris)
+
+pheatmap(ds, 
+         annotation_row = ann,
+         show_rownames = FALSE,
+         )</code></pre>
 <p><img src="06_DataVisualization_files/figure-html/pheatmap-1.png" width="672" /></p>
+<p>There is many more parameters for more control - if you have lots of
+time read “?pheatmap”</p>
+<hr />
 </div>
 <div id="sending-plots-to-files" class="section level1">
 <h1>Sending plots to files</h1>
@@ -413,19 +401,20 @@ pheatmap(scale(iris[,-5])) # works also with data frames</code></pre>
 console we can define a pdf file as a new device for all subsequent
 figures. This is usually done only <em>after</em> the image is
 sufficiently optimized</p>
-<pre class="r"><code>pdf(&quot;heatmap.pdf&quot;) # similar for jpeg, png, ...
-heatmap(S,scale=&quot;none&quot;, RowSideColors=cols,labRow=FALSE, cexCol=0.9)
-dev.off()  # close device = pdf file</code></pre>
-<pre><code>## png 
-##   2</code></pre>
+<pre class="r"><code>pdf(&quot;heatmap.pdf&quot;)                                        # similar for jpeg, png, ...
+pheatmap(ds, annotation_row = ann, show_rownames = FALSE)
+dev.off()                                                 # close device = pdf file</code></pre>
+<pre><code>## pdf 
+##   3</code></pre>
+<hr />
 </div>
-<div id="dimensional-reduction-pca" class="section level1">
-<h1>Dimensional Reduction: PCA</h1>
+<div id="goal-2-show-me-all-the-data-in-lower-dimensions"
+class="section level1">
+<h1>Goal 2: Show me all the data (in lower dimensions)</h1>
 <pre class="r"><code>M=as.matrix(iris[,-5])     # numerical data, some operations below require matrices not data frames (%*%)
 s=iris[,5]                 # species attributes (factor)</code></pre>
-</div>
-<div id="goals" class="section level1">
-<h1>Goals:</h1>
+<div id="pca-goals" class="section level2">
+<h2>PCA Goals</h2>
 <ul>
 <li>simplify description of data matrix <span
 class="math inline">\(M\)</span>: data reduction &amp; extract most
@@ -456,13 +445,13 @@ dimensions:</p>
 <p><img src="06_DataVisualization_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <hr />
 </div>
+</div>
 <div id="review" class="section level1">
 <h1>Review</h1>
 <ul>
-<li>use image() and heatmap() to visualize matrices</li>
-<li>scaling transformation and customizations</li>
-<li>installing packages for extra functionalitty: pheatmap</li>
-<li>be careful with colour-scaling</li>
+<li>use heatmaps to visualize large matrices</li>
+<li>scaling transformation</li>
+<li>installing packages: pheatmap</li>
 <li>exporting figures as publication-ready files</li>
 <li>dimensional reduction with PCA</li>
 </ul>

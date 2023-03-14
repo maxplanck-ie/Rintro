@@ -11,7 +11,7 @@
 
 <meta name="author" content="Devon P. Ryan" />
 
-<meta name="date" content="2023-03-13" />
+<meta name="date" content="2023-03-14" />
 
 <title>Manipulating datasets with dplyr</title>
 
@@ -318,7 +318,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Manipulating datasets with dplyr</h1>
 <h4 class="author">Devon P. Ryan</h4>
-<h4 class="date">2023-03-13</h4>
+<h4 class="date">2023-03-14</h4>
 
 </div>
 
@@ -755,7 +755,10 @@ healing/oncogenesis/etc.</li>
 <p>There are a lot of different ways to combine datasets.</p>
 <pre class="r"><code>t1 = data_frame(x1=c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;), x2=c(1, 2, 3))</code></pre>
 <pre><code>## Warning: `data_frame()` was deprecated in tibble 1.1.0.
-## i Please use `tibble()` instead.</code></pre>
+## i Please use `tibble()` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
 <pre class="r"><code>t2 = data_frame(x1=c(&quot;A&quot;, &quot;B&quot;, &quot;D&quot;), x3=c(T, F, T))</code></pre>
 <ul>
 <li>Mutating joins</li>
@@ -823,14 +826,14 @@ t4 = data_frame(d=rep(c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;), 2),
                 f=runif(6))
 inner_join(t3, t4, by=c(&quot;a&quot;=&quot;d&quot;, &quot;b&quot;=&quot;e&quot;))</code></pre>
 <pre><code>## # A tibble: 6 x 4
-##   a         b      c     f
-##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1 A         1 0.445  0.329
-## 2 B         1 0.326  0.854
-## 3 C         1 0.0238 0.279
-## 4 A         2 0.346  0.270
-## 5 B         2 0.539  0.549
-## 6 C         2 0.911  0.226</code></pre>
+##   a         b      c      f
+##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 A         1 0.904  0.936 
+## 2 B         1 0.646  0.211 
+## 3 C         1 0.857  0.0394
+## 4 A         2 0.0580 0.265 
+## 5 B         2 0.389  0.697 
+## 6 C         2 0.577  0.673</code></pre>
 <p>By default, joins occur on all columns with the same name across
 tables!</p>
 </div>

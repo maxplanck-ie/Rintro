@@ -11,7 +11,7 @@
 
 <meta name="author" content="Thomas Manke" />
 
-<meta name="date" content="2023-03-13" />
+<meta name="date" content="2023-03-14" />
 
 <title>Sampling: Monty Hall Problem</title>
 
@@ -331,7 +331,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Sampling: Monty Hall Problem</h1>
 <h4 class="author">Thomas Manke</h4>
-<h4 class="date">2023-03-13</h4>
+<h4 class="date">2023-03-14</h4>
 
 </div>
 
@@ -379,7 +379,7 @@ doors</code></pre>
 the winning door)</p>
 <pre class="r"><code>pick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)
 pick</code></pre>
-<pre><code>## [1] &quot;L2&quot;</code></pre>
+<pre><code>## [1] &quot;W&quot;</code></pre>
 </div>
 <div id="a-function" class="section level2">
 <h2>A Function</h2>
@@ -405,7 +405,7 @@ door (not open, not previously picked).</p>
 be more successful?</p>
 <pre class="r"><code>switch=doors[ doors != pick &amp; doors != open]  
 paste(switch)</code></pre>
-<pre><code>## [1] &quot;W&quot;</code></pre>
+<pre><code>## [1] &quot;L2&quot;</code></pre>
 <p>With three doors, the candidate has only two choices to stay with
 “pick” or to switch to “switch”</p>
 <p>The above results from sampling will vary (for each candiate and
@@ -444,8 +444,8 @@ cat(&quot;successes with switching= &quot;,success, &quot;success_rate: &quot;, 
 with some suitable name. Return to the console and execute the script
 using the <em>source</em> command</p>
 <pre class="r"><code>source(&quot;MontyHall.R&quot;)</code></pre>
-<pre><code>## successes with switching=  6606 success_rate:  0.6606 
-## successes with switching=  6620 success_rate:  0.662</code></pre>
+<pre><code>## successes with switching=  6692 success_rate:  0.6692 
+## successes with switching=  6679 success_rate:  0.6679</code></pre>
 <p>You can share the script easily with all people who speak R –
 especially those who don’t like to switch.</p>
 <hr />
