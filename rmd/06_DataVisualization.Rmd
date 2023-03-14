@@ -11,22 +11,19 @@ output:
 ---
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(cache=TRUE)
+```{r, child="_setup.Rmd"}
 ```
-
 
 # Goal 1: Show me all the data
 
-
 **Scaling**: It's good practice to normalize the different variables
 ```{r scaling}
-S=scale(d)                                                     # scales column-wise
+d=iris[,-5]   # numerical iris data (without speciee) 
+ds=scale(d)   # scaled iris data (column-wise)
 
-br=seq(-5,7,by=0.5)                                            # set common break points for the histograms below
-hist(d[,"Sepal.Width"], breaks = br)                           # illustrate scaling for specific column
-hist(S[,"Sepal.Width"], breaks = br, add=TRUE, col="red")      # add histogram to current plot
+br=seq(-5,7,by=0.5)                                           # set common break points for the histograms below
+hist(d[,"Sepal.Width"], breaks = br)                          # illustrate scaling for specific column
+hist(ds[,"Sepal.Width"], breaks = br, add=TRUE, col="red")    # add histogram to current plot
 legend("topright", c("orig","scaled"), fill=c("white", "red"))
 ```
 
@@ -42,17 +39,18 @@ Here we use the `pheatmap` package to provide this powerful functionality
 ```{r pheatmap}
 #install.packages("pheatmap")  # That's how we install new packages - more later
 library(pheatmap)              # make packaged functions available
+paste('loaded pheatmap version:', packageVersion('pheatmap'))
 
-S   = scale(iris[,-5])                # scaled data for heatmap
+ds  = scale(iris[,-5])                # scaled data for heatmap
 ann = data.frame(Species = iris[,5])  # meta data for annotations
 
 # explicitly set rownames to retain association between data and metadata
-rownames(S)=rownames(iris)
+rownames(ds)=rownames(iris)
 rownames(ann)=rownames(iris)
 
-pheatmap(S, 
+pheatmap(ds, 
          annotation_row = ann,
-         show_rownames = FALSE
+         show_rownames = FALSE,
          )
 ```
 
@@ -63,16 +61,16 @@ There is many more parameters for more control - if you have lots of time read "
 # Sending plots to files
 In Rstudio, we can export figures from the "Plots" tab. On the console we can define a pdf file as a new device for all subsequent figures. This is usually done only *after* the image is sufficiently optimized
 ```{r pdf}
-pdf("heatmap.pdf") # similar for jpeg, png, ...
-pheatmap(S, annotation_row = ann, show_rownames = FALSE)
-dev.off()  # close device = pdf file
+pdf("heatmap.pdf")                                        # similar for jpeg, png, ...
+pheatmap(ds, annotation_row = ann, show_rownames = FALSE)
+dev.off()                                                 # close device = pdf file
 ```
 
 ***
 
 # Goal 2: Show me all the data (in lower dimensions)
 
-```{r}
+```{r df2mat}
 M=as.matrix(iris[,-5])     # numerical data, some operations below require matrices not data frames (%*%)
 s=iris[,5]                 # species attributes (factor)
 ```

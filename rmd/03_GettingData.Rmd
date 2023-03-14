@@ -178,9 +178,9 @@ In Rstudio they can be created using `File > New File > R script`
 * Create a new R-script `filter_iris.R` to do the following: 
   - Starting from the pre-compiled `iris` data, create a new `data_frame d` of all flowers where `Sepal.Length` is greater or equal to 7 cm.
   - determine the number flower in the new `data_frame`. Save this number as variable `nf`
-  - How many different species are in the new data_frame. Save this number as variable `ns`
-  - write the new `data_frame d` in tab seperated file `iris_big_sepal.tsv`
-  - save the whole environment in a file `analysis.RData` (hint:)
+  - How many different species are in the new data_frame. Save this number as variable `ns` (hint: there are two useful functions: `unique()` and `length()`)
+  - write the new `data_frame d` in comma seperated file `iris_big_sepal.csv`
+  - save the whole environment in a file `analysis.RData` 
   - delete all variables in the environment
 * Save the script and run it (source)
 * Bonus: Delete all whole environment reload it from the image file
@@ -203,9 +203,9 @@ In Rstudio they can be created using `File > New File > R script`
   - customization with parameters
   - and there is more: special packages
 * Writing Data: many ways
-  - write.csv
-  - save()
-  - save.image()
+  - write.csv()
+  - save() $\to$ load()
+  - save.image() $\to$ load()
 * Data I/O can be challenging:
   - file $\to$ memory
   - know your paths, format, type, size
