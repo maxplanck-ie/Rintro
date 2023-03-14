@@ -1,0 +1,209 @@
+---
+title: "Data Import with Tidyverse"
+subtitle: "David Koppstein"
+format: 
+  revealjs:
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/maxplanck-ie.jpg
+    css: styles.css
+    theme: night
+editor: visual
+---
+
+## Before we begin
+
+-   If you haven't already, please execute the following code:
+
+```{r}
+#| eval: false
+#| echo: true
+install.packages("tidyverse")
+install.packages("dslabs")
+```
+
+-   The first command will install a large set of packages that are designed to work together, including ggplot2.
+-   The second command installs some datasets we will use from Rafael Irizarry's book, "Introduction to Data Science."
+
+## Credit
+
+-   This presentation is heavily influenced by Rafael Irizarry's book [Introduction to Data Science](https://rafalab.dfci.harvard.edu/dsbook) and his corresponding course on EdX.
+-   It also draws on material from previous MPI R courses given by Devon Ryan.
+
+![](images/irizarry.jpg){.absolute bottom="25" left="100" width="250"} 
+![](images/devon.jpg){.absolute bottom="25" left="800" width="250"}
+
+::: footer
+<https://www.edx.org/bio/rafael-irizarry>
+:::
+
+## Following along
+
+- For each module, please create a separate R script and type in and execute the commands that are to follow along. 
+
+- The code from some slides depends on the previous slides! 
+
+- You can execute each line individually using Command-Enter on Mac, alt-Enter on Workbench. 
+
+## Data Import in the Tidyverse
+
+The first step for any analysis is importing the data into a machine-readable format. The tidyverse offers the `readr::` and `readxl::` packages, as we have just recently seen.
+
+## Data Import in the Tidyverse
+
+```{r}
+#| echo: true
+# set path to the location for raw data files in the dslabs package and list files
+library(dslabs)
+path <- system.file("extdata", package="dslabs")
+list.files(path)
+```
+
+## File operations
+
+-   Use the `file.path()` function to generate a full path from a relative path and a file name. Use `file.path()` instead of `paste()` because `file.path()` is aware of your operating system and will use the correct slashes to navigate your machine.
+-   The `file.copy()` function copies a file to a new path.
+
+## File operations in practice
+
+```{r}
+#| echo: true
+# generate a full path to a file
+filename <- "murders.csv"
+fullpath <- file.path(path, filename)
+fullpath
+
+# copy file from dslabs package to your working directory
+file.copy(fullpath, getwd())
+
+# check if the file exists
+file.exists(filename)
+```
+
+## `readr::` {auto-animate="true"}
+
+-   `readr::` is the Tidyverse library for reading data from text formats.
+-   `read_csv()`, `read_tsv()`, `read_table()`, and `read_delim()` are some of the functions provided
+-   `read_csv2()` allows for reading of European-style CSV files (e.g. using `;`)
+
+## `readr::` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# inspect the first 3 lines
+library(readr)
+read_lines("murders.csv", n_max = 3)
+
+# read file in CSV format
+dat <- read_csv(filename)
+
+#read using full path
+dat <- read_csv(fullpath)
+head(dat, n = 4)
+```
+
+## What is a tibble?
+
+-   Tibbles are like data frames, but more modern, and are built for the Tidyverse
+-   The interface is the same, using e.g. `$` for columns
+-   Tibbles can contain more complex objects than just strings, numbers, or booleans, like lists or functions
+-   Tibbles can be grouped
+-   You can see the types of each column in a tibble
+
+## Quick exercise {auto-animate="true"}
+
+Read the following data into a tibble. Give it the following column names: `star, magnitude, temp, type`
+
+```{r}
+#| echo: true
+library(dslabs)
+path <- system.file("extdata", package="dslabs")
+fullpath <- file.path(path, "HRList2.txt")
+```
+
+## Quick exercise {auto-animate="true"}
+
+Read the following data into a tibble. Give it the following column names: `star, magnitude, temp, type`
+
+```{r}
+#| echo: true
+library(dslabs)
+path <- system.file("extdata", package="dslabs")
+full_path <- file.path(path, "HRList2.txt")
+read_lines(full_path, n_max = 3)
+```
+
+## Quick exercise {auto-animate="true"}
+
+Read the following data into a tibble. Give it the following column names: `star, magnitude, temp, type`
+
+```{r}
+#| echo: true
+library(dslabs)
+path <- system.file("extdata", package="dslabs")
+full_path <- file.path(path, "HRList2.txt")
+read_lines(full_path, n_max = 3)
+```
+
+## Quick exercise {auto-animate="true"}
+
+Read the following data into a tibble. Give it the following column names: `star, magnitude, temp, type`
+
+```{r}
+#| echo: true
+library(dslabs)
+path <- system.file("extdata", package="dslabs")
+full_path <- file.path(path, "HRList2.txt")
+tbl <- read_table(full_path)
+head(tbl)
+```
+
+## Quick exercise {auto-animate="true"}
+
+Read the following data into a tibble. Give it the following column names: `star, magnitude, temp, type`
+
+```{r}
+#| echo: true
+library(dslabs)
+path <- system.file("extdata", package="dslabs")
+full_path <- file.path(path, "HRList2.txt")
+tbl <- read_table(full_path, col_names = c("star", "magnitude", "temp", "type"))
+head(tbl)
+```
+
+## `readxl::` {auto-animate="true"}
+
+-   `readxl::` is the Tidyverse library for reading data from Excel formats.
+-   `read_excel()`, `read_xls()` and `read_xlsx()` are some of the functions provided
+-   The `excel_sheets()` function yields the names of the sheets in the Excel file. These names are passed to the `sheet` argument for the **readxl** functions
+-   The `read_lines()` function shows the first few lines of a file in R.
+
+## `readxl::` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+library(readxl)
+full_path <- file.path(path, "2010_bigfive_regents.xls")
+excel_sheets(full_path)
+```
+
+## `readxl::` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+library(readxl)
+full_path <- file.path(path, "2010_bigfive_regents.xls")
+sheet_one <- read_xls(full_path, sheet = "Sheet1")
+sheet_one
+```
+
+## `readxl::` {auto-animate="true"}
+
+-   `read_xls()` is for xls files, `read_xlsx` for XML-based xlsx files
+-   you can use `read_excel()` if you are unsure of the format
+
+## Any questions?
+
+We will next talk about how to manipulate data in data frames/tibbles using the Tidyverse.

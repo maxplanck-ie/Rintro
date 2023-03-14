@@ -28,12 +28,14 @@ navbar:
       - text: 06_DataVisualization
         href: 06_DataVisualization.html
       - text: ------
-      - text: 10_tidyr
-        href: 10_tidyr.html
-      - text: 11_dplyr
-        href: 11_dplyr.html
-      - text: 12_ggplot2
-        href: 12_ggplot2.html
+      - text: 10_Data_Import
+        href: 10_Data_Import.html
+      - text: 11_Data_Wrangling
+        href: 11_Data_Wrangling.html
+      - text: 12_Data_Visualization
+        href: 12_Data_Visualization.html
+      - text: 13_Tidy_Data
+        href: 13_Tidy_Data.html
       - text: ------
       - text: P01_DataExploration_short
         href: P01_DataExploration_short.html

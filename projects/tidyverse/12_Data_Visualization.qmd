@@ -1,0 +1,550 @@
+---
+title: "Data visualization with ggplot2"
+author: "David Koppstein"
+format: 
+  revealjs:
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/maxplanck-ie.jpg
+    css: styles.css
+    theme: night
+editor: visual
+---
+
+## What is ggplot2?
+
+-   ggplot2 is part of the *tidyverse*, a set of packages created by Hadley Wickham.
+-   ggplot2 implements a *grammar of graphics* to enable creation of plots from modular building blocks
+-   ggplot2 is designed to work with *tidy data* (we'll get into this later today).
+
+![](images/ggplot2.png){.absolute bottom="25" left="100" width="150"} ![](images/hadley.jpg){.absolute bottom="25" left="800" width="250"}
+
+## Graph components {auto-animate="true"}
+
+-   Plots in **ggplot2** consist of 3 main components:
+    -   Data: The dataset being summarized
+    -   Geometry: The type of plot (scatterplot, boxplot, barplot, histogram, qqplot, smooth density, etc.)
+    -   Aesthetic mapping: Variables mapped to visual cues, such as x-axis and y-axis values and color
+
+## Graph components {auto-animate="true"}
+
+-   There are additional components:
+    -   Scale
+    -   Labels, Title, Legend
+    -   Theme/Style
+
+## Creating a new plot
+
+```{r}
+#| eval: false
+#| echo: true
+    ggplot(data = x)
+    ggplot(x)
+    x %>% ggplot()
+    x |> ggplot()
+```
+
+You can associate a dataset `x` with a ggplot object with any of these 4 commands.
+
+## Murders dataset {auto-animate="true"}
+
+Let's load some libraries and load the `murders` dataset. Take a look around with `head()`.
+
+```{r}
+#| echo: true
+library(tidyverse)
+library(dslabs)
+data(murders)
+head(murders)
+```
+
+## Murders dataset {auto-animate="true"}
+
+Let's now create a basic ggplot object, called p.
+
+```{r}
+#| echo: true
+# ggplot(data = murders)
+# murders %>% ggplot()
+
+p <- ggplot(data = murders)
+class(p)
+```
+
+## Murders dataset {auto-animate="true"}
+
+As you can see, just passing the dataset `murders` to ggplot doesn't do anything by itself. We need to add additional layers!
+
+```{r}
+#| echo: true
+p
+```
+
+## Layers {auto-animate="true"}
+
+-   In ggplot2, graphs are created by adding layers to the ggplot object:
+
+```{r}
+#| echo: true
+#| eval: false
+DATA %>% ggplot() + LAYER_1 + LAYER_2 + ... + LAYER_N
+```
+
+-   The geometry layer defines the plot type and takes the format `geom_X` where X is the plot type.
+
+## Layers {auto-animate="true"}
+
+-   Aesthetic mappings describe how properties of the data connect with features of the graph (axis position, color, size, etc.)
+-   Define aesthetic mappings with the `aes()` function.
+-   `aes()` uses variable names from the object component (for example, `total` rather than `murders$total`).
+
+## Layers {auto-animate="true"}
+
+```{r}
+#| echo: true
+# add points layer to predefined ggplot object
+p <- ggplot(data = murders)
+p + geom_point(aes(population/10^6, total))
+```
+
+## Layers {auto-animate="true"}
+
+```{r}
+#| echo: true
+# add text layer to scatterplot
+p <- ggplot(data = murders)
+p + 
+  geom_point(aes(population/10^6, total)) +
+  geom_text(aes(population/10^6, total, label = abb))
+```
+
+## Example of `aes()` behavior {auto-animate="true"}
+
+```{r}
+#| echo: true
+# no error from this call
+p_test <- p + geom_text(aes(population/10^6, total, label = abb))
+```
+
+## Example of `aes()` behavior {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| error: true
+# error - "abb" is not a globally defined variable 
+# and cannot be found outside of aes
+p_test <- p + geom_text(aes(population/10^6, total), label = abb)
+```
+
+::: footer
+<https://www.r-bloggers.com/2019/07/bang-bang-how-to-program-with-dplyr/>
+:::
+
+## Aesthetics scoping {auto-animate="true"}
+
+- Each geometry function has its own arguments that can be used
+to tinker with the visualization
+- These arguments are not aesthetic mappings: they affect all data points the same way. 
+
+## Aesthetics scoping {auto-animate="true"}
+
+- *Global aesthetic mappings* apply to *all* geometries and can be defined when you initially call `ggplot()`.  
+- *Local aesthetic mappings* are called within the geometry function add additional information or override the default mappings. 
+
+## Building a plot using layers {auto-animate="true"}
+
+```{r}
+#| echo: true
+p <- murders %>% ggplot(aes(population/10^6, total, label = abb))
+p
+```
+
+## Add points {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  geom_point(size = 3)
+```
+
+## Log the axes {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  geom_point(size = 3) +
+  scale_x_continuous(trans = "log10") +
+  scale_y_continuous(trans = "log10")
+```
+
+## Shorthand for logging axes {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10()
+```
+
+## Add labels {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10() +
+  geom_text()
+```
+
+## Nudge the labels {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10() +
+  geom_text(nudge_x = 0.075)
+```
+
+## Add axis labels {auto-animate="true"}
+
+```{r}
+#| echo: true
+p <- p +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10() +
+  geom_text(nudge_x = 0.075) + 
+  xlab("Population in millions (log scale)") +
+  ylab("Total number of murders (log scale)")
+p
+```
+
+## Add a title {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  ggtitle("US Gun Murders in 2010")
+```
+
+## Turn all points blue {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  ggtitle("US Gun Murders in 2010") + 
+  geom_point(size = 3, color = "blue")
+```
+
+## Color by region {auto-animate="true"}
+
+```{r}
+#| echo: true
+p +
+  ggtitle("US Gun Murders in 2010") + 
+  geom_point(aes(color = region), size = 3)
+```
+
+## Add a line with average murder rate {auto-animate="true"}
+
+```{r}
+#| echo: true
+# define average murder rate
+r <- murders %>%
+    summarize(rate = sum(total) / sum(population) * 10^6) %>%
+    pull(rate)
+r
+```
+
+
+## Add a line with average murder rate {auto-animate="true"}
+
+```{r}
+#| echo: true
+# basic line with average murder rate for the country
+p +
+  ggtitle("US Gun Murders in 2010") + 
+  geom_point(aes(color = region), size = 3) + 
+  geom_abline(intercept = log10(r)) # slope is default of 1
+```
+
+## Edit appearance of line {auto-animate="true"}
+
+```{r}
+#| echo: true
+# basic line with average murder rate for the country
+p +
+  ggtitle("US Gun Murders in 2010") + 
+  geom_point(aes(color = region), size = 3) + 
+  geom_abline(intercept = log10(r), lty = 2, color = "darkgrey")
+```
+
+## Edit legend
+
+```{r}
+#| echo: true
+# basic line with average murder rate for the country
+p <- p +
+  ggtitle("US Gun Murders in 2010") + 
+  geom_point(aes(color = region), size = 3) + 
+  geom_abline(intercept = log10(r), lty = 2, color = "darkgrey") + 
+  scale_color_discrete(name = "Region")
+p
+```
+
+## Themes
+
+`install.packages("ggthemes")`
+`install.packages("ggrepel")`
+
+## Themes {auto-animate="true"}
+
+```{r}
+#| echo: true
+library(ggthemes)
+p + 
+  theme_economist()
+```
+
+## Themes {auto-animate="true"}
+
+```{r}
+#| echo: true
+library(ggthemes)
+p + 
+  theme_fivethirtyeight()
+```
+
+## More useful geoms
+
+- `geom_histogram()` for histograms
+  - use `binwidth` to change binwidth
+- `geom_density()` for smooth density plots
+- `geom_qq()` creates a quantile-quantile plot. 
+  - use `sample` argument. 
+  - By default, the data are compared to a normal distribution with a mean of 0 and standard deviation of 1
+  - This can be changed with the `dparams` argument
+
+## `geom_histogram()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+data(heights)
+
+# define p
+p <- heights %>%
+    filter(sex == "Male") %>%
+    ggplot(aes(x = height))
+```
+
+## `geom_histogram()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# basic histograms
+p + geom_histogram()
+```
+
+## `geom_histogram()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# basic histograms
+p + geom_histogram(binwidth = 1)
+```
+
+## `geom_histogram()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# histogram with blue fill, black outline, labels and title
+p + 
+  geom_histogram(binwidth = 1, fill = "blue", col = "black") +
+  xlab("Male heights in inches") +
+  ggtitle("Histogram")
+```
+
+## `geom_density()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+p + geom_density()
+```
+
+## `geom_density()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+p + geom_density(fill = "blue")
+```
+
+## `geom_qq()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| layout: [[80], [80]]
+# basic QQ-plot
+p <- heights %>% 
+  filter(sex == "Male") %>%
+  ggplot(aes(sample = height)) # we require sample param! 
+p + geom_qq()
+```
+
+## `geom_qq()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| layout: [[80], [80]]
+# QQ-plot against a normal distribution with same mean/sd as data
+params <- heights %>%
+    filter(sex == "Male") %>%
+    summarize(mean = mean(height), sd = sd(height))
+
+p + 
+  geom_qq(dparams = params) +
+  geom_abline()
+```
+
+## Faceting
+
+- Faceting makes several plots at once, side-by-side, to facilitate comparison
+- `facet_grid(a~b)` facets by two variables, `a` (rows) and `b` (cols)
+- to facet by only one variables, use `.` for the other variable e.g. `facet_grid(.~b)`
+- `facet_wrap()` facets by one variable but wraps the plots over multiple lines
+- axes are constants
+
+## Faceting in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+data(gapminder)
+# facet by continent and year
+filter(gapminder, year %in% c(1962, 2012)) %>%
+    ggplot(aes(fertility, life_expectancy, col = continent)) +
+    geom_point() +
+    facet_grid(continent ~ year)
+```
+
+## Faceting in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# facet by year only
+filter(gapminder, year %in% c(1962, 2012)) %>%
+    ggplot(aes(fertility, life_expectancy, col = continent)) +
+    geom_point() +
+    facet_grid(. ~ year)
+```
+
+## Faceting in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# facet by year, plots wrapped onto multiple rows
+years <- c(1962, 1980, 1990, 2000, 2012)
+continents <- c("Europe", "Asia")
+gapminder %>%
+    filter(year %in% years & continent %in% continents) %>%
+    ggplot(aes(fertility, life_expectancy, col = continent)) +
+    geom_point() +
+    facet_wrap(~year)
+```
+
+## Line plots - Fertility over time
+
+```{r}
+#| echo: true
+gapminder %>%
+    filter(country == "United States") %>%
+    ggplot(aes(year, fertility)) + 
+    geom_line()
+```
+
+## Multiple line plots
+
+```{r}
+#| echo: true
+# fertility time series for two countries
+gapminder %>% filter(country %in% c("Germany", "Australia")) %>%
+    ggplot(aes(year, fertility, col = country)) +
+    geom_line()
+```
+
+
+## Histograms {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| eval: false
+# add dollars per day
+gapminder <- gapminder %>%
+    mutate(dollars_per_day = gdp/population/365)
+
+gapminder %>%
+    filter(!is.na(gdp)) %>%
+    ggplot(aes(dollars_per_day)) +
+    geom_histogram(binwidth = 1, color = "black") +
+    scale_x_continuous(trans = "log2")
+```
+
+## Histograms {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| eval: false
+#| code-line-numbers: "6"
+# add dollars per day
+gapminder <- gapminder %>%
+    mutate(dollars_per_day = gdp/population/365)
+
+gapminder %>%
+    filter(!is.na(gdp)) %>%
+    ggplot(aes(dollars_per_day)) +
+    geom_histogram(binwidth = 1, color = "black") +
+    scale_x_continuous(trans = "log2")
+```
+
+## Histograms {auto-animate="true"}
+
+```{r}
+#| echo: false
+#| eval: true
+# add dollars per day
+gapminder <- gapminder %>%
+    mutate(dollars_per_day = gdp/population/365)
+
+gapminder %>%
+    filter(!is.na(gdp)) %>%
+    ggplot(aes(dollars_per_day)) +
+    geom_histogram(binwidth = 1, color = "black") +
+    scale_x_continuous(trans = "log2")
+```
+
+## Exercise: make a boxplot of daily salary by region in 1970! {auto-animate="true"}
+
+## Exercise: make a boxplot of daily salary by region in 1970! {auto-animate="true"}
+
+```{r}
+#| echo: true
+gapminder %>%
+  filter(year == 1970 & !is.na(gdp)) %>%
+  ggplot(aes(region, dollars_per_day)) +
+  geom_boxplot()
+```
+## Exercise: make a boxplot of daily salary by region in 1970! {auto-animate="true"}
+
+```{r}
+#| echo: true
+gapminder %>%
+  filter(year == 1970 & !is.na(gdp)) %>%
+  ggplot(aes(region, dollars_per_day)) +
+  geom_boxplot() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
