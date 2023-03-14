@@ -144,14 +144,13 @@ p_test <- p + geom_text(aes(population/10^6, total), label = abb)
 
 ## Aesthetics scoping {auto-animate="true"}
 
-- Each geometry function has its own arguments that can be used
-to tinker with the visualization
-- These arguments are not aesthetic mappings: they affect all data points the same way. 
+-   Each geometry function has its own arguments that can be used to tinker with the visualization
+-   These arguments are not aesthetic mappings: they affect all data points the same way.
 
 ## Aesthetics scoping {auto-animate="true"}
 
-- *Global aesthetic mappings* apply to *all* geometries and can be defined when you initially call `ggplot()`.  
-- *Local aesthetic mappings* are called within the geometry function add additional information or override the default mappings. 
+-   *Global aesthetic mappings* apply to *all* geometries and can be defined when you initially call `ggplot()`.\
+-   *Local aesthetic mappings* are called within the geometry function add additional information or override the default mappings.
 
 ## Building a plot using layers {auto-animate="true"}
 
@@ -262,7 +261,6 @@ r <- murders %>%
 r
 ```
 
-
 ## Add a line with average murder rate {auto-animate="true"}
 
 ```{r}
@@ -300,8 +298,7 @@ p
 
 ## Themes
 
-`install.packages("ggthemes")`
-`install.packages("ggrepel")`
+`install.packages("ggthemes")` `install.packages("ggrepel")`
 
 ## Themes {auto-animate="true"}
 
@@ -323,13 +320,13 @@ p +
 
 ## More useful geoms
 
-- `geom_histogram()` for histograms
-  - use `binwidth` to change binwidth
-- `geom_density()` for smooth density plots
-- `geom_qq()` creates a quantile-quantile plot. 
-  - use `sample` argument. 
-  - By default, the data are compared to a normal distribution with a mean of 0 and standard deviation of 1
-  - This can be changed with the `dparams` argument
+-   `geom_histogram()` for histograms
+    -   use `binwidth` to change binwidth
+-   `geom_density()` for smooth density plots
+-   `geom_qq()` creates a quantile-quantile plot.
+    -   use `sample` argument.
+    -   By default, the data are compared to a normal distribution with a mean of 0 and standard deviation of 1
+    -   This can be changed with the `dparams` argument
 
 ## `geom_histogram()` in action {auto-animate="true"}
 
@@ -413,11 +410,11 @@ p +
 
 ## Faceting
 
-- Faceting makes several plots at once, side-by-side, to facilitate comparison
-- `facet_grid(a~b)` facets by two variables, `a` (rows) and `b` (cols)
-- to facet by only one variables, use `.` for the other variable e.g. `facet_grid(.~b)`
-- `facet_wrap()` facets by one variable but wraps the plots over multiple lines
-- axes are constants
+-   Faceting makes several plots at once, side-by-side, to facilitate comparison
+-   `facet_grid(a~b)` facets by two variables, `a` (rows) and `b` (cols)
+-   to facet by only one variables, use `.` for the other variable e.g. `facet_grid(.~b)`
+-   `facet_wrap()` facets by one variable but wraps the plots over multiple lines
+-   axes are constants
 
 ## Faceting in action {auto-animate="true"}
 
@@ -475,7 +472,6 @@ gapminder %>% filter(country %in% c("Germany", "Australia")) %>%
     ggplot(aes(year, fertility, col = country)) +
     geom_line()
 ```
-
 
 ## Histograms {auto-animate="true"}
 
@@ -537,6 +533,7 @@ gapminder %>%
   ggplot(aes(region, dollars_per_day)) +
   geom_boxplot()
 ```
+
 ## Exercise: make a boxplot of daily salary by region in 1970! {auto-animate="true"}
 
 ```{r}
@@ -547,4 +544,3 @@ gapminder %>%
   geom_boxplot() + 
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
-
