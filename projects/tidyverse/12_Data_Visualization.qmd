@@ -1,7 +1,15 @@
 ---
 title: "Data visualization with ggplot2"
 author: "David Koppstein"
-format: revealjs
+format: 
+  revealjs:
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/maxplanck-ie.jpg
+    css: styles.css
+    theme: night
 editor: visual
 ---
 
@@ -114,21 +122,13 @@ p +
 
 ## Example of `aes()` behavior {auto-animate="true"}
 
-If you come from another programming language, this syntax is really weird! 
-
 ```{r}
 #| echo: true
 # no error from this call
 p_test <- p + geom_text(aes(population/10^6, total, label = abb))
 ```
 
-::: footer
-<http://adv-r.had.co.nz/Computing-on-the-language.html>
-:::
-
 ## Example of `aes()` behavior {auto-animate="true"}
-
-If you come from another programming language, this syntax is really weird! 
 
 ```{r}
 #| echo: true
@@ -410,3 +410,141 @@ p +
   geom_qq(dparams = params) +
   geom_abline()
 ```
+
+## Faceting
+
+- Faceting makes several plots at once, side-by-side, to facilitate comparison
+- `facet_grid(a~b)` facets by two variables, `a` (rows) and `b` (cols)
+- to facet by only one variables, use `.` for the other variable e.g. `facet_grid(.~b)`
+- `facet_wrap()` facets by one variable but wraps the plots over multiple lines
+- axes are constants
+
+## Faceting in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+data(gapminder)
+# facet by continent and year
+filter(gapminder, year %in% c(1962, 2012)) %>%
+    ggplot(aes(fertility, life_expectancy, col = continent)) +
+    geom_point() +
+    facet_grid(continent ~ year)
+```
+
+## Faceting in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# facet by year only
+filter(gapminder, year %in% c(1962, 2012)) %>%
+    ggplot(aes(fertility, life_expectancy, col = continent)) +
+    geom_point() +
+    facet_grid(. ~ year)
+```
+
+## Faceting in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# facet by year, plots wrapped onto multiple rows
+years <- c(1962, 1980, 1990, 2000, 2012)
+continents <- c("Europe", "Asia")
+gapminder %>%
+    filter(year %in% years & continent %in% continents) %>%
+    ggplot(aes(fertility, life_expectancy, col = continent)) +
+    geom_point() +
+    facet_wrap(~year)
+```
+
+## Line plots - Fertility over time
+
+```{r}
+#| echo: true
+gapminder %>%
+    filter(country == "United States") %>%
+    ggplot(aes(year, fertility)) + 
+    geom_line()
+```
+
+## Multiple line plots
+
+```{r}
+#| echo: true
+# fertility time series for two countries
+gapminder %>% filter(country %in% c("Germany", "Australia")) %>%
+    ggplot(aes(year, fertility, col = country)) +
+    geom_line()
+```
+
+
+## Histograms {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| eval: false
+# add dollars per day
+gapminder <- gapminder %>%
+    mutate(dollars_per_day = gdp/population/365)
+
+gapminder %>%
+    filter(!is.na(gdp)) %>%
+    ggplot(aes(dollars_per_day)) +
+    geom_histogram(binwidth = 1, color = "black") +
+    scale_x_continuous(trans = "log2")
+```
+
+## Histograms {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| eval: false
+#| code-line-numbers: "6"
+# add dollars per day
+gapminder <- gapminder %>%
+    mutate(dollars_per_day = gdp/population/365)
+
+gapminder %>%
+    filter(!is.na(gdp)) %>%
+    ggplot(aes(dollars_per_day)) +
+    geom_histogram(binwidth = 1, color = "black") +
+    scale_x_continuous(trans = "log2")
+```
+
+## Histograms {auto-animate="true"}
+
+```{r}
+#| echo: false
+#| eval: true
+# add dollars per day
+gapminder <- gapminder %>%
+    mutate(dollars_per_day = gdp/population/365)
+
+gapminder %>%
+    filter(!is.na(gdp)) %>%
+    ggplot(aes(dollars_per_day)) +
+    geom_histogram(binwidth = 1, color = "black") +
+    scale_x_continuous(trans = "log2")
+```
+
+## Exercise: make a boxplot of daily salary by region in 1970! {auto-animate="true"}
+
+## Exercise: make a boxplot of daily salary by region in 1970! {auto-animate="true"}
+
+```{r}
+#| echo: true
+gapminder %>%
+  filter(year == 1970 & !is.na(gdp)) %>%
+  ggplot(aes(region, dollars_per_day)) +
+  geom_boxplot()
+```
+## Exercise: make a boxplot of daily salary by region in 1970! {auto-animate="true"}
+
+```{r}
+#| echo: true
+gapminder %>%
+  filter(year == 1970 & !is.na(gdp)) %>%
+  ggplot(aes(region, dollars_per_day)) +
+  geom_boxplot() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+

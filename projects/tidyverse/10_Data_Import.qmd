@@ -1,6 +1,15 @@
 ---
 title: "Data Import with Tidyverse"
-format: revealjs
+subtitle: "David Koppstein"
+format: 
+  revealjs:
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/maxplanck-ie.jpg
+    css: styles.css
+    theme: night
 editor: visual
 ---
 
@@ -197,4 +206,4 @@ sheet_one
 
 ## Any questions?
 
-We will next talk about how to manipulate data in data frames using the Tidyverse.
+We will next talk about how to manipulate data in data frames/tibbles using the Tidyverse.

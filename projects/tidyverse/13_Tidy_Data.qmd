@@ -1,8 +1,8 @@
 ---
 title: "Tidy Data"
 subtitle: "David Koppstein"
-format:
-  revealjs: 
+format: 
+  revealjs:
     slide-number: true
     chalkboard: 
       buttons: false
@@ -10,6 +10,7 @@ format:
     logo: images/maxplanck-ie.jpg
     css: styles.css
     footer: <https://github.com/maxplanck-ie/Rintro>
+    theme: night
 ---
 
 ## What is Tidy Data? 

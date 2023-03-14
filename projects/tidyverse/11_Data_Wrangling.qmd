@@ -1,6 +1,15 @@
 ---
-title: "Data Wrangling with Dplyr"
-format: revealjs
+title: "Intro to Data Wrangling with Dplyr"
+subtitle: "David Koppstein"
+format: 
+  revealjs:
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/maxplanck-ie.jpg
+    css: styles.css
+    theme: night
 editor: visual
 ---
 
@@ -48,12 +57,51 @@ murders <- mutate(murders, rate = total / population * 100000)
 head(murders)
 ```
 
+## Dplyr in action - `mutate()` {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| code-line-numbers: "6"
+library(dplyr)
+library(dslabs)
+data("murders")
+
+# adding a column with mutate
+murders <- mutate(murders, rate = total / population * 100000)
+head(murders)
+```
+
+## A brief note on non-standard evaluation
+
+```{r}
+#| eval: false
+murders <- mutate(murders, rate = total / population * 100000)
+```
+
+Within the `mutate()` call, `total` and `population` are inferred to call `murders$total` and `murders$population` *per row*
+
+This can be super confusing for people who come from traditional programming languages!
+
+::: footer
+<http://adv-r.had.co.nz/Computing-on-the-language.html>
+:::
+
 ## Dplyr in action - `filter()` {auto-animate="true"}
 
 ```{r}
 #| echo: true
 # subsetting with filter
 filtered_murders <- filter(murders, rate <= 0.71)
+head(filtered_murders)
+```
+
+## Dplyr in action - `filter()` {auto-animate="true"}
+
+```{r}
+#| echo: true
+# subsetting with filter
+south_west <- c("South", "West")
+filtered_murders <- filter(murders, region %in% south_west)
 head(filtered_murders)
 ```
 
@@ -88,17 +136,16 @@ murders %>%
 
 ## A note about pipes
 
-- Piping is shorthand to pass the output of one function as input to the next
-- `h(g(f(x)))` becomes `x %>% f() %>% g() %>% h()`
-- There are two pipes:
-  - `%>%` (from `magrittr`) - Ctrl-shift-M! 
-  - `|>` (native to R, introduced in R 4.1)
-- We will use `%>%` going forward, but feel free to read about the differences and use what you need
+-   Piping is shorthand to pass the output of one function as input to the next
+-   `h(g(f(x)))` becomes `x %>% f() %>% g() %>% h()`
+-   There are two pipes:
+    -   `%>%` (from `magrittr`) - Ctrl-shift-M!
+    -   `|>` (native to R, introduced in R 4.1)
+-   We will use `%>%` going forward, but feel free to read about the differences and use what you need
 
 ::: footer
-[https://stackoverflow.com/questions/67633022/what-are-the-differences-between-rs-new-native-pipe-and-the-magrittr-pipe](https://stackoverflow.com/questions/67633022/what-are-the-differences-between-rs-new-native-pipe-and-the-magrittr-pipe)
+<https://stackoverflow.com/questions/67633022/what-are-the-differences-between-rs-new-native-pipe-and-the-magrittr-pipe>
 :::
-
 
 ## A quick look at the data {auto-animate="true"}
 
@@ -225,6 +272,10 @@ abline(fit, col = "red")
 
 ## Group then summarize {auto-animate="true"}
 
+![](images/groupby.png)
+
+## Group then summarize {auto-animate="true"}
+
 ```{r}
 #| echo: true
 # group by region
@@ -310,9 +361,86 @@ murders %>% arrange(desc(rate)) %>% top_n(10)
 
 Side note: Why would Washington DC have a much higher murder rate than all the other states?
 
-## Consider urban area!
+## Exercises with gapminder
 
-![](images/murder_rates_dc.png)
+-   The `gapminder` dataset was developed by Hans Rosling, a famous sociologist and health expert, to help visualize global socioeconomic data
+
+```{r}
+data(gapminder)
+head(gapminder)
+```
+
+## Which five countries have the highest population in 2012? {auto-animate="true"}
+
+Store it in a vector.
+
+## Which five countries have the highest population in 2012? {auto-animate="true"}
+
+Store it in a vector.
+
+```{r}
+#| echo: true
+top5_countries <- gapminder %>%
+  filter(year == 2012) %>% 
+  arrange(desc(population)) %>% 
+  head(5) %>%
+  pull(country)
+top5_countries
+```
+
+## What is the average daily salary of a German person in 1989 (use gdp)? {auto-animate="true"}
+
+## What is the average daily salary of a German person in 1989 (use gdp)? {auto-animate="true"}
+
+```{r}
+#| echo: true
+gapminder %>%
+  filter(country == "Germany", year == 1989) %>%
+  mutate(dollars_per_day = gdp/population/365) %>%
+  pull()
+```
+
+## Rank the following countries based on their mortality rate in 2012. {auto-animate="true"}
+
+Turkey, Argentina, South Korea, Georgia, Thailand, Australia
+
+## Rank the following countries based on their mortality rate in 2012. {auto-animate="true"}
+
+Turkey, Argentina, South Korea, Georgia, Thailand, Australia
+
+```{r}
+#| echo: true
+gapminder %>%
+  filter(year==2012, country %in% c("Turkey", "Argentina", "South Korea", "Georgia", "Thailand", "Australia")) %>%
+  arrange(infant_mortality) %>%
+  select(country, infant_mortality)
+```
+
+## What are the seven regions with lowest median life expectancy between 2000-2009? {auto-animate="true"}
+
+## What are the seven regions with lowest median life expectancy between 2000-2009? {auto-animate="true"}
+
+```{r}
+#| echo: true
+gapminder %>%
+  filter(year %in% 2000:2009) %>%
+  group_by(region) %>%
+  summarise(med_life_exp = median(life_expectancy)) %>%
+  arrange(med_life_exp) %>%
+  head(7)
+```
+
+## The tip of the iceberg
+
+![](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf)
+
+For more, see this handy cheatsheet!
+
+![](images/dplyr_cheat_sheet.png){fig-align="center"}
+
+::: footer
+<https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf>
+:::
 
 ## Any questions?
 
