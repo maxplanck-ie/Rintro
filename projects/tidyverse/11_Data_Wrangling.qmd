@@ -68,19 +68,31 @@ data("murders")
 
 # adding a column with mutate
 murders <- mutate(murders, rate = total / population * 100000)
-head(murders)
+head(murders, 2)
 ```
 
-## A brief note on non-standard evaluation
+## A brief note on non-standard evaluation {auto-animate="true"}
 
 ```{r}
-#| eval: false
+#| echo: true
 murders <- mutate(murders, rate = total / population * 100000)
+head(murders, 2)
 ```
 
 Within the `mutate()` call, `total` and `population` are inferred to call `murders$total` and `murders$population` *per row*
 
+## A brief note on non-standard evaluation {auto-animate="true"}
+
+```{r}
+#| echo: true
+params <- c("total", "population")
+df <- mutate(murders, rate = !!sym(params[1]) / !!sym(params[2]) * 100000)
+head(df, 2)
+```
+
 This can be super confusing for people who come from traditional programming languages!
+
+Advanced tip: use `!!` and `sym` to specify variables programatically
 
 ::: footer
 <http://adv-r.had.co.nz/Computing-on-the-language.html>
@@ -336,17 +348,7 @@ murders %>% arrange(desc(rate)) %>% head()
 murders <- mutate(murders, rate = total / population * 10^5)
 
 # order the states by region and then by murder rate within region
-murders %>% arrange(region, rate) %>% head()
-```
-
-## `arrange()` in action {auto-animate="true"}
-
-```{r}
-#| echo: true
-murders <- mutate(murders, rate = total / population * 10^5)
-
-# return the top 10 states by murder rate
-murders %>% top_n(10, rate)
+murders %>% arrange(region, rate)
 ```
 
 ## `arrange()` in action {auto-animate="true"}
@@ -356,18 +358,20 @@ murders %>% top_n(10, rate)
 murders <- mutate(murders, rate = total / population * 10^5)
 
 # return the top 10 states ranked by murder rate, sorted by murder rate
-murders %>% arrange(desc(rate)) %>% top_n(10)
+murders %>% arrange(desc(rate)) %>% head(10)
 ```
 
-Side note: Why would Washington DC have a much higher murder rate than all the other states?
+Side note 1: You can also use the `slice_max` function
+Side note 2: Why would Washington DC have a much higher murder rate than all the other states?
 
 ## Exercises with gapminder
 
 -   The `gapminder` dataset was developed by Hans Rosling, a famous sociologist and health expert, to help visualize global socioeconomic data
 
 ```{r}
+#| echo: true
 data(gapminder)
-head(gapminder)
+head(gapminder, 3)
 ```
 
 ## Which five countries have the highest population in 2012? {auto-animate="true"}
@@ -388,9 +392,9 @@ top5_countries <- gapminder %>%
 top5_countries
 ```
 
-## What is the average daily salary of a German person in 1989 (use gdp)? {auto-animate="true"}
+## How many dollars per day does a single German contribute to the total GDP in 1989? {auto-animate="true"}
 
-## What is the average daily salary of a German person in 1989 (use gdp)? {auto-animate="true"}
+## How many dollars per day does a single German contribute to the total GDP in 1989? {auto-animate="true"}
 
 ```{r}
 #| echo: true
@@ -400,11 +404,11 @@ gapminder %>%
   pull()
 ```
 
-## Rank the following countries based on their mortality rate in 2012. {auto-animate="true"}
+## Rank the following countries based on their infant mortality rate in 2012. {auto-animate="true"}
 
 Turkey, Argentina, South Korea, Georgia, Thailand, Australia
 
-## Rank the following countries based on their mortality rate in 2012. {auto-animate="true"}
+## Rank the following countries based on their infant mortality rate in 2012. {auto-animate="true"}
 
 Turkey, Argentina, South Korea, Georgia, Thailand, Australia
 
@@ -416,9 +420,13 @@ gapminder %>%
   select(country, infant_mortality)
 ```
 
-## What are the seven regions with lowest median life expectancy between 2000-2009? {auto-animate="true"}
+## What are the six regions with lowest median life expectancy between 2000-2009? {auto-animate="true"}
 
-## What are the seven regions with lowest median life expectancy between 2000-2009? {auto-animate="true"}
+Calculate them and return a sorted vector. 
+
+## What are the six regions with lowest median life expectancy between 2000-2009? {auto-animate="true"}
+
+Calculate them and return a sorted vector. 
 
 ```{r}
 #| echo: true
@@ -427,7 +435,7 @@ gapminder %>%
   group_by(region) %>%
   summarise(med_life_exp = median(life_expectancy)) %>%
   arrange(med_life_exp) %>%
-  head(7)
+  head(6)
 ```
 
 ## The tip of the iceberg
