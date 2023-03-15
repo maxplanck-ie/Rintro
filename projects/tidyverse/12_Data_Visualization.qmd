@@ -216,7 +216,6 @@ p +
 
 ## Repel the labels
 
-
 ```{r}
 #| echo: true
 #install.packages("ggrepel")
@@ -315,7 +314,7 @@ p +
 
 ## Themes
 
-`install.packages("ggthemes")` 
+`install.packages("ggthemes")`
 
 ## Themes {auto-animate="true"}
 
@@ -570,7 +569,7 @@ gapminder %>%
 
 ## Reordering {auto-animate="true"}
 
-Better, but hard to interpret... 
+Better, but hard to interpret...
 
 ```{r}
 #| echo: true
@@ -600,7 +599,9 @@ gapminder %>%
   ggplot(aes(region, dollars_per_day, fill = continent)) +    # color by continent
   geom_boxplot() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  xlab("")
+  xlab("") + 
+  scale_y_continuous(trans = "log2") + 
+  geom_point(show.legend = FALSE)
 ```
 
 ## Enhanced boxplot {auto-animate="true"}
@@ -614,13 +615,17 @@ gapminder %>%
   ggplot(aes(region, dollars_per_day, fill = continent)) +    # color by continent
   geom_boxplot() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  xlab("")
+  xlab("") + 
+  scale_y_continuous(trans = "log2") + 
+  geom_point(show.legend = FALSE)
 ```
 
 ## Tip of the iceberg
 
 See this handy cheatsheet for lots more!
 
-![](images/ggplot2_cheat_sheet.png){fig-align="center"}
+![](images/ggplot2_cheat_sheet.png){fig-align="center" width="600"} 
 
-<https://github.com/rstudio/cheatsheets/blob/main/data-visualization-2.1.pdf>
+::: footer 
+<https://github.com/rstudio/cheatsheets/blob/main/data-visualization-2.1.pdf> 
+:::

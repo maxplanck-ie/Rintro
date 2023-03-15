@@ -1007,7 +1007,9 @@ David Koppstein
 <span id="cb52-4" class="hljs-ln-code"><a href="#cb52-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(region, dollars_per_day, <span class="at">fill =</span> continent)) <span class="sc">+</span>    <span class="co"># color by continent</span></span>
 <span id="cb52-5" class="hljs-ln-code"><a href="#cb52-5"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
 <span id="cb52-6" class="hljs-ln-code"><a href="#cb52-6"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb52-7" class="hljs-ln-code"><a href="#cb52-7"></a>  <span class="fu">xlab</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb52-7" class="hljs-ln-code"><a href="#cb52-7"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> </span>
+<span id="cb52-8" class="hljs-ln-code"><a href="#cb52-8"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">trans =</span> <span class="st">"log2"</span>) <span class="sc">+</span> </span>
+<span id="cb52-9" class="hljs-ln-code"><a href="#cb52-9"></a>  <span class="fu">geom_point</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="enhanced-boxplot-1" class="slide level2" data-auto-animate="true">
@@ -1019,10 +1021,12 @@ David Koppstein
 <p>See this handy cheatsheet for lots more!</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ggplot2_cheat_sheet.png"></p>
+<p><img data-src="images/ggplot2_cheat_sheet.png" width="600"></p>
 </figure>
 </div>
+<div class="footer">
 <p><a href="https://github.com/rstudio/cheatsheets/blob/main/data-visualization-2.1.pdf" class="uri">https://github.com/rstudio/cheatsheets/blob/main/data-visualization-2.1.pdf</a></p>
+</div>
 <p><img src="images/maxplanck-ie.jpg" class="slide-logo"></p>
 <div class="footer footer-default">
 

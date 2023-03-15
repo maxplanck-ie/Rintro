@@ -834,26 +834,8 @@
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb46-1" class="hljs-ln-code"><a href="#cb46-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
 <span id="cb46-2" class="hljs-ln-code"><a href="#cb46-2"></a></span>
-<span id="cb46-3" class="hljs-ln-code"><a href="#cb46-3"></a><span class="co"># order the states by murder rate in descending order</span></span>
-<span id="cb46-4" class="hljs-ln-code"><a href="#cb46-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(rate)) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                 state abb        region population total      rate
-1 District of Columbia  DC         South     601723    99 16.452753
-2            Louisiana  LA         South    4533372   351  7.742581
-3             Missouri  MO North Central    5988927   321  5.359892
-4             Maryland  MD         South    5773552   293  5.074866
-5       South Carolina  SC         South    4625364   207  4.475323
-6             Delaware  DE         South     897934    38  4.231937</code></pre>
-</div>
-</div>
-</section>
-<section id="arrange-in-action-4" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title"><code>arrange()</code> in action</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb48-1" class="hljs-ln-code"><a href="#cb48-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
-<span id="cb48-2" class="hljs-ln-code"><a href="#cb48-2"></a></span>
-<span id="cb48-3" class="hljs-ln-code"><a href="#cb48-3"></a><span class="co"># order the states by region and then by murder rate within region</span></span>
-<span id="cb48-4" class="hljs-ln-code"><a href="#cb48-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(region, rate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb46-3" class="hljs-ln-code"><a href="#cb46-3"></a><span class="co"># order the states by region and then by murder rate within region</span></span>
+<span id="cb46-4" class="hljs-ln-code"><a href="#cb46-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(region, rate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                  state abb        region population total       rate
 1               Vermont  VT     Northeast     625741     2  0.3196211
@@ -910,25 +892,21 @@
 </div>
 </div>
 </section>
-<section id="arrange-in-action-5" class="slide level2" data-auto-animate="true">
+<section id="arrange-in-action-4" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>arrange()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb50-1" class="hljs-ln-code"><a href="#cb50-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
-<span id="cb50-2" class="hljs-ln-code"><a href="#cb50-2"></a></span>
-<span id="cb50-3" class="hljs-ln-code"><a href="#cb50-3"></a><span class="co"># return the top 10 states ranked by murder rate, sorted by murder rate</span></span>
-<span id="cb50-4" class="hljs-ln-code"><a href="#cb50-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(rate)) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb48-1" class="hljs-ln-code"><a href="#cb48-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
+<span id="cb48-2" class="hljs-ln-code"><a href="#cb48-2"></a></span>
+<span id="cb48-3" class="hljs-ln-code"><a href="#cb48-3"></a><span class="co"># order the states by murder rate in descending order</span></span>
+<span id="cb48-4" class="hljs-ln-code"><a href="#cb48-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(rate)) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                  state abb        region population total      rate
-1  District of Columbia  DC         South     601723    99 16.452753
-2             Louisiana  LA         South    4533372   351  7.742581
-3              Missouri  MO North Central    5988927   321  5.359892
-4              Maryland  MD         South    5773552   293  5.074866
-5        South Carolina  SC         South    4625364   207  4.475323
-6              Delaware  DE         South     897934    38  4.231937
-7              Michigan  MI North Central    9883640   413  4.178622
-8           Mississippi  MS         South    2967297   120  4.044085
-9               Georgia  GA         South    9920000   376  3.790323
-10              Arizona  AZ          West    6392017   232  3.629527</code></pre>
+<pre><code>                 state abb        region population total      rate
+1 District of Columbia  DC         South     601723    99 16.452753
+2            Louisiana  LA         South    4533372   351  7.742581
+3             Missouri  MO North Central    5988927   321  5.359892
+4             Maryland  MD         South    5773552   293  5.074866
+5       South Carolina  SC         South    4625364   207  4.475323
+6             Delaware  DE         South     897934    38  4.231937</code></pre>
 </div>
 </div>
 <p>Side note 1: You can also use the <code>slice_max</code> function Side note 2: Why would Washington DC have a much higher murder rate than all the other states?</p>
@@ -939,8 +917,8 @@
 <li>The <code>gapminder</code> dataset was developed by Hans Rosling, a famous sociologist and health expert, to help visualize global socioeconomic data</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a><span class="fu">data</span>(gapminder)</span>
-<span id="cb52-2"><a href="#cb52-2"></a><span class="fu">head</span>(gapminder, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">data</span>(gapminder)</span>
+<span id="cb50-2"><a href="#cb50-2"></a><span class="fu">head</span>(gapminder, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  country year infant_mortality life_expectancy fertility population
 1 Albania 1960            115.4           62.87      6.19    1636054
@@ -961,12 +939,12 @@
 <h2 data-id="quarto-animate-title">Which five countries have the highest population in 2012?</h2>
 <p>Store it in a vector.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb54-1" class="hljs-ln-code"><a href="#cb54-1"></a>top5_countries <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb54-2" class="hljs-ln-code"><a href="#cb54-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2012</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb54-3" class="hljs-ln-code"><a href="#cb54-3"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(population)) <span class="sc">%&gt;%</span> </span>
-<span id="cb54-4" class="hljs-ln-code"><a href="#cb54-4"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb54-5" class="hljs-ln-code"><a href="#cb54-5"></a>  <span class="fu">pull</span>(country)</span>
-<span id="cb54-6" class="hljs-ln-code"><a href="#cb54-6"></a>top5_countries</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb52-1" class="hljs-ln-code"><a href="#cb52-1"></a>top5_countries <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb52-2" class="hljs-ln-code"><a href="#cb52-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2012</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb52-3" class="hljs-ln-code"><a href="#cb52-3"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(population)) <span class="sc">%&gt;%</span> </span>
+<span id="cb52-4" class="hljs-ln-code"><a href="#cb52-4"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb52-5" class="hljs-ln-code"><a href="#cb52-5"></a>  <span class="fu">pull</span>(country)</span>
+<span id="cb52-6" class="hljs-ln-code"><a href="#cb52-6"></a>top5_countries</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] China         India         United States Indonesia     Brazil       
 185 Levels: Albania Algeria Angola Antigua and Barbuda Argentina ... Zimbabwe</code></pre>
@@ -979,10 +957,10 @@
 <section id="what-is-the-approximate-daily-income-gdp-per-person-per-day-for-a-german-person-in-1989-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">What is the approximate daily income (~gdp per person per day) for a German person in 1989?</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb56-1" class="hljs-ln-code"><a href="#cb56-1"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb56-2" class="hljs-ln-code"><a href="#cb56-2"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">"Germany"</span>, year <span class="sc">==</span> <span class="dv">1989</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb56-3" class="hljs-ln-code"><a href="#cb56-3"></a>  <span class="fu">mutate</span>(<span class="at">dollars_per_day =</span> gdp<span class="sc">/</span>population<span class="sc">/</span><span class="dv">365</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb56-4" class="hljs-ln-code"><a href="#cb56-4"></a>  <span class="fu">pull</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb54-1" class="hljs-ln-code"><a href="#cb54-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb54-2" class="hljs-ln-code"><a href="#cb54-2"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">"Germany"</span>, year <span class="sc">==</span> <span class="dv">1989</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb54-3" class="hljs-ln-code"><a href="#cb54-3"></a>  <span class="fu">mutate</span>(<span class="at">dollars_per_day =</span> gdp<span class="sc">/</span>population<span class="sc">/</span><span class="dv">365</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb54-4" class="hljs-ln-code"><a href="#cb54-4"></a>  <span class="fu">pull</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 51.61653</code></pre>
 </div>
@@ -996,10 +974,10 @@
 <h2 data-id="quarto-animate-title">Rank the following countries based on their infant mortality rate in 2012.</h2>
 <p>Turkey, Argentina, South Korea, Georgia, Thailand, Australia</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb58-1" class="hljs-ln-code"><a href="#cb58-1"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb58-2" class="hljs-ln-code"><a href="#cb58-2"></a>  <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">2012</span>, country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Turkey"</span>, <span class="st">"Argentina"</span>, <span class="st">"South Korea"</span>, <span class="st">"Georgia"</span>, <span class="st">"Thailand"</span>, <span class="st">"Australia"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb58-3" class="hljs-ln-code"><a href="#cb58-3"></a>  <span class="fu">arrange</span>(infant_mortality) <span class="sc">%&gt;%</span></span>
-<span id="cb58-4" class="hljs-ln-code"><a href="#cb58-4"></a>  <span class="fu">select</span>(country, infant_mortality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb56-1" class="hljs-ln-code"><a href="#cb56-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb56-2" class="hljs-ln-code"><a href="#cb56-2"></a>  <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">2012</span>, country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Turkey"</span>, <span class="st">"Argentina"</span>, <span class="st">"South Korea"</span>, <span class="st">"Georgia"</span>, <span class="st">"Thailand"</span>, <span class="st">"Australia"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb56-3" class="hljs-ln-code"><a href="#cb56-3"></a>  <span class="fu">arrange</span>(infant_mortality) <span class="sc">%&gt;%</span></span>
+<span id="cb56-4" class="hljs-ln-code"><a href="#cb56-4"></a>  <span class="fu">select</span>(country, infant_mortality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      country infant_mortality
 1 South Korea              3.3
@@ -1019,12 +997,12 @@
 <h2 data-id="quarto-animate-title">What are the six regions with lowest median life expectancy between 2000-2009?</h2>
 <p>Calculate them and return a sorted vector.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb60-1" class="hljs-ln-code"><a href="#cb60-1"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb60-2" class="hljs-ln-code"><a href="#cb60-2"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="dv">2000</span><span class="sc">:</span><span class="dv">2009</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb60-3" class="hljs-ln-code"><a href="#cb60-3"></a>  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
-<span id="cb60-4" class="hljs-ln-code"><a href="#cb60-4"></a>  <span class="fu">summarise</span>(<span class="at">med_life_exp =</span> <span class="fu">median</span>(life_expectancy)) <span class="sc">%&gt;%</span></span>
-<span id="cb60-5" class="hljs-ln-code"><a href="#cb60-5"></a>  <span class="fu">arrange</span>(med_life_exp) <span class="sc">%&gt;%</span></span>
-<span id="cb60-6" class="hljs-ln-code"><a href="#cb60-6"></a>  <span class="fu">head</span>(<span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb58-1" class="hljs-ln-code"><a href="#cb58-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb58-2" class="hljs-ln-code"><a href="#cb58-2"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="dv">2000</span><span class="sc">:</span><span class="dv">2009</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb58-3" class="hljs-ln-code"><a href="#cb58-3"></a>  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
+<span id="cb58-4" class="hljs-ln-code"><a href="#cb58-4"></a>  <span class="fu">summarise</span>(<span class="at">med_life_exp =</span> <span class="fu">median</span>(life_expectancy)) <span class="sc">%&gt;%</span></span>
+<span id="cb58-5" class="hljs-ln-code"><a href="#cb58-5"></a>  <span class="fu">arrange</span>(med_life_exp) <span class="sc">%&gt;%</span></span>
+<span id="cb58-6" class="hljs-ln-code"><a href="#cb58-6"></a>  <span class="fu">head</span>(<span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 2
   region          med_life_exp

@@ -92,3 +92,9 @@ new_tidy_data <- wide_data %>%
 head(new_tidy_data)
 ```
 
+## Thank you! 
+
+- The Koppstein lab will be starting in Düsseldorf in a few months
+- There is a position for a Ph.D student interested in cancer, structural variation, and transcriptomics using long reads
+- E-mail [David.Koppstein@gmail.com](David.Koppstein@gmail.com) if you or anyone else are interested
+

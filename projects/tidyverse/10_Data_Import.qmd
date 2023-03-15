@@ -202,8 +202,8 @@ sheet_one
 
 ## `readxl::` {auto-animate="true"}
 
--   `read_xls()` is for xls files, `read_xlsx` for XML-based xlsx files
--   you can use `read_excel()` if you are unsure of the format
+- `read_xls()` is for xls files, `read_xlsx` for XML-based xlsx files
+- you can use `read_excel()` if you are unsure of the format
 
 ## Any questions?
 
