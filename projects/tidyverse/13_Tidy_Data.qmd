@@ -9,7 +9,6 @@ format:
     preview-links: auto
     logo: images/maxplanck-ie.jpg
     css: styles.css
-    footer: <https://github.com/maxplanck-ie/Rintro>
     theme: night
 ---
 
@@ -17,6 +16,10 @@ format:
 
 - In tidy data, each row is an observation and each column is a different variable. 
 - In wide data, each row contains several observations, and the columns contain values. 
+
+::: footer 
+<https://maxplanck-ie.github.io/Rintro>
+:::
 
 ## Example of a tidy data frame
 

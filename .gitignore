@@ -8,5 +8,7 @@ rmd/*_cache/
 rmd/*_files
 rmd/*RData
 rmd/_site
+<<<<<<< HEAD
 rmd/*.csv
 rmd/*.csv.gz
+.DS_Store
