@@ -897,6 +897,8 @@
 <li>The <code>gapminder</code> dataset was developed by Hans Rosling, a famous sociologist and health expert, to help visualize global socioeconomic data</li>
 </ul>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">data</span>(gapminder)</span>
+<span id="cb50-2"><a href="#cb50-2"></a><span class="fu">head</span>(gapminder)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              country year infant_mortality life_expectancy fertility
 1             Albania 1960           115.40           62.87      6.19
@@ -923,12 +925,12 @@
 <h2 data-id="quarto-animate-title">Which five countries have the highest population in 2012?</h2>
 <p>Store it in a vector.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb51-1" class="hljs-ln-code"><a href="#cb51-1"></a>top5_countries <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb51-2" class="hljs-ln-code"><a href="#cb51-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2012</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb51-3" class="hljs-ln-code"><a href="#cb51-3"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(population)) <span class="sc">%&gt;%</span> </span>
-<span id="cb51-4" class="hljs-ln-code"><a href="#cb51-4"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb51-5" class="hljs-ln-code"><a href="#cb51-5"></a>  <span class="fu">pull</span>(country)</span>
-<span id="cb51-6" class="hljs-ln-code"><a href="#cb51-6"></a>top5_countries</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb52-1" class="hljs-ln-code"><a href="#cb52-1"></a>top5_countries <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb52-2" class="hljs-ln-code"><a href="#cb52-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2012</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb52-3" class="hljs-ln-code"><a href="#cb52-3"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(population)) <span class="sc">%&gt;%</span> </span>
+<span id="cb52-4" class="hljs-ln-code"><a href="#cb52-4"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb52-5" class="hljs-ln-code"><a href="#cb52-5"></a>  <span class="fu">pull</span>(country)</span>
+<span id="cb52-6" class="hljs-ln-code"><a href="#cb52-6"></a>top5_countries</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] China         India         United States Indonesia     Brazil       
 185 Levels: Albania Algeria Angola Antigua and Barbuda Argentina ... Zimbabwe</code></pre>
@@ -941,27 +943,27 @@
 <section id="what-is-the-average-daily-salary-of-a-german-person-in-1989-use-gdp-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">What is the average daily salary of a German person in 1989 (use gdp)?</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb53-1" class="hljs-ln-code"><a href="#cb53-1"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb53-2" class="hljs-ln-code"><a href="#cb53-2"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">"Germany"</span>, year <span class="sc">==</span> <span class="dv">1989</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb53-3" class="hljs-ln-code"><a href="#cb53-3"></a>  <span class="fu">mutate</span>(<span class="at">dollars_per_day =</span> gdp<span class="sc">/</span>population<span class="sc">/</span><span class="dv">365</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb53-4" class="hljs-ln-code"><a href="#cb53-4"></a>  <span class="fu">pull</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb54-1" class="hljs-ln-code"><a href="#cb54-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb54-2" class="hljs-ln-code"><a href="#cb54-2"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">"Germany"</span>, year <span class="sc">==</span> <span class="dv">1989</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb54-3" class="hljs-ln-code"><a href="#cb54-3"></a>  <span class="fu">mutate</span>(<span class="at">dollars_per_day =</span> gdp<span class="sc">/</span>population<span class="sc">/</span><span class="dv">365</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb54-4" class="hljs-ln-code"><a href="#cb54-4"></a>  <span class="fu">pull</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 51.61653</code></pre>
 </div>
 </div>
 </section>
-<section id="rank-the-following-countries-based-on-their-mortality-rate-in-2012." class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Rank the following countries based on their mortality rate in 2012.</h2>
+<section id="rank-the-following-countries-based-on-their-infant-mortality-rate-in-2012." class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Rank the following countries based on their infant mortality rate in 2012.</h2>
 <p>Turkey, Argentina, South Korea, Georgia, Thailand, Australia</p>
 </section>
-<section id="rank-the-following-countries-based-on-their-mortality-rate-in-2012.-1" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Rank the following countries based on their mortality rate in 2012.</h2>
+<section id="rank-the-following-countries-based-on-their-infant-mortality-rate-in-2012.-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Rank the following countries based on their infant mortality rate in 2012.</h2>
 <p>Turkey, Argentina, South Korea, Georgia, Thailand, Australia</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb55-1" class="hljs-ln-code"><a href="#cb55-1"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb55-2" class="hljs-ln-code"><a href="#cb55-2"></a>  <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">2012</span>, country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Turkey"</span>, <span class="st">"Argentina"</span>, <span class="st">"South Korea"</span>, <span class="st">"Georgia"</span>, <span class="st">"Thailand"</span>, <span class="st">"Australia"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb55-3" class="hljs-ln-code"><a href="#cb55-3"></a>  <span class="fu">arrange</span>(infant_mortality) <span class="sc">%&gt;%</span></span>
-<span id="cb55-4" class="hljs-ln-code"><a href="#cb55-4"></a>  <span class="fu">select</span>(country, infant_mortality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb56-1" class="hljs-ln-code"><a href="#cb56-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb56-2" class="hljs-ln-code"><a href="#cb56-2"></a>  <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">2012</span>, country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Turkey"</span>, <span class="st">"Argentina"</span>, <span class="st">"South Korea"</span>, <span class="st">"Georgia"</span>, <span class="st">"Thailand"</span>, <span class="st">"Australia"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb56-3" class="hljs-ln-code"><a href="#cb56-3"></a>  <span class="fu">arrange</span>(infant_mortality) <span class="sc">%&gt;%</span></span>
+<span id="cb56-4" class="hljs-ln-code"><a href="#cb56-4"></a>  <span class="fu">select</span>(country, infant_mortality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      country infant_mortality
 1 South Korea              3.3
@@ -979,12 +981,12 @@
 <section id="what-are-the-seven-regions-with-lowest-median-life-expectancy-between-2000-2009-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">What are the seven regions with lowest median life expectancy between 2000-2009?</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb57-1" class="hljs-ln-code"><a href="#cb57-1"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb57-2" class="hljs-ln-code"><a href="#cb57-2"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="dv">2000</span><span class="sc">:</span><span class="dv">2009</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb57-3" class="hljs-ln-code"><a href="#cb57-3"></a>  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
-<span id="cb57-4" class="hljs-ln-code"><a href="#cb57-4"></a>  <span class="fu">summarise</span>(<span class="at">med_life_exp =</span> <span class="fu">median</span>(life_expectancy)) <span class="sc">%&gt;%</span></span>
-<span id="cb57-5" class="hljs-ln-code"><a href="#cb57-5"></a>  <span class="fu">arrange</span>(med_life_exp) <span class="sc">%&gt;%</span></span>
-<span id="cb57-6" class="hljs-ln-code"><a href="#cb57-6"></a>  <span class="fu">head</span>(<span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb58-1" class="hljs-ln-code"><a href="#cb58-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb58-2" class="hljs-ln-code"><a href="#cb58-2"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="dv">2000</span><span class="sc">:</span><span class="dv">2009</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb58-3" class="hljs-ln-code"><a href="#cb58-3"></a>  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
+<span id="cb58-4" class="hljs-ln-code"><a href="#cb58-4"></a>  <span class="fu">summarise</span>(<span class="at">med_life_exp =</span> <span class="fu">median</span>(life_expectancy)) <span class="sc">%&gt;%</span></span>
+<span id="cb58-5" class="hljs-ln-code"><a href="#cb58-5"></a>  <span class="fu">arrange</span>(med_life_exp) <span class="sc">%&gt;%</span></span>
+<span id="cb58-6" class="hljs-ln-code"><a href="#cb58-6"></a>  <span class="fu">head</span>(<span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 × 2
   region          med_life_exp
