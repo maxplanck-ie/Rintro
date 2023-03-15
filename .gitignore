@@ -7,3 +7,4 @@ tmp/
 *_cache/
 rmd/*RData
 rmd/_site
+.DS_Store

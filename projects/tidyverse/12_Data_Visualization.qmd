@@ -21,6 +21,10 @@ editor: visual
 
 ![](images/ggplot2.png){.absolute bottom="25" left="100" width="150"} ![](images/hadley.jpg){.absolute bottom="25" left="800" width="250"}
 
+::: footer
+<https://maxplanck-ie.github.io/Rintro>
+:::
+
 ## Graph components {auto-animate="true"}
 
 -   Plots in **ggplot2** consist of 3 main components:
@@ -210,6 +214,20 @@ p +
   geom_text(nudge_x = 0.075)
 ```
 
+## Repel the labels
+
+
+```{r}
+#| echo: true
+#install.packages("ggrepel")
+library(ggrepel)
+p +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10() +
+  geom_text_repel()
+```
+
 ## Add axis labels {auto-animate="true"}
 
 ```{r}
@@ -218,7 +236,7 @@ p <- p +
   geom_point(size = 3) +
   scale_x_log10() +
   scale_y_log10() +
-  geom_text(nudge_x = 0.075) + 
+  geom_text_repel() +
   xlab("Population in millions (log scale)") +
   ylab("Total number of murders (log scale)")
 p
@@ -288,17 +306,16 @@ p +
 ```{r}
 #| echo: true
 # basic line with average murder rate for the country
-p <- p +
+p +
   ggtitle("US Gun Murders in 2010") + 
   geom_point(aes(color = region), size = 3) + 
   geom_abline(intercept = log10(r), lty = 2, color = "darkgrey") + 
   scale_color_discrete(name = "Region")
-p
 ```
 
 ## Themes
 
-`install.packages("ggthemes")` `install.packages("ggrepel")`
+`install.packages("ggthemes")` 
 
 ## Themes {auto-animate="true"}
 
@@ -522,9 +539,13 @@ gapminder %>%
     scale_x_continuous(trans = "log2")
 ```
 
-## Exercise: make a boxplot of daily salary by region in 1970! {auto-animate="true"}
+## Exercise {auto-animate="true"}
 
-## Exercise: make a boxplot of daily salary by region in 1970! {auto-animate="true"}
+Make a boxplot of daily income per person by region in 1970
+
+## Exercise {auto-animate="true"}
+
+Make a boxplot of daily income per person by region in 1970
 
 ```{r}
 #| echo: true
@@ -534,7 +555,9 @@ gapminder %>%
   geom_boxplot()
 ```
 
-## Exercise: make a boxplot of daily salary by region in 1970! {auto-animate="true"}
+## Exercise
+
+Make a boxplot of daily income per person by region in 1970
 
 ```{r}
 #| echo: true
@@ -544,3 +567,60 @@ gapminder %>%
   geom_boxplot() + 
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+
+## Reordering {auto-animate="true"}
+
+Better, but hard to interpret... 
+
+```{r}
+#| echo: true
+# by default, factor order is alphabetical
+fac <- factor(c("Asia", "Asia", "West", "West", "West"))
+levels(fac)
+```
+
+## Reordering {auto-animate="true"}
+
+```{r}
+#| echo: true
+# reorder factor by the category means
+value <- c(10, 11, 12, 6, 4)
+fac <- reorder(fac, value, FUN = mean)
+levels(fac)
+```
+
+## Enhanced boxplot {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| eval: false
+gapminder %>%
+  filter(year == 1970 & !is.na(gdp)) %>%
+  mutate(region = reorder(region, dollars_per_day, FUN = median)) %>%    # reorder
+  ggplot(aes(region, dollars_per_day, fill = continent)) +    # color by continent
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  xlab("")
+```
+
+## Enhanced boxplot {auto-animate="true"}
+
+```{r}
+#| echo: false
+#| eval: true
+gapminder %>%
+  filter(year == 1970 & !is.na(gdp)) %>%
+  mutate(region = reorder(region, dollars_per_day, FUN = median)) %>%    # reorder
+  ggplot(aes(region, dollars_per_day, fill = continent)) +    # color by continent
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  xlab("")
+```
+
+## Tip of the iceberg
+
+See this handy cheatsheet for lots more!
+
+![](images/ggplot2_cheat_sheet.png){fig-align="center"}
+
+<https://github.com/rstudio/cheatsheets/blob/main/data-visualization-2.1.pdf>

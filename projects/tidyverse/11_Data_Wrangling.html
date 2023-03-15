@@ -406,6 +406,9 @@
 <li><code>filter()</code>: filters rows based on criteria</li>
 <li><code>select()</code>: selects columns</li>
 </ul>
+<div class="footer">
+<p><a href="https://maxplanck-ie.github.io/Rintro" class="uri">https://maxplanck-ie.github.io/Rintro</a></p>
+</div>
 </section>
 <section id="introduction-to-dplyr-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Introduction to Dplyr</h2>
@@ -466,25 +469,41 @@
 <span id="cb5-4" class="hljs-ln-code"><a href="#cb5-4"></a></span>
 <span id="cb5-5" class="hljs-ln-code"><a href="#cb5-5"></a><span class="co"># adding a column with mutate</span></span>
 <span id="cb5-6" class="hljs-ln-code"><a href="#cb5-6"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">100000</span>)</span>
-<span id="cb5-7" class="hljs-ln-code"><a href="#cb5-7"></a><span class="fu">head</span>(murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-7" class="hljs-ln-code"><a href="#cb5-7"></a><span class="fu">head</span>(murders, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       state abb region population total     rate
-1    Alabama  AL  South    4779736   135 2.824424
-2     Alaska  AK   West     710231    19 2.675186
-3    Arizona  AZ   West    6392017   232 3.629527
-4   Arkansas  AR  South    2915918    93 3.189390
-5 California  CA   West   37253956  1257 3.374138
-6   Colorado  CO   West    5029196    65 1.292453</code></pre>
+<pre><code>    state abb region population total     rate
+1 Alabama  AL  South    4779736   135 2.824424
+2  Alaska  AK   West     710231    19 2.675186</code></pre>
 </div>
 </div>
 </section>
-<section id="a-brief-note-on-non-standard-evaluation" class="slide level2">
-<h2>A brief note on non-standard evaluation</h2>
+<section id="a-brief-note-on-non-standard-evaluation" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">A brief note on non-standard evaluation</h2>
 <div class="cell">
-
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb7-1" class="hljs-ln-code"><a href="#cb7-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">100000</span>)</span>
+<span id="cb7-2" class="hljs-ln-code"><a href="#cb7-2"></a><span class="fu">head</span>(murders, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    state abb region population total     rate
+1 Alabama  AL  South    4779736   135 2.824424
+2  Alaska  AK   West     710231    19 2.675186</code></pre>
+</div>
 </div>
 <p>Within the <code>mutate()</code> call, <code>total</code> and <code>population</code> are inferred to call <code>murders$total</code> and <code>murders$population</code> <em>per row</em></p>
+</section>
+<section id="a-brief-note-on-non-standard-evaluation-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">A brief note on non-standard evaluation</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb9-1" class="hljs-ln-code"><a href="#cb9-1"></a>params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"total"</span>, <span class="st">"population"</span>)</span>
+<span id="cb9-2" class="hljs-ln-code"><a href="#cb9-2"></a>df <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> <span class="sc">!!</span><span class="fu">sym</span>(params[<span class="dv">1</span>]) <span class="sc">/</span> <span class="sc">!!</span><span class="fu">sym</span>(params[<span class="dv">2</span>]) <span class="sc">*</span> <span class="dv">100000</span>)</span>
+<span id="cb9-3" class="hljs-ln-code"><a href="#cb9-3"></a><span class="fu">head</span>(df, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    state abb region population total     rate
+1 Alabama  AL  South    4779736   135 2.824424
+2  Alaska  AK   West     710231    19 2.675186</code></pre>
+</div>
+</div>
 <p>This can be super confusing for people who come from traditional programming languages!</p>
+<p>Advanced tip: use <code>!!</code> and <code>sym</code> to specify variables programatically</p>
 <div class="footer">
 <p><a href="http://adv-r.had.co.nz/Computing-on-the-language.html" class="uri">http://adv-r.had.co.nz/Computing-on-the-language.html</a></p>
 </div>
@@ -492,9 +511,9 @@
 <section id="dplyr-in-action---filter" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Dplyr in action - <code>filter()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb7-1" class="hljs-ln-code"><a href="#cb7-1"></a><span class="co"># subsetting with filter</span></span>
-<span id="cb7-2" class="hljs-ln-code"><a href="#cb7-2"></a>filtered_murders <span class="ot">&lt;-</span> <span class="fu">filter</span>(murders, rate <span class="sc">&lt;=</span> <span class="fl">0.71</span>)</span>
-<span id="cb7-3" class="hljs-ln-code"><a href="#cb7-3"></a><span class="fu">head</span>(filtered_murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb11-1" class="hljs-ln-code"><a href="#cb11-1"></a><span class="co"># subsetting with filter</span></span>
+<span id="cb11-2" class="hljs-ln-code"><a href="#cb11-2"></a>filtered_murders <span class="ot">&lt;-</span> <span class="fu">filter</span>(murders, rate <span class="sc">&lt;=</span> <span class="fl">0.71</span>)</span>
+<span id="cb11-3" class="hljs-ln-code"><a href="#cb11-3"></a><span class="fu">head</span>(filtered_murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          state abb        region population total      rate
 1        Hawaii  HI          West    1360301     7 0.5145920
@@ -508,10 +527,10 @@
 <section id="dplyr-in-action---filter-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Dplyr in action - <code>filter()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb9-1" class="hljs-ln-code"><a href="#cb9-1"></a><span class="co"># subsetting with filter</span></span>
-<span id="cb9-2" class="hljs-ln-code"><a href="#cb9-2"></a>south_west <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"South"</span>, <span class="st">"West"</span>)</span>
-<span id="cb9-3" class="hljs-ln-code"><a href="#cb9-3"></a>filtered_murders <span class="ot">&lt;-</span> <span class="fu">filter</span>(murders, region <span class="sc">%in%</span> south_west)</span>
-<span id="cb9-4" class="hljs-ln-code"><a href="#cb9-4"></a><span class="fu">head</span>(filtered_murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb13-1" class="hljs-ln-code"><a href="#cb13-1"></a><span class="co"># subsetting with filter</span></span>
+<span id="cb13-2" class="hljs-ln-code"><a href="#cb13-2"></a>south_west <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"South"</span>, <span class="st">"West"</span>)</span>
+<span id="cb13-3" class="hljs-ln-code"><a href="#cb13-3"></a>filtered_murders <span class="ot">&lt;-</span> <span class="fu">filter</span>(murders, region <span class="sc">%in%</span> south_west)</span>
+<span id="cb13-4" class="hljs-ln-code"><a href="#cb13-4"></a><span class="fu">head</span>(filtered_murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       state abb region population total     rate
 1    Alabama  AL  South    4779736   135 2.824424
@@ -526,9 +545,9 @@
 <section id="dplyr-in-action---select" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Dplyr in action - <code>select()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb11-1" class="hljs-ln-code"><a href="#cb11-1"></a><span class="co"># selecting columns with select</span></span>
-<span id="cb11-2" class="hljs-ln-code"><a href="#cb11-2"></a>new_table <span class="ot">&lt;-</span> <span class="fu">select</span>(murders, state, region, rate)</span>
-<span id="cb11-3" class="hljs-ln-code"><a href="#cb11-3"></a><span class="fu">head</span>(new_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb15-1" class="hljs-ln-code"><a href="#cb15-1"></a><span class="co"># selecting columns with select</span></span>
+<span id="cb15-2" class="hljs-ln-code"><a href="#cb15-2"></a>new_table <span class="ot">&lt;-</span> <span class="fu">select</span>(murders, state, region, rate)</span>
+<span id="cb15-3" class="hljs-ln-code"><a href="#cb15-3"></a><span class="fu">head</span>(new_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       state region     rate
 1    Alabama  South 2.824424
@@ -543,9 +562,9 @@
 <section id="dplyr-in-action---select-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Dplyr in action - <code>select()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb13-1" class="hljs-ln-code"><a href="#cb13-1"></a><span class="co"># selecting all columns except specified ones</span></span>
-<span id="cb13-2" class="hljs-ln-code"><a href="#cb13-2"></a>new_table <span class="ot">&lt;-</span> <span class="fu">select</span>(murders, <span class="sc">-</span>state, <span class="sc">-</span>region)</span>
-<span id="cb13-3" class="hljs-ln-code"><a href="#cb13-3"></a><span class="fu">head</span>(new_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb17-1" class="hljs-ln-code"><a href="#cb17-1"></a><span class="co"># selecting all columns except specified ones</span></span>
+<span id="cb17-2" class="hljs-ln-code"><a href="#cb17-2"></a>new_table <span class="ot">&lt;-</span> <span class="fu">select</span>(murders, <span class="sc">-</span>state, <span class="sc">-</span>region)</span>
+<span id="cb17-3" class="hljs-ln-code"><a href="#cb17-3"></a><span class="fu">head</span>(new_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  abb population total     rate
 1  AL    4779736   135 2.824424
@@ -560,11 +579,11 @@
 <section id="dplyr-in-action---using-the-pipe" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Dplyr in action - using the pipe</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb15-1" class="hljs-ln-code"><a href="#cb15-1"></a><span class="co"># using the pipe</span></span>
-<span id="cb15-2" class="hljs-ln-code"><a href="#cb15-2"></a>murders <span class="sc">%&gt;%</span> </span>
-<span id="cb15-3" class="hljs-ln-code"><a href="#cb15-3"></a>  <span class="fu">select</span>(state, region, rate) <span class="sc">%&gt;%</span></span>
-<span id="cb15-4" class="hljs-ln-code"><a href="#cb15-4"></a>  <span class="fu">filter</span>(rate <span class="sc">&lt;=</span> <span class="fl">0.71</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb15-5" class="hljs-ln-code"><a href="#cb15-5"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb19-1" class="hljs-ln-code"><a href="#cb19-1"></a><span class="co"># using the pipe</span></span>
+<span id="cb19-2" class="hljs-ln-code"><a href="#cb19-2"></a>murders <span class="sc">%&gt;%</span> </span>
+<span id="cb19-3" class="hljs-ln-code"><a href="#cb19-3"></a>  <span class="fu">select</span>(state, region, rate) <span class="sc">%&gt;%</span></span>
+<span id="cb19-4" class="hljs-ln-code"><a href="#cb19-4"></a>  <span class="fu">filter</span>(rate <span class="sc">&lt;=</span> <span class="fl">0.71</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-5" class="hljs-ln-code"><a href="#cb19-5"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          state        region      rate
 1        Hawaii          West 0.5145920
@@ -594,39 +613,39 @@
 <section id="a-quick-look-at-the-data" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">A quick look at the data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb17-1" class="hljs-ln-code"><a href="#cb17-1"></a><span class="co"># a simple scatterplot of total murders versus population</span></span>
-<span id="cb17-2" class="hljs-ln-code"><a href="#cb17-2"></a>x <span class="ot">&lt;-</span> murders<span class="sc">$</span>population <span class="sc">/</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">6</span></span>
-<span id="cb17-3" class="hljs-ln-code"><a href="#cb17-3"></a>y <span class="ot">&lt;-</span> murders<span class="sc">$</span>total</span>
-<span id="cb17-4" class="hljs-ln-code"><a href="#cb17-4"></a><span class="fu">plot</span>(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="11_Data_Wrangling_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
-<section id="a-quick-look-at-the-data-1" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">A quick look at the data</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb18-1" class="hljs-ln-code"><a href="#cb18-1"></a><span class="co"># a histogram of murder rates</span></span>
-<span id="cb18-2" class="hljs-ln-code"><a href="#cb18-2"></a>murder_rates <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">100000</span>)</span>
-<span id="cb18-3" class="hljs-ln-code"><a href="#cb18-3"></a><span class="fu">hist</span>(murder_rates<span class="sc">$</span>rate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb21-1" class="hljs-ln-code"><a href="#cb21-1"></a><span class="co"># a simple scatterplot of total murders versus population</span></span>
+<span id="cb21-2" class="hljs-ln-code"><a href="#cb21-2"></a>x <span class="ot">&lt;-</span> murders<span class="sc">$</span>population <span class="sc">/</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">6</span></span>
+<span id="cb21-3" class="hljs-ln-code"><a href="#cb21-3"></a>y <span class="ot">&lt;-</span> murders<span class="sc">$</span>total</span>
+<span id="cb21-4" class="hljs-ln-code"><a href="#cb21-4"></a><span class="fu">plot</span>(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="11_Data_Wrangling_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
-<section id="a-quick-look-at-the-data-2" class="slide level2" data-auto-animate="true">
+<section id="a-quick-look-at-the-data-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">A quick look at the data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb19-1" class="hljs-ln-code"><a href="#cb19-1"></a><span class="co"># boxplots of murder rates by region</span></span>
-<span id="cb19-2" class="hljs-ln-code"><a href="#cb19-2"></a><span class="fu">boxplot</span>(rate<span class="sc">~</span>region, <span class="at">data =</span> murder_rates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb22-1" class="hljs-ln-code"><a href="#cb22-1"></a><span class="co"># a histogram of murder rates</span></span>
+<span id="cb22-2" class="hljs-ln-code"><a href="#cb22-2"></a>murder_rates <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">100000</span>)</span>
+<span id="cb22-3" class="hljs-ln-code"><a href="#cb22-3"></a><span class="fu">hist</span>(murder_rates<span class="sc">$</span>rate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="11_Data_Wrangling_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
+<section id="a-quick-look-at-the-data-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">A quick look at the data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb23-1" class="hljs-ln-code"><a href="#cb23-1"></a><span class="co"># boxplots of murder rates by region</span></span>
+<span id="cb23-2" class="hljs-ln-code"><a href="#cb23-2"></a><span class="fu">boxplot</span>(rate<span class="sc">~</span>region, <span class="at">data =</span> murder_rates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="11_Data_Wrangling_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
 <section id="dplyr-in-action---summarize" class="slide level2">
 <h2>Dplyr in action - <code>summarize()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>murder_summary <span class="ot">&lt;-</span> murder_rates <span class="sc">%&gt;%</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">filter</span>(region <span class="sc">==</span> <span class="st">"West"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">summarize</span>(<span class="at">minimum =</span> <span class="fu">min</span>(rate),</span>
-<span id="cb20-4"><a href="#cb20-4"></a>            <span class="at">median =</span> <span class="fu">median</span>(rate),</span>
-<span id="cb20-5"><a href="#cb20-5"></a>            <span class="at">maximum =</span> <span class="fu">max</span>(rate))</span>
-<span id="cb20-6"><a href="#cb20-6"></a>murder_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>murder_summary <span class="ot">&lt;-</span> murder_rates <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">filter</span>(region <span class="sc">==</span> <span class="st">"West"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">summarize</span>(<span class="at">minimum =</span> <span class="fu">min</span>(rate),</span>
+<span id="cb24-4"><a href="#cb24-4"></a>            <span class="at">median =</span> <span class="fu">median</span>(rate),</span>
+<span id="cb24-5"><a href="#cb24-5"></a>            <span class="at">maximum =</span> <span class="fu">max</span>(rate))</span>
+<span id="cb24-6"><a href="#cb24-6"></a>murder_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   minimum   median  maximum
 1 0.514592 1.292453 3.629527</code></pre>
@@ -636,12 +655,12 @@
 <section id="dplyr-in-action---summarize-1" class="slide level2">
 <h2>Dplyr in action - <code>summarize()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>murder_summary <span class="ot">&lt;-</span> murder_rates <span class="sc">%&gt;%</span></span>
-<span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">filter</span>(region <span class="sc">==</span> <span class="st">"West"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-3"><a href="#cb22-3"></a>  <span class="fu">summarize</span>(<span class="at">minimum =</span> <span class="fu">min</span>(rate),</span>
-<span id="cb22-4"><a href="#cb22-4"></a>            <span class="at">median =</span> <span class="fu">median</span>(rate),</span>
-<span id="cb22-5"><a href="#cb22-5"></a>            <span class="at">maximum =</span> <span class="fu">max</span>(rate))</span>
-<span id="cb22-6"><a href="#cb22-6"></a>murder_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>murder_summary <span class="ot">&lt;-</span> murder_rates <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>  <span class="fu">filter</span>(region <span class="sc">==</span> <span class="st">"West"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a>  <span class="fu">summarize</span>(<span class="at">minimum =</span> <span class="fu">min</span>(rate),</span>
+<span id="cb26-4"><a href="#cb26-4"></a>            <span class="at">median =</span> <span class="fu">median</span>(rate),</span>
+<span id="cb26-5"><a href="#cb26-5"></a>            <span class="at">maximum =</span> <span class="fu">max</span>(rate))</span>
+<span id="cb26-6"><a href="#cb26-6"></a>murder_summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   minimum   median  maximum
 1 0.514592 1.292453 3.629527</code></pre>
@@ -656,8 +675,8 @@
 <h2 data-id="quarto-animate-title">Quick exercise</h2>
 <p>What is the average murder rate in the United States?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb24-1" class="hljs-ln-code"><a href="#cb24-1"></a><span class="co"># average rate unadjusted by population size</span></span>
-<span id="cb24-2" class="hljs-ln-code"><a href="#cb24-2"></a><span class="fu">mean</span>(murders<span class="sc">$</span>rate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb28-1" class="hljs-ln-code"><a href="#cb28-1"></a><span class="co"># average rate unadjusted by population size</span></span>
+<span id="cb28-2" class="hljs-ln-code"><a href="#cb28-2"></a><span class="fu">mean</span>(murders<span class="sc">$</span>rate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2.779125</code></pre>
 </div>
@@ -667,10 +686,10 @@
 <h2 data-id="quarto-animate-title">Quick exercise</h2>
 <p>What is the average murder rate in the United States?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb26-1" class="hljs-ln-code"><a href="#cb26-1"></a><span class="co"># average rate adjusted by population size</span></span>
-<span id="cb26-2" class="hljs-ln-code"><a href="#cb26-2"></a>us_murder_rate <span class="ot">&lt;-</span> murders <span class="sc">%&gt;%</span> </span>
-<span id="cb26-3" class="hljs-ln-code"><a href="#cb26-3"></a>  <span class="fu">summarize</span>(<span class="at">rate =</span> <span class="fu">sum</span>(total) <span class="sc">/</span> <span class="fu">sum</span>(population) <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
-<span id="cb26-4" class="hljs-ln-code"><a href="#cb26-4"></a>us_murder_rate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb30-1" class="hljs-ln-code"><a href="#cb30-1"></a><span class="co"># average rate adjusted by population size</span></span>
+<span id="cb30-2" class="hljs-ln-code"><a href="#cb30-2"></a>us_murder_rate <span class="ot">&lt;-</span> murders <span class="sc">%&gt;%</span> </span>
+<span id="cb30-3" class="hljs-ln-code"><a href="#cb30-3"></a>  <span class="fu">summarize</span>(<span class="at">rate =</span> <span class="fu">sum</span>(total) <span class="sc">/</span> <span class="fu">sum</span>(population) <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
+<span id="cb30-4" class="hljs-ln-code"><a href="#cb30-4"></a>us_murder_rate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      rate
 1 3.034555</code></pre>
@@ -681,11 +700,11 @@
 <h2><code>pull()</code> in action</h2>
 <p>We can also use <code>pull</code> to return the numerical value of a given column directly.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="co"># average rate adjusted by population size</span></span>
-<span id="cb28-2"><a href="#cb28-2"></a>us_murder_rate <span class="ot">&lt;-</span> murders <span class="sc">%&gt;%</span> </span>
-<span id="cb28-3"><a href="#cb28-3"></a>  <span class="fu">summarize</span>(<span class="at">rate =</span> <span class="fu">sum</span>(total) <span class="sc">/</span> <span class="fu">sum</span>(population) <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb28-4"><a href="#cb28-4"></a>  <span class="fu">pull</span>(rate)</span>
-<span id="cb28-5"><a href="#cb28-5"></a>us_murder_rate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># average rate adjusted by population size</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a>us_murder_rate <span class="ot">&lt;-</span> murders <span class="sc">%&gt;%</span> </span>
+<span id="cb32-3"><a href="#cb32-3"></a>  <span class="fu">summarize</span>(<span class="at">rate =</span> <span class="fu">sum</span>(total) <span class="sc">/</span> <span class="fu">sum</span>(population) <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a>  <span class="fu">pull</span>(rate)</span>
+<span id="cb32-5"><a href="#cb32-5"></a>us_murder_rate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.034555</code></pre>
 </div>
@@ -701,11 +720,11 @@
 <section id="the-dot-placeholder-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">The dot placeholder</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb30-1" class="hljs-ln-code"><a href="#cb30-1"></a><span class="co"># average rate adjusted by population size</span></span>
-<span id="cb30-2" class="hljs-ln-code"><a href="#cb30-2"></a>us_murder_rate <span class="ot">&lt;-</span> murders <span class="sc">%&gt;%</span> </span>
-<span id="cb30-3" class="hljs-ln-code"><a href="#cb30-3"></a>  <span class="fu">summarize</span>(<span class="at">rate =</span> <span class="fu">sum</span>(total) <span class="sc">/</span> <span class="fu">sum</span>(population) <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-4" class="hljs-ln-code"><a href="#cb30-4"></a>  .<span class="sc">$</span>rate</span>
-<span id="cb30-5" class="hljs-ln-code"><a href="#cb30-5"></a>us_murder_rate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb34-1" class="hljs-ln-code"><a href="#cb34-1"></a><span class="co"># average rate adjusted by population size</span></span>
+<span id="cb34-2" class="hljs-ln-code"><a href="#cb34-2"></a>us_murder_rate <span class="ot">&lt;-</span> murders <span class="sc">%&gt;%</span> </span>
+<span id="cb34-3" class="hljs-ln-code"><a href="#cb34-3"></a>  <span class="fu">summarize</span>(<span class="at">rate =</span> <span class="fu">sum</span>(total) <span class="sc">/</span> <span class="fu">sum</span>(population) <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb34-4" class="hljs-ln-code"><a href="#cb34-4"></a>  .<span class="sc">$</span>rate</span>
+<span id="cb34-5" class="hljs-ln-code"><a href="#cb34-5"></a>us_murder_rate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.034555</code></pre>
 </div>
@@ -714,14 +733,14 @@
 <section id="using-the-dot-place-holder-for-formulas" class="slide level2">
 <h2>Using the dot place holder for formulas</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>fit <span class="ot">&lt;-</span> mtcars <span class="sc">%&gt;%</span></span>
-<span id="cb32-2"><a href="#cb32-2"></a>    <span class="fu">lm</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> .)</span>
-<span id="cb32-3"><a href="#cb32-3"></a></span>
-<span id="cb32-4"><a href="#cb32-4"></a><span class="fu">plot</span>(mtcars<span class="sc">$</span>disp, mtcars<span class="sc">$</span>mpg)</span>
-<span id="cb32-5"><a href="#cb32-5"></a><span class="fu">abline</span>(fit, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>fit <span class="ot">&lt;-</span> mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a>    <span class="fu">lm</span>(mpg <span class="sc">~</span> disp, <span class="at">data =</span> .)</span>
+<span id="cb36-3"><a href="#cb36-3"></a></span>
+<span id="cb36-4"><a href="#cb36-4"></a><span class="fu">plot</span>(mtcars<span class="sc">$</span>disp, mtcars<span class="sc">$</span>mpg)</span>
+<span id="cb36-5"><a href="#cb36-5"></a><span class="fu">abline</span>(fit, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="11_Data_Wrangling_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
+<img data-src="11_Data_Wrangling_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
 <section id="group-then-summarize" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Group then summarize</h2>
 
@@ -729,8 +748,8 @@
 <section id="group-then-summarize-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Group then summarize</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb33-1" class="hljs-ln-code"><a href="#cb33-1"></a><span class="co"># group by region</span></span>
-<span id="cb33-2" class="hljs-ln-code"><a href="#cb33-2"></a>murders <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(region)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb37-1" class="hljs-ln-code"><a href="#cb37-1"></a><span class="co"># group by region</span></span>
+<span id="cb37-2" class="hljs-ln-code"><a href="#cb37-2"></a>murders <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(region)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 51 × 6
 # Groups:   region [4]
@@ -753,10 +772,10 @@
 <section id="group-then-summarize-2" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Group then summarize</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb35-1" class="hljs-ln-code"><a href="#cb35-1"></a><span class="co"># summarize after grouping</span></span>
-<span id="cb35-2" class="hljs-ln-code"><a href="#cb35-2"></a>murders <span class="sc">%&gt;%</span> </span>
-<span id="cb35-3" class="hljs-ln-code"><a href="#cb35-3"></a>  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
-<span id="cb35-4" class="hljs-ln-code"><a href="#cb35-4"></a>  <span class="fu">summarize</span>(<span class="at">median =</span> <span class="fu">median</span>(rate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb39-1" class="hljs-ln-code"><a href="#cb39-1"></a><span class="co"># summarize after grouping</span></span>
+<span id="cb39-2" class="hljs-ln-code"><a href="#cb39-2"></a>murders <span class="sc">%&gt;%</span> </span>
+<span id="cb39-3" class="hljs-ln-code"><a href="#cb39-3"></a>  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
+<span id="cb39-4" class="hljs-ln-code"><a href="#cb39-4"></a>  <span class="fu">summarize</span>(<span class="at">median =</span> <span class="fu">median</span>(rate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 2
   region        median
@@ -771,16 +790,16 @@
 <section id="arrange-in-action" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>arrange()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb37-1" class="hljs-ln-code"><a href="#cb37-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb41-1" class="hljs-ln-code"><a href="#cb41-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="arrange-in-action-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>arrange()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb38-1" class="hljs-ln-code"><a href="#cb38-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
-<span id="cb38-2" class="hljs-ln-code"><a href="#cb38-2"></a></span>
-<span id="cb38-3" class="hljs-ln-code"><a href="#cb38-3"></a><span class="co"># order the states by population size</span></span>
-<span id="cb38-4" class="hljs-ln-code"><a href="#cb38-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(population) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb42-1" class="hljs-ln-code"><a href="#cb42-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
+<span id="cb42-2" class="hljs-ln-code"><a href="#cb42-2"></a></span>
+<span id="cb42-3" class="hljs-ln-code"><a href="#cb42-3"></a><span class="co"># order the states by population size</span></span>
+<span id="cb42-4" class="hljs-ln-code"><a href="#cb42-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(population) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                 state abb        region population total       rate
 1              Wyoming  WY          West     563626     5  0.8871131
@@ -795,10 +814,10 @@
 <section id="arrange-in-action-2" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>arrange()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb40-1" class="hljs-ln-code"><a href="#cb40-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
-<span id="cb40-2" class="hljs-ln-code"><a href="#cb40-2"></a></span>
-<span id="cb40-3" class="hljs-ln-code"><a href="#cb40-3"></a><span class="co"># order the states by murder rate - the default is ascending order</span></span>
-<span id="cb40-4" class="hljs-ln-code"><a href="#cb40-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(rate) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb44-1" class="hljs-ln-code"><a href="#cb44-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
+<span id="cb44-2" class="hljs-ln-code"><a href="#cb44-2"></a></span>
+<span id="cb44-3" class="hljs-ln-code"><a href="#cb44-3"></a><span class="co"># order the states by murder rate - the default is ascending order</span></span>
+<span id="cb44-4" class="hljs-ln-code"><a href="#cb44-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(rate) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          state abb        region population total      rate
 1       Vermont  VT     Northeast     625741     2 0.3196211
@@ -813,10 +832,10 @@
 <section id="arrange-in-action-3" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>arrange()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb42-1" class="hljs-ln-code"><a href="#cb42-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
-<span id="cb42-2" class="hljs-ln-code"><a href="#cb42-2"></a></span>
-<span id="cb42-3" class="hljs-ln-code"><a href="#cb42-3"></a><span class="co"># order the states by murder rate in descending order</span></span>
-<span id="cb42-4" class="hljs-ln-code"><a href="#cb42-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(rate)) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb46-1" class="hljs-ln-code"><a href="#cb46-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
+<span id="cb46-2" class="hljs-ln-code"><a href="#cb46-2"></a></span>
+<span id="cb46-3" class="hljs-ln-code"><a href="#cb46-3"></a><span class="co"># order the states by murder rate in descending order</span></span>
+<span id="cb46-4" class="hljs-ln-code"><a href="#cb46-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(rate)) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                 state abb        region population total      rate
 1 District of Columbia  DC         South     601723    99 16.452753
@@ -831,50 +850,73 @@
 <section id="arrange-in-action-4" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>arrange()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb44-1" class="hljs-ln-code"><a href="#cb44-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
-<span id="cb44-2" class="hljs-ln-code"><a href="#cb44-2"></a></span>
-<span id="cb44-3" class="hljs-ln-code"><a href="#cb44-3"></a><span class="co"># order the states by region and then by murder rate within region</span></span>
-<span id="cb44-4" class="hljs-ln-code"><a href="#cb44-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(region, rate) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb48-1" class="hljs-ln-code"><a href="#cb48-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
+<span id="cb48-2" class="hljs-ln-code"><a href="#cb48-2"></a></span>
+<span id="cb48-3" class="hljs-ln-code"><a href="#cb48-3"></a><span class="co"># order the states by region and then by murder rate within region</span></span>
+<span id="cb48-4" class="hljs-ln-code"><a href="#cb48-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(region, rate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>          state abb    region population total      rate
-1       Vermont  VT Northeast     625741     2 0.3196211
-2 New Hampshire  NH Northeast    1316470     5 0.3798036
-3         Maine  ME Northeast    1328361    11 0.8280881
-4  Rhode Island  RI Northeast    1052567    16 1.5200933
-5 Massachusetts  MA Northeast    6547629   118 1.8021791
-6      New York  NY Northeast   19378102   517 2.6679599</code></pre>
+<pre><code>                  state abb        region population total       rate
+1               Vermont  VT     Northeast     625741     2  0.3196211
+2         New Hampshire  NH     Northeast    1316470     5  0.3798036
+3                 Maine  ME     Northeast    1328361    11  0.8280881
+4          Rhode Island  RI     Northeast    1052567    16  1.5200933
+5         Massachusetts  MA     Northeast    6547629   118  1.8021791
+6              New York  NY     Northeast   19378102   517  2.6679599
+7           Connecticut  CT     Northeast    3574097    97  2.7139722
+8            New Jersey  NJ     Northeast    8791894   246  2.7980319
+9          Pennsylvania  PA     Northeast   12702379   457  3.5977513
+10        West Virginia  WV         South    1852994    27  1.4571013
+11             Kentucky  KY         South    4339367   116  2.6732010
+12              Alabama  AL         South    4779736   135  2.8244238
+13             Oklahoma  OK         South    3751351   111  2.9589340
+14       North Carolina  NC         South    9535483   286  2.9993237
+15             Virginia  VA         South    8001024   250  3.1246001
+16             Arkansas  AR         South    2915918    93  3.1893901
+17                Texas  TX         South   25145561   805  3.2013603
+18              Florida  FL         South   19687653   669  3.3980688
+19            Tennessee  TN         South    6346105   219  3.4509357
+20              Georgia  GA         South    9920000   376  3.7903226
+21          Mississippi  MS         South    2967297   120  4.0440846
+22             Delaware  DE         South     897934    38  4.2319369
+23       South Carolina  SC         South    4625364   207  4.4753235
+24             Maryland  MD         South    5773552   293  5.0748655
+25            Louisiana  LA         South    4533372   351  7.7425810
+26 District of Columbia  DC         South     601723    99 16.4527532
+27         North Dakota  ND North Central     672591     4  0.5947151
+28                 Iowa  IA North Central    3046355    21  0.6893484
+29         South Dakota  SD North Central     814180     8  0.9825837
+30            Minnesota  MN North Central    5303925    53  0.9992600
+31            Wisconsin  WI North Central    5686986    97  1.7056487
+32             Nebraska  NE North Central    1826341    32  1.7521372
+33              Indiana  IN North Central    6483802   142  2.1900730
+34               Kansas  KS North Central    2853118    63  2.2081106
+35                 Ohio  OH North Central   11536504   310  2.6871225
+36             Illinois  IL North Central   12830632   364  2.8369608
+37             Michigan  MI North Central    9883640   413  4.1786225
+38             Missouri  MO North Central    5988927   321  5.3598917
+39               Hawaii  HI          West    1360301     7  0.5145920
+40                Idaho  ID          West    1567582    12  0.7655102
+41                 Utah  UT          West    2763885    22  0.7959810
+42              Wyoming  WY          West     563626     5  0.8871131
+43               Oregon  OR          West    3831074    36  0.9396843
+44              Montana  MT          West     989415    12  1.2128379
+45             Colorado  CO          West    5029196    65  1.2924531
+46           Washington  WA          West    6724540    93  1.3829942
+47               Alaska  AK          West     710231    19  2.6751860
+48               Nevada  NV          West    2700551    84  3.1104763
+49           New Mexico  NM          West    2059179    67  3.2537239
+50           California  CA          West   37253956  1257  3.3741383
+51              Arizona  AZ          West    6392017   232  3.6295273</code></pre>
 </div>
 </div>
 </section>
 <section id="arrange-in-action-5" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>arrange()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb46-1" class="hljs-ln-code"><a href="#cb46-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
-<span id="cb46-2" class="hljs-ln-code"><a href="#cb46-2"></a></span>
-<span id="cb46-3" class="hljs-ln-code"><a href="#cb46-3"></a><span class="co"># return the top 10 states by murder rate</span></span>
-<span id="cb46-4" class="hljs-ln-code"><a href="#cb46-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">top_n</span>(<span class="dv">10</span>, rate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                  state abb        region population total      rate
-1               Arizona  AZ          West    6392017   232  3.629527
-2              Delaware  DE         South     897934    38  4.231937
-3  District of Columbia  DC         South     601723    99 16.452753
-4               Georgia  GA         South    9920000   376  3.790323
-5             Louisiana  LA         South    4533372   351  7.742581
-6              Maryland  MD         South    5773552   293  5.074866
-7              Michigan  MI North Central    9883640   413  4.178622
-8           Mississippi  MS         South    2967297   120  4.044085
-9              Missouri  MO North Central    5988927   321  5.359892
-10       South Carolina  SC         South    4625364   207  4.475323</code></pre>
-</div>
-</div>
-</section>
-<section id="arrange-in-action-6" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title"><code>arrange()</code> in action</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb48-1" class="hljs-ln-code"><a href="#cb48-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
-<span id="cb48-2" class="hljs-ln-code"><a href="#cb48-2"></a></span>
-<span id="cb48-3" class="hljs-ln-code"><a href="#cb48-3"></a><span class="co"># return the top 10 states ranked by murder rate, sorted by murder rate</span></span>
-<span id="cb48-4" class="hljs-ln-code"><a href="#cb48-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(rate)) <span class="sc">%&gt;%</span> <span class="fu">top_n</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb50-1" class="hljs-ln-code"><a href="#cb50-1"></a>murders <span class="ot">&lt;-</span> <span class="fu">mutate</span>(murders, <span class="at">rate =</span> total <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
+<span id="cb50-2" class="hljs-ln-code"><a href="#cb50-2"></a></span>
+<span id="cb50-3" class="hljs-ln-code"><a href="#cb50-3"></a><span class="co"># return the top 10 states ranked by murder rate, sorted by murder rate</span></span>
+<span id="cb50-4" class="hljs-ln-code"><a href="#cb50-4"></a>murders <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(rate)) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                  state abb        region population total      rate
 1  District of Columbia  DC         South     601723    99 16.452753
@@ -889,7 +931,7 @@
 10              Arizona  AZ          West    6392017   232  3.629527</code></pre>
 </div>
 </div>
-<p>Side note: Why would Washington DC have a much higher murder rate than all the other states?</p>
+<p>Side note 1: You can also use the <code>slice_max</code> function Side note 2: Why would Washington DC have a much higher murder rate than all the other states?</p>
 </section>
 <section id="exercises-with-gapminder" class="slide level2">
 <h2>Exercises with gapminder</h2>
@@ -897,23 +939,17 @@
 <li>The <code>gapminder</code> dataset was developed by Hans Rosling, a famous sociologist and health expert, to help visualize global socioeconomic data</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">data</span>(gapminder)</span>
-<span id="cb50-2"><a href="#cb50-2"></a><span class="fu">head</span>(gapminder)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a><span class="fu">data</span>(gapminder)</span>
+<span id="cb52-2"><a href="#cb52-2"></a><span class="fu">head</span>(gapminder, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>              country year infant_mortality life_expectancy fertility
-1             Albania 1960           115.40           62.87      6.19
-2             Algeria 1960           148.20           47.50      7.65
-3              Angola 1960           208.00           35.98      7.32
-4 Antigua and Barbuda 1960               NA           62.97      4.43
-5           Argentina 1960            59.87           65.39      3.11
-6             Armenia 1960               NA           66.86      4.55
-  population          gdp continent          region
-1    1636054           NA    Europe Southern Europe
-2   11124892  13828152297    Africa Northern Africa
-3    5270844           NA    Africa   Middle Africa
-4      54681           NA  Americas       Caribbean
-5   20619075 108322326649  Americas   South America
-6    1867396           NA      Asia    Western Asia</code></pre>
+<pre><code>  country year infant_mortality life_expectancy fertility population
+1 Albania 1960            115.4           62.87      6.19    1636054
+2 Algeria 1960            148.2           47.50      7.65   11124892
+3  Angola 1960            208.0           35.98      7.32    5270844
+          gdp continent          region
+1          NA    Europe Southern Europe
+2 13828152297    Africa Northern Africa
+3          NA    Africa   Middle Africa</code></pre>
 </div>
 </div>
 </section>
@@ -925,28 +961,28 @@
 <h2 data-id="quarto-animate-title">Which five countries have the highest population in 2012?</h2>
 <p>Store it in a vector.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb52-1" class="hljs-ln-code"><a href="#cb52-1"></a>top5_countries <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb52-2" class="hljs-ln-code"><a href="#cb52-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2012</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb52-3" class="hljs-ln-code"><a href="#cb52-3"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(population)) <span class="sc">%&gt;%</span> </span>
-<span id="cb52-4" class="hljs-ln-code"><a href="#cb52-4"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb52-5" class="hljs-ln-code"><a href="#cb52-5"></a>  <span class="fu">pull</span>(country)</span>
-<span id="cb52-6" class="hljs-ln-code"><a href="#cb52-6"></a>top5_countries</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb54-1" class="hljs-ln-code"><a href="#cb54-1"></a>top5_countries <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb54-2" class="hljs-ln-code"><a href="#cb54-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2012</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb54-3" class="hljs-ln-code"><a href="#cb54-3"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(population)) <span class="sc">%&gt;%</span> </span>
+<span id="cb54-4" class="hljs-ln-code"><a href="#cb54-4"></a>  <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb54-5" class="hljs-ln-code"><a href="#cb54-5"></a>  <span class="fu">pull</span>(country)</span>
+<span id="cb54-6" class="hljs-ln-code"><a href="#cb54-6"></a>top5_countries</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] China         India         United States Indonesia     Brazil       
 185 Levels: Albania Algeria Angola Antigua and Barbuda Argentina ... Zimbabwe</code></pre>
 </div>
 </div>
 </section>
-<section id="what-is-the-average-daily-salary-of-a-german-person-in-1989-use-gdp" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">What is the average daily salary of a German person in 1989 (use gdp)?</h2>
+<section id="what-is-the-approximate-daily-income-gdp-per-person-per-day-for-a-german-person-in-1989" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">What is the approximate daily income (~gdp per person per day) for a German person in 1989?</h2>
 </section>
-<section id="what-is-the-average-daily-salary-of-a-german-person-in-1989-use-gdp-1" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">What is the average daily salary of a German person in 1989 (use gdp)?</h2>
+<section id="what-is-the-approximate-daily-income-gdp-per-person-per-day-for-a-german-person-in-1989-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">What is the approximate daily income (~gdp per person per day) for a German person in 1989?</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb54-1" class="hljs-ln-code"><a href="#cb54-1"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb54-2" class="hljs-ln-code"><a href="#cb54-2"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">"Germany"</span>, year <span class="sc">==</span> <span class="dv">1989</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb54-3" class="hljs-ln-code"><a href="#cb54-3"></a>  <span class="fu">mutate</span>(<span class="at">dollars_per_day =</span> gdp<span class="sc">/</span>population<span class="sc">/</span><span class="dv">365</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb54-4" class="hljs-ln-code"><a href="#cb54-4"></a>  <span class="fu">pull</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb56-1" class="hljs-ln-code"><a href="#cb56-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb56-2" class="hljs-ln-code"><a href="#cb56-2"></a>  <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">"Germany"</span>, year <span class="sc">==</span> <span class="dv">1989</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb56-3" class="hljs-ln-code"><a href="#cb56-3"></a>  <span class="fu">mutate</span>(<span class="at">dollars_per_day =</span> gdp<span class="sc">/</span>population<span class="sc">/</span><span class="dv">365</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb56-4" class="hljs-ln-code"><a href="#cb56-4"></a>  <span class="fu">pull</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 51.61653</code></pre>
 </div>
@@ -960,10 +996,10 @@
 <h2 data-id="quarto-animate-title">Rank the following countries based on their infant mortality rate in 2012.</h2>
 <p>Turkey, Argentina, South Korea, Georgia, Thailand, Australia</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb56-1" class="hljs-ln-code"><a href="#cb56-1"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb56-2" class="hljs-ln-code"><a href="#cb56-2"></a>  <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">2012</span>, country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Turkey"</span>, <span class="st">"Argentina"</span>, <span class="st">"South Korea"</span>, <span class="st">"Georgia"</span>, <span class="st">"Thailand"</span>, <span class="st">"Australia"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb56-3" class="hljs-ln-code"><a href="#cb56-3"></a>  <span class="fu">arrange</span>(infant_mortality) <span class="sc">%&gt;%</span></span>
-<span id="cb56-4" class="hljs-ln-code"><a href="#cb56-4"></a>  <span class="fu">select</span>(country, infant_mortality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb58-1" class="hljs-ln-code"><a href="#cb58-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb58-2" class="hljs-ln-code"><a href="#cb58-2"></a>  <span class="fu">filter</span>(year<span class="sc">==</span><span class="dv">2012</span>, country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Turkey"</span>, <span class="st">"Argentina"</span>, <span class="st">"South Korea"</span>, <span class="st">"Georgia"</span>, <span class="st">"Thailand"</span>, <span class="st">"Australia"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb58-3" class="hljs-ln-code"><a href="#cb58-3"></a>  <span class="fu">arrange</span>(infant_mortality) <span class="sc">%&gt;%</span></span>
+<span id="cb58-4" class="hljs-ln-code"><a href="#cb58-4"></a>  <span class="fu">select</span>(country, infant_mortality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      country infant_mortality
 1 South Korea              3.3
@@ -975,20 +1011,22 @@
 </div>
 </div>
 </section>
-<section id="what-are-the-seven-regions-with-lowest-median-life-expectancy-between-2000-2009" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">What are the seven regions with lowest median life expectancy between 2000-2009?</h2>
+<section id="what-are-the-six-regions-with-lowest-median-life-expectancy-between-2000-2009" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">What are the six regions with lowest median life expectancy between 2000-2009?</h2>
+<p>Calculate them and return a sorted vector.</p>
 </section>
-<section id="what-are-the-seven-regions-with-lowest-median-life-expectancy-between-2000-2009-1" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">What are the seven regions with lowest median life expectancy between 2000-2009?</h2>
+<section id="what-are-the-six-regions-with-lowest-median-life-expectancy-between-2000-2009-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">What are the six regions with lowest median life expectancy between 2000-2009?</h2>
+<p>Calculate them and return a sorted vector.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb58-1" class="hljs-ln-code"><a href="#cb58-1"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb58-2" class="hljs-ln-code"><a href="#cb58-2"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="dv">2000</span><span class="sc">:</span><span class="dv">2009</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb58-3" class="hljs-ln-code"><a href="#cb58-3"></a>  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
-<span id="cb58-4" class="hljs-ln-code"><a href="#cb58-4"></a>  <span class="fu">summarise</span>(<span class="at">med_life_exp =</span> <span class="fu">median</span>(life_expectancy)) <span class="sc">%&gt;%</span></span>
-<span id="cb58-5" class="hljs-ln-code"><a href="#cb58-5"></a>  <span class="fu">arrange</span>(med_life_exp) <span class="sc">%&gt;%</span></span>
-<span id="cb58-6" class="hljs-ln-code"><a href="#cb58-6"></a>  <span class="fu">head</span>(<span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb60-1" class="hljs-ln-code"><a href="#cb60-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb60-2" class="hljs-ln-code"><a href="#cb60-2"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="dv">2000</span><span class="sc">:</span><span class="dv">2009</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb60-3" class="hljs-ln-code"><a href="#cb60-3"></a>  <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span></span>
+<span id="cb60-4" class="hljs-ln-code"><a href="#cb60-4"></a>  <span class="fu">summarise</span>(<span class="at">med_life_exp =</span> <span class="fu">median</span>(life_expectancy)) <span class="sc">%&gt;%</span></span>
+<span id="cb60-5" class="hljs-ln-code"><a href="#cb60-5"></a>  <span class="fu">arrange</span>(med_life_exp) <span class="sc">%&gt;%</span></span>
+<span id="cb60-6" class="hljs-ln-code"><a href="#cb60-6"></a>  <span class="fu">head</span>(<span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 7 × 2
+<pre><code># A tibble: 6 × 2
   region          med_life_exp
   &lt;fct&gt;                  &lt;dbl&gt;
 1 Southern Africa         50  
@@ -996,8 +1034,7 @@
 3 Eastern Africa          57.2
 4 Western Africa          57.4
 5 Melanesia               62.6
-6 Micronesia              63.8
-7 Central Asia            66.8</code></pre>
+6 Micronesia              63.8</code></pre>
 </div>
 </div>
 </section>

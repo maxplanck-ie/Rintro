@@ -23,6 +23,10 @@ The six main verbs are:
 -   `filter()`: filters rows based on criteria
 -   `select()`: selects columns
 
+::: footer
+<https://maxplanck-ie.github.io/Rintro>
+:::
+
 ## Introduction to Dplyr {auto-animate="true"}
 
 Dplyr uses a functions that act as verbs to transform data frames in ways to facilitate data analysis.
@@ -392,9 +396,9 @@ top5_countries <- gapminder %>%
 top5_countries
 ```
 
-## How many dollars per day does a single German contribute to the total GDP in 1989? {auto-animate="true"}
+## What is the approximate daily income (~gdp per person per day) for a German person in 1989? {auto-animate="true"}
 
-## How many dollars per day does a single German contribute to the total GDP in 1989? {auto-animate="true"}
+## What is the approximate daily income (~gdp per person per day) for a German person in 1989? {auto-animate="true"}
 
 ```{r}
 #| echo: true
