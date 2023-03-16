@@ -413,11 +413,6 @@ co2_tidy <- data.frame(matrix(co2, ncol = 12, byrow = TRUE)) %>%
 - First compute the year averages. 
 - Use the `group_by` and `summarize` to compute the average co2 for each year. Save in an object called yearly_avg.
 
-## Exercises  {auto-animate="true"}
-
-- We want to see if the monthly trend is changing so we are going to remove the year effects and then plot the results. 
-- Use `group_by` and `summarize` to compute the average co2 for each year. Save in an object called yearly_avg.
-
 ## Exercises {auto-animate="true"}
 
 ```{r}
