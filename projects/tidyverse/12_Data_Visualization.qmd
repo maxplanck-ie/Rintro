@@ -471,6 +471,28 @@ gapminder %>%
   facet_wrap(~continent)
 ```
 
+## Exercise {auto-animate="true"}
+
+Make a time course of fertility over time for:
+
+- Thailand
+- Germany
+- Brazil
+- Kazakhstan 
+
+colored by country.
+
+## Exercise {auto-animate="true"}
+
+```{r}
+#| echo: true
+# fertility time series for two countries
+countries <- c("Thailand", "Germany", "Brazil", "Kazakhstan")
+gapminder %>% filter(country %in% countries) %>%
+    ggplot(aes(year, fertility, col = country)) +
+    geom_line()
+```
+
 ## Exercises {auto-animate="true"}
 
 How does income relate to life expectancy in 1970 for each continent? 
@@ -545,28 +567,6 @@ df %>%
   ggplot(aes(x = country, y = diff, label = country)) + 
   geom_col(width = 0.5) + 
   coord_flip()
-```
-
-## Exercise {auto-animate="true"}
-
-Make a time course of fertility over time for:
-
-- Thailand
-- Germany
-- Brazil
-- Kazakhstan 
-
-colored by country.
-
-## Exercise {auto-animate="true"}
-
-```{r}
-#| echo: true
-# fertility time series for two countries
-countries <- c("Thailand", "Germany", "Brazil", "Kazakhstan")
-gapminder %>% filter(country %in% countries) %>%
-    ggplot(aes(year, fertility, col = country)) +
-    geom_line()
 ```
 
 ## Exercise {auto-animate="true"}

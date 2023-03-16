@@ -17,6 +17,8 @@ format:
 - In tidy data, each row is an observation and each column is a different variable. 
 - In wide data, each row contains several observations, and the columns contain values. 
 
+![](images/tidy_data.png)
+
 ::: footer 
 <https://maxplanck-ie.github.io/Rintro>
 :::
@@ -79,14 +81,6 @@ wide_data %>% pivot_longer(-country)
 
 ```{r}
 #| echo: true
-# another way to do this - only country isn't being pivoted
-wide_data %>% pivot_longer(-country)
-```
-
-## `pivot_longer()` in action {auto-animate="true"}
-
-```{r}
-#| echo: true
 new_tidy_data <- wide_data %>% 
   pivot_longer(-country, names_to = "year", values_to = "fertility")
 head(new_tidy_data)
@@ -96,5 +90,5 @@ head(new_tidy_data)
 
 - The Koppstein lab will be starting in Düsseldorf in a few months
 - There is a position for a Ph.D student interested in cancer, structural variation, and transcriptomics using long reads
-- E-mail [David.Koppstein@gmail.com](David.Koppstein@gmail.com) if you or anyone else are interested
+- E-mail [David.Koppstein@gmail.com](David.Koppstein@gmail.com) if you or anyone else are interested!
 
