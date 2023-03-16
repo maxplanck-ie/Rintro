@@ -341,16 +341,6 @@ murders %>% arrange(rate) %>% head()
 #| echo: true
 murders <- mutate(murders, rate = total / population * 10^5)
 
-# order the states by murder rate in descending order
-murders %>% arrange(desc(rate)) %>% head()
-```
-
-## `arrange()` in action {auto-animate="true"}
-
-```{r}
-#| echo: true
-murders <- mutate(murders, rate = total / population * 10^5)
-
 # order the states by region and then by murder rate within region
 murders %>% arrange(region, rate)
 ```
@@ -361,8 +351,8 @@ murders %>% arrange(region, rate)
 #| echo: true
 murders <- mutate(murders, rate = total / population * 10^5)
 
-# return the top 10 states ranked by murder rate, sorted by murder rate
-murders %>% arrange(desc(rate)) %>% head(10)
+# order the states by murder rate in descending order
+murders %>% arrange(desc(rate)) %>% head()
 ```
 
 Side note 1: You can also use the `slice_max` function

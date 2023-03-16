@@ -403,7 +403,8 @@
 <li>In tidy data, each row is an observation and each column is a different variable.</li>
 <li>In wide data, each row contains several observations, and the columns contain values.</li>
 </ul>
-<div class="footer">
+
+<img data-src="images/tidy_data.png" class="r-stretch"><div class="footer">
 <p><a href="https://maxplanck-ie.github.io/Rintro" class="uri">https://maxplanck-ie.github.io/Rintro</a></p>
 </div>
 </section>
@@ -510,32 +511,9 @@
 <section id="pivot_longer-in-action-2" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>pivot_longer()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb10-1" class="hljs-ln-code"><a href="#cb10-1"></a><span class="co"># another way to do this - only country isn't being pivoted</span></span>
-<span id="cb10-2" class="hljs-ln-code"><a href="#cb10-2"></a>wide_data <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="sc">-</span>country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 112 × 3
-   country name  value
-   &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;
- 1 Germany 1960   2.41
- 2 Germany 1961   2.44
- 3 Germany 1962   2.47
- 4 Germany 1963   2.49
- 5 Germany 1964   2.49
- 6 Germany 1965   2.48
- 7 Germany 1966   2.44
- 8 Germany 1967   2.37
- 9 Germany 1968   2.28
-10 Germany 1969   2.17
-# … with 102 more rows</code></pre>
-</div>
-</div>
-</section>
-<section id="pivot_longer-in-action-3" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title"><code>pivot_longer()</code> in action</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb12-1" class="hljs-ln-code"><a href="#cb12-1"></a>new_tidy_data <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
-<span id="cb12-2" class="hljs-ln-code"><a href="#cb12-2"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>country, <span class="at">names_to =</span> <span class="st">"year"</span>, <span class="at">values_to =</span> <span class="st">"fertility"</span>)</span>
-<span id="cb12-3" class="hljs-ln-code"><a href="#cb12-3"></a><span class="fu">head</span>(new_tidy_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb10-1" class="hljs-ln-code"><a href="#cb10-1"></a>new_tidy_data <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2" class="hljs-ln-code"><a href="#cb10-2"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>country, <span class="at">names_to =</span> <span class="st">"year"</span>, <span class="at">values_to =</span> <span class="st">"fertility"</span>)</span>
+<span id="cb10-3" class="hljs-ln-code"><a href="#cb10-3"></a><span class="fu">head</span>(new_tidy_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
   country year  fertility
@@ -548,6 +526,765 @@
 6 Germany 1965       2.48</code></pre>
 </div>
 </div>
+</section>
+<section id="pivot_longer-in-action-3" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>pivot_longer()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># compare the class from our original tidy data (year is an integer) and in the new version (year is a character)</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">class</span>(tidy_data<span class="sc">$</span>year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "integer"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">class</span>(new_tidy_data<span class="sc">$</span>year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+</div>
+</section>
+<section id="pivot_longer-in-action-4" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>pivot_longer()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb16-1" class="hljs-ln-code"><a href="#cb16-1"></a><span class="co"># use the names_transform argument to change the class of the year values to numeric</span></span>
+<span id="cb16-2" class="hljs-ln-code"><a href="#cb16-2"></a>new_tidy_data <span class="ot">&lt;-</span> wide_data <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3" class="hljs-ln-code"><a href="#cb16-3"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>country, <span class="at">names_to =</span> <span class="st">"year"</span>, <span class="at">values_to =</span> <span class="st">"fertility"</span>, </span>
+<span id="cb16-4" class="hljs-ln-code"><a href="#cb16-4"></a>               <span class="at">names_transform =</span> <span class="fu">list</span>(<span class="at">year=</span>as.numeric))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="pivot_wider" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>pivot_wider()</code></h2>
+<ul>
+<li>The <code>pivot_wider()</code> function converts tidy data into wide data</li>
+<li>The data frame to be reshaped is the first argument in <code>pivot_wider()</code></li>
+<li>The argument <code>names_from</code> tells <code>pivot_wider()</code> which variable will be used for the column names, <code>values_from</code> which variable to use to fill in the values.</li>
+</ul>
+</section>
+<section id="pivot_wider-in-action" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>pivot_wider()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb17-1" class="hljs-ln-code"><a href="#cb17-1"></a><span class="co"># convert the tidy data to wide data</span></span>
+<span id="cb17-2" class="hljs-ln-code"><a href="#cb17-2"></a>new_wide_data <span class="ot">&lt;-</span> new_tidy_data <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3" class="hljs-ln-code"><a href="#cb17-3"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> year, <span class="at">values_from =</span> fertility)</span>
+<span id="cb17-4" class="hljs-ln-code"><a href="#cb17-4"></a><span class="fu">select</span>(new_wide_data, country, <span class="st">`</span><span class="at">1960</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">1967</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 9
+  country     `1960` `1961` `1962` `1963` `1964` `1965` `1966` `1967`
+  &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1 Germany       2.41   2.44   2.47   2.49   2.49   2.48   2.44   2.37
+2 South Korea   6.16   5.99   5.79   5.57   5.36   5.16   4.99   4.85</code></pre>
+</div>
+</div>
+</section>
+<section id="exercise" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise</h2>
+<ul>
+<li>Use the built-in <code>co2</code> dataset from dslabs.</li>
+<li>Convert it to a wide format using the following:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb19-1" class="hljs-ln-code"><a href="#cb19-1"></a>co2_wide <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(co2, <span class="at">ncol =</span> <span class="dv">12</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2" class="hljs-ln-code"><a href="#cb19-2"></a>    <span class="fu">setNames</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3" class="hljs-ln-code"><a href="#cb19-3"></a>    <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.character</span>(<span class="dv">1959</span><span class="sc">:</span><span class="dv">1997</span>))</span>
+<span id="cb19-4" class="hljs-ln-code"><a href="#cb19-4"></a><span class="fu">head</span>(co2_wide)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1      2      3      4      5      6      7      8      9     10     11
+1 315.42 316.31 316.50 317.56 318.13 318.00 316.39 314.65 313.68 313.18 314.66
+2 316.27 316.81 317.42 318.87 319.87 319.43 318.01 315.74 314.00 313.68 314.84
+3 316.73 317.54 318.38 319.31 320.42 319.61 318.42 316.63 314.83 315.16 315.94
+4 317.78 318.40 319.53 320.42 320.85 320.45 319.45 317.25 316.11 315.27 316.53
+5 318.58 318.92 319.70 321.22 322.08 321.31 319.58 317.61 316.05 315.83 316.91
+6 319.41 320.07 320.74 321.40 322.06 321.73 320.27 318.54 316.54 316.71 317.53
+      12 year
+1 315.43 1959
+2 316.03 1960
+3 316.85 1961
+4 317.53 1962
+5 318.20 1963
+6 318.55 1964</code></pre>
+</div>
+</div>
+</section>
+<section id="exercise-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise</h2>
+<ul>
+<li>Convert the wide format to a tidy format.</li>
+<li>Use ggplot to plot CO2 vs.&nbsp;month with a different curve per year</li>
+</ul>
+</section>
+<section id="exercise---part-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise - part 1</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb21-1" class="hljs-ln-code"><a href="#cb21-1"></a>co2_tidy <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(co2_wide, <span class="sc">-</span>year, <span class="at">names_to =</span> <span class="st">"month"</span>, <span class="at">values_to =</span> <span class="st">"co2"</span>)</span>
+<span id="cb21-2" class="hljs-ln-code"><a href="#cb21-2"></a>co2_tidy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 468 × 3
+   year  month   co2
+   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+ 1 1959  1      315.
+ 2 1959  2      316.
+ 3 1959  3      316.
+ 4 1959  4      318.
+ 5 1959  5      318.
+ 6 1959  6      318 
+ 7 1959  7      316.
+ 8 1959  8      315.
+ 9 1959  9      314.
+10 1959  10     313.
+# … with 458 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="exercise---part-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise - part 2</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb23-1" class="hljs-ln-code"><a href="#cb23-1"></a>co2_tidy <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2" class="hljs-ln-code"><a href="#cb23-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">as.numeric</span>(month), co2, <span class="at">color =</span> year)) <span class="sc">+</span> </span>
+<span id="cb23-3" class="hljs-ln-code"><a href="#cb23-3"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="13_Tidy_Data_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
+<section id="separate" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>separate()</code></h2>
+<ul>
+<li>splits one column into two or more columns at a specified character</li>
+<li>takes three parameters: the name of the column to be separated, the names to be used for the new columns, and the character that separates the variables.</li>
+<li>use <code>extra = "merge"</code> to merge rest in case of additional separation</li>
+</ul>
+</section>
+<section id="separate-in-action" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>separate()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb24-1" class="hljs-ln-code"><a href="#cb24-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="at">package =</span> <span class="st">"dslabs"</span>)</span>
+<span id="cb24-2" class="hljs-ln-code"><a href="#cb24-2"></a>fname <span class="ot">&lt;-</span><span class="st">"life-expectancy-and-fertility-two-countries-example.csv"</span></span>
+<span id="cb24-3" class="hljs-ln-code"><a href="#cb24-3"></a>filename <span class="ot">&lt;-</span> <span class="fu">file.path</span>(path, fname)</span>
+<span id="cb24-4" class="hljs-ln-code"><a href="#cb24-4"></a>raw_dat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(filename)</span>
+<span id="cb24-5" class="hljs-ln-code"><a href="#cb24-5"></a><span class="fu">select</span>(raw_dat, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  country     `1960_fertility` `1960_life_expectancy` `1961_fertility`
+  &lt;chr&gt;                  &lt;dbl&gt;                  &lt;dbl&gt;            &lt;dbl&gt;
+1 Germany                 2.41                   69.3             2.44
+2 South Korea             6.16                   53.0             5.99</code></pre>
+</div>
+</div>
+</section>
+<section id="separate-in-action-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>separate()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># pivot all columns except country</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>dat <span class="ot">&lt;-</span> raw_dat <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="sc">-</span>country)</span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  country name                 value
+  &lt;chr&gt;   &lt;chr&gt;                &lt;dbl&gt;
+1 Germany 1960_fertility        2.41
+2 Germany 1960_life_expectancy 69.3 
+3 Germany 1961_fertility        2.44
+4 Germany 1961_life_expectancy 69.8 
+5 Germany 1962_fertility        2.47
+6 Germany 1962_life_expectancy 70.0 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>dat<span class="sc">$</span>name[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "1960_fertility"       "1960_life_expectancy" "1961_fertility"      
+[4] "1961_life_expectancy" "1962_fertility"      </code></pre>
+</div>
+</div>
+</section>
+<section id="separate-in-action-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>separate()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb30-1" class="hljs-ln-code"><a href="#cb30-1"></a><span class="co"># separate on underscores</span></span>
+<span id="cb30-2" class="hljs-ln-code"><a href="#cb30-2"></a>dat <span class="sc">%&gt;%</span> <span class="fu">separate</span>(name, <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"name"</span>), <span class="at">sep =</span> <span class="st">"_"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 224 × 4
+   country year  name      value
+   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt;
+ 1 Germany 1960  fertility  2.41
+ 2 Germany 1960  life      69.3 
+ 3 Germany 1961  fertility  2.44
+ 4 Germany 1961  life      69.8 
+ 5 Germany 1962  fertility  2.47
+ 6 Germany 1962  life      70.0 
+ 7 Germany 1963  fertility  2.49
+ 8 Germany 1963  life      70.1 
+ 9 Germany 1964  fertility  2.49
+10 Germany 1964  life      70.7 
+# … with 214 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="separate-in-action-3" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>separate()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb32-1" class="hljs-ln-code"><a href="#cb32-1"></a><span class="co"># separate on underscores (the default), convert years to numeric</span></span>
+<span id="cb32-2" class="hljs-ln-code"><a href="#cb32-2"></a>dat <span class="sc">%&gt;%</span> <span class="fu">separate</span>(name, <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"name"</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 224 × 4
+   country  year name      value
+   &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt;
+ 1 Germany  1960 fertility  2.41
+ 2 Germany  1960 life      69.3 
+ 3 Germany  1961 fertility  2.44
+ 4 Germany  1961 life      69.8 
+ 5 Germany  1962 fertility  2.47
+ 6 Germany  1962 life      70.0 
+ 7 Germany  1963 fertility  2.49
+ 8 Germany  1963 life      70.1 
+ 9 Germany  1964 fertility  2.49
+10 Germany  1964 life      70.7 
+# … with 214 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="separate-in-action-4" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>separate()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb34-1" class="hljs-ln-code"><a href="#cb34-1"></a><span class="co"># separate on underscores</span></span>
+<span id="cb34-2" class="hljs-ln-code"><a href="#cb34-2"></a><span class="co"># split on all underscores, pad empty cells with NA</span></span>
+<span id="cb34-3" class="hljs-ln-code"><a href="#cb34-3"></a>dat <span class="sc">%&gt;%</span> <span class="fu">separate</span>(name, <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"name_1"</span>, <span class="st">"name_2"</span>), </span>
+<span id="cb34-4" class="hljs-ln-code"><a href="#cb34-4"></a>                 <span class="at">fill =</span> <span class="st">"right"</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 224 × 5
+   country  year name_1    name_2     value
+   &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;      &lt;dbl&gt;
+ 1 Germany  1960 fertility &lt;NA&gt;        2.41
+ 2 Germany  1960 life      expectancy 69.3 
+ 3 Germany  1961 fertility &lt;NA&gt;        2.44
+ 4 Germany  1961 life      expectancy 69.8 
+ 5 Germany  1962 fertility &lt;NA&gt;        2.47
+ 6 Germany  1962 life      expectancy 70.0 
+ 7 Germany  1963 fertility &lt;NA&gt;        2.49
+ 8 Germany  1963 life      expectancy 70.1 
+ 9 Germany  1964 fertility &lt;NA&gt;        2.49
+10 Germany  1964 life      expectancy 70.7 
+# … with 214 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="separate-in-action-5" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>separate()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb36-1" class="hljs-ln-code"><a href="#cb36-1"></a><span class="co"># split on first underscore but keep life_expectancy merged</span></span>
+<span id="cb36-2" class="hljs-ln-code"><a href="#cb36-2"></a>dat <span class="sc">%&gt;%</span> <span class="fu">separate</span>(name, <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"name"</span>), <span class="at">sep =</span> <span class="st">"_"</span>, </span>
+<span id="cb36-3" class="hljs-ln-code"><a href="#cb36-3"></a>                 <span class="at">extra =</span> <span class="st">"merge"</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 224 × 4
+   country  year name            value
+   &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;           &lt;dbl&gt;
+ 1 Germany  1960 fertility        2.41
+ 2 Germany  1960 life_expectancy 69.3 
+ 3 Germany  1961 fertility        2.44
+ 4 Germany  1961 life_expectancy 69.8 
+ 5 Germany  1962 fertility        2.47
+ 6 Germany  1962 life_expectancy 70.0 
+ 7 Germany  1963 fertility        2.49
+ 8 Germany  1963 life_expectancy 70.1 
+ 9 Germany  1964 fertility        2.49
+10 Germany  1964 life_expectancy 70.7 
+# … with 214 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="separate-in-action-6" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>separate()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb38-1" class="hljs-ln-code"><a href="#cb38-1"></a><span class="co"># separate then create a new column for each variable using pivot_wider</span></span>
+<span id="cb38-2" class="hljs-ln-code"><a href="#cb38-2"></a>dat <span class="sc">%&gt;%</span> <span class="fu">separate</span>(name, <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"name"</span>), <span class="at">sep =</span> <span class="st">"_"</span>, </span>
+<span id="cb38-3" class="hljs-ln-code"><a href="#cb38-3"></a>                 <span class="at">extra =</span> <span class="st">"merge"</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-4" class="hljs-ln-code"><a href="#cb38-4"></a>  <span class="fu">pivot_wider</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 112 × 4
+   country  year fertility life_expectancy
+   &lt;chr&gt;   &lt;int&gt;     &lt;dbl&gt;           &lt;dbl&gt;
+ 1 Germany  1960      2.41            69.3
+ 2 Germany  1961      2.44            69.8
+ 3 Germany  1962      2.47            70.0
+ 4 Germany  1963      2.49            70.1
+ 5 Germany  1964      2.49            70.7
+ 6 Germany  1965      2.48            70.6
+ 7 Germany  1966      2.44            70.8
+ 8 Germany  1967      2.37            71.0
+ 9 Germany  1968      2.28            70.6
+10 Germany  1969      2.17            70.5
+# … with 102 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="unite" class="slide level2">
+<h2><code>unite()</code></h2>
+<ul>
+<li>does the opposite of <code>separate()</code></li>
+</ul>
+</section>
+<section id="unite-in-action" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>unite()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb40-1" class="hljs-ln-code"><a href="#cb40-1"></a><span class="co"># what if we had used this suboptimal way of separating</span></span>
+<span id="cb40-2" class="hljs-ln-code"><a href="#cb40-2"></a>dat <span class="sc">%&gt;%</span> </span>
+<span id="cb40-3" class="hljs-ln-code"><a href="#cb40-3"></a>  <span class="fu">separate</span>(name, <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"name_1"</span>, <span class="st">"name_2"</span>), </span>
+<span id="cb40-4" class="hljs-ln-code"><a href="#cb40-4"></a>           <span class="at">fill =</span> <span class="st">"right"</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 224 × 5
+   country  year name_1    name_2     value
+   &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;      &lt;dbl&gt;
+ 1 Germany  1960 fertility &lt;NA&gt;        2.41
+ 2 Germany  1960 life      expectancy 69.3 
+ 3 Germany  1961 fertility &lt;NA&gt;        2.44
+ 4 Germany  1961 life      expectancy 69.8 
+ 5 Germany  1962 fertility &lt;NA&gt;        2.47
+ 6 Germany  1962 life      expectancy 70.0 
+ 7 Germany  1963 fertility &lt;NA&gt;        2.49
+ 8 Germany  1963 life      expectancy 70.1 
+ 9 Germany  1964 fertility &lt;NA&gt;        2.49
+10 Germany  1964 life      expectancy 70.7 
+# … with 214 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="unite-in-action-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>unite()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb42-1" class="hljs-ln-code"><a href="#cb42-1"></a><span class="co"># we could unite the second and third columns using unite()</span></span>
+<span id="cb42-2" class="hljs-ln-code"><a href="#cb42-2"></a>dat <span class="sc">%&gt;%</span> </span>
+<span id="cb42-3" class="hljs-ln-code"><a href="#cb42-3"></a>  <span class="fu">separate</span>(name, <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"name_1"</span>, <span class="st">"name_2"</span>), </span>
+<span id="cb42-4" class="hljs-ln-code"><a href="#cb42-4"></a>           <span class="at">fill =</span> <span class="st">"right"</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb42-5" class="hljs-ln-code"><a href="#cb42-5"></a>  <span class="fu">unite</span>(variable_name, name_1, name_2, <span class="at">sep=</span><span class="st">"_"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 224 × 4
+   country  year variable_name   value
+   &lt;chr&gt;   &lt;int&gt; &lt;chr&gt;           &lt;dbl&gt;
+ 1 Germany  1960 fertility_NA     2.41
+ 2 Germany  1960 life_expectancy 69.3 
+ 3 Germany  1961 fertility_NA     2.44
+ 4 Germany  1961 life_expectancy 69.8 
+ 5 Germany  1962 fertility_NA     2.47
+ 6 Germany  1962 life_expectancy 70.0 
+ 7 Germany  1963 fertility_NA     2.49
+ 8 Germany  1963 life_expectancy 70.1 
+ 9 Germany  1964 fertility_NA     2.49
+10 Germany  1964 life_expectancy 70.7 
+# … with 214 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="unite-in-action-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"><code>unite()</code> in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb44-1" class="hljs-ln-code"><a href="#cb44-1"></a><span class="co"># spread the columns</span></span>
+<span id="cb44-2" class="hljs-ln-code"><a href="#cb44-2"></a>dat <span class="sc">%&gt;%</span> </span>
+<span id="cb44-3" class="hljs-ln-code"><a href="#cb44-3"></a>  <span class="fu">separate</span>(name, <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"name_1"</span>, <span class="st">"name_2"</span>), </span>
+<span id="cb44-4" class="hljs-ln-code"><a href="#cb44-4"></a>           <span class="at">fill =</span> <span class="st">"right"</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb44-5" class="hljs-ln-code"><a href="#cb44-5"></a>  <span class="fu">unite</span>(name, name_1, name_2, <span class="at">sep=</span><span class="st">"_"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb44-6" class="hljs-ln-code"><a href="#cb44-6"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"name"</span>, <span class="at">values_from =</span> <span class="st">"value"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb44-7" class="hljs-ln-code"><a href="#cb44-7"></a>  <span class="fu">rename</span>(<span class="at">fertility =</span> fertility_NA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 112 × 4
+   country  year fertility life_expectancy
+   &lt;chr&gt;   &lt;int&gt;     &lt;dbl&gt;           &lt;dbl&gt;
+ 1 Germany  1960      2.41            69.3
+ 2 Germany  1961      2.44            69.8
+ 3 Germany  1962      2.47            70.0
+ 4 Germany  1963      2.49            70.1
+ 5 Germany  1964      2.49            70.7
+ 6 Germany  1965      2.48            70.6
+ 7 Germany  1966      2.44            70.8
+ 8 Germany  1967      2.37            71.0
+ 9 Germany  1968      2.28            70.6
+10 Germany  1969      2.17            70.5
+# … with 102 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="combining-tables" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Combining tables</h2>
+<ul>
+<li>The <code>join</code> functions in the <strong>dplyr</strong> package combine two tables such that matching rows are together.</li>
+<li><code>left_join()</code> only keeps rows that have information in the first table.</li>
+<li><code>right_join()</code> only keeps rows that have information in the second table.</li>
+<li><code>inner_join()</code> only keeps rows that have information in both tables.</li>
+</ul>
+</section>
+<section id="combining-tables-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Combining tables</h2>
+<ul>
+<li><code>full_join()</code> keeps all rows from both tables.</li>
+<li><code>semi_join()</code> keeps the part of first table for which we have information in the second.</li>
+<li><code>anti_join()</code> keeps the elements of the first table for which there is no information in the second.</li>
+</ul>
+</section>
+<section id="joins-in-action" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Joins in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="fu">library</span>(dslabs)</span>
+<span id="cb46-2"><a href="#cb46-2"></a><span class="fu">data</span>(murders)</span>
+<span id="cb46-3"><a href="#cb46-3"></a><span class="co"># import US election results data</span></span>
+<span id="cb46-4"><a href="#cb46-4"></a><span class="fu">data</span>(polls_us_election_2016)</span>
+<span id="cb46-5"><a href="#cb46-5"></a><span class="fu">head</span>(results_us_election_2016)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         state electoral_votes clinton trump others
+1   California              55    61.7  31.6    6.7
+2        Texas              38    43.2  52.2    4.5
+3      Florida              29    47.8  49.0    3.2
+4     New York              29    59.0  36.5    4.5
+5     Illinois              20    55.8  38.8    5.4
+6 Pennsylvania              20    47.9  48.6    3.6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="fu">identical</span>(results_us_election_2016<span class="sc">$</span>state, murders<span class="sc">$</span>state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+</div>
+</section>
+<section id="joins-in-action-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Joins in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb50-1" class="hljs-ln-code"><a href="#cb50-1"></a><span class="co"># join the murders table and US election results table</span></span>
+<span id="cb50-2" class="hljs-ln-code"><a href="#cb50-2"></a>tab <span class="ot">&lt;-</span> <span class="fu">left_join</span>(murders, results_us_election_2016, <span class="at">by =</span> <span class="st">"state"</span>)</span>
+<span id="cb50-3" class="hljs-ln-code"><a href="#cb50-3"></a>tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  state abb        region population total electoral_votes
+1               Alabama  AL         South    4779736   135               9
+2                Alaska  AK          West     710231    19               3
+3               Arizona  AZ          West    6392017   232              11
+4              Arkansas  AR         South    2915918    93               6
+5            California  CA          West   37253956  1257              55
+6              Colorado  CO          West    5029196    65               9
+7           Connecticut  CT     Northeast    3574097    97               7
+8              Delaware  DE         South     897934    38               3
+9  District of Columbia  DC         South     601723    99               3
+10              Florida  FL         South   19687653   669              29
+11              Georgia  GA         South    9920000   376              16
+12               Hawaii  HI          West    1360301     7               4
+13                Idaho  ID          West    1567582    12               4
+14             Illinois  IL North Central   12830632   364              20
+15              Indiana  IN North Central    6483802   142              11
+16                 Iowa  IA North Central    3046355    21               6
+17               Kansas  KS North Central    2853118    63               6
+18             Kentucky  KY         South    4339367   116               8
+19            Louisiana  LA         South    4533372   351               8
+20                Maine  ME     Northeast    1328361    11               4
+21             Maryland  MD         South    5773552   293              10
+22        Massachusetts  MA     Northeast    6547629   118              11
+23             Michigan  MI North Central    9883640   413              16
+24            Minnesota  MN North Central    5303925    53              10
+25          Mississippi  MS         South    2967297   120               6
+26             Missouri  MO North Central    5988927   321              10
+27              Montana  MT          West     989415    12               3
+28             Nebraska  NE North Central    1826341    32               5
+29               Nevada  NV          West    2700551    84               6
+30        New Hampshire  NH     Northeast    1316470     5               4
+31           New Jersey  NJ     Northeast    8791894   246              14
+32           New Mexico  NM          West    2059179    67               5
+33             New York  NY     Northeast   19378102   517              29
+34       North Carolina  NC         South    9535483   286              15
+35         North Dakota  ND North Central     672591     4               3
+36                 Ohio  OH North Central   11536504   310              18
+37             Oklahoma  OK         South    3751351   111               7
+38               Oregon  OR          West    3831074    36               7
+39         Pennsylvania  PA     Northeast   12702379   457              20
+40         Rhode Island  RI     Northeast    1052567    16               4
+41       South Carolina  SC         South    4625364   207               9
+42         South Dakota  SD North Central     814180     8               3
+43            Tennessee  TN         South    6346105   219              11
+44                Texas  TX         South   25145561   805              38
+45                 Utah  UT          West    2763885    22               6
+46              Vermont  VT     Northeast     625741     2               3
+47             Virginia  VA         South    8001024   250              13
+48           Washington  WA          West    6724540    93              12
+49        West Virginia  WV         South    1852994    27               5
+50            Wisconsin  WI North Central    5686986    97              10
+51              Wyoming  WY          West     563626     5               3
+   clinton trump others
+1     34.4  62.1    3.6
+2     36.6  51.3   12.2
+3     45.1  48.7    6.2
+4     33.7  60.6    5.8
+5     61.7  31.6    6.7
+6     48.2  43.3    8.6
+7     54.6  40.9    4.5
+8     53.4  41.9    4.7
+9     90.9   4.1    5.0
+10    47.8  49.0    3.2
+11    45.9  51.0    3.1
+12    62.2  30.0    7.7
+13    27.5  59.3   13.2
+14    55.8  38.8    5.4
+15    37.8  56.9    5.3
+16    41.7  51.1    7.1
+17    36.1  56.7    7.3
+18    32.7  62.5    4.8
+19    38.4  58.1    3.5
+20    48.0  45.0    7.0
+21    60.3  33.9    5.8
+22    60.0  32.8    7.2
+23    47.3  47.5    5.2
+24    46.4  44.9    8.6
+25    40.1  57.9    1.9
+26    38.1  56.8    5.1
+27    35.9  56.5    7.6
+28    34.3  59.9    5.8
+29    47.9  45.5    6.6
+30    46.8  46.5    6.7
+31    55.5  41.4    3.2
+32    48.3  40.0   11.7
+33    59.0  36.5    4.5
+34    46.2  49.8    4.0
+35    27.2  63.0    9.8
+36    43.5  51.7    4.8
+37    28.9  65.3    5.7
+38    50.1  39.1   10.8
+39    47.9  48.6    3.6
+40    54.4  38.9    6.7
+41    40.7  54.9    4.4
+42    31.7  61.5    6.7
+43    34.7  60.7    4.6
+44    43.2  52.2    4.5
+45    27.5  45.5   27.0
+46    56.7  30.3   13.1
+47    49.8  44.4    5.8
+48    54.3  38.1    7.6
+49    26.5  68.6    4.9
+50    46.5  47.2    6.3
+51    21.9  68.2   10.0</code></pre>
+</div>
+</div>
+</section>
+<section id="plot-votes-vs.-population" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Plot votes vs.&nbsp;population</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb52-1" class="hljs-ln-code"><a href="#cb52-1"></a>tab <span class="sc">%&gt;%</span> </span>
+<span id="cb52-2" class="hljs-ln-code"><a href="#cb52-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, electoral_votes, <span class="at">label =</span> abb)) <span class="sc">+</span>           <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb52-3" class="hljs-ln-code"><a href="#cb52-3"></a>  <span class="fu">geom_text_repel</span>() <span class="sc">+</span> </span>
+<span id="cb52-4" class="hljs-ln-code"><a href="#cb52-4"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans =</span> <span class="st">"log2"</span>) <span class="sc">+</span>  </span>
+<span id="cb52-5" class="hljs-ln-code"><a href="#cb52-5"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">trans =</span> <span class="st">"log2"</span>) <span class="sc">+</span> </span>
+<span id="cb52-6" class="hljs-ln-code"><a href="#cb52-6"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plot-votes-vs.-population-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Plot votes vs.&nbsp;population</h2>
+
+<img data-src="13_Tidy_Data_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"></section>
+<section id="joins-in-action-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Joins in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb53-1" class="hljs-ln-code"><a href="#cb53-1"></a><span class="co"># make two smaller tables to demonstrate joins</span></span>
+<span id="cb53-2" class="hljs-ln-code"><a href="#cb53-2"></a>tab1 <span class="ot">&lt;-</span> <span class="fu">slice</span>(murders, <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(state, population)</span>
+<span id="cb53-3" class="hljs-ln-code"><a href="#cb53-3"></a>tab1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       state population
+1    Alabama    4779736
+2     Alaska     710231
+3    Arizona    6392017
+4   Arkansas    2915918
+5 California   37253956
+6   Colorado    5029196</code></pre>
+</div>
+</div>
+</section>
+<section id="joins-in-action-3" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Joins in action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb55-1" class="hljs-ln-code"><a href="#cb55-1"></a>tab2 <span class="ot">&lt;-</span> <span class="fu">slice</span>(results_us_election_2016, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">8</span>)) <span class="sc">%&gt;%</span> <span class="fu">select</span>(state, electoral_votes)</span>
+<span id="cb55-2" class="hljs-ln-code"><a href="#cb55-2"></a>tab2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       state electoral_votes
+1 California              55
+2      Texas              38
+3    Florida              29
+4   Illinois              20
+5       Ohio              18
+6    Georgia              16</code></pre>
+</div>
+</div>
+</section>
+<section id="experiment-with-different-joins" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Experiment with different joins</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb57-1" class="hljs-ln-code"><a href="#cb57-1"></a><span class="co"># experiment with different joins</span></span>
+<span id="cb57-2" class="hljs-ln-code"><a href="#cb57-2"></a><span class="fu">left_join</span>(tab1, tab2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       state population electoral_votes
+1    Alabama    4779736              NA
+2     Alaska     710231              NA
+3    Arizona    6392017              NA
+4   Arkansas    2915918              NA
+5 California   37253956              55
+6   Colorado    5029196              NA</code></pre>
+</div>
+</div>
+</section>
+<section id="experiment-with-different-joins-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Experiment with different joins</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb59-1" class="hljs-ln-code"><a href="#cb59-1"></a><span class="co"># experiment with different joins</span></span>
+<span id="cb59-2" class="hljs-ln-code"><a href="#cb59-2"></a>tab1 <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(tab2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       state population electoral_votes
+1    Alabama    4779736              NA
+2     Alaska     710231              NA
+3    Arizona    6392017              NA
+4   Arkansas    2915918              NA
+5 California   37253956              55
+6   Colorado    5029196              NA</code></pre>
+</div>
+</div>
+</section>
+<section id="experiment-with-different-joins-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Experiment with different joins</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb61-1" class="hljs-ln-code"><a href="#cb61-1"></a><span class="co"># experiment with different joins</span></span>
+<span id="cb61-2" class="hljs-ln-code"><a href="#cb61-2"></a>tab1 <span class="sc">%&gt;%</span> <span class="fu">right_join</span>(tab2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       state population electoral_votes
+1 California   37253956              55
+2      Texas         NA              38
+3    Florida         NA              29
+4   Illinois         NA              20
+5       Ohio         NA              18
+6    Georgia         NA              16</code></pre>
+</div>
+</div>
+</section>
+<section id="experiment-with-different-joins-3" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Experiment with different joins</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb63-1" class="hljs-ln-code"><a href="#cb63-1"></a><span class="co"># experiment with different joins</span></span>
+<span id="cb63-2" class="hljs-ln-code"><a href="#cb63-2"></a><span class="fu">inner_join</span>(tab1, tab2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       state population electoral_votes
+1 California   37253956              55</code></pre>
+</div>
+</div>
+</section>
+<section id="experiment-with-different-joins-4" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Experiment with different joins</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb65-1" class="hljs-ln-code"><a href="#cb65-1"></a><span class="co"># experiment with different joins</span></span>
+<span id="cb65-2" class="hljs-ln-code"><a href="#cb65-2"></a><span class="fu">semi_join</span>(tab1, tab2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       state population
+1 California   37253956</code></pre>
+</div>
+</div>
+</section>
+<section id="experiment-with-different-joins-5" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Experiment with different joins</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb67-1" class="hljs-ln-code"><a href="#cb67-1"></a><span class="co"># experiment with different joins</span></span>
+<span id="cb67-2" class="hljs-ln-code"><a href="#cb67-2"></a><span class="fu">anti_join</span>(tab1, tab2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     state population
+1  Alabama    4779736
+2   Alaska     710231
+3  Arizona    6392017
+4 Arkansas    2915918
+5 Colorado    5029196</code></pre>
+</div>
+</div>
+</section>
+<section id="exercises" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercises</h2>
+<p>We previously created a tidy version of the <code>co2</code> dataset:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb69-1" class="hljs-ln-code"><a href="#cb69-1"></a>co2_tidy <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(co2, <span class="at">ncol =</span> <span class="dv">12</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb69-2" class="hljs-ln-code"><a href="#cb69-2"></a>  <span class="fu">setNames</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb69-3" class="hljs-ln-code"><a href="#cb69-3"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="dv">1959</span><span class="sc">:</span><span class="dv">1997</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb69-4" class="hljs-ln-code"><a href="#cb69-4"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>year, <span class="at">names_to =</span> <span class="st">"month"</span>, <span class="at">values_to =</span> <span class="st">"co2"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb69-5" class="hljs-ln-code"><a href="#cb69-5"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">as.numeric</span>(month))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercises-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercises</h2>
+<ul>
+<li>We want to see if the monthly trend is changing so we are going to remove the year effects and then plot the results.</li>
+<li>First compute the year averages.</li>
+<li>Use the <code>group_by</code> and <code>summarize</code> to compute the average co2 for each year. Save in an object called yearly_avg.</li>
+</ul>
+</section>
+<section id="exercises-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercises</h2>
+<ul>
+<li>We want to see if the monthly trend is changing so we are going to remove the year effects and then plot the results.</li>
+<li>Use <code>group_by</code> and <code>summarize</code> to compute the average co2 for each year. Save in an object called yearly_avg.</li>
+</ul>
+</section>
+<section id="exercises-3" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercises</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb70-1" class="hljs-ln-code"><a href="#cb70-1"></a>yearly_avg <span class="ot">&lt;-</span> co2_tidy <span class="sc">%&gt;%</span></span>
+<span id="cb70-2" class="hljs-ln-code"><a href="#cb70-2"></a>  <span class="fu">group_by</span>(year) <span class="sc">%&gt;%</span></span>
+<span id="cb70-3" class="hljs-ln-code"><a href="#cb70-3"></a>  <span class="fu">summarize</span>(<span class="at">avg_co2 =</span> <span class="fu">mean</span>(co2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise</h2>
+<ul>
+<li>Now use the <code>left_join</code> function to add the yearly average to the co2_tidy dataset.</li>
+<li>Then compute the residuals: observed co2 measure - yearly average.</li>
+<li>Plot the residuals by year as before after removing the year effect.</li>
+<li>What is happening to the seasonal variation? Modify the plot to look at one year in every decade.</li>
+</ul>
+</section>
+<section id="exercise---part-1-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise - part 1</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb71-1" class="hljs-ln-code"><a href="#cb71-1"></a>joined_co2 <span class="ot">&lt;-</span> co2_tidy <span class="sc">%&gt;%</span> </span>
+<span id="cb71-2" class="hljs-ln-code"><a href="#cb71-2"></a>  <span class="fu">left_join</span>(yearly_avg) <span class="sc">%&gt;%</span></span>
+<span id="cb71-3" class="hljs-ln-code"><a href="#cb71-3"></a>  <span class="fu">mutate</span>(<span class="at">residual =</span> co2 <span class="sc">-</span> avg_co2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise---part-2-1" class="slide level2" data-auto-animate="&quot;true">
+<h2 data-id="quarto-animate-title">Exercise - part 2</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb72-1" class="hljs-ln-code"><a href="#cb72-1"></a>joined_co2 <span class="sc">%&gt;%</span> </span>
+<span id="cb72-2" class="hljs-ln-code"><a href="#cb72-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(month, residual, <span class="at">color =</span> <span class="fu">as.factor</span>(year))) <span class="sc">+</span> </span>
+<span id="cb72-3" class="hljs-ln-code"><a href="#cb72-3"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="13_Tidy_Data_files/figure-revealjs/unnamed-chunk-38-1.png" width="960" class="r-stretch"></section>
+<section id="exercise---part-3" class="slide level2" data-auto-animate="&quot;true">
+<h2 data-id="quarto-animate-title">Exercise - part 3</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb73-1" class="hljs-ln-code"><a href="#cb73-1"></a>joined_co2 <span class="sc">%&gt;%</span> </span>
+<span id="cb73-2" class="hljs-ln-code"><a href="#cb73-2"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">seq</span>(<span class="fu">min</span>(joined_co2<span class="sc">$</span>year), <span class="fu">max</span>(joined_co2<span class="sc">$</span>year), <span class="dv">10</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb73-3" class="hljs-ln-code"><a href="#cb73-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(month, residual, <span class="at">color =</span> <span class="fu">as.factor</span>(year))) <span class="sc">+</span> </span>
+<span id="cb73-4" class="hljs-ln-code"><a href="#cb73-4"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="13_Tidy_Data_files/figure-revealjs/unnamed-chunk-39-1.png" width="960" class="r-stretch"></section>
+<section id="exercise---part-3-1" class="slide level2" data-auto-animate="&quot;true">
+<h2 data-id="quarto-animate-title">Exercise - part 3</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb74-1" class="hljs-ln-code"><a href="#cb74-1"></a>co2_stats <span class="ot">&lt;-</span> joined_co2 <span class="sc">%&gt;%</span> </span>
+<span id="cb74-2" class="hljs-ln-code"><a href="#cb74-2"></a>  <span class="fu">mutate</span>(<span class="at">decade =</span> <span class="fu">round</span>(year<span class="sc">/</span> <span class="dv">10</span>)<span class="sc">*</span><span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb74-3" class="hljs-ln-code"><a href="#cb74-3"></a>  <span class="fu">group_by</span>(decade, month) <span class="sc">%&gt;%</span></span>
+<span id="cb74-4" class="hljs-ln-code"><a href="#cb74-4"></a>  <span class="fu">summarize</span>(<span class="at">avg_per_month =</span> <span class="fu">mean</span>(residual)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise---part-3-2" class="slide level2" data-auto-animate="&quot;true">
+<h2 data-id="quarto-animate-title">Exercise - part 3</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb75-1" class="hljs-ln-code"><a href="#cb75-1"></a>co2_stats <span class="sc">%&gt;%</span> </span>
+<span id="cb75-2" class="hljs-ln-code"><a href="#cb75-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(month, avg_per_month, <span class="at">color =</span> <span class="fu">as.factor</span>(decade))) <span class="sc">+</span> </span>
+<span id="cb75-3" class="hljs-ln-code"><a href="#cb75-3"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="13_Tidy_Data_files/figure-revealjs/unnamed-chunk-41-1.png" width="960" class="r-stretch"></section>
+<section id="any-questions" class="slide level2">
+<h2>Any questions?</h2>
+
+<img data-src="images/tidyr_cheat_sheet.png" class="r-stretch"><div class="footer">
+<p><a href="https://github.com/rstudio/cheatsheets/blob/main/tidyr.pdf" class="uri">https://github.com/rstudio/cheatsheets/blob/main/tidyr.pdf</a></p>
+</div>
+</section>
+<section id="thank-you" class="slide level2">
+<h2>Thank you!</h2>
+<ul>
+<li>The Koppstein lab will be starting at Uniklinik Düsseldorf in a few months</li>
+<li>There is a position for a Ph.D student interested in genomic and bioinformatic methods applied to blood and brain cancers</li>
+<li>E-mail <a href="David.Koppstein@gmail.com">David.Koppstein@gmail.com</a> if you or anyone else are interested!</li>
+</ul>
 
 <img src="images/maxplanck-ie.jpg" class="slide-logo r-stretch"><div class="footer footer-default">
 

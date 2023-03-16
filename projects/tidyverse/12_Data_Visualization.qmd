@@ -39,29 +39,15 @@ editor: visual
     -   Labels, Title, Legend
     -   Theme/Style
 
-## Creating a new plot
-
-```{r}
-#| eval: false
-#| echo: true
-    ggplot(data = x)
-    ggplot(x)
-    x %>% ggplot()
-    x |> ggplot()
-```
-
-You can associate a dataset `x` with a ggplot object with any of these 4 commands.
-
 ## Murders dataset {auto-animate="true"}
 
-Let's load some libraries and load the `murders` dataset. Take a look around with `head()`.
+Let's load some libraries and load the `murders` dataset. 
 
 ```{r}
 #| echo: true
 library(tidyverse)
 library(dslabs)
 data(murders)
-head(murders)
 ```
 
 ## Murders dataset {auto-animate="true"}
@@ -216,7 +202,6 @@ p +
 
 ## Repel the labels
 
-
 ```{r}
 #| echo: true
 #install.packages("ggrepel")
@@ -315,7 +300,7 @@ p +
 
 ## Themes
 
-`install.packages("ggthemes")` 
+`install.packages("ggthemes")`
 
 ## Themes {auto-animate="true"}
 
@@ -470,97 +455,153 @@ gapminder %>%
     facet_wrap(~year)
 ```
 
-## Line plots - Fertility over time
+## Exercises {auto-animate="true"}
+
+- Create a histogram of life expectancy in all continents except Oceania. 
+- Use `facet_wrap()` to display them side by side. 
+
+## Exercises {auto-animate="true"}
 
 ```{r}
 #| echo: true
 gapminder %>%
-    filter(country == "United States") %>%
-    ggplot(aes(year, fertility)) + 
-    geom_line()
+  filter(continent != "Oceania") %>%
+  ggplot(aes(life_expectancy)) +
+  geom_histogram() + 
+  facet_wrap(~continent)
 ```
 
-## Multiple line plots
+## Exercise {auto-animate="true"}
+
+Make a time course of fertility over time for:
+
+- Thailand
+- Germany
+- Brazil
+- Kazakhstan 
+
+colored by country.
+
+## Exercise {auto-animate="true"}
 
 ```{r}
 #| echo: true
 # fertility time series for two countries
-gapminder %>% filter(country %in% c("Germany", "Australia")) %>%
+countries <- c("Thailand", "Germany", "Brazil", "Kazakhstan")
+gapminder %>% filter(country %in% countries) %>%
     ggplot(aes(year, fertility, col = country)) +
     geom_line()
 ```
 
-## Histograms {auto-animate="true"}
+## Exercises {auto-animate="true"}
+
+How does income relate to life expectancy in 1970 for each continent? 
+
+- Exclude Oceania. 
+- Take the log of dollars per day. 
+- Use `geom_smooth(method = "lm")` to fit a linear model. 
+
+```{r}
+#| echo: true
+gapminder <- gapminder %>%
+    mutate(dollars_per_day = gdp/population/365)
+```
+
+## Exercises {auto-animate="true"}
 
 ```{r}
 #| echo: true
 #| eval: false
-# add dollars per day
-gapminder <- gapminder %>%
-    mutate(dollars_per_day = gdp/population/365)
-
-gapminder %>%
-    filter(!is.na(gdp)) %>%
-    ggplot(aes(dollars_per_day)) +
-    geom_histogram(binwidth = 1, color = "black") +
-    scale_x_continuous(trans = "log2")
+gapminder %>% 
+  filter(year == 1970, continent != "Oceania", !is.na(dollars_per_day)) %>%
+  ggplot(aes(log(dollars_per_day), life_expectancy, color = continent)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm") + 
+  facet_wrap(~continent)
 ```
 
-## Histograms {auto-animate="true"}
-
-```{r}
-#| echo: true
-#| eval: false
-#| code-line-numbers: "6"
-# add dollars per day
-gapminder <- gapminder %>%
-    mutate(dollars_per_day = gdp/population/365)
-
-gapminder %>%
-    filter(!is.na(gdp)) %>%
-    ggplot(aes(dollars_per_day)) +
-    geom_histogram(binwidth = 1, color = "black") +
-    scale_x_continuous(trans = "log2")
-```
-
-## Histograms {auto-animate="true"}
+## Exercises {auto-animate="true"}
 
 ```{r}
 #| echo: false
 #| eval: true
-# add dollars per day
-gapminder <- gapminder %>%
-    mutate(dollars_per_day = gdp/population/365)
-
-gapminder %>%
-    filter(!is.na(gdp)) %>%
-    ggplot(aes(dollars_per_day)) +
-    geom_histogram(binwidth = 1, color = "black") +
-    scale_x_continuous(trans = "log2")
+gapminder %>% 
+  filter(year == 1970, continent != "Oceania", !is.na(dollars_per_day)) %>%
+  ggplot(aes(log(dollars_per_day), life_expectancy, color = continent)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm") + 
+  facet_wrap(~continent)
 ```
 
 ## Exercise {auto-animate="true"}
 
-Make a boxplot of daily income per person by region in 1970
+In Europe, which countries have income (`dollars_per_day`) above and below 
+average in 2010? 
+
+- Make a bar plot of each country using `geom_col()` centered around the mean
+- Sort from highest to lowest
 
 ## Exercise {auto-animate="true"}
 
-Make a boxplot of daily income per person by region in 1970
+- Hints: use `dplyr` skills from yesterday to create a new tibble
+- Use `geom_col`, and `coord_flip()` to fix the label rotations
+- You can pass the order of countries to ggplot2 using `mutate(country = factor(country, levels = country))`
+
+## Exercise - Step 1 {auto-animate="true"}
 
 ```{r}
 #| echo: true
+df <- gapminder %>%
+  filter(year == 2010, continent == "Europe", !is.na(dollars_per_day)) %>%
+  mutate(avg = mean(dollars_per_day),
+         diff = dollars_per_day - avg) %>%
+  arrange(diff) %>%
+  mutate(country = factor(country, levels = country))
+```
+
+## Exercise - Step 2 {auto-animate="true"}
+
+```{r}
+#| echo: true
+df %>%
+  ggplot(aes(x = country, y = diff, label = country)) + 
+  geom_col(width = 0.5) + 
+  coord_flip()
+```
+
+## Exercise {auto-animate="true"}
+
+- Make a boxplot of daily income per person by region in 1970
+- Hint: use `!is.na()` to get rid of NA values
+
+## Exercise {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| eval: false
 gapminder %>%
   filter(year == 1970 & !is.na(gdp)) %>%
   ggplot(aes(region, dollars_per_day)) +
   geom_boxplot()
 ```
 
-## Exercise
+## Exercise {auto-animate="true"}
 
-Make a boxplot of daily income per person by region in 1970
+```{r}
+#| echo: false
+gapminder %>%
+  filter(year == 1970 & !is.na(gdp)) %>%
+  ggplot(aes(region, dollars_per_day)) +
+  geom_boxplot()
+```
+
+Good, but x axis is a bit funny...
+
+## Exercise {auto-animate="true"}
 
 ```{r}
 #| echo: true
+#| eval: false
 gapminder %>%
   filter(year == 1970 & !is.na(gdp)) %>%
   ggplot(aes(region, dollars_per_day)) +
@@ -568,9 +609,23 @@ gapminder %>%
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
+## Exercise {auto-animate="true"}
+
+```{r}
+#| echo: false
+#| eval: true
+gapminder %>%
+  filter(year == 1970 & !is.na(gdp)) %>%
+  ggplot(aes(region, dollars_per_day)) +
+  geom_boxplot() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+That's better! 
+
 ## Reordering {auto-animate="true"}
 
-Better, but hard to interpret... 
+Better, but hard to interpret...
 
 ```{r}
 #| echo: true
@@ -600,7 +655,9 @@ gapminder %>%
   ggplot(aes(region, dollars_per_day, fill = continent)) +    # color by continent
   geom_boxplot() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  xlab("")
+  xlab("") + 
+  scale_y_continuous(trans = "log2") + 
+  geom_point(show.legend = FALSE)
 ```
 
 ## Enhanced boxplot {auto-animate="true"}
@@ -614,13 +671,209 @@ gapminder %>%
   ggplot(aes(region, dollars_per_day, fill = continent)) +    # color by continent
   geom_boxplot() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  xlab("")
+  xlab("") + 
+  scale_y_continuous(trans = "log2") + 
+  geom_point(show.legend = FALSE)
+```
+
+## Ridge plots {auto-animate="true"}
+
+- Box plots are great but do not visually capture the shape of the distribution. 
+- To do this, we can use ridge plots or density plots. 
+
+## Ridge plots {auto-animate="true"}
+
+```{r}
+#| eval: false
+#| echo: true
+#install.packages("ggridges")
+library(ggridges)
+gapminder %>%
+  filter(year == 1970 & !is.na(dollars_per_day)) %>%
+  ggplot(aes(dollars_per_day, continent)) + 
+  scale_x_continuous(trans = "log2") +
+  geom_density_ridges()
+```
+
+## Ridge plots {auto-animate="true"}
+
+```{r}
+#| eval: true
+#| echo: false
+#install.packages("ggridges")
+library(ggridges)
+gapminder %>%
+  filter(year == 1970 & !is.na(dollars_per_day)) %>%
+  ggplot(aes(dollars_per_day, continent)) + 
+  scale_x_continuous(trans = "log2") +
+  geom_density_ridges()
+```
+
+## West vs. the rest
+
+Use `ifelse()` with `mutate()` to create new variables according to some boolean logic. 
+
+```{r}
+#| echo: true
+the_west <- c("Western Europe", "Northern Europe", "Southern Europe",
+              "Northern America", "Australia and New Zealand")
+gapminder <- gapminder %>% 
+  mutate(w_v_tr = ifelse(region %in% the_west, "West", "Rest"))
+```
+
+## Ridges {auto-animate="true"}
+
+```{r}
+#| eval: false
+#| echo: true
+#install.packages("ggridges")
+library(ggridges)
+years <- seq(min(gapminder$year), max(gapminder$year), 5)
+gapminder %>%
+  filter(year %in% years, !is.na(dollars_per_day)) %>%
+  mutate_at(vars(year), factor) %>%
+  ggplot(aes(x = dollars_per_day, y = year, fill = w_v_tr)) + 
+  geom_density_ridges(alpha = 0.35) + 
+  scale_x_continuous(trans = "log2")
+```
+## Ridges {auto-animate="true"}
+
+```{r}
+#| eval: true
+#| echo: false
+#install.packages("ggridges")
+library(ggridges)
+years <- seq(min(gapminder$year), max(gapminder$year), 5)
+gapminder %>%
+  filter(year %in% years, !is.na(dollars_per_day)) %>%
+  mutate_at(vars(year), factor) %>%
+  ggplot(aes(x = dollars_per_day, y = year, fill = w_v_tr)) + 
+  geom_density_ridges(alpha = 0.35) + 
+  scale_x_continuous(trans = "log2")
+```
+
+
+## More fine-grained analysis with `case_when()`
+
+```{r}
+#| echo: true
+gapminder <- gapminder %>% 
+  mutate(group = case_when(
+    region %in% c("Western Europe", "Northern Europe","Southern Europe", 
+                  "Northern America", "Australia and New Zealand") ~ "West",
+    region %in% c("Eastern Asia", "South-Eastern Asia") ~ "East Asia",
+    region %in% c("Caribbean", "Central America", 
+                  "South America") ~ "Latin America",
+    continent == "Africa" & 
+      region != "Northern Africa" ~ "Sub-Saharan",
+    TRUE ~ "Others"))
+```
+
+## Ridges {auto-animate="true"}
+
+```{r}
+#| eval: false
+#| echo: true
+#install.packages("ggridges")
+library(ggridges)
+years <- c(1970, 2010)
+gapminder %>%
+  filter(year %in% years, !is.na(dollars_per_day)) %>%
+  mutate_at(vars(year), factor) %>%
+  ggplot(aes(x = dollars_per_day, y = year, fill = group)) + 
+  geom_density_ridges(alpha = 0.35, scale = 1) + 
+  scale_x_continuous(trans = "log2")
+```
+
+## Ridges {auto-animate="true"}
+
+```{r}
+#| eval: true
+#| echo: false
+#install.packages("ggridges")
+library(ggridges)
+years <- c(1970, 2010)
+gapminder %>%
+  filter(year %in% years, !is.na(dollars_per_day)) %>%
+  mutate_at(vars(year), factor) %>%
+  ggplot(aes(x = dollars_per_day, y = year, fill = group)) + 
+  geom_density_ridges(alpha = 0.35, scale = 1) + 
+  scale_x_continuous(trans = "log2", limit = c(0.125, 300))
+```
+
+## Stacking densities {auto-animate="true"}
+
+```{r}
+#| eval: false
+#| echo: true
+years <- c(1970, 2010)
+gapminder %>%
+  filter(year %in% years, !is.na(dollars_per_day)) %>%
+  ggplot(aes(x = dollars_per_day, fill = group)) + 
+  geom_density(alpha = 0.2, bw= 0.75, position = "stack") + 
+  scale_x_continuous(trans = "log2", limit = c(0.125, 300)) + 
+  facet_grid(year ~ .)
+```
+
+## Stacking densities {auto-animate="true"}
+
+```{r}
+#| eval: true
+#| echo: false
+years <- c(1970, 2010)
+gapminder %>%
+  filter(year %in% years, !is.na(dollars_per_day)) %>%
+  ggplot(aes(x = dollars_per_day, fill = group)) + 
+  geom_density(alpha = 0.2, bw= 0.75, position = "stack") + 
+  scale_x_continuous(trans = "log2", limit = c(0.125, 300)) + 
+  facet_grid(year ~ .)
+```
+
+
+## Weight by population {auto-animate="true"}
+
+```{r}
+#| eval: false
+#| echo: true
+years <- c(1970, 2010)
+gapminder %>%
+  filter(year %in% years, !is.na(dollars_per_day)) %>%
+  group_by(year) %>%
+  mutate(weight = population/sum(population)*2) %>%
+  ungroup() %>%
+  ggplot(aes(x = dollars_per_day, fill = group, weight = weight)) + 
+  geom_density(alpha = 0.2, bw= 0.75, position = "stack") + 
+  scale_x_continuous(trans = "log2", limit = c(0.125, 300)) + 
+  facet_grid(year ~ .)
+```
+
+## Weight by population {auto-animate="true"}
+
+```{r}
+#| eval: true
+#| echo: false
+years <- c(1970, 2010)
+gapminder %>%
+  filter(year %in% years, !is.na(dollars_per_day)) %>%
+  group_by(year) %>%
+  mutate(weight = population/sum(population)*2) %>%
+  ungroup() %>%
+  ggplot(aes(x = dollars_per_day, fill = group, weight = weight)) + 
+  geom_density(alpha = 0.2, bw= 0.75, position = "stack") + 
+  scale_x_continuous(trans = "log2", limit = c(0.125, 300)) + 
+  facet_grid(year ~ .)
 ```
 
 ## Tip of the iceberg
 
 See this handy cheatsheet for lots more!
 
-![](images/ggplot2_cheat_sheet.png){fig-align="center"}
+![](images/ggplot2_cheat_sheet.png){fig-align="center" width="600"}
 
+::: footer
 <https://github.com/rstudio/cheatsheets/blob/main/data-visualization-2.1.pdf>
+:::
+
+## Any questions?
+
+Next, we will learn a bit about tidying data. 

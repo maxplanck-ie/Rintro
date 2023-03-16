@@ -17,6 +17,8 @@ format:
 - In tidy data, each row is an observation and each column is a different variable. 
 - In wide data, each row contains several observations, and the columns contain values. 
 
+![](images/tidy_data.png)
+
 ::: footer 
 <https://maxplanck-ie.github.io/Rintro>
 :::
@@ -79,16 +81,416 @@ wide_data %>% pivot_longer(-country)
 
 ```{r}
 #| echo: true
-# another way to do this - only country isn't being pivoted
-wide_data %>% pivot_longer(-country)
+new_tidy_data <- wide_data %>% 
+  pivot_longer(-country, names_to = "year", values_to = "fertility")
+head(new_tidy_data)
 ```
 
 ## `pivot_longer()` in action {auto-animate="true"}
 
 ```{r}
 #| echo: true
-new_tidy_data <- wide_data %>% 
-  pivot_longer(-country, names_to = "year", values_to = "fertility")
-head(new_tidy_data)
+# compare the class from our original tidy data (year is an integer) and in the new version (year is a character)
+class(tidy_data$year)
+class(new_tidy_data$year)
 ```
+
+## `pivot_longer()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# use the names_transform argument to change the class of the year values to numeric
+new_tidy_data <- wide_data %>% 
+  pivot_longer(-country, names_to = "year", values_to = "fertility", 
+               names_transform = list(year=as.numeric))
+```
+
+## `pivot_wider()` {auto-animate="true"}
+
+
+- The `pivot_wider()` function converts tidy data into wide data
+- The data frame to be reshaped is the first argument in `pivot_wider()`
+- The argument `names_from` tells `pivot_wider()` which variable will be used for the column names, `values_from` which variable to use to fill in the values.
+
+## `pivot_wider()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# convert the tidy data to wide data
+new_wide_data <- new_tidy_data %>% 
+  pivot_wider(names_from = year, values_from = fertility)
+select(new_wide_data, country, `1960`:`1967`)
+```
+
+## Exercise {auto-animate="true"}
+
+- Use the built-in `co2` dataset from dslabs. 
+- Convert it to a wide format using the following: 
+
+```{r}
+#| echo: true
+co2_wide <- data.frame(matrix(co2, ncol = 12, byrow = TRUE)) %>% 
+    setNames(1:12) %>%
+    mutate(year = as.character(1959:1997))
+head(co2_wide)
+```
+
+## Exercise {auto-animate="true"}
+
+- Convert the wide format to a tidy format. 
+- Use ggplot to plot CO2 vs. month with a different curve per year
+
+## Exercise - part 1 {auto-animate="true"}
+
+```{r}
+#| echo: true
+co2_tidy <- pivot_longer(co2_wide, -year, names_to = "month", values_to = "co2")
+co2_tidy
+```
+
+## Exercise - part 2 {auto-animate="true"}
+
+```{r}
+#| echo: true
+      
+co2_tidy %>% 
+  ggplot(aes(as.numeric(month), co2, color = year)) + 
+  geom_line()
+```
+
+## `separate()` {auto-animate="true"}
+
+- splits one column into two or more columns at a specified character 
+- takes three parameters: the name of the column to be separated, the names to be used for the new columns, and the character that separates the variables.
+- use `extra = "merge"` to merge rest in case of additional separation
+
+## `separate()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+path <- system.file("extdata", package = "dslabs")
+fname <-"life-expectancy-and-fertility-two-countries-example.csv"
+filename <- file.path(path, fname)
+raw_dat <- read_csv(filename)
+select(raw_dat, 1:4)
+```
+
+## `separate()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# pivot all columns except country
+dat <- raw_dat %>% pivot_longer(-country)
+head(dat)
+dat$name[1:5]
+```
+
+## `separate()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# separate on underscores
+dat %>% separate(name, c("year", "name"), sep = "_")
+```
+
+## `separate()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# separate on underscores (the default), convert years to numeric
+dat %>% separate(name, c("year", "name"), convert = TRUE)
+```
+
+## `separate()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# separate on underscores
+# split on all underscores, pad empty cells with NA
+dat %>% separate(name, c("year", "name_1", "name_2"), 
+                 fill = "right", convert = TRUE)
+```
+
+## `separate()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# split on first underscore but keep life_expectancy merged
+dat %>% separate(name, c("year", "name"), sep = "_", 
+                 extra = "merge", convert = TRUE)
+```
+
+## `separate()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# separate then create a new column for each variable using pivot_wider
+dat %>% separate(name, c("year", "name"), sep = "_", 
+                 extra = "merge", convert = TRUE) %>%
+  pivot_wider()
+```
+
+## `unite()`
+
+- does the opposite of `separate()`
+
+## `unite()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# what if we had used this suboptimal way of separating
+dat %>% 
+  separate(name, c("year", "name_1", "name_2"), 
+           fill = "right", convert = TRUE)
+```
+
+## `unite()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# we could unite the second and third columns using unite()
+dat %>% 
+  separate(name, c("year", "name_1", "name_2"), 
+           fill = "right", convert = TRUE) %>%
+  unite(variable_name, name_1, name_2, sep="_")
+```
+
+## `unite()` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# spread the columns
+dat %>% 
+  separate(name, c("year", "name_1", "name_2"), 
+           fill = "right", convert = TRUE) %>%
+  unite(name, name_1, name_2, sep="_") %>%
+  pivot_wider(names_from = "name", values_from = "value") %>%
+  rename(fertility = fertility_NA)
+```
+
+## Combining tables {auto-animate="true"}
+
+- The `join` functions in the **dplyr** package combine two tables such that matching rows are together.
+- `left_join()` only keeps rows that have information in the first table.
+- `right_join()` only keeps rows that have information in the second table.
+- `inner_join()` only keeps rows that have information in both tables.
+
+## Combining tables {auto-animate="true"}
+
+- `full_join()` keeps all rows from both tables.
+- `semi_join()` keeps the part of first table for which we have information in the second.
+- `anti_join()` keeps the elements of the first table for which there is no information in the second.
+
+## Joins in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+library(dslabs)
+data(murders)
+# import US election results data
+data(polls_us_election_2016)
+head(results_us_election_2016)
+identical(results_us_election_2016$state, murders$state)
+```
+
+## Joins in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# join the murders table and US election results table
+tab <- left_join(murders, results_us_election_2016, by = "state")
+tab
+```
+
+## Plot votes vs. population {auto-animate="true"}
+
+```{r}
+#| echo: true
+#| eval: false
+tab %>% 
+  ggplot(aes(population/10^6, electoral_votes, label = abb)) +           geom_point() + 
+  geom_text_repel() + 
+  scale_x_continuous(trans = "log2") +  
+  scale_y_continuous(trans = "log2") + 
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+## Plot votes vs. population {auto-animate="true"}
+
+```{r}
+#| eval: true
+#| echo: false
+library(ggrepel)
+tab %>% 
+  ggplot(aes(population/10^6, electoral_votes, label = abb)) +           geom_point() + 
+  geom_text_repel() + 
+  scale_x_continuous(trans = "log2") +  
+  scale_y_continuous(trans = "log2") + 
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+## Joins in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+# make two smaller tables to demonstrate joins
+tab1 <- slice(murders, 1:6) %>% select(state, population)
+tab1
+```
+
+## Joins in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+tab2 <- slice(results_us_election_2016, c(1:3, 5, 7:8)) %>% select(state, electoral_votes)
+tab2
+```
+
+## Experiment with different joins {auto-animate="true"}
+
+```{r}
+#| echo: true
+# experiment with different joins
+left_join(tab1, tab2)
+```
+
+## Experiment with different joins {auto-animate="true"}
+
+```{r}
+#| echo: true
+# experiment with different joins
+tab1 %>% left_join(tab2)
+```
+
+## Experiment with different joins {auto-animate="true"}
+
+```{r}
+#| echo: true
+# experiment with different joins
+tab1 %>% right_join(tab2)
+```
+
+## Experiment with different joins {auto-animate="true"}
+
+```{r}
+#| echo: true
+# experiment with different joins
+inner_join(tab1, tab2)
+```
+
+## Experiment with different joins {auto-animate="true"}
+
+```{r}
+#| echo: true
+# experiment with different joins
+semi_join(tab1, tab2)
+```
+
+## Experiment with different joins {auto-animate="true"}
+
+```{r}
+#| echo: true
+# experiment with different joins
+anti_join(tab1, tab2)
+```
+
+## Exercises  {auto-animate="true"}
+
+We previously created a tidy version of the `co2` dataset:
+
+```{r}
+#| echo: true
+co2_tidy <- data.frame(matrix(co2, ncol = 12, byrow = TRUE)) %>% 
+  setNames(1:12) %>%
+  mutate(year = 1959:1997) %>%
+  pivot_longer(-year, names_to = "month", values_to = "co2") %>%
+  mutate(month = as.numeric(month))
+```
+
+## Exercises  {auto-animate="true"}
+
+- We want to see if the monthly trend is changing so we are going to remove the year effects and then plot the results. 
+- First compute the year averages. 
+- Use the `group_by` and `summarize` to compute the average co2 for each year. Save in an object called yearly_avg.
+
+## Exercises  {auto-animate="true"}
+
+- We want to see if the monthly trend is changing so we are going to remove the year effects and then plot the results. 
+- Use `group_by` and `summarize` to compute the average co2 for each year. Save in an object called yearly_avg.
+
+## Exercises {auto-animate="true"}
+
+```{r}
+#| echo: true
+yearly_avg <- co2_tidy %>%
+  group_by(year) %>%
+  summarize(avg_co2 = mean(co2))
+```
+
+## Exercise {auto-animate="true"}
+
+- Now use the `left_join` function to add the yearly average to the co2_tidy dataset. 
+- Then compute the residuals: observed co2 measure - yearly average.
+- Plot the residuals by year as before after removing the year effect. 
+- What is happening to the seasonal variation? Modify the plot to look at one year in every decade. 
+
+## Exercise - part 1 {auto-animate="true"}
+
+```{r}
+#| echo: true
+joined_co2 <- co2_tidy %>% 
+  left_join(yearly_avg) %>%
+  mutate(residual = co2 - avg_co2)
+```
+
+## Exercise - part 2 {auto-animate="true}
+
+```{r}
+#| echo: true
+joined_co2 %>% 
+  ggplot(aes(month, residual, color = as.factor(year))) + 
+  geom_line()
+```
+
+## Exercise - part 3 {auto-animate="true}
+
+```{r}
+#| echo: true
+joined_co2 %>% 
+  filter(year %in% seq(min(joined_co2$year), max(joined_co2$year), 10)) %>%
+  ggplot(aes(month, residual, color = as.factor(year))) + 
+  geom_line()
+```
+## Exercise - part 3 {auto-animate="true}
+
+```{r}
+#| echo: true
+co2_stats <- joined_co2 %>% 
+  mutate(decade = round(year/ 10)*10) %>%
+  group_by(decade, month) %>%
+  summarize(avg_per_month = mean(residual)) 
+```
+
+## Exercise - part 3 {auto-animate="true}
+
+```{r}
+#| echo: true
+co2_stats %>% 
+  ggplot(aes(month, avg_per_month, color = as.factor(decade))) + 
+  geom_line()
+```
+
+## Any questions?
+
+![](images/tidyr_cheat_sheet.png)
+
+::: footer
+<https://github.com/rstudio/cheatsheets/blob/main/tidyr.pdf>
+:::
+
+## Thank you! 
+
+- The Koppstein lab will be starting at Uniklinik Düsseldorf in a few months
+- There is a position for a Ph.D student interested in genomic and bioinformatic methods applied to blood and brain cancers
+- E-mail [David.Koppstein@gmail.com](David.Koppstein@gmail.com) if you or anyone else are interested!
 
