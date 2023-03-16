@@ -571,14 +571,14 @@ df %>%
 
 ## Exercise {auto-animate="true"}
 
-Make a boxplot of daily income per person by region in 1970
+- Make a boxplot of daily income per person by region in 1970
+- Hint: use `!is.na()` to get rid of NA values
 
 ## Exercise {auto-animate="true"}
 
-Make a boxplot of daily income per person by region in 1970
-
 ```{r}
 #| echo: true
+#| eval: false
 gapminder %>%
   filter(year == 1970 & !is.na(gdp)) %>%
   ggplot(aes(region, dollars_per_day)) +
@@ -725,7 +725,7 @@ gapminder <- gapminder %>%
 
 ```{r}
 #| eval: false
-#| echo: echo
+#| echo: true
 #install.packages("ggridges")
 library(ggridges)
 years <- seq(min(gapminder$year), max(gapminder$year), 5)

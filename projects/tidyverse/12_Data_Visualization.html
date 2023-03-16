@@ -436,44 +436,24 @@ David Koppstein
 </ul></li>
 </ul>
 </section>
-<section id="creating-a-new-plot" class="slide level2">
-<h2>Creating a new plot</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>    <span class="fu">ggplot</span>(<span class="at">data =</span> x)</span>
-<span id="cb1-2"><a href="#cb1-2"></a>    <span class="fu">ggplot</span>(x)</span>
-<span id="cb1-3"><a href="#cb1-3"></a>    x <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>()</span>
-<span id="cb1-4"><a href="#cb1-4"></a>    x <span class="sc">|&gt;</span> <span class="fu">ggplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>You can associate a dataset <code>x</code> with a ggplot object with any of these 4 commands.</p>
-</section>
 <section id="murders-dataset" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Murders dataset</h2>
-<p>Let’s load some libraries and load the <code>murders</code> dataset. Take a look around with <code>head()</code>.</p>
+<p>Let’s load some libraries and load the <code>murders</code> dataset.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb2-1" class="hljs-ln-code"><a href="#cb2-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb2-2" class="hljs-ln-code"><a href="#cb2-2"></a><span class="fu">library</span>(dslabs)</span>
-<span id="cb2-3" class="hljs-ln-code"><a href="#cb2-3"></a><span class="fu">data</span>(murders)</span>
-<span id="cb2-4" class="hljs-ln-code"><a href="#cb2-4"></a><span class="fu">head</span>(murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       state abb region population total
-1    Alabama  AL  South    4779736   135
-2     Alaska  AK   West     710231    19
-3    Arizona  AZ   West    6392017   232
-4   Arkansas  AR  South    2915918    93
-5 California  CA   West   37253956  1257
-6   Colorado  CO   West    5029196    65</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb1-1" class="hljs-ln-code"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2" class="hljs-ln-code"><a href="#cb1-2"></a><span class="fu">library</span>(dslabs)</span>
+<span id="cb1-3" class="hljs-ln-code"><a href="#cb1-3"></a><span class="fu">data</span>(murders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="murders-dataset-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Murders dataset</h2>
 <p>Let’s now create a basic ggplot object, called p.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb4-1" class="hljs-ln-code"><a href="#cb4-1"></a><span class="co"># ggplot(data = murders)</span></span>
-<span id="cb4-2" class="hljs-ln-code"><a href="#cb4-2"></a><span class="co"># murders %&gt;% ggplot()</span></span>
-<span id="cb4-3" class="hljs-ln-code"><a href="#cb4-3"></a></span>
-<span id="cb4-4" class="hljs-ln-code"><a href="#cb4-4"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> murders)</span>
-<span id="cb4-5" class="hljs-ln-code"><a href="#cb4-5"></a><span class="fu">class</span>(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb2-1" class="hljs-ln-code"><a href="#cb2-1"></a><span class="co"># ggplot(data = murders)</span></span>
+<span id="cb2-2" class="hljs-ln-code"><a href="#cb2-2"></a><span class="co"># murders %&gt;% ggplot()</span></span>
+<span id="cb2-3" class="hljs-ln-code"><a href="#cb2-3"></a></span>
+<span id="cb2-4" class="hljs-ln-code"><a href="#cb2-4"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> murders)</span>
+<span id="cb2-5" class="hljs-ln-code"><a href="#cb2-5"></a><span class="fu">class</span>(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "gg"     "ggplot"</code></pre>
 </div>
@@ -483,17 +463,17 @@ David Koppstein
 <h2 data-id="quarto-animate-title">Murders dataset</h2>
 <p>As you can see, just passing the dataset <code>murders</code> to ggplot doesn’t do anything by itself. We need to add additional layers!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb6-1" class="hljs-ln-code"><a href="#cb6-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb4-1" class="hljs-ln-code"><a href="#cb4-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
 <section id="layers" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Layers</h2>
 <ul>
 <li>In ggplot2, graphs are created by adding layers to the ggplot object:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb7-1" class="hljs-ln-code"><a href="#cb7-1"></a>DATA <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>() <span class="sc">+</span> LAYER_1 <span class="sc">+</span> LAYER_2 <span class="sc">+</span> ... <span class="sc">+</span> LAYER_N</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb5-1" class="hljs-ln-code"><a href="#cb5-1"></a>DATA <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>() <span class="sc">+</span> LAYER_1 <span class="sc">+</span> LAYER_2 <span class="sc">+</span> ... <span class="sc">+</span> LAYER_N</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>The geometry layer defines the plot type and takes the format <code>geom_X</code> where X is the plot type.</li>
@@ -510,36 +490,36 @@ David Koppstein
 <section id="layers-2" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Layers</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb8-1" class="hljs-ln-code"><a href="#cb8-1"></a><span class="co"># add points layer to predefined ggplot object</span></span>
-<span id="cb8-2" class="hljs-ln-code"><a href="#cb8-2"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> murders)</span>
-<span id="cb8-3" class="hljs-ln-code"><a href="#cb8-3"></a>p <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, total))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb6-1" class="hljs-ln-code"><a href="#cb6-1"></a><span class="co"># add points layer to predefined ggplot object</span></span>
+<span id="cb6-2" class="hljs-ln-code"><a href="#cb6-2"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> murders)</span>
+<span id="cb6-3" class="hljs-ln-code"><a href="#cb6-3"></a>p <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, total))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
 <section id="layers-3" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Layers</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb9-1" class="hljs-ln-code"><a href="#cb9-1"></a><span class="co"># add text layer to scatterplot</span></span>
-<span id="cb9-2" class="hljs-ln-code"><a href="#cb9-2"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> murders)</span>
-<span id="cb9-3" class="hljs-ln-code"><a href="#cb9-3"></a>p <span class="sc">+</span> </span>
-<span id="cb9-4" class="hljs-ln-code"><a href="#cb9-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, total)) <span class="sc">+</span></span>
-<span id="cb9-5" class="hljs-ln-code"><a href="#cb9-5"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, total, <span class="at">label =</span> abb))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb7-1" class="hljs-ln-code"><a href="#cb7-1"></a><span class="co"># add text layer to scatterplot</span></span>
+<span id="cb7-2" class="hljs-ln-code"><a href="#cb7-2"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> murders)</span>
+<span id="cb7-3" class="hljs-ln-code"><a href="#cb7-3"></a>p <span class="sc">+</span> </span>
+<span id="cb7-4" class="hljs-ln-code"><a href="#cb7-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, total)) <span class="sc">+</span></span>
+<span id="cb7-5" class="hljs-ln-code"><a href="#cb7-5"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, total, <span class="at">label =</span> abb))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-7-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section>
 <section id="example-of-aes-behavior" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Example of <code>aes()</code> behavior</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb10-1" class="hljs-ln-code"><a href="#cb10-1"></a><span class="co"># no error from this call</span></span>
-<span id="cb10-2" class="hljs-ln-code"><a href="#cb10-2"></a>p_test <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="fu">aes</span>(population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, total, <span class="at">label =</span> abb))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb8-1" class="hljs-ln-code"><a href="#cb8-1"></a><span class="co"># no error from this call</span></span>
+<span id="cb8-2" class="hljs-ln-code"><a href="#cb8-2"></a>p_test <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="fu">aes</span>(population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, total, <span class="at">label =</span> abb))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="example-of-aes-behavior-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Example of <code>aes()</code> behavior</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb11-1" class="hljs-ln-code"><a href="#cb11-1"></a><span class="co"># error - "abb" is not a globally defined variable </span></span>
-<span id="cb11-2" class="hljs-ln-code"><a href="#cb11-2"></a><span class="co"># and cannot be found outside of aes</span></span>
-<span id="cb11-3" class="hljs-ln-code"><a href="#cb11-3"></a>p_test <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="fu">aes</span>(population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, total), <span class="at">label =</span> abb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb9-1" class="hljs-ln-code"><a href="#cb9-1"></a><span class="co"># error - "abb" is not a globally defined variable </span></span>
+<span id="cb9-2" class="hljs-ln-code"><a href="#cb9-2"></a><span class="co"># and cannot be found outside of aes</span></span>
+<span id="cb9-3" class="hljs-ln-code"><a href="#cb9-3"></a>p_test <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="fu">aes</span>(population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, total), <span class="at">label =</span> abb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in list2(parse = parse, check_overlap = check_overlap, na.rm = na.rm, : object 'abb' not found</code></pre>
 </div>
@@ -566,122 +546,122 @@ David Koppstein
 <section id="building-a-plot-using-layers" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Building a plot using layers</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb13-1" class="hljs-ln-code"><a href="#cb13-1"></a>p <span class="ot">&lt;-</span> murders <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, total, <span class="at">label =</span> abb))</span>
-<span id="cb13-2" class="hljs-ln-code"><a href="#cb13-2"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb11-1" class="hljs-ln-code"><a href="#cb11-1"></a>p <span class="ot">&lt;-</span> murders <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(population<span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>, total, <span class="at">label =</span> abb))</span>
+<span id="cb11-2" class="hljs-ln-code"><a href="#cb11-2"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
 <section id="add-points" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Add points</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb14-1" class="hljs-ln-code"><a href="#cb14-1"></a>p <span class="sc">+</span></span>
-<span id="cb14-2" class="hljs-ln-code"><a href="#cb14-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb12-1" class="hljs-ln-code"><a href="#cb12-1"></a>p <span class="sc">+</span></span>
+<span id="cb12-2" class="hljs-ln-code"><a href="#cb12-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
 <section id="log-the-axes" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Log the axes</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb15-1" class="hljs-ln-code"><a href="#cb15-1"></a>p <span class="sc">+</span></span>
-<span id="cb15-2" class="hljs-ln-code"><a href="#cb15-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb15-3" class="hljs-ln-code"><a href="#cb15-3"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans =</span> <span class="st">"log10"</span>) <span class="sc">+</span></span>
-<span id="cb15-4" class="hljs-ln-code"><a href="#cb15-4"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">trans =</span> <span class="st">"log10"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb13-1" class="hljs-ln-code"><a href="#cb13-1"></a>p <span class="sc">+</span></span>
+<span id="cb13-2" class="hljs-ln-code"><a href="#cb13-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb13-3" class="hljs-ln-code"><a href="#cb13-3"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans =</span> <span class="st">"log10"</span>) <span class="sc">+</span></span>
+<span id="cb13-4" class="hljs-ln-code"><a href="#cb13-4"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">trans =</span> <span class="st">"log10"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
+<section id="shorthand-for-logging-axes" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Shorthand for logging axes</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb14-1" class="hljs-ln-code"><a href="#cb14-1"></a>p <span class="sc">+</span></span>
+<span id="cb14-2" class="hljs-ln-code"><a href="#cb14-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb14-3" class="hljs-ln-code"><a href="#cb14-3"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb14-4" class="hljs-ln-code"><a href="#cb14-4"></a>  <span class="fu">scale_y_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
-<section id="shorthand-for-logging-axes" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Shorthand for logging axes</h2>
+<section id="add-labels" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Add labels</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb15-1" class="hljs-ln-code"><a href="#cb15-1"></a>p <span class="sc">+</span></span>
+<span id="cb15-2" class="hljs-ln-code"><a href="#cb15-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb15-3" class="hljs-ln-code"><a href="#cb15-3"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb15-4" class="hljs-ln-code"><a href="#cb15-4"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb15-5" class="hljs-ln-code"><a href="#cb15-5"></a>  <span class="fu">geom_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
+<section id="nudge-the-labels" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Nudge the labels</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb16-1" class="hljs-ln-code"><a href="#cb16-1"></a>p <span class="sc">+</span></span>
 <span id="cb16-2" class="hljs-ln-code"><a href="#cb16-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
 <span id="cb16-3" class="hljs-ln-code"><a href="#cb16-3"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
-<span id="cb16-4" class="hljs-ln-code"><a href="#cb16-4"></a>  <span class="fu">scale_y_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
-<section id="add-labels" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Add labels</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb17-1" class="hljs-ln-code"><a href="#cb17-1"></a>p <span class="sc">+</span></span>
-<span id="cb17-2" class="hljs-ln-code"><a href="#cb17-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb17-3" class="hljs-ln-code"><a href="#cb17-3"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
-<span id="cb17-4" class="hljs-ln-code"><a href="#cb17-4"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
-<span id="cb17-5" class="hljs-ln-code"><a href="#cb17-5"></a>  <span class="fu">geom_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-4" class="hljs-ln-code"><a href="#cb16-4"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb16-5" class="hljs-ln-code"><a href="#cb16-5"></a>  <span class="fu">geom_text</span>(<span class="at">nudge_x =</span> <span class="fl">0.075</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
-<section id="nudge-the-labels" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Nudge the labels</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb18-1" class="hljs-ln-code"><a href="#cb18-1"></a>p <span class="sc">+</span></span>
-<span id="cb18-2" class="hljs-ln-code"><a href="#cb18-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb18-3" class="hljs-ln-code"><a href="#cb18-3"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
-<span id="cb18-4" class="hljs-ln-code"><a href="#cb18-4"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
-<span id="cb18-5" class="hljs-ln-code"><a href="#cb18-5"></a>  <span class="fu">geom_text</span>(<span class="at">nudge_x =</span> <span class="fl">0.075</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
 <section id="repel-the-labels" class="slide level2">
 <h2>Repel the labels</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co">#install.packages("ggrepel")</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="fu">library</span>(ggrepel)</span>
-<span id="cb19-3"><a href="#cb19-3"></a>p <span class="sc">+</span></span>
-<span id="cb19-4"><a href="#cb19-4"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
-<span id="cb19-6"><a href="#cb19-6"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
-<span id="cb19-7"><a href="#cb19-7"></a>  <span class="fu">geom_text_repel</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co">#install.packages("ggrepel")</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">library</span>(ggrepel)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>p <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a>  <span class="fu">geom_text_repel</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
 <section id="add-axis-labels" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Add axis labels</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb20-1" class="hljs-ln-code"><a href="#cb20-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span></span>
-<span id="cb20-2" class="hljs-ln-code"><a href="#cb20-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb20-3" class="hljs-ln-code"><a href="#cb20-3"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
-<span id="cb20-4" class="hljs-ln-code"><a href="#cb20-4"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
-<span id="cb20-5" class="hljs-ln-code"><a href="#cb20-5"></a>  <span class="fu">geom_text_repel</span>() <span class="sc">+</span></span>
-<span id="cb20-6" class="hljs-ln-code"><a href="#cb20-6"></a>  <span class="fu">xlab</span>(<span class="st">"Population in millions (log scale)"</span>) <span class="sc">+</span></span>
-<span id="cb20-7" class="hljs-ln-code"><a href="#cb20-7"></a>  <span class="fu">ylab</span>(<span class="st">"Total number of murders (log scale)"</span>)</span>
-<span id="cb20-8" class="hljs-ln-code"><a href="#cb20-8"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb18-1" class="hljs-ln-code"><a href="#cb18-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span></span>
+<span id="cb18-2" class="hljs-ln-code"><a href="#cb18-2"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb18-3" class="hljs-ln-code"><a href="#cb18-3"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb18-4" class="hljs-ln-code"><a href="#cb18-4"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb18-5" class="hljs-ln-code"><a href="#cb18-5"></a>  <span class="fu">geom_text_repel</span>() <span class="sc">+</span></span>
+<span id="cb18-6" class="hljs-ln-code"><a href="#cb18-6"></a>  <span class="fu">xlab</span>(<span class="st">"Population in millions (log scale)"</span>) <span class="sc">+</span></span>
+<span id="cb18-7" class="hljs-ln-code"><a href="#cb18-7"></a>  <span class="fu">ylab</span>(<span class="st">"Total number of murders (log scale)"</span>)</span>
+<span id="cb18-8" class="hljs-ln-code"><a href="#cb18-8"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section>
 <section id="add-a-title" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Add a title</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb21-1" class="hljs-ln-code"><a href="#cb21-1"></a>p <span class="sc">+</span></span>
-<span id="cb21-2" class="hljs-ln-code"><a href="#cb21-2"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Gun Murders in 2010"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb19-1" class="hljs-ln-code"><a href="#cb19-1"></a>p <span class="sc">+</span></span>
+<span id="cb19-2" class="hljs-ln-code"><a href="#cb19-2"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Gun Murders in 2010"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
 <section id="turn-all-points-blue" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Turn all points blue</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb22-1" class="hljs-ln-code"><a href="#cb22-1"></a>p <span class="sc">+</span></span>
-<span id="cb22-2" class="hljs-ln-code"><a href="#cb22-2"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Gun Murders in 2010"</span>) <span class="sc">+</span> </span>
-<span id="cb22-3" class="hljs-ln-code"><a href="#cb22-3"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb20-1" class="hljs-ln-code"><a href="#cb20-1"></a>p <span class="sc">+</span></span>
+<span id="cb20-2" class="hljs-ln-code"><a href="#cb20-2"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Gun Murders in 2010"</span>) <span class="sc">+</span> </span>
+<span id="cb20-3" class="hljs-ln-code"><a href="#cb20-3"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
 <section id="color-by-region" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Color by region</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb23-1" class="hljs-ln-code"><a href="#cb23-1"></a>p <span class="sc">+</span></span>
-<span id="cb23-2" class="hljs-ln-code"><a href="#cb23-2"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Gun Murders in 2010"</span>) <span class="sc">+</span> </span>
-<span id="cb23-3" class="hljs-ln-code"><a href="#cb23-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> region), <span class="at">size =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb21-1" class="hljs-ln-code"><a href="#cb21-1"></a>p <span class="sc">+</span></span>
+<span id="cb21-2" class="hljs-ln-code"><a href="#cb21-2"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Gun Murders in 2010"</span>) <span class="sc">+</span> </span>
+<span id="cb21-3" class="hljs-ln-code"><a href="#cb21-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> region), <span class="at">size =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
 <section id="add-a-line-with-average-murder-rate" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Add a line with average murder rate</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb24-1" class="hljs-ln-code"><a href="#cb24-1"></a><span class="co"># define average murder rate</span></span>
-<span id="cb24-2" class="hljs-ln-code"><a href="#cb24-2"></a>r <span class="ot">&lt;-</span> murders <span class="sc">%&gt;%</span></span>
-<span id="cb24-3" class="hljs-ln-code"><a href="#cb24-3"></a>    <span class="fu">summarize</span>(<span class="at">rate =</span> <span class="fu">sum</span>(total) <span class="sc">/</span> <span class="fu">sum</span>(population) <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb24-4" class="hljs-ln-code"><a href="#cb24-4"></a>    <span class="fu">pull</span>(rate)</span>
-<span id="cb24-5" class="hljs-ln-code"><a href="#cb24-5"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb22-1" class="hljs-ln-code"><a href="#cb22-1"></a><span class="co"># define average murder rate</span></span>
+<span id="cb22-2" class="hljs-ln-code"><a href="#cb22-2"></a>r <span class="ot">&lt;-</span> murders <span class="sc">%&gt;%</span></span>
+<span id="cb22-3" class="hljs-ln-code"><a href="#cb22-3"></a>    <span class="fu">summarize</span>(<span class="at">rate =</span> <span class="fu">sum</span>(total) <span class="sc">/</span> <span class="fu">sum</span>(population) <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-4" class="hljs-ln-code"><a href="#cb22-4"></a>    <span class="fu">pull</span>(rate)</span>
+<span id="cb22-5" class="hljs-ln-code"><a href="#cb22-5"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 30.34555</code></pre>
 </div>
@@ -690,37 +670,37 @@ David Koppstein
 <section id="add-a-line-with-average-murder-rate-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Add a line with average murder rate</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb26-1" class="hljs-ln-code"><a href="#cb26-1"></a><span class="co"># basic line with average murder rate for the country</span></span>
-<span id="cb26-2" class="hljs-ln-code"><a href="#cb26-2"></a>p <span class="sc">+</span></span>
-<span id="cb26-3" class="hljs-ln-code"><a href="#cb26-3"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Gun Murders in 2010"</span>) <span class="sc">+</span> </span>
-<span id="cb26-4" class="hljs-ln-code"><a href="#cb26-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> region), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
-<span id="cb26-5" class="hljs-ln-code"><a href="#cb26-5"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="fu">log10</span>(r)) <span class="co"># slope is default of 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb24-1" class="hljs-ln-code"><a href="#cb24-1"></a><span class="co"># basic line with average murder rate for the country</span></span>
+<span id="cb24-2" class="hljs-ln-code"><a href="#cb24-2"></a>p <span class="sc">+</span></span>
+<span id="cb24-3" class="hljs-ln-code"><a href="#cb24-3"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Gun Murders in 2010"</span>) <span class="sc">+</span> </span>
+<span id="cb24-4" class="hljs-ln-code"><a href="#cb24-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> region), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
+<span id="cb24-5" class="hljs-ln-code"><a href="#cb24-5"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="fu">log10</span>(r)) <span class="co"># slope is default of 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
 <section id="edit-appearance-of-line" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Edit appearance of line</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb27-1" class="hljs-ln-code"><a href="#cb27-1"></a><span class="co"># basic line with average murder rate for the country</span></span>
-<span id="cb27-2" class="hljs-ln-code"><a href="#cb27-2"></a>p <span class="sc">+</span></span>
-<span id="cb27-3" class="hljs-ln-code"><a href="#cb27-3"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Gun Murders in 2010"</span>) <span class="sc">+</span> </span>
-<span id="cb27-4" class="hljs-ln-code"><a href="#cb27-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> region), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
-<span id="cb27-5" class="hljs-ln-code"><a href="#cb27-5"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="fu">log10</span>(r), <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"darkgrey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb25-1" class="hljs-ln-code"><a href="#cb25-1"></a><span class="co"># basic line with average murder rate for the country</span></span>
+<span id="cb25-2" class="hljs-ln-code"><a href="#cb25-2"></a>p <span class="sc">+</span></span>
+<span id="cb25-3" class="hljs-ln-code"><a href="#cb25-3"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Gun Murders in 2010"</span>) <span class="sc">+</span> </span>
+<span id="cb25-4" class="hljs-ln-code"><a href="#cb25-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> region), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
+<span id="cb25-5" class="hljs-ln-code"><a href="#cb25-5"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="fu">log10</span>(r), <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"darkgrey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section>
 <section id="edit-legend" class="slide level2">
 <h2>Edit legend</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="co"># basic line with average murder rate for the country</span></span>
-<span id="cb28-2"><a href="#cb28-2"></a>p <span class="sc">+</span></span>
-<span id="cb28-3"><a href="#cb28-3"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Gun Murders in 2010"</span>) <span class="sc">+</span> </span>
-<span id="cb28-4"><a href="#cb28-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> region), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
-<span id="cb28-5"><a href="#cb28-5"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="fu">log10</span>(r), <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"darkgrey"</span>) <span class="sc">+</span> </span>
-<span id="cb28-6"><a href="#cb28-6"></a>  <span class="fu">scale_color_discrete</span>(<span class="at">name =</span> <span class="st">"Region"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># basic line with average murder rate for the country</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>p <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a>  <span class="fu">ggtitle</span>(<span class="st">"US Gun Murders in 2010"</span>) <span class="sc">+</span> </span>
+<span id="cb26-4"><a href="#cb26-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> region), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
+<span id="cb26-5"><a href="#cb26-5"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="fu">log10</span>(r), <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"darkgrey"</span>) <span class="sc">+</span> </span>
+<span id="cb26-6"><a href="#cb26-6"></a>  <span class="fu">scale_color_discrete</span>(<span class="at">name =</span> <span class="st">"Region"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-24-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
 <section id="themes" class="slide level2">
 <h2>Themes</h2>
 <p><code>install.packages("ggthemes")</code></p>
@@ -728,21 +708,21 @@ David Koppstein
 <section id="themes-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Themes</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb29-1" class="hljs-ln-code"><a href="#cb29-1"></a><span class="fu">library</span>(ggthemes)</span>
-<span id="cb29-2" class="hljs-ln-code"><a href="#cb29-2"></a>p <span class="sc">+</span> </span>
-<span id="cb29-3" class="hljs-ln-code"><a href="#cb29-3"></a>  <span class="fu">theme_economist</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb27-1" class="hljs-ln-code"><a href="#cb27-1"></a><span class="fu">library</span>(ggthemes)</span>
+<span id="cb27-2" class="hljs-ln-code"><a href="#cb27-2"></a>p <span class="sc">+</span> </span>
+<span id="cb27-3" class="hljs-ln-code"><a href="#cb27-3"></a>  <span class="fu">theme_economist</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-25-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-24-1.png" width="960" class="r-stretch"></section>
 <section id="themes-2" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Themes</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb30-1" class="hljs-ln-code"><a href="#cb30-1"></a><span class="fu">library</span>(ggthemes)</span>
-<span id="cb30-2" class="hljs-ln-code"><a href="#cb30-2"></a>p <span class="sc">+</span> </span>
-<span id="cb30-3" class="hljs-ln-code"><a href="#cb30-3"></a>  <span class="fu">theme_fivethirtyeight</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb28-1" class="hljs-ln-code"><a href="#cb28-1"></a><span class="fu">library</span>(ggthemes)</span>
+<span id="cb28-2" class="hljs-ln-code"><a href="#cb28-2"></a>p <span class="sc">+</span> </span>
+<span id="cb28-3" class="hljs-ln-code"><a href="#cb28-3"></a>  <span class="fu">theme_fivethirtyeight</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-25-1.png" width="960" class="r-stretch"></section>
 <section id="more-useful-geoms" class="slide level2">
 <h2>More useful geoms</h2>
 <ul>
@@ -762,67 +742,67 @@ David Koppstein
 <section id="geom_histogram-in-action" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>geom_histogram()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb31-1" class="hljs-ln-code"><a href="#cb31-1"></a><span class="fu">data</span>(heights)</span>
-<span id="cb31-2" class="hljs-ln-code"><a href="#cb31-2"></a></span>
-<span id="cb31-3" class="hljs-ln-code"><a href="#cb31-3"></a><span class="co"># define p</span></span>
-<span id="cb31-4" class="hljs-ln-code"><a href="#cb31-4"></a>p <span class="ot">&lt;-</span> heights <span class="sc">%&gt;%</span></span>
-<span id="cb31-5" class="hljs-ln-code"><a href="#cb31-5"></a>    <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="st">"Male"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb31-6" class="hljs-ln-code"><a href="#cb31-6"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> height))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb29-1" class="hljs-ln-code"><a href="#cb29-1"></a><span class="fu">data</span>(heights)</span>
+<span id="cb29-2" class="hljs-ln-code"><a href="#cb29-2"></a></span>
+<span id="cb29-3" class="hljs-ln-code"><a href="#cb29-3"></a><span class="co"># define p</span></span>
+<span id="cb29-4" class="hljs-ln-code"><a href="#cb29-4"></a>p <span class="ot">&lt;-</span> heights <span class="sc">%&gt;%</span></span>
+<span id="cb29-5" class="hljs-ln-code"><a href="#cb29-5"></a>    <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="st">"Male"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-6" class="hljs-ln-code"><a href="#cb29-6"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> height))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="geom_histogram-in-action-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>geom_histogram()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb32-1" class="hljs-ln-code"><a href="#cb32-1"></a><span class="co"># basic histograms</span></span>
-<span id="cb32-2" class="hljs-ln-code"><a href="#cb32-2"></a>p <span class="sc">+</span> <span class="fu">geom_histogram</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb30-1" class="hljs-ln-code"><a href="#cb30-1"></a><span class="co"># basic histograms</span></span>
+<span id="cb30-2" class="hljs-ln-code"><a href="#cb30-2"></a>p <span class="sc">+</span> <span class="fu">geom_histogram</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-28-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-27-1.png" width="960" class="r-stretch"></section>
 <section id="geom_histogram-in-action-2" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>geom_histogram()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb33-1" class="hljs-ln-code"><a href="#cb33-1"></a><span class="co"># basic histograms</span></span>
-<span id="cb33-2" class="hljs-ln-code"><a href="#cb33-2"></a>p <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb31-1" class="hljs-ln-code"><a href="#cb31-1"></a><span class="co"># basic histograms</span></span>
+<span id="cb31-2" class="hljs-ln-code"><a href="#cb31-2"></a>p <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-28-1.png" width="960" class="r-stretch"></section>
 <section id="geom_histogram-in-action-3" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>geom_histogram()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb34-1" class="hljs-ln-code"><a href="#cb34-1"></a><span class="co"># histogram with blue fill, black outline, labels and title</span></span>
-<span id="cb34-2" class="hljs-ln-code"><a href="#cb34-2"></a>p <span class="sc">+</span> </span>
-<span id="cb34-3" class="hljs-ln-code"><a href="#cb34-3"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>, <span class="at">fill =</span> <span class="st">"blue"</span>, <span class="at">col =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb34-4" class="hljs-ln-code"><a href="#cb34-4"></a>  <span class="fu">xlab</span>(<span class="st">"Male heights in inches"</span>) <span class="sc">+</span></span>
-<span id="cb34-5" class="hljs-ln-code"><a href="#cb34-5"></a>  <span class="fu">ggtitle</span>(<span class="st">"Histogram"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb32-1" class="hljs-ln-code"><a href="#cb32-1"></a><span class="co"># histogram with blue fill, black outline, labels and title</span></span>
+<span id="cb32-2" class="hljs-ln-code"><a href="#cb32-2"></a>p <span class="sc">+</span> </span>
+<span id="cb32-3" class="hljs-ln-code"><a href="#cb32-3"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>, <span class="at">fill =</span> <span class="st">"blue"</span>, <span class="at">col =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb32-4" class="hljs-ln-code"><a href="#cb32-4"></a>  <span class="fu">xlab</span>(<span class="st">"Male heights in inches"</span>) <span class="sc">+</span></span>
+<span id="cb32-5" class="hljs-ln-code"><a href="#cb32-5"></a>  <span class="fu">ggtitle</span>(<span class="st">"Histogram"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"></section>
 <section id="geom_density-in-action" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>geom_density()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb35-1" class="hljs-ln-code"><a href="#cb35-1"></a>p <span class="sc">+</span> <span class="fu">geom_density</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb33-1" class="hljs-ln-code"><a href="#cb33-1"></a>p <span class="sc">+</span> <span class="fu">geom_density</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-31-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"></section>
 <section id="geom_density-in-action-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>geom_density()</code> in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb36-1" class="hljs-ln-code"><a href="#cb36-1"></a>p <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb34-1" class="hljs-ln-code"><a href="#cb34-1"></a>p <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-32-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-31-1.png" width="960" class="r-stretch"></section>
 <section id="geom_qq-in-action" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>geom_qq()</code> in action</h2>
 <div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb37-1" class="hljs-ln-code"><a href="#cb37-1"></a><span class="co"># basic QQ-plot</span></span>
-<span id="cb37-2" class="hljs-ln-code"><a href="#cb37-2"></a>p <span class="ot">&lt;-</span> heights <span class="sc">%&gt;%</span> </span>
-<span id="cb37-3" class="hljs-ln-code"><a href="#cb37-3"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="st">"Male"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb37-4" class="hljs-ln-code"><a href="#cb37-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> height)) <span class="co"># we require sample param! </span></span>
-<span id="cb37-5" class="hljs-ln-code"><a href="#cb37-5"></a>p <span class="sc">+</span> <span class="fu">geom_qq</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb35-1" class="hljs-ln-code"><a href="#cb35-1"></a><span class="co"># basic QQ-plot</span></span>
+<span id="cb35-2" class="hljs-ln-code"><a href="#cb35-2"></a>p <span class="ot">&lt;-</span> heights <span class="sc">%&gt;%</span> </span>
+<span id="cb35-3" class="hljs-ln-code"><a href="#cb35-3"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="st">"Male"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-4" class="hljs-ln-code"><a href="#cb35-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> height)) <span class="co"># we require sample param! </span></span>
+<span id="cb35-5" class="hljs-ln-code"><a href="#cb35-5"></a>p <span class="sc">+</span> <span class="fu">geom_qq</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-33-1.png" width="960"></p>
+<p><img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-32-1.png" width="960"></p>
 </div>
 </div>
 </div>
@@ -831,18 +811,18 @@ David Koppstein
 <section id="geom_qq-in-action-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title"><code>geom_qq()</code> in action</h2>
 <div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb38-1" class="hljs-ln-code"><a href="#cb38-1"></a><span class="co"># QQ-plot against a normal distribution with same mean/sd as data</span></span>
-<span id="cb38-2" class="hljs-ln-code"><a href="#cb38-2"></a>params <span class="ot">&lt;-</span> heights <span class="sc">%&gt;%</span></span>
-<span id="cb38-3" class="hljs-ln-code"><a href="#cb38-3"></a>    <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="st">"Male"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb38-4" class="hljs-ln-code"><a href="#cb38-4"></a>    <span class="fu">summarize</span>(<span class="at">mean =</span> <span class="fu">mean</span>(height), <span class="at">sd =</span> <span class="fu">sd</span>(height))</span>
-<span id="cb38-5" class="hljs-ln-code"><a href="#cb38-5"></a></span>
-<span id="cb38-6" class="hljs-ln-code"><a href="#cb38-6"></a>p <span class="sc">+</span> </span>
-<span id="cb38-7" class="hljs-ln-code"><a href="#cb38-7"></a>  <span class="fu">geom_qq</span>(<span class="at">dparams =</span> params) <span class="sc">+</span></span>
-<span id="cb38-8" class="hljs-ln-code"><a href="#cb38-8"></a>  <span class="fu">geom_abline</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb36-1" class="hljs-ln-code"><a href="#cb36-1"></a><span class="co"># QQ-plot against a normal distribution with same mean/sd as data</span></span>
+<span id="cb36-2" class="hljs-ln-code"><a href="#cb36-2"></a>params <span class="ot">&lt;-</span> heights <span class="sc">%&gt;%</span></span>
+<span id="cb36-3" class="hljs-ln-code"><a href="#cb36-3"></a>    <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="st">"Male"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-4" class="hljs-ln-code"><a href="#cb36-4"></a>    <span class="fu">summarize</span>(<span class="at">mean =</span> <span class="fu">mean</span>(height), <span class="at">sd =</span> <span class="fu">sd</span>(height))</span>
+<span id="cb36-5" class="hljs-ln-code"><a href="#cb36-5"></a></span>
+<span id="cb36-6" class="hljs-ln-code"><a href="#cb36-6"></a>p <span class="sc">+</span> </span>
+<span id="cb36-7" class="hljs-ln-code"><a href="#cb36-7"></a>  <span class="fu">geom_qq</span>(<span class="at">dparams =</span> params) <span class="sc">+</span></span>
+<span id="cb36-8" class="hljs-ln-code"><a href="#cb36-8"></a>  <span class="fu">geom_abline</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-34-1.png" width="960"></p>
+<p><img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-33-1.png" width="960"></p>
 </div>
 </div>
 </div>
@@ -861,119 +841,181 @@ David Koppstein
 <section id="faceting-in-action" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Faceting in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb39-1" class="hljs-ln-code"><a href="#cb39-1"></a><span class="fu">data</span>(gapminder)</span>
-<span id="cb39-2" class="hljs-ln-code"><a href="#cb39-2"></a><span class="co"># facet by continent and year</span></span>
-<span id="cb39-3" class="hljs-ln-code"><a href="#cb39-3"></a><span class="fu">filter</span>(gapminder, year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1962</span>, <span class="dv">2012</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb39-4" class="hljs-ln-code"><a href="#cb39-4"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(fertility, life_expectancy, <span class="at">col =</span> continent)) <span class="sc">+</span></span>
-<span id="cb39-5" class="hljs-ln-code"><a href="#cb39-5"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb39-6" class="hljs-ln-code"><a href="#cb39-6"></a>    <span class="fu">facet_grid</span>(continent <span class="sc">~</span> year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb37-1" class="hljs-ln-code"><a href="#cb37-1"></a><span class="fu">data</span>(gapminder)</span>
+<span id="cb37-2" class="hljs-ln-code"><a href="#cb37-2"></a><span class="co"># facet by continent and year</span></span>
+<span id="cb37-3" class="hljs-ln-code"><a href="#cb37-3"></a><span class="fu">filter</span>(gapminder, year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1962</span>, <span class="dv">2012</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb37-4" class="hljs-ln-code"><a href="#cb37-4"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(fertility, life_expectancy, <span class="at">col =</span> continent)) <span class="sc">+</span></span>
+<span id="cb37-5" class="hljs-ln-code"><a href="#cb37-5"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb37-6" class="hljs-ln-code"><a href="#cb37-6"></a>    <span class="fu">facet_grid</span>(continent <span class="sc">~</span> year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-35-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-34-1.png" width="960" class="r-stretch"></section>
 <section id="faceting-in-action-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Faceting in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb40-1" class="hljs-ln-code"><a href="#cb40-1"></a><span class="co"># facet by year only</span></span>
-<span id="cb40-2" class="hljs-ln-code"><a href="#cb40-2"></a><span class="fu">filter</span>(gapminder, year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1962</span>, <span class="dv">2012</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb40-3" class="hljs-ln-code"><a href="#cb40-3"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(fertility, life_expectancy, <span class="at">col =</span> continent)) <span class="sc">+</span></span>
-<span id="cb40-4" class="hljs-ln-code"><a href="#cb40-4"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb40-5" class="hljs-ln-code"><a href="#cb40-5"></a>    <span class="fu">facet_grid</span>(. <span class="sc">~</span> year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb38-1" class="hljs-ln-code"><a href="#cb38-1"></a><span class="co"># facet by year only</span></span>
+<span id="cb38-2" class="hljs-ln-code"><a href="#cb38-2"></a><span class="fu">filter</span>(gapminder, year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1962</span>, <span class="dv">2012</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb38-3" class="hljs-ln-code"><a href="#cb38-3"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(fertility, life_expectancy, <span class="at">col =</span> continent)) <span class="sc">+</span></span>
+<span id="cb38-4" class="hljs-ln-code"><a href="#cb38-4"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb38-5" class="hljs-ln-code"><a href="#cb38-5"></a>    <span class="fu">facet_grid</span>(. <span class="sc">~</span> year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-36-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-35-1.png" width="960" class="r-stretch"></section>
 <section id="faceting-in-action-2" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Faceting in action</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb41-1" class="hljs-ln-code"><a href="#cb41-1"></a><span class="co"># facet by year, plots wrapped onto multiple rows</span></span>
-<span id="cb41-2" class="hljs-ln-code"><a href="#cb41-2"></a>years <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1962</span>, <span class="dv">1980</span>, <span class="dv">1990</span>, <span class="dv">2000</span>, <span class="dv">2012</span>)</span>
-<span id="cb41-3" class="hljs-ln-code"><a href="#cb41-3"></a>continents <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Europe"</span>, <span class="st">"Asia"</span>)</span>
-<span id="cb41-4" class="hljs-ln-code"><a href="#cb41-4"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb41-5" class="hljs-ln-code"><a href="#cb41-5"></a>    <span class="fu">filter</span>(year <span class="sc">%in%</span> years <span class="sc">&amp;</span> continent <span class="sc">%in%</span> continents) <span class="sc">%&gt;%</span></span>
-<span id="cb41-6" class="hljs-ln-code"><a href="#cb41-6"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(fertility, life_expectancy, <span class="at">col =</span> continent)) <span class="sc">+</span></span>
-<span id="cb41-7" class="hljs-ln-code"><a href="#cb41-7"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb41-8" class="hljs-ln-code"><a href="#cb41-8"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb39-1" class="hljs-ln-code"><a href="#cb39-1"></a><span class="co"># facet by year, plots wrapped onto multiple rows</span></span>
+<span id="cb39-2" class="hljs-ln-code"><a href="#cb39-2"></a>years <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1962</span>, <span class="dv">1980</span>, <span class="dv">1990</span>, <span class="dv">2000</span>, <span class="dv">2012</span>)</span>
+<span id="cb39-3" class="hljs-ln-code"><a href="#cb39-3"></a>continents <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Europe"</span>, <span class="st">"Asia"</span>)</span>
+<span id="cb39-4" class="hljs-ln-code"><a href="#cb39-4"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb39-5" class="hljs-ln-code"><a href="#cb39-5"></a>    <span class="fu">filter</span>(year <span class="sc">%in%</span> years <span class="sc">&amp;</span> continent <span class="sc">%in%</span> continents) <span class="sc">%&gt;%</span></span>
+<span id="cb39-6" class="hljs-ln-code"><a href="#cb39-6"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(fertility, life_expectancy, <span class="at">col =</span> continent)) <span class="sc">+</span></span>
+<span id="cb39-7" class="hljs-ln-code"><a href="#cb39-7"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb39-8" class="hljs-ln-code"><a href="#cb39-8"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-36-1.png" width="960" class="r-stretch"></section>
+<section id="exercises" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercises</h2>
+<ul>
+<li>Create a histogram of life expectancy in all continents except Oceania.</li>
+<li>Use <code>facet_wrap()</code> to display them side by side.</li>
+</ul>
+</section>
+<section id="exercises-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercises</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb40-1" class="hljs-ln-code"><a href="#cb40-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb40-2" class="hljs-ln-code"><a href="#cb40-2"></a>  <span class="fu">filter</span>(continent <span class="sc">!=</span> <span class="st">"Oceania"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb40-3" class="hljs-ln-code"><a href="#cb40-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(life_expectancy)) <span class="sc">+</span></span>
+<span id="cb40-4" class="hljs-ln-code"><a href="#cb40-4"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span> </span>
+<span id="cb40-5" class="hljs-ln-code"><a href="#cb40-5"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-37-1.png" width="960" class="r-stretch"></section>
-<section id="line-plots---fertility-over-time" class="slide level2">
-<h2>Line plots - Fertility over time</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb42-2"><a href="#cb42-2"></a>    <span class="fu">filter</span>(country <span class="sc">==</span> <span class="st">"United States"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb42-3"><a href="#cb42-3"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, fertility)) <span class="sc">+</span> </span>
-<span id="cb42-4"><a href="#cb42-4"></a>    <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-38-1.png" width="960" class="r-stretch"></section>
-<section id="multiple-line-plots" class="slide level2">
-<h2>Multiple line plots</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="co"># fertility time series for two countries</span></span>
-<span id="cb43-2"><a href="#cb43-2"></a>gapminder <span class="sc">%&gt;%</span> <span class="fu">filter</span>(country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Germany"</span>, <span class="st">"Australia"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb43-3"><a href="#cb43-3"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, fertility, <span class="at">col =</span> country)) <span class="sc">+</span></span>
-<span id="cb43-4"><a href="#cb43-4"></a>    <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-39-1.png" width="960" class="r-stretch"></section>
-<section id="histograms" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Histograms</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb44-1" class="hljs-ln-code"><a href="#cb44-1"></a><span class="co"># add dollars per day</span></span>
-<span id="cb44-2" class="hljs-ln-code"><a href="#cb44-2"></a>gapminder <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb44-3" class="hljs-ln-code"><a href="#cb44-3"></a>    <span class="fu">mutate</span>(<span class="at">dollars_per_day =</span> gdp<span class="sc">/</span>population<span class="sc">/</span><span class="dv">365</span>)</span>
-<span id="cb44-4" class="hljs-ln-code"><a href="#cb44-4"></a></span>
-<span id="cb44-5" class="hljs-ln-code"><a href="#cb44-5"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb44-6" class="hljs-ln-code"><a href="#cb44-6"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(gdp)) <span class="sc">%&gt;%</span></span>
-<span id="cb44-7" class="hljs-ln-code"><a href="#cb44-7"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(dollars_per_day)) <span class="sc">+</span></span>
-<span id="cb44-8" class="hljs-ln-code"><a href="#cb44-8"></a>    <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb44-9" class="hljs-ln-code"><a href="#cb44-9"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">trans =</span> <span class="st">"log2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="histograms-1" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Histograms</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb45" data-code-line-numbers="6"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb45-1" class="hljs-ln-code"><a href="#cb45-1"></a><span class="co"># add dollars per day</span></span>
-<span id="cb45-2" class="hljs-ln-code"><a href="#cb45-2"></a>gapminder <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb45-3" class="hljs-ln-code"><a href="#cb45-3"></a>    <span class="fu">mutate</span>(<span class="at">dollars_per_day =</span> gdp<span class="sc">/</span>population<span class="sc">/</span><span class="dv">365</span>)</span>
-<span id="cb45-4" class="hljs-ln-code"><a href="#cb45-4"></a></span>
-<span id="cb45-5" class="hljs-ln-code"><a href="#cb45-5"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb45-6" class="hljs-ln-code"><a href="#cb45-6"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(gdp)) <span class="sc">%&gt;%</span></span>
-<span id="cb45-7" class="hljs-ln-code"><a href="#cb45-7"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(dollars_per_day)) <span class="sc">+</span></span>
-<span id="cb45-8" class="hljs-ln-code"><a href="#cb45-8"></a>    <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb45-9" class="hljs-ln-code"><a href="#cb45-9"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">trans =</span> <span class="st">"log2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="histograms-2" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Histograms</h2>
-
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-42-1.png" width="960" class="r-stretch"></section>
 <section id="exercise" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Exercise</h2>
-<p>Make a boxplot of daily income per person by region in 1970</p>
+<p>Make a time course of fertility over time for:</p>
+<ul>
+<li>Thailand</li>
+<li>Germany</li>
+<li>Brazil</li>
+<li>Kazakhstan</li>
+</ul>
+<p>colored by country.</p>
 </section>
 <section id="exercise-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Exercise</h2>
-<p>Make a boxplot of daily income per person by region in 1970</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb41-1" class="hljs-ln-code"><a href="#cb41-1"></a><span class="co"># fertility time series for two countries</span></span>
+<span id="cb41-2" class="hljs-ln-code"><a href="#cb41-2"></a>countries <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Thailand"</span>, <span class="st">"Germany"</span>, <span class="st">"Brazil"</span>, <span class="st">"Kazakhstan"</span>)</span>
+<span id="cb41-3" class="hljs-ln-code"><a href="#cb41-3"></a>gapminder <span class="sc">%&gt;%</span> <span class="fu">filter</span>(country <span class="sc">%in%</span> countries) <span class="sc">%&gt;%</span></span>
+<span id="cb41-4" class="hljs-ln-code"><a href="#cb41-4"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(year, fertility, <span class="at">col =</span> country)) <span class="sc">+</span></span>
+<span id="cb41-5" class="hljs-ln-code"><a href="#cb41-5"></a>    <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-38-1.png" width="960" class="r-stretch"></section>
+<section id="exercises-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercises</h2>
+<p>How does income relate to life expectancy in 1970 for each continent?</p>
+<ul>
+<li>Exclude Oceania.</li>
+<li>Take the log of dollars per day.</li>
+<li>Use <code>geom_smooth(method = "lm")</code> to fit a linear model.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb42-1" class="hljs-ln-code"><a href="#cb42-1"></a>gapminder <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb42-2" class="hljs-ln-code"><a href="#cb42-2"></a>    <span class="fu">mutate</span>(<span class="at">dollars_per_day =</span> gdp<span class="sc">/</span>population<span class="sc">/</span><span class="dv">365</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercises-3" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercises</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb43-1" class="hljs-ln-code"><a href="#cb43-1"></a>gapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb43-2" class="hljs-ln-code"><a href="#cb43-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">1970</span>, continent <span class="sc">!=</span> <span class="st">"Oceania"</span>, <span class="sc">!</span><span class="fu">is.na</span>(dollars_per_day)) <span class="sc">%&gt;%</span></span>
+<span id="cb43-3" class="hljs-ln-code"><a href="#cb43-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">log</span>(dollars_per_day), life_expectancy, <span class="at">color =</span> continent)) <span class="sc">+</span></span>
+<span id="cb43-4" class="hljs-ln-code"><a href="#cb43-4"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb43-5" class="hljs-ln-code"><a href="#cb43-5"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>) <span class="sc">+</span> </span>
+<span id="cb43-6" class="hljs-ln-code"><a href="#cb43-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercises-4" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercises</h2>
+
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-41-1.png" width="960" class="r-stretch"></section>
+<section id="exercise-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise</h2>
+<p>In Europe, which countries have income (<code>dollars_per_day</code>) above and below average in 2010?</p>
+<ul>
+<li>Make a bar plot of each country using <code>geom_col()</code> centered around the mean</li>
+<li>Sort from highest to lowest</li>
+</ul>
+</section>
+<section id="exercise-3" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise</h2>
+<ul>
+<li>Hints: use <code>dplyr</code> skills from yesterday to create a new tibble</li>
+<li>Use <code>geom_col</code>, and <code>coord_flip()</code> to fix the label rotations</li>
+<li>You can pass the order of countries to ggplot2 using <code>mutate(country = factor(country, levels = country))</code></li>
+</ul>
+</section>
+<section id="exercise---step-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise - Step 1</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb44-1" class="hljs-ln-code"><a href="#cb44-1"></a>df <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb44-2" class="hljs-ln-code"><a href="#cb44-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2010</span>, continent <span class="sc">==</span> <span class="st">"Europe"</span>, <span class="sc">!</span><span class="fu">is.na</span>(dollars_per_day)) <span class="sc">%&gt;%</span></span>
+<span id="cb44-3" class="hljs-ln-code"><a href="#cb44-3"></a>  <span class="fu">mutate</span>(<span class="at">avg =</span> <span class="fu">mean</span>(dollars_per_day),</span>
+<span id="cb44-4" class="hljs-ln-code"><a href="#cb44-4"></a>         <span class="at">diff =</span> dollars_per_day <span class="sc">-</span> avg) <span class="sc">%&gt;%</span></span>
+<span id="cb44-5" class="hljs-ln-code"><a href="#cb44-5"></a>  <span class="fu">arrange</span>(diff) <span class="sc">%&gt;%</span></span>
+<span id="cb44-6" class="hljs-ln-code"><a href="#cb44-6"></a>  <span class="fu">mutate</span>(<span class="at">country =</span> <span class="fu">factor</span>(country, <span class="at">levels =</span> country))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise---step-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise - Step 2</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb45-1" class="hljs-ln-code"><a href="#cb45-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb45-2" class="hljs-ln-code"><a href="#cb45-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> country, <span class="at">y =</span> diff, <span class="at">label =</span> country)) <span class="sc">+</span> </span>
+<span id="cb45-3" class="hljs-ln-code"><a href="#cb45-3"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb45-4" class="hljs-ln-code"><a href="#cb45-4"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-43-1.png" width="960" class="r-stretch"></section>
+<section id="exercise-4" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise</h2>
+<ul>
+<li>Make a boxplot of daily income per person by region in 1970</li>
+<li>Hint: use <code>!is.na()</code> to get rid of NA values</li>
+</ul>
+</section>
+<section id="exercise-5" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb46-1" class="hljs-ln-code"><a href="#cb46-1"></a>gapminder <span class="sc">%&gt;%</span></span>
 <span id="cb46-2" class="hljs-ln-code"><a href="#cb46-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">1970</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(gdp)) <span class="sc">%&gt;%</span></span>
 <span id="cb46-3" class="hljs-ln-code"><a href="#cb46-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(region, dollars_per_day)) <span class="sc">+</span></span>
 <span id="cb46-4" class="hljs-ln-code"><a href="#cb46-4"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-43-1.png" width="960" class="r-stretch"></section>
-<section id="exercise-2" class="slide level2">
-<h2>Exercise</h2>
-<p>Make a boxplot of daily income per person by region in 1970</p>
+</section>
+<section id="exercise-6" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise</h2>
+
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-45-1.png" width="960" class="r-stretch"><p>Good, but x axis is a bit funny…</p>
+</section>
+<section id="exercise-7" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>gapminder <span class="sc">%&gt;%</span></span>
-<span id="cb47-2"><a href="#cb47-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">1970</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(gdp)) <span class="sc">%&gt;%</span></span>
-<span id="cb47-3"><a href="#cb47-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(region, dollars_per_day)) <span class="sc">+</span></span>
-<span id="cb47-4"><a href="#cb47-4"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
-<span id="cb47-5"><a href="#cb47-5"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb47-1" class="hljs-ln-code"><a href="#cb47-1"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb47-2" class="hljs-ln-code"><a href="#cb47-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">1970</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(gdp)) <span class="sc">%&gt;%</span></span>
+<span id="cb47-3" class="hljs-ln-code"><a href="#cb47-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(region, dollars_per_day)) <span class="sc">+</span></span>
+<span id="cb47-4" class="hljs-ln-code"><a href="#cb47-4"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
+<span id="cb47-5" class="hljs-ln-code"><a href="#cb47-5"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-44-1.png" width="960" class="r-stretch"></section>
+</section>
+<section id="exercise-8" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Exercise</h2>
+
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-47-1.png" width="960" class="r-stretch"><p>That’s better!</p>
+</section>
 <section id="reordering" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Reordering</h2>
 <p>Better, but hard to interpret…</p>
@@ -1015,20 +1057,139 @@ David Koppstein
 <section id="enhanced-boxplot-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Enhanced boxplot</h2>
 
-<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-48-1.png" width="960" class="r-stretch"></section>
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-51-1.png" width="960" class="r-stretch"></section>
+<section id="ridge-plots" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Ridge plots</h2>
+<ul>
+<li>Box plots are great but do not visually capture the shape of the distribution.</li>
+<li>To do this, we can use ridge plots or density plots.</li>
+</ul>
+</section>
+<section id="ridge-plots-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Ridge plots</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb53-1" class="hljs-ln-code"><a href="#cb53-1"></a><span class="co">#install.packages("ggridges")</span></span>
+<span id="cb53-2" class="hljs-ln-code"><a href="#cb53-2"></a><span class="fu">library</span>(ggridges)</span>
+<span id="cb53-3" class="hljs-ln-code"><a href="#cb53-3"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb53-4" class="hljs-ln-code"><a href="#cb53-4"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">1970</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(dollars_per_day)) <span class="sc">%&gt;%</span></span>
+<span id="cb53-5" class="hljs-ln-code"><a href="#cb53-5"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(dollars_per_day, continent)) <span class="sc">+</span> </span>
+<span id="cb53-6" class="hljs-ln-code"><a href="#cb53-6"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans =</span> <span class="st">"log2"</span>) <span class="sc">+</span></span>
+<span id="cb53-7" class="hljs-ln-code"><a href="#cb53-7"></a>  <span class="fu">geom_density_ridges</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="ridge-plots-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Ridge plots</h2>
+
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-53-1.png" width="960" class="r-stretch"></section>
+<section id="west-vs.-the-rest" class="slide level2">
+<h2>West vs.&nbsp;the rest</h2>
+<p>Use <code>ifelse()</code> with <code>mutate()</code> to create new variables according to some boolean logic.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>the_west <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Western Europe"</span>, <span class="st">"Northern Europe"</span>, <span class="st">"Southern Europe"</span>,</span>
+<span id="cb54-2"><a href="#cb54-2"></a>              <span class="st">"Northern America"</span>, <span class="st">"Australia and New Zealand"</span>)</span>
+<span id="cb54-3"><a href="#cb54-3"></a>gapminder <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb54-4"><a href="#cb54-4"></a>  <span class="fu">mutate</span>(<span class="at">w_v_tr =</span> <span class="fu">ifelse</span>(region <span class="sc">%in%</span> the_west, <span class="st">"West"</span>, <span class="st">"Rest"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="ridges" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Ridges</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb55-1" class="hljs-ln-code"><a href="#cb55-1"></a><span class="co">#install.packages("ggridges")</span></span>
+<span id="cb55-2" class="hljs-ln-code"><a href="#cb55-2"></a><span class="fu">library</span>(ggridges)</span>
+<span id="cb55-3" class="hljs-ln-code"><a href="#cb55-3"></a>years <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">min</span>(gapminder<span class="sc">$</span>year), <span class="fu">max</span>(gapminder<span class="sc">$</span>year), <span class="dv">5</span>)</span>
+<span id="cb55-4" class="hljs-ln-code"><a href="#cb55-4"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb55-5" class="hljs-ln-code"><a href="#cb55-5"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> years, <span class="sc">!</span><span class="fu">is.na</span>(dollars_per_day)) <span class="sc">%&gt;%</span></span>
+<span id="cb55-6" class="hljs-ln-code"><a href="#cb55-6"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(year), factor) <span class="sc">%&gt;%</span></span>
+<span id="cb55-7" class="hljs-ln-code"><a href="#cb55-7"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> dollars_per_day, <span class="at">y =</span> year, <span class="at">fill =</span> w_v_tr)) <span class="sc">+</span> </span>
+<span id="cb55-8" class="hljs-ln-code"><a href="#cb55-8"></a>  <span class="fu">geom_density_ridges</span>(<span class="at">alpha =</span> <span class="fl">0.35</span>) <span class="sc">+</span> </span>
+<span id="cb55-9" class="hljs-ln-code"><a href="#cb55-9"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans =</span> <span class="st">"log2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="ridges-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Ridges</h2>
+
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-56-1.png" width="960" class="r-stretch"></section>
+<section id="more-fine-grained-analysis-with-case_when" class="slide level2">
+<h2>More fine-grained analysis with <code>case_when()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a>gapminder <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span> </span>
+<span id="cb56-2"><a href="#cb56-2"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb56-3"><a href="#cb56-3"></a>    region <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Western Europe"</span>, <span class="st">"Northern Europe"</span>,<span class="st">"Southern Europe"</span>, </span>
+<span id="cb56-4"><a href="#cb56-4"></a>                  <span class="st">"Northern America"</span>, <span class="st">"Australia and New Zealand"</span>) <span class="sc">~</span> <span class="st">"West"</span>,</span>
+<span id="cb56-5"><a href="#cb56-5"></a>    region <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Eastern Asia"</span>, <span class="st">"South-Eastern Asia"</span>) <span class="sc">~</span> <span class="st">"East Asia"</span>,</span>
+<span id="cb56-6"><a href="#cb56-6"></a>    region <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Caribbean"</span>, <span class="st">"Central America"</span>, </span>
+<span id="cb56-7"><a href="#cb56-7"></a>                  <span class="st">"South America"</span>) <span class="sc">~</span> <span class="st">"Latin America"</span>,</span>
+<span id="cb56-8"><a href="#cb56-8"></a>    continent <span class="sc">==</span> <span class="st">"Africa"</span> <span class="sc">&amp;</span> </span>
+<span id="cb56-9"><a href="#cb56-9"></a>      region <span class="sc">!=</span> <span class="st">"Northern Africa"</span> <span class="sc">~</span> <span class="st">"Sub-Saharan"</span>,</span>
+<span id="cb56-10"><a href="#cb56-10"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Others"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="ridges-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Ridges</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb57-1" class="hljs-ln-code"><a href="#cb57-1"></a><span class="co">#install.packages("ggridges")</span></span>
+<span id="cb57-2" class="hljs-ln-code"><a href="#cb57-2"></a><span class="fu">library</span>(ggridges)</span>
+<span id="cb57-3" class="hljs-ln-code"><a href="#cb57-3"></a>years <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1970</span>, <span class="dv">2010</span>)</span>
+<span id="cb57-4" class="hljs-ln-code"><a href="#cb57-4"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb57-5" class="hljs-ln-code"><a href="#cb57-5"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> years, <span class="sc">!</span><span class="fu">is.na</span>(dollars_per_day)) <span class="sc">%&gt;%</span></span>
+<span id="cb57-6" class="hljs-ln-code"><a href="#cb57-6"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(year), factor) <span class="sc">%&gt;%</span></span>
+<span id="cb57-7" class="hljs-ln-code"><a href="#cb57-7"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> dollars_per_day, <span class="at">y =</span> year, <span class="at">fill =</span> group)) <span class="sc">+</span> </span>
+<span id="cb57-8" class="hljs-ln-code"><a href="#cb57-8"></a>  <span class="fu">geom_density_ridges</span>(<span class="at">alpha =</span> <span class="fl">0.35</span>, <span class="at">scale =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb57-9" class="hljs-ln-code"><a href="#cb57-9"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans =</span> <span class="st">"log2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="ridges-3" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Ridges</h2>
+
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-59-1.png" width="960" class="r-stretch"></section>
+<section id="stacking-densities" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Stacking densities</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb58-1" class="hljs-ln-code"><a href="#cb58-1"></a>years <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1970</span>, <span class="dv">2010</span>)</span>
+<span id="cb58-2" class="hljs-ln-code"><a href="#cb58-2"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb58-3" class="hljs-ln-code"><a href="#cb58-3"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> years, <span class="sc">!</span><span class="fu">is.na</span>(dollars_per_day)) <span class="sc">%&gt;%</span></span>
+<span id="cb58-4" class="hljs-ln-code"><a href="#cb58-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> dollars_per_day, <span class="at">fill =</span> group)) <span class="sc">+</span> </span>
+<span id="cb58-5" class="hljs-ln-code"><a href="#cb58-5"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">bw=</span> <span class="fl">0.75</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span> </span>
+<span id="cb58-6" class="hljs-ln-code"><a href="#cb58-6"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans =</span> <span class="st">"log2"</span>, <span class="at">limit =</span> <span class="fu">c</span>(<span class="fl">0.125</span>, <span class="dv">300</span>)) <span class="sc">+</span> </span>
+<span id="cb58-7" class="hljs-ln-code"><a href="#cb58-7"></a>  <span class="fu">facet_grid</span>(year <span class="sc">~</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="stacking-densities-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Stacking densities</h2>
+
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-61-1.png" width="960" class="r-stretch"></section>
+<section id="weight-by-population" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Weight by population</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb59-1" class="hljs-ln-code"><a href="#cb59-1"></a>years <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1970</span>, <span class="dv">2010</span>)</span>
+<span id="cb59-2" class="hljs-ln-code"><a href="#cb59-2"></a>gapminder <span class="sc">%&gt;%</span></span>
+<span id="cb59-3" class="hljs-ln-code"><a href="#cb59-3"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> years, <span class="sc">!</span><span class="fu">is.na</span>(dollars_per_day)) <span class="sc">%&gt;%</span></span>
+<span id="cb59-4" class="hljs-ln-code"><a href="#cb59-4"></a>  <span class="fu">group_by</span>(year) <span class="sc">%&gt;%</span></span>
+<span id="cb59-5" class="hljs-ln-code"><a href="#cb59-5"></a>  <span class="fu">mutate</span>(<span class="at">weight =</span> population<span class="sc">/</span><span class="fu">sum</span>(population)<span class="sc">*</span><span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb59-6" class="hljs-ln-code"><a href="#cb59-6"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb59-7" class="hljs-ln-code"><a href="#cb59-7"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> dollars_per_day, <span class="at">fill =</span> group, <span class="at">weight =</span> weight)) <span class="sc">+</span> </span>
+<span id="cb59-8" class="hljs-ln-code"><a href="#cb59-8"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">bw=</span> <span class="fl">0.75</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span> </span>
+<span id="cb59-9" class="hljs-ln-code"><a href="#cb59-9"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans =</span> <span class="st">"log2"</span>, <span class="at">limit =</span> <span class="fu">c</span>(<span class="fl">0.125</span>, <span class="dv">300</span>)) <span class="sc">+</span> </span>
+<span id="cb59-10" class="hljs-ln-code"><a href="#cb59-10"></a>  <span class="fu">facet_grid</span>(year <span class="sc">~</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="weight-by-population-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Weight by population</h2>
+
+<img data-src="12_Data_Visualization_files/figure-revealjs/unnamed-chunk-63-1.png" width="960" class="r-stretch"></section>
 <section id="tip-of-the-iceberg" class="slide level2">
 <h2>Tip of the iceberg</h2>
 <p>See this handy cheatsheet for lots more!</p>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/ggplot2_cheat_sheet.png" width="600"></p>
-</figure>
-</div>
-<div class="footer">
+
+<img data-src="images/ggplot2_cheat_sheet.png" width="600" class="r-stretch quarto-figure-center"><div class="footer">
 <p><a href="https://github.com/rstudio/cheatsheets/blob/main/data-visualization-2.1.pdf" class="uri">https://github.com/rstudio/cheatsheets/blob/main/data-visualization-2.1.pdf</a></p>
 </div>
-<p><img src="images/maxplanck-ie.jpg" class="slide-logo"></p>
-<div class="footer footer-default">
+</section>
+<section id="any-questions" class="slide level2">
+<h2>Any questions?</h2>
+<p>Next, we will learn a bit about tidying data.</p>
+
+<img src="images/maxplanck-ie.jpg" class="slide-logo r-stretch"><div class="footer footer-default">
 
 </div>
 </section>
