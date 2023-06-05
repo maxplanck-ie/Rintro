@@ -28,7 +28,7 @@ jobs:
         run: |
           cat conda_config.yml || true
       - name: Install Conda environment with Micromamba
-        uses: mamba-org/provision-with-micromamba@main
+        uses: mamba-org/setup-micromamba@main
         with:
           environment-file: conda_config.yml
           # environment-name: Rintro2023
