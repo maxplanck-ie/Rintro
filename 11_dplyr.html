@@ -11,7 +11,7 @@
 
 <meta name="author" content="Devon P. Ryan" />
 
-<meta name="date" content="2023-03-16" />
+<meta name="date" content="2023-06-05" />
 
 <title>Manipulating datasets with dplyr</title>
 
@@ -321,7 +321,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Manipulating datasets with dplyr</h1>
 <h4 class="author">Devon P. Ryan</h4>
-<h4 class="date">2023-03-16</h4>
+<h4 class="date">2023-06-05</h4>
 
 </div>
 
@@ -732,23 +732,19 @@ symbols/descriptions.</p>
 ## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <p>Run <strong><code>head()</code></strong> or
 <strong><code>View()</code></strong> on these.</p>
-<pre class="r"><code>tab2 = left_join(tab, anno, by=c(&quot;ENSEMBL&quot; = &quot;Ensembl Gene ID&quot;))</code></pre>
-<pre><code>## Warning in left_join(tab, anno, by = c(ENSEMBL = &quot;Ensembl Gene ID&quot;)): Each row in `x` is expected to match at most 1 row in `y`.
-## i Row 211 of `x` matches multiple rows.
-## i If multiple matches are expected, set `multiple = &quot;all&quot;` to silence this
-##   warning.</code></pre>
-<pre class="r"><code>head(tab2[order(tab2$padj),])</code></pre>
+<pre class="r"><code>tab2 = left_join(tab, anno, by=c(&quot;ENSEMBL&quot; = &quot;Ensembl Gene ID&quot;))
+head(tab2[order(tab2$padj),])</code></pre>
 <pre><code>## # A tibble: 6 x 10
-##   ENSEMBL   baseM~1 log2F~2  lfcSE  stat  pvalue    padj Assoc~3 Descr~4 Entre~5
-##   &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;
-## 1 ENSMUSG0~   1014.   0.497 0.0956  5.20 1.96e-7 0.00212 A33002~ RIKEN ~      NA
-## 2 ENSMUSG0~    284.   0.548 0.110   4.99 6.08e-7 0.00219 Banp    BTG3 a~   53325
-## 3 ENSMUSG0~   1476.  -0.417 0.0833 -5.01 5.42e-7 0.00219 Nov     nephro~   18133
-## 4 ENSMUSG0~    449.   0.426 0.0906  4.70 2.57e-6 0.00484 Ftx     Ftx tr~      NA
-## 5 ENSMUSG0~    615.   0.471 0.0996  4.73 2.26e-6 0.00484 Pxdn    peroxi~   69675
-## 6 ENSMUSG0~    397.   0.663 0.141   4.69 2.68e-6 0.00484 Slit1   slit h~   20562
-## # ... with abbreviated variable names 1: baseMean, 2: log2FoldChange,
-## #   3: `Associated Gene Name`, 4: Description, 5: `EntrezGene ID`</code></pre>
+##   ENSEMBL            baseMean log2FoldChange  lfcSE  stat      pvalue    padj
+##   &lt;chr&gt;                 &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt;
+## 1 ENSMUSG00000096929    1014.          0.497 0.0956  5.20 0.000000196 0.00212
+## 2 ENSMUSG00000025316     284.          0.548 0.110   4.99 0.000000608 0.00219
+## 3 ENSMUSG00000037362    1476.         -0.417 0.0833 -5.01 0.000000542 0.00219
+## 4 ENSMUSG00000086370     449.          0.426 0.0906  4.70 0.00000257  0.00484
+## 5 ENSMUSG00000020674     615.          0.471 0.0996  4.73 0.00000226  0.00484
+## 6 ENSMUSG00000025020     397.          0.663 0.141   4.69 0.00000268  0.00484
+## # i 3 more variables: `Associated Gene Name` &lt;chr&gt;, Description &lt;chr&gt;,
+## #   `EntrezGene ID` &lt;dbl&gt;</code></pre>
 <blockquote>
 <ul>
 <li>Ah, ENSMUSG00000037362 is Nov, a gene involved in wound
@@ -829,14 +825,14 @@ t4 = data_frame(d=rep(c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;), 2),
                 f=runif(6))
 inner_join(t3, t4, by=c(&quot;a&quot;=&quot;d&quot;, &quot;b&quot;=&quot;e&quot;))</code></pre>
 <pre><code>## # A tibble: 6 x 4
-##   a         b      c      f
-##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 A         1 0.813  0.183 
-## 2 B         1 0.887  0.821 
-## 3 C         1 0.351  0.0726
-## 4 A         2 0.218  0.870 
-## 5 B         2 0.615  0.381 
-## 6 C         2 0.0941 0.439</code></pre>
+##   a         b     c     f
+##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 A         1 0.677 0.480
+## 2 B         1 0.570 0.351
+## 3 C         1 0.564 0.379
+## 4 A         2 0.732 0.171
+## 5 B         2 0.216 0.888
+## 6 C         2 0.851 0.186</code></pre>
 <p>By default, joins occur on all columns with the same name across
 tables!</p>
 </div>
