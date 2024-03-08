@@ -24,8 +24,8 @@ Pre-requisites:
 To setup all required packages run the following in the repo root:
 
 ```{bash}
-mamba env create -f conda_config.yml  
-conda activate Rintro2023
+mamba env create -f configs/conda.yml  
+conda activate Rintro
 ```
 
 To render all material into a full web site under `rmd/_site` run
