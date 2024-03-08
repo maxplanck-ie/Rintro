@@ -27,8 +27,8 @@ website:
 format:
   html:
     theme: 
-      light: cosmo
       dark: darkly
+      light: cosmo
     css: styles.css
     code-tools: true
     code-line-numbers: false
