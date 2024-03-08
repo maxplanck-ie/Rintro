@@ -1,0 +1,7 @@
+# This is to keep an empty directory output/ in the github repo
+# It can be used for output that is generated during rendering
+
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore

@@ -1,5 +1,6 @@
 ---
-title: "02: Higher Dimensional Data "
+title: "02: Higher Dimensional Data"
+author: "Thomas Manke"
 categories:
   - iris
   - data frame

@@ -1,5 +1,6 @@
 ---
 title: "03: Getting Data In and Out"
+author: "Thomas Manke"
 categories:
   - files
   - formats
@@ -95,12 +96,12 @@ str(d)
 ## Writing data
 There are many ways to save data to text files. One of the simplest uses `write.csv`.
 ```{r write_csv, eval=FALSE}
-write.csv(iris, file="iris.csv", row.names=FALSE, quote=FALSE)
+write.csv(iris, file="output/iris.csv", row.names=FALSE, quote=FALSE)
 ```
 
 For large data you may prefer to write compressed version:
 ```{r write_gz, eval=FALSE}
-write.csv(iris, gzfile("iris.csv.gz"))
+write.csv(iris, gzfile("output/iris.csv.gz"))
 ```
 
 
@@ -120,11 +121,11 @@ It's very efficient when you exchange your data with other R-users (or your futu
 
 ### Specific objects
 ```{r rdata}
-d = iris              # copy of iris data
-fn="iris.RData"       # filename (and extension) of choice
+d = iris                # copy of iris data
+fn="output/iris.RData"  # filename (and extension) of choice
 save(d, file=fn)
-rm(d)                 # remove object d for illustration - and watch global env
-load(fn)              # reload object d from file - and watch global env
+rm(d)             # remove object d for illustration - and watch global env
+load(fn)          # reload object d from file - and watch global env
 ```
 
 

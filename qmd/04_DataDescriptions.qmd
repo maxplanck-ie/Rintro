@@ -1,0 +1,123 @@
+---
+title: "04: Data Descriptions and Visualizations"
+author: "Thomas Manke"
+categories:
+  - markdown
+  - hist()
+  - cor()
+  - boxplot()
+---
+
+```{r, child="_setup.qmd"}
+```
+    
+# R Markdown
+
+R scripts (.R) help to define and run reproducible analysis workflows, but they lack documentation (other than comments).
+
+R Markdown files (*.Rmd) combine scripts with powerful text formatting.
+They can be rendered (="knit") to produce html and pdf.
+
+
+**Task**:
+In Rstudio, 
+
+- open a new R markdown document with `File > New File > R Markdown...`.
+(This will open a template for an Rmd file that can be knit)
+- To convert this file into html press `Knit` - try it out! You may have to save it first as - e.g. "first.Rmd"
+- There is a `YAML` header that contains parameters which will affect the rendering process - customize them
+- The rest of the document are `text blocks` (with simple format instructions) and `code blocks` (with R code)
+- In R studio, the code blocks can also be run individually using the embedded `Play` button - try it out
+- Play time: Modify the yaml header, text blocks or code - or all of it. "knit" the documnt and observe changes. 
+
+
+***
+
+# Descriptive Statistics
+```{r descriptive}
+summary(iris)
+plot(iris$Petal.Length) # a plot at last. Simple, but many arguments: ?plot 
+hist(iris$Petal.Length) # and a histogram
+```
+
+**Task** hist() can have many arguments. Use help to find out how the histogram can be customized (e.g. number of break points, title, colors). Try some of it.
+
+# Boxplot: a more condensed summary
+```{r}
+boxplot(iris$Petal.Length)
+```
+
+**Task**: The boxplot above is for *all* data. Create a boxplot of petal length for species "setosa" only.
+```{r boxplot, echo=FALSE}
+boxplot(iris$Petal.Length[iris$Species=="setosa"], xlab="setosa", ylab="Petal Length", col="red")
+```
+
+Boxplot understands data frames
+```{r}
+boxplot(iris) 
+```
+
+**Query**: What does the boxplot for Species mean?
+
+
+# Interlude: Factors = categorical variables
+
+Factors denote a special class of R-objects that can be thought of as categories (here: species). They have a given number of *levels* which are internally represented as integers.
+```{r factors}
+class(iris$Species)
+typeof(iris$Species)
+ts=table(iris$Species)  # returns a contigency table ~> histogram for categorical data
+barplot(ts, col=rainbow(3), ylab="observations", cex.names=0.9)
+pie(ts,col=rainbow(3))  # if you really must
+```
+
+***
+
+Boxplot understands factors in data frames
+```{r boxplot_factors}
+boxplot( Petal.Length ~ Species, data = iris, las=2) # what does las=2 do ?
+```
+
+**Task**: Use help to add three different colors:
+```{r colored_boxplot, echo=FALSE}
+# use help to determine how to add colors
+cols=c("red","yellow","blue")
+boxplot( Petal.Length ~ Species, data = iris, las=2,col=cols)
+```
+
+
+# Correlations
+If a data set has many numerical variables we often want to understand their correlations structure
+```{r corr}
+x=iris$Petal.Length
+y=iris$Petal.Width
+plot(x,y)                              # again: this can be customized
+abline(v=mean(x),h=mean(y),col="red")  # add vertical/horizontal lines
+cor(x,y)                               # a correlation coefficient: which one?
+```
+
+# All-Against-All Correlations
+**Task**: remove the Species variable from "iris" and store the result in a new data.frame "niris"
+```{r niris, echo=FALSE}
+niris=iris[,-5]  # generate new data frame without species variable
+str(niris)
+```
+
+```{r all_against_all}
+cor(niris)  # correlation matrix. Which correlation coefficient?
+plot(niris) # provide a visualization for data frames, try also pairs(iris)
+
+# assign species-colors to each observation 
+cols = iris$Species                        # understand how color is defined
+plot(niris, col=cols, lower.panel=NULL)   # "cols" was defined in task above
+```
+
+
+***
+# Review
+* R markdown files extend scripts and can be converted to html/pdf
+* summary for descriptive statistics
+* simple plots with simple commands: plot(), hist(), ...
+* lots of parameters for customization: line width, colours, ...
+* correlation between variables: cor(), plot() - class specific behaviour
+* Notice that the data used was extremely clean and structured: data()

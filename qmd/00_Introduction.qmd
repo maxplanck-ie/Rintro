@@ -1,8 +1,6 @@
 ---
 title: "00: Introduction"
-format: 
-  html:
-    theme: cosmo
+author: "Thomas Manke"
 ---
 
 ### Block 1: Groundwork

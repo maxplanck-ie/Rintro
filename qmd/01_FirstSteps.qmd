@@ -1,5 +1,6 @@
 ---
 title: "01: First Steps"
+author: "Thomas Manke"
 categories:
   - vectors
   - indexing
