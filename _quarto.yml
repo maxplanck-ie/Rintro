@@ -1,0 +1,49 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Rintro 2024"
+
+  navbar:
+    left: 
+      - text: "Modules"
+        icon: book
+        href: qmd/index.qmd
+    right:
+      - text: "GitHub"
+        icon: fa-github
+        href: https://github.com/maxplanck-ie/Rintro/tree/2024.04
+
+
+  page-footer: 
+    left: |
+        Bioinfo Core @ MPI-IE Freiburg (2024) 
+    right:
+      - icon: github
+        href: https://github.com/maxplanck-ie
+
+#    background: "grey"
+format:
+  html:
+    theme: 
+      light: cosmo
+      dark: darkly
+    css: styles.css
+    code-tools: true
+    code-line-numbers: false
+    code-link: false
+    code-fold: true
+    code_folding: hide
+    highlight-style: github
+    highlight: textmate 
+    toc: true
+    toc_depth: 1
+    toc_float: true
+    df_print: paged
+
+execute:
+  freeze: auto
+  
+editor: visual
+

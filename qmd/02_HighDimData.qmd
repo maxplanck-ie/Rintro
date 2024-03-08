@@ -1,0 +1,113 @@
+---
+title: "02: Higher Dimensional Data "
+categories:
+  - iris
+  - data frame
+---
+
+```{r, child="_setup.qmd"}
+```
+   
+**Goal**:  
+Real data is much more complex than simple vectors of numbers or strings.  
+Here we introduce new data structures, important functions, and some more jargon.
+
+
+## data()
+R comes with many pre-defined data sets. They are often used to illustrate statistical problems, data science concepts and functionality of software packages. Just type `data()` to get an overview. 
+
+```{r data_pre, eval=FALSE, echo=TRUE}
+data()
+```
+
+
+One particularly famous data set is `iris`. We will use it throughout this course:
+
+![Flower Measurements](images/sepal_petal.jpeg) 
+
+(Image from blog of mathieu.guillame-bert.com)
+
+
+**Tasks**: Explore the `iris` data set
+
+- Try `?iris` to learn more about this data set.
+- Type `iris` or `View(iris)`. Why is this not the best way to explore data? 
+
+
+**Query:**   
+How many samples and variables does this data set contain?
+
+
+***
+
+## Data Frames
+This iris data object is more complex than simple vectors discussed before. 
+
+Typical commands to explore such data objects are:
+
+```{r explore}
+str(iris)      # the structure
+head(iris)     # the first few lines
+tail(iris,n=3) # last n lines
+
+
+class(iris)    # data frame is a "class"
+summary(iris)  # works well with data_frames
+dim(iris)      # data frames ar 2D objects: rows x columns
+```
+
+Data Frames are built from vectors with identical lengths.
+
+![Image adopted from Michael Stadler (FMI)](images/DataTypes.png) 
+
+***
+
+## Data Frame Access
+
+Programmatic access to specific subsets of data is key to all analyses.  
+There are many basic ways to achieve this - and even more in later sections.
+
+```{r iris_access}
+d=iris    # just to reduce typing
+
+ir=1:3    # vector of row indices
+ic=c(2,5) # vector of col indices
+d[ir,ic]  # selecting specific elements in 2D data frame
+
+ir = c(7,20,19,69)   # just some arbitrary choice of indices
+d[ir,"Species"]      # access by index and column by name
+d$Species[ir]        # the same, more common 
+d[ir,-5]               # unselecting column 5
+```
+
+***
+
+## Conditional Access
+Usually we want to access (or subset) data if certain conditions are met
+
+```{r cond_access}
+# select only species "setosa"
+ib = d$Species == "setosa" 
+d[ib,]
+
+# select species "setosa" and "small Sepal.Width")
+ib=(d$Species=="setosa") & (d$Sepal.Width<3)
+d[ib,]
+```
+**Task**:
+
+- Look at the vector `ib` in the above examples and understand what is meant with "access by truth value". 
+- Modify the criteria and try your own selections.
+
+## Adding Data
+```{r adding_data}
+d$x = 1:3   # simple, but useless
+head(d,10)
+```
+
+***
+# Review
+* pre-compiled data sets
+* data_frames as a class with new functions
+* access by index, name and boolean logic
+
