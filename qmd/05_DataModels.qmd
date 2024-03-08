@@ -11,17 +11,17 @@ categories:
 ```
 
 # Recap: All-Against-All Correlations
-**Task**: remove the Species variable from "iris" and store the result in a new data.frame "niris"
-```{r}
-niris=iris[,-5]  # generate new data frame without species variable
-str(niris)
-```
 
-**Task**: Generate all-against-all correlation plot
+**Task**: Generate all-against-all correlation plot. Understand:
+
+- `cols`
+- selection/unselection of elements `[,-5]`
+- plot() function and arguments
+
 ```{r}
 # assign species-colors to each observation 
-cols = iris$Species                        # understand how color is defined
-pairs(niris, col=cols, lower.panel=NULL)   # "cols" was defined in task above
+cols = iris$Species                            # understand how color is defined
+plot(iris[,-5], col=cols, lower.panel=NULL)   # "cols" was defined in task above
 ```
 
 ***
@@ -83,6 +83,8 @@ methods(class='lm')
 
 
 # Predictions (with confidence intervals)
+
+Uncertainties in parameters become uncertainties in fits:
 ```{r predictions}
 x=iris$Petal.Length                       # explanatory variable from fit (here:Petal.Length)
 xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
@@ -102,7 +104,7 @@ polygon(c(rev(xn), xn), c(rev(p[ ,"upr"]), p[ ,"lwr"]), col = rgb(1,0,0,0.5), bo
 #g + geom_point() + geom_smooth(method="lm", se=TRUE, color="red") + geom_smooth(method="loess", colour="blue")
 ```
 
-# Poor Fit
+# Poor Model
 
 Just replace "Petal" with "Sepal"
 ```{r}
@@ -113,9 +115,10 @@ confint(fit1)                     # estimated slope is indistinguishable from ze
 summary(fit1)
 ```
 *Interpretation*: slope is not significantly distinct from 0.
+Model does not account for much of the observed variation.
 
 
-**Task**: Use the above template to make predictions for the new poor fit.
+**Task**: Use the above template to make predictions for the new poor model.
 ```{r echo=FALSE}
 x=iris$Sepal.Length                       # explanatory variable from fit (here:Sepal.Length)
 xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
