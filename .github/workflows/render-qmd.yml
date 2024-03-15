@@ -48,7 +48,7 @@ jobs:
 
       - name: Installation non-conda packages 
         run: |
-          Rscript -e 'install.packages("dslabs", repos="https://cloud.r-project.org")'
+          Rscript -e 'install.packages(c("dslabs","KernSmooth"), repos="https://cloud.r-project.org")'
 
       - name: Inspect dslabs ext_data
         run: |
