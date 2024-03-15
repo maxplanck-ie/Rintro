@@ -55,17 +55,13 @@ jobs:
           Rscript -e '.libPaths()'
           Rscript -e 'find.package("dslabs")'
           Rscript -e 'list.files(system.file(package="dslabs"))'
-          Rscript -e 'list.files(system.file("extdata", package="dslabs"))' 
-
-      - name: show 
-        run: |
-          ls -Rl "/github/home/micromamba/envs/"
-          ls -Rl "/github/home/micromamba/envs/Rintro/lib/R/library"
-          
+          Rscript -e 'list.files(system.file("extdata", package="dslabs"))'           
 
       - name: Render quarto
-        #continue-on-error: true. # only for error tracking
-        run: quarto render
+        continue-on-error: true. # only for error tracking
+        run: |
+          ls -Rl /github/home/micromamba/envs/Rintro/lib/R/library/dslabs
+          quarto render .
 
       - name: Show all files
         run: ls -Ral
