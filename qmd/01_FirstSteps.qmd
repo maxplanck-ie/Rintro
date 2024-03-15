@@ -56,10 +56,10 @@ There are various different ways to get help
 Use help to find out more about: sqrt, exp or anything else of interest.
 
 # Community help
-* online courses: http://software-carpentry.org/lessons, Coursera, Udacity, ...
+* online courses: https://software-carpentry.org/lessons, Coursera, Udacity, ...
 * bootcamp: https://github.com/jknowles/r_tutorial_ed
-* QuickR: http://www.statmethods.net 
-* http://stackoverflow.com, http://www.r-bloggers.com/
+* QuickR: https://www.statmethods.net 
+* https://stackoverflow.com, https://www.r-bloggers.com/
 
 
 # SessionInfo
