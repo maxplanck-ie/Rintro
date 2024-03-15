@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is testing
 
 on:
   push:
-    branches: ["2023.03"] 
+    branches: ["2024.04"] 
 
 
 jobs:
@@ -26,12 +26,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check yaml
         run: |
-          cat conda_config.yml || true
+          cat configs/config.yml || true
       - name: Install Conda environment with Micromamba
         uses: mamba-org/setup-micromamba@main
         with:
-          environment-file: conda_config.yml
-          # environment-name: Rintro2023
+          environment-file: configs/conda.yml
 
       - name: List Available Environment
         shell: bash -l {0}
@@ -46,20 +45,30 @@ jobs:
           which R || true
           R --version || true
 
-      - name: Render R Markdown and Move Site
-        run: | 
-          Rscript -e "rmarkdown::render_site('rmd')"  
-          mv projects/tidyverse/*_files projects/tidyverse/*.html projects/tidyverse/styles.css rmd/_site/
-          mv projects/tidyverse/images/* rmd/_site/images/
+      - name: Installation non-conda packages 
+        run: |
+          Rscript -e 'install.packages("dslabs", repos="https://cloud.r-project.org")'
+
+      - name: Render quarto
+        #continue-on-error: true. # only for error tracking
+        run: quarto render
 
       - name: Show all files
         run: ls -Ral
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ !env.ACT }}
+      - name: Upload
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: |
-            ./rmd/_site
+          path: ./docs
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
             
