@@ -61,7 +61,7 @@ jobs:
         continue-on-error: true # only for error tracking
         run: |
           ls -Rl /github/home/micromamba/envs/Rintro/lib/R/library/dslabs
-          quarto render .
+          quarto render qmd
 
       - name: Show all files
         run: ls -Ral
