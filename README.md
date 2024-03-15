@@ -28,7 +28,7 @@ mamba env create -f configs/conda.yml
 conda activate Rintro
 
 # dslabs cannot be conda installed
-Rscript -e 'install.packages("dslabs", repos="https://cloud.r-project.org")'
+Rscript -e 'install.packages(c("dslabs","KernSmooth"), repos="https://cloud.r-project.org")'
 ```
 
 To render all material into a full web site under `docs` run
