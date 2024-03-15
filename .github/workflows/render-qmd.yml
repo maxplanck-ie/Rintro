@@ -26,7 +26,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check yaml
         run: |
-          cat configs/config.yml || true
+          cat configs/conda.yml || true
+          
       - name: Install Conda environment with Micromamba
         uses: mamba-org/setup-micromamba@main
         with:
@@ -37,7 +38,7 @@ jobs:
         run: micromamba list
 
       - name: Activate Environment
-        run: micromamba activate Rintro2023
+        run: micromamba activate Rintro
 
       - name: Check Installation
         run: |
