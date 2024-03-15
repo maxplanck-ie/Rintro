@@ -27,7 +27,7 @@ jobs:
       - name: Check yaml
         run: |
           cat configs/conda.yml || true
-          
+
       - name: Install Conda environment with Micromamba
         uses: mamba-org/setup-micromamba@main
         with:
@@ -49,6 +49,14 @@ jobs:
       - name: Installation non-conda packages 
         run: |
           Rscript -e 'install.packages("dslabs", repos="https://cloud.r-project.org")'
+
+      - name: Inspect dslabs ext_data
+        run: |
+          Rscript -e 'list.files(system.file(package="dslabs"))'
+
+      - name: Inspect dslabs ext_data again
+        run: |
+          Rscript -e 'list.files(system.file("extdata", package="dslabs"))'
 
       - name: Render quarto
         #continue-on-error: true. # only for error tracking
