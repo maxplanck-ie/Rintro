@@ -58,7 +58,7 @@ jobs:
           Rscript -e 'list.files(system.file("extdata", package="dslabs"))'           
 
       - name: Render quarto
-        continue-on-error: true. # only for error tracking
+        continue-on-error: true # only for error tracking
         run: |
           ls -Rl /github/home/micromamba/envs/Rintro/lib/R/library/dslabs
           quarto render .
