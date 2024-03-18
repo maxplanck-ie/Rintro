@@ -1,13 +1,15 @@
 ---
-title: "Manipulating datasets with dplyr"
-author: "Devon P. Ryan"
+title: "08: Manipulating datasets with dplyr"
+author: "Juan Caballero"
 date: '`r Sys.Date()`'
-output: html_document
+output:
+  html_document:
+  code_folding: show
+  toc: yes
+  toc_depth: 2
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(cache=TRUE)
+```{r, child="_setup.Rmd"}
 ```
 
 
@@ -118,42 +120,9 @@ d2 %>% filter(!is.na(Value)) %>% summarise(avg=median(Value))
 # Exercise
 
 Going back to the `msleep_ggplot2.txt` file that we loaded earlier, what's the average time (in hours) that primates spend sleeping?
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+
+# Solution
+
 ```{r}
 msleep %>% filter(order == 'Primates') %>% summarise(ave=mean(sleep_total))
 ```
@@ -177,42 +146,9 @@ There are 8 results. Why? What happens if we swap the order of **Group** and **W
 # Exercise
 
 Again, using the `msleep_ggplot2.txt` dataset, what is the average sleep time per order?
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+
+# Solution
+
 ```{r}
 msleep %>% group_by(order) %>% summarise(ave=mean(sleep_total))
 ```

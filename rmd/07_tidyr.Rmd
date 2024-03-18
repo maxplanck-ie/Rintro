@@ -1,32 +1,49 @@
 ---
-title: "Tidying a mess of data"
-author: "Devon P. Ryan"
+title: "07: Tidyr - dealing with messy data"
+author: "Juan Caballero"
 date: '`r Sys.Date()`'
-output: html_document
+output: 
+  html_document:
+  code_folding: show
+  toc: yes
+  toc_depth: 2
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(cache=TRUE)
+```{r, child="_setup.Rmd"}
 ```
 
 # Initial setup
 
-Before continuing, please run the following:
+In case you are not using Workbench, please install the following packages:
 
-```{r install, echo=TRUE, eval=FALSE}
-install.packages(c("readr", "tidyr", "dplyr", "ggplot2", "devtools"))
+```{r install, eval=FALSE}
+install.packages(c(
+  "readr",
+  "tidyr",
+  "dplyr",
+  "ggplot2",
+  "devtools"
+))
 ```
+
+# Material credits
+
+- This course content has been evolving since its conception
+- It is heavily influenced by Rafael Irizarry's book "*Introduction to Data Science*" and his corresponding course on EdX.
+- It also draws on material from previous MPI R-courses by
+  - Devon Ryan
+  - David Koppstein
 
 # Real data is very messy
 
 - Typically not in a usable format
 - Random empty values
 - Poorly coded treatments
+- Even worse if humans capture the data manually
 
 This **always** happens with other's datasets.
 
-The process of correcting all of this is called "munging."
+The process of correcting all of this is called **data munging**.
 
 # With great power comes great annoyance
 
@@ -36,6 +53,7 @@ Congrats, you're now the R gal/guy. Everyone will now ask you for help and their
   - Missing values
   - Random coding, like "--" for missing
   - Multiple entries/column
+  - Also, Excel it's dangeorus (*Genes* as *Dates*) and should be avoided if possible
 
 | | Day | Escape Time | Distance Traveled | Quadrant Occupancy |
 |-|:---:|:-----------:|:-----------------:|:------------------:|
@@ -103,8 +121,8 @@ problems(df1)
 | `col_skip()` | _ | |
 | `col_number()` | n | "500.25???" |
 
-
-- Open the xlsx file in eXcel/Openoffice
+# Real example: MouseFoodExperiment
+- Open the *../data/MouseFoodExperiment.xlsx* file in Excel/LibreOffice
   - Multiple levels of headers?!?!
   - Empty columns
   - Missing values
@@ -128,9 +146,9 @@ File structure:
 - 17 columns of measurements (group 2)
 
 ```{r, echo=TRUE}
-#I've taken care of changing "," to ".", since this sometimes causes problems,
-#but note that you can handle different locales with locale=blah
-#blah = locale("en", decimal_mark=",") # stupid commas
+# We've taken care of changing "," to ".", since this sometimes causes problems,
+# but note that you can handle different locales with locale=blah
+# blah = locale("en", decimal_mark=",") # stupid commas
 d = read_csv("../data/foodIntake2.csv", skip=1)
 head(d, n=1)
 tail(d, n=1)
@@ -169,6 +187,7 @@ New school: **x %>% h() %>% g() %>% f()**
 
 >- More typing...
 >- but more logical
+>- also it is based on *data flows|streams*
 
 # tidyr/dplyr %>% 
 
@@ -190,7 +209,7 @@ Let's gather everything together so we have something like:
 ```{r, echo=TRUE}
 d2 = d %>% select(-Skip) %>% gather(Cage, Value, -Week)
 head(d2) # or "d2 %>% head()"
-tail(d2)
+tail(d2) # or "d2 %>% tail()"
 ```
 
 The syntax for `gather()` is `d %>% gather(Key, Value, ...)`. `Key` becomes a column containing the original column names. `Value` then becomes a column of the values, matched to their original columns. `...` defines columns for inclusion/exclusion. Excluding `Week` results in it being added as a new column.
@@ -226,42 +245,8 @@ Load the `msleep_ggplot2.txt` dataset that's in the `data/` folder. This is a da
 
 Use `filter()` to select only primates. How many of the animals in the table are primates (try the `nrow()` function)?
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+# Solution
+
 ```{r, echo=TRUE}
 msleep = read_tsv("../data/msleep_ggplot2.txt")
 head(msleep)

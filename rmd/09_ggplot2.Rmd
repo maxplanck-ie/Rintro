@@ -1,13 +1,15 @@
 ---
-title: "Advanced plotting with ggplot2"
-author: "Devon P. Ryan"
+title: "09: Advanced plotting with ggplot2"
+author: "Juan Caballero"
 date: '`r Sys.Date()`'
-output: html_document
+output:
+  html_document:
+  code_folding: show
+  toc: yes
+  toc_depth: 2
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(cache=TRUE)
+```{r, child="_setup.Rmd"}
 ```
 
 # Initial setup
@@ -25,9 +27,9 @@ d2 = d %>% select(-Skip) %>% gather(Cage, Value, -Week)
 d2$Group = c(rep(rep("Control", 33), 18), rep(rep("Treatment", 33), 17))
 ```
 
-This is the messy "food intake in two groups of mice over time" dataset from the tidyr section.
+This is the messy *food intake in two groups of mice over time* dataset from the tidyr section.
 
-Also, load/install ggplot2
+Also, load ggplot2
 
 ```{r}
 #install.packages("ggplot2") #If you need it
@@ -78,7 +80,7 @@ ggplot(data = d2, aes(x = Week, y = Value)) +
   geom_point()
 ```
 
-- These `geoms` often have additional aesthetics:
+- These `geoms` often have additional aestinstallhetics:
 
 Notes:
 
@@ -131,12 +133,7 @@ ggplot(data = d3, aes(x=Week, y=Value)) +
 
 Can you make a scatter plot that also includes lines?
 
-
-
-
-
-
-
+# Solution
 
 ```{r}
 ggplot(d2, aes(x = Week, y = Value)) +
