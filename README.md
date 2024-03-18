@@ -1,11 +1,11 @@
-# Rintro 2023
+# Rintro 2024
 
 This repository contains material for our course: Introduction to R-language.
 
 This branch can be downloaded as zip archive (using the `Code` button above) or cloned such:
 
 ```{bash}
-git clone -b 2023.03 git@github.com:maxplanck-ie/Rintro.git
+git clone -b 2024.04 git@github.com:maxplanck-ie/Rintro.git
 ```
 
 # For participants
@@ -24,13 +24,16 @@ Pre-requisites:
 To setup all required packages run the following in the repo root:
 
 ```{bash}
-mamba env create -f conda_config.yml  
-conda activate Rintro2023
+mamba env create -f configs/conda.yml  
+conda activate Rintro
+
+# dslabs cannot be conda installed
+Rscript -e 'install.packages(c("dslabs","KernSmooth"), repos="https://cloud.r-project.org")'
 ```
 
-To render all material into a full web site under `rmd/_site` run
+To render all material into a full web site under `docs` run
 ```{bash}
-Rscript -e "rmarkdown::render_site('rmd')" 
+quarto render qmd
 ```
 
 The same is available also here: https://maxplanck-ie.github.io/Rintro/

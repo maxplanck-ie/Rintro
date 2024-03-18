@@ -1,0 +1,148 @@
+---
+title: "P02: Sampling; Monty Hall Problem"
+author: "Thomas Manke"
+categories:
+  - Monty Hall
+  - sample
+  - function
+  - script
+  - Bayes Theorem
+---
+
+# The Game
+A showmaster presents three closed doors (1,2,3) to a candidate. Only behind one random door is a price (i.e a car).
+The canddiate is asked to pick one of the doors. Afterwards, the showmaster opens one of the other two doors which does not contain the price.
+Now two doors are still closed and the candidate has the choice to *either stick* to the original choice, *or switch* to the other closed door.  
+
+**Query**: which strategy is more likely to succeed in winning the price?
+
+
+# Simulation in R
+Define the three doors, only one of which hides a price - the winning door "W". The other two doors are loosers (L1 and L2)
+```{r}
+doors=c("W","L1","L2")
+doors
+```
+
+## Sampling
+First assume that the doors are shuffled randomly
+```{r}
+doors=sample(doors) # Why does this amount to shuffling?
+doors
+```
+
+Now the candidate picks a random door "pick" (hoping that it might be the winning door)
+```{r}
+pick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)
+pick
+```
+
+
+## A Function
+Only the show master knows the winning door. Depending on the picked door, the show master will reveal one door that does _not_ contain the price, and _not_ the picked door. This is a more complex task than simple samping - so let's write a function that depends on "pick" and the doors content
+
+```{r function_open_door}
+open_door = function(pick, doors) {
+  # masters choices are limited: do not reveal "win" and do not reveal "pick"
+  choices = doors[ doors != "W" & doors != pick ]
+  return (sample(choices,1))
+}
+```
+
+Now let's use the function to open a door
+```{r}
+open = open_door(pick,doors)
+open
+```
+Notice that the showmaster does not really have a choice when the candidate has picked a loosing door (2/3 of the time).
+
+Now the candidate has the choice to switch to the other remaining door (not open, not previously picked).  
+
+To repeat the **question**: Will the switching strategy be more successful?
+```{r}
+switch=doors[ doors != pick & doors != open]  
+paste(switch)
+```
+
+With three doors, the candidate has only two choices to stay with "pick" or to switch to "switch"
+
+The above results from sampling will vary (for each candiate and participant of the R-course). Now let's play this game N times. The goal is to count the number of successes for the switching strategy. 
+
+## An R-script
+We want to execute the commands above repeatedly.
+To this end the console is not very useful. Therefore we leave the console for a moment, and first collect the individual commands in a file (an Rscript). Thankfully Rstudio also has an editor for such purposes.
+
+**Task**: Open (a new and empty) Rscript file. Include the definition of the function "open_door" and save the lines below in a file called MontyHall.R.
+
+**Tip**: Almost all command lines are already in your history, where you have tested that they are working properly. In the history panel, you can select those lines and send them "To Source", i.e the newly opened file. This should avoid redundant typing and errors. All you need to do is to wrap the commands into the *for* loop.
+
+```{r, eval=FALSE}
+#Comment Line: A small Rscript to simulate the Monty Hall Problem
+doors=c("W","L1","L2")
+N=10000
+success=0
+for (i in 1:N){
+  doors = sample(doors)                           # shuffle doors
+  pick  = sample(doors,1)                         # candidate picks one door at random
+  open  = open_door(pick,doors)                   # show master picks one other door (!= pick != win)
+  switch= doors[ doors != pick & doors != open]   # candidate has choice to switch
+  if (switch=="W") { success=success+1}           # count if switching strategy is successful (= "win")
+}
+
+cat("successes with switching= ",success, "success_rate: ", success/N, "\n")
+```
+
+Congratulations! You have just written your first "R script".
+Save it with some suitable name. Return to the console and execute the script using the *source* command
+```{r}
+source("MontyHall.R")
+```
+
+You can share the script easily with all people who speak R -- especially those who don't like to switch.
+
+***
+
+# Bayesian Treatment
+If you prefer paper and pencil, this is how to solve this problem analytically.
+
+**Prior Probabilities**: 
+
+$$
+Pr(1=car)=Pr(2=car)=Pr(3=car)=\frac{1}{3}
+$$
+
+Assume that the candidate picks door 1 and the showmaster opens door 2 (up to relabeling). Now the candidate would like to know
+
+**Posterior Probability**: $Pr(3=car|2=shown)= ?$
+
+**Bayes Theorem** (for events $A$ and $B$): 
+$$
+Pr(A,B) = Pr(A|B)Pr(B) = Pr(B|A)Pr(A)
+$$
+
+Updating Probabilities (given new data):
+$$
+Pr(3=car|2=shown)=\frac{Pr(2=shown|3=car)Pr(3=car) }{Pr(2=shown)}\\
+Pr(1=car|2=shown)=\frac{Pr(2=shown|1=car)Pr(1=car) }{Pr(2=shown)}
+$$
+
+Updating ratios:
+$$
+\frac{Pr(3=car|2=shown)} {Pr(1=car|2=shown)} =\frac{Pr(2=shown|3=car) }{Pr(2=shown|1=car) } \frac{Pr(3=car)} {Pr(1=car)} \\
+ = \frac{1}{1/2} = 2
+$$
+
+**Result**
+
+$$
+      Pr(3=car|2=shown) = 2 \times Pr(1=car|2=shown)
+$$
+
+# Review
+* solving problems (in R) with simulations
+* writing functions to encapsulate more complex tasks
+* loops (for) and conditionals (if)
+* selection/exclusion in vector
+* sample()
+* writing and running R-scripts: `source("Rscript.R")`
+* (Bayes Theorem: updating probabilities)

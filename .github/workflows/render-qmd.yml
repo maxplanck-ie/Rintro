@@ -1,0 +1,84 @@
+name: Rintro2HTML
+run-name: ${{ github.actor }} is testing
+
+on:
+  push:
+    branches: ["2024.04"] 
+
+
+jobs:
+  
+  build:
+    name: Conda Tests
+    runs-on: ubuntu-latest
+    defaults:
+       run:
+         shell: bash -l {0}
+    container: node:latest
+
+    steps:
+      - name: Print shell information
+        run: |
+          echo "Shell: $SHELL"
+          echo "Shell version: $($SHELL --version)"
+          uname -a || true
+
+      - uses: actions/checkout@v2
+      - name: Check yaml
+        run: |
+          cat configs/conda.yml || true
+
+      - name: Install Conda environment with Micromamba
+        uses: mamba-org/setup-micromamba@main
+        with:
+          environment-file: configs/conda.yml
+
+      - name: List Available Environment
+        shell: bash -l {0}
+        run: micromamba list
+
+      - name: Activate Environment
+        run: micromamba activate Rintro
+
+      - name: Check Installation
+        run: |
+          echo "after conda activate Rintro: PATH=$PATH;"
+          which R || true
+          R --version || true
+
+      - name: Installation non-conda packages 
+        run: |
+          Rscript -e 'install.packages(c("dslabs","KernSmooth"), repos="https://cloud.r-project.org")'
+
+      - name: Inspect dslabs ext_data
+        run: |
+          Rscript -e '.libPaths()'
+          Rscript -e 'find.package("dslabs")'
+          Rscript -e 'list.files(system.file(package="dslabs"))'
+          Rscript -e 'list.files(system.file("extdata", package="dslabs"))'           
+
+      - name: Render quarto
+        continue-on-error: true # only for error tracking
+        run: |
+          ls -Rl /github/home/micromamba/envs/Rintro/lib/R/library/dslabs
+          quarto render qmd
+
+      - name: Show all files
+        run: ls -Ral
+
+      - name: Upload
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+            
