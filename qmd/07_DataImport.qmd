@@ -114,7 +114,7 @@ Read the following data into a tibble. Give it the following column names: `star
 #| echo: true
 library(dslabs)
 path <- system.file("extdata", package="dslabs")
-fullpath <- file.path(path, "HRList2.txt")
+fullpath <- file.path(path, "HRlist2.txt")
 ```
 
 ## Quick exercise {auto-animate="true"}
@@ -125,7 +125,7 @@ Read the following data into a tibble. Give it the following column names: `star
 #| echo: true
 library(dslabs)
 path <- system.file("extdata", package="dslabs")
-full_path <- file.path(path, "HRList2.txt")
+full_path <- file.path(path, "HRlist2.txt")
 read_lines(full_path, n_max = 3)
 ```
 
@@ -137,7 +137,7 @@ Read the following data into a tibble. Give it the following column names: `star
 #| echo: true
 library(dslabs)
 path <- system.file("extdata", package="dslabs")
-full_path <- file.path(path, "HRList2.txt")
+full_path <- file.path(path, "HRlist2.txt")
 read_lines(full_path, n_max = 3)
 ```
 
@@ -149,7 +149,7 @@ Read the following data into a tibble. Give it the following column names: `star
 #| echo: true
 library(dslabs)
 path <- system.file("extdata", package="dslabs")
-full_path <- file.path(path, "HRList2.txt")
+full_path <- file.path(path, "HRlist2.txt")
 tbl <- read_table(full_path)
 head(tbl)
 ```
@@ -162,7 +162,7 @@ Read the following data into a tibble. Give it the following column names: `star
 #| echo: true
 library(dslabs)
 path <- system.file("extdata", package="dslabs")
-full_path <- file.path(path, "HRList2.txt")
+full_path <- file.path(path, "HRlist2.txt")
 tbl <- read_table(full_path, col_names = c("star", "magnitude", "temp", "type"))
 head(tbl)
 ```
