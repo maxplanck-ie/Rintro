@@ -1,17 +1,10 @@
 ---
-title: "13: Tidy Data"
-author: "David Koppstein"
-format: 
-  revealjs:
-    toc: false
-    slide-number: true
-    chalkboard: 
-      buttons: false
-    preview-links: auto
-    logo: images/maxplanck-ie.jpg
-    css: styles.css
-    theme: night
+title: "10: Tidy Data"
+author: "Juan Caballero"
 ---
+
+```{r, child="_setup.qmd"}
+```
 
 ## What is Tidy Data? 
 
@@ -478,15 +471,11 @@ co2_stats %>%
 
 ## Any questions?
 
-![](images/tidyr_cheat_sheet.png)
+![](images/complaining-data-science-data-science.jpg)
 
 ::: footer
 <https://github.com/rstudio/cheatsheets/blob/main/tidyr.pdf>
 :::
 
-## Thank you! 
 
-- The Koppstein lab will be starting at Uniklinik Düsseldorf in a few months
-- There is a position for a Ph.D student interested in genomic and bioinformatic methods applied to blood and brain cancers
-- E-mail [David.Koppstein@gmail.com](David.Koppstein@gmail.com) if you or anyone else are interested!
 

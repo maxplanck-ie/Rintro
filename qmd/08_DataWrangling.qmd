@@ -1,17 +1,10 @@
 ---
-title: "11: Intro to Data Wrangling with Dplyr"
-author: "David Koppstein"
-format:
-  revealjs:
-    toc: false
-    slide-number: true
-    chalkboard: 
-      buttons: false
-    preview-links: auto
-    logo: images/maxplanck-ie.jpg
-    css: styles.css
-    theme: night
+title: "08: Intro to Data Wrangling with Dplyr"
+author: "Juan Caballero"
 ---
+
+```{r, child="_setup.qmd"}
+```
 
 ## Introduction to Dplyr {auto-animate="true"}
 
@@ -356,7 +349,6 @@ murders %>% arrange(desc(rate)) %>% head()
 ```
 
 Side note 1: You can also use the `slice_max` function
-Side note 2: Why would Washington DC have a much higher murder rate than all the other states?
 
 ## Exercises with gapminder
 

@@ -1,22 +1,14 @@
 ---
-title: "10: Data Import with Tidyverse"
-author: "David Koppstein"
-format: 
-  revealjs:
-    toc: false
-    slide-number: true
-    chalkboard: 
-      buttons: false
-    preview-links: auto
-    logo: images/maxplanck-ie.jpg
-    footer: <https://maxplanck-ie.github.io/Rintro>
-    css: styles.css
-    theme: night
+title: "07: Data Import with Tidyverse"
+author: "Juan Caballero"
 ---
+
+```{r, child="_setup.qmd"}
+```
 
 ## Before we begin
 
--   If you haven't already, please execute the following code:
+-   If you are not using Workbench, please install the following packages:
 
 ```{r}
 #| eval: false
@@ -26,15 +18,16 @@ install.packages("dslabs")
 ```
 
 -   The first command will install a large set of packages that are designed to work together, including ggplot2.
--   The second command installs some datasets we will use from Rafael Irizarry's book, "Introduction to Data Science."
+-   The second command installs some datasets we will use from Rafael Irizarry's book, "*Introduction to Data Science*"
 
 ## Credit
 
 -   This presentation is heavily influenced by Rafael Irizarry's book [Introduction to Data Science](https://rafalab.dfci.harvard.edu/dsbook) and his corresponding course on EdX.
--   It also draws on material from previous MPI R courses given by Devon Ryan.
+-   It also draws on material from previous MPI R courses given by Devon Ryan and David Koppstein.
 
-![](images/irizarry.jpg){.absolute bottom="25" left="100" width="250"} 
-![](images/devon.jpg){.absolute bottom="25" left="800" width="250"}
+![](images/Rafael_Irizarry.jpg){.absolute bottom="25" left="100" width="250"} 
+![](images/Devon_Ryan.jpeg){.absolute bottom="25" left="450" width="250"}
+![](images/David_Koppstein.jpg){.absolute bottom="25" left="800" width="250"}
 
 ::: footer
 <https://www.edx.org/bio/rafael-irizarry>
@@ -50,7 +43,7 @@ install.packages("dslabs")
 
 ## Data Import in the Tidyverse
 
-The first step for any analysis is importing the data into a machine-readable format. The tidyverse offers the `readr::` and `readxl::` packages, as we have just recently seen.
+The first step for any analysis is importing the data into a machine-readable format. The tidyverse offers the `readr::` and `readxl::` packages.
 
 ## Data Import in the Tidyverse
 
@@ -58,7 +51,7 @@ The first step for any analysis is importing the data into a machine-readable fo
 #| echo: true
 # set path to the location for raw data files in the dslabs package and list files
 library(dslabs)
-path <- system.file("extdata", package="dslabs")
+path = system.file("extdata", package="dslabs")
 list.files(path)
 ```
 

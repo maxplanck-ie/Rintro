@@ -1,17 +1,10 @@
 ---
-title: "12: Data visualization with ggplot2"
-author: "David Koppstein"
-format: 
-  revealjs:
-    toc: false
-    slide-number: true
-    chalkboard: 
-      buttons: false
-    preview-links: auto
-    logo: images/maxplanck-ie.jpg
-    css: styles.css
-    theme: night
+title: "09: Data visualization with ggplot2"
+author: "Juan Caballero"
 ---
+
+```{r, child="_setup.qmd"}
+```
 
 ## What is ggplot2?
 
@@ -30,7 +23,7 @@ format:
 -   Plots in **ggplot2** consist of 3 main components:
     -   Data: The dataset being summarized
     -   Geometry: The type of plot (scatterplot, boxplot, barplot, histogram, qqplot, smooth density, etc.)
-    -   Aesthetic mapping: Variables mapped to visual cues, such as x-axis and y-axis values and color
+    -   Aesthetic mapping: Variables mapped to visual cues, such as x-axis and y-axis values and colors
 
 ## Graph components {auto-animate="true"}
 
