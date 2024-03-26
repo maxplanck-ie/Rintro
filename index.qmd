@@ -2,7 +2,7 @@
 This lecture series is written in R Markdown and is publically available as github repository. 
 
 
-![Github link. https://github.com/maxplanck-ie/Rintro.git](images/Rintro_QR.png)
+![Github link. https://github.com/maxplanck-ie/Rintro.git](qmd/images/Rintro_QR.png)
 
 >  Be aware that this course has seen various iterations - selecting the **correct** branch is crucial to avoid mix ups 
 
