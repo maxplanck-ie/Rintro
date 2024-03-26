@@ -9,7 +9,7 @@ git clone -b 2024.04 git@github.com:maxplanck-ie/Rintro.git
 ```
 
 # For participants
-All lecture material can be found as r-markdown files in the `rmd/` sub-directory. 
+All lecture material can be found as quarto files in the `qmd/` sub-directory. 
 You can load and explore those individually in your Rstudio session. 
 
 The early parts of this series should work in any R environment.  
@@ -27,8 +27,8 @@ To setup all required packages run the following in the repo root:
 mamba env create -f configs/conda.yml  
 conda activate Rintro
 
-# dslabs cannot be conda installed
-Rscript -e 'install.packages(c("dslabs","KernSmooth"), repos="https://cloud.r-project.org")'
+# install packages that cannot be conda/mamba installed
+Rscript -e 'install.packages(c("KernSmooth"), repos="https://cloud.r-project.org")'
 ```
 
 To render all material into a full web site under `docs` run
