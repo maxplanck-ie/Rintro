@@ -54,7 +54,7 @@ rna_exp = rna %>%
   select(gene, sample, expression)
 
 rna_exp
-
+readxl
 ```
 
 ## Dplyr in action - `pivot_wider()` {auto-animate="true"}
@@ -238,7 +238,7 @@ Load the annotation table
 ```{r}
 #| echo: true
 
-annot_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/annnot1.csv"
+annot_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/annot1.csv"
 
 annot = read_csv(annot_file)
 
