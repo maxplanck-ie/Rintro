@@ -188,6 +188,8 @@ dim(rna)
 
 ```{r}
 #| echo: true
+library(readxl)
+
 full_url = "https://github.com/maxplanck-ie/Rintro/raw/2024.04/qmd/data/2010_bigfive_regents.xls"
 
 download.file(url=full_url, destfile="2010_bigfive_regents.xls")
