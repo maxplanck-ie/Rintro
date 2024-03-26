@@ -54,7 +54,7 @@ rna_exp = rna %>%
   select(gene, sample, expression)
 
 rna_exp
-readxl
+
 ```
 
 ## Dplyr in action - `pivot_wider()` {auto-animate="true"}
