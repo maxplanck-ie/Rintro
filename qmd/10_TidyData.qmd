@@ -265,6 +265,7 @@ In case the names don't match, we need to define specific variables names for me
 
 ```{r}
 #| echo: true
+#| eval: false
 
 full_join(rna_mini, annot, by = c("gene" = "gene_symbol"))
 
