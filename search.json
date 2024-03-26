@@ -1,0 +1,1066 @@
+[
+  {
+    "objectID": "qmd/00_Introduction.html",
+    "href": "qmd/00_Introduction.html",
+    "title": "00: Introduction",
+    "section": "",
+    "text": "Block 1: Groundwork\n\nStarting RStudio: a GUI for R\nSimple functions (input, output, parameters & help)\nData: I/O, Types, Formats & Structures\n\n\n\nBlock 2: Speaking about Data\n\nData Descriptions\nData Visualization: simple plots and advanced heatmaps\nData Models: linear models\n\n\n\nBlock 3: Open the universe\n\ninstalling and using packages\ntidyverse: data cleaning, filtering, merging\n\n\n\nBlock 4: Advanced topics and case studies\n\nR scripts, R markdown & reproducible analyses\ndata exploration\n\n\n\n\nGoals:\nAfter the course you will be able to\n\nunderstand the basic syntax of R\nfind help for more nifty problems\ninstall and use packages for your specific questions\nsee the limitations of EXCEL\nunderstand the importance of structured data\nunderstand some bioinformatics jargon\nunderstand common difficulties in data analysis\nincrease the value of your CV\nproduce figures such as\n\n\n\n\nTypical examples from R.\n\n\n\n\n\nNon-Goals:\nThis course does not teach\n\nprogramming new tools: focus on existing tools\nbioinformatics: BSc course (3 yrs ++)\nNGS analysis: other programs (Linux, Galaxy, deepTools)\n\n\n\n\nWhy R ?\n\nStandard software for data analysis, statistics, and visualization\nfree and community support\nmany packages available (for data I/O, manipulation, high-end: expression analysis)\ngood compromise between flexibility (programming) and box-solutions (packages)\nsuitable for very large dataset (filtering, merging)\ninteractive and scripting\nnot the best solution for everything (e.g. mapping)\nfrequent requirement during (bioinformatics) hiring\n\n\n\n\nEmbrace the learning curve\n\nsteep (but rewarding)\nFirst hurdles:\n\nit’s a new language: vocabulary & grammar\nchoices: many ways to say (to program) the same things\nmore choices: many (redundant) packages\ncomputers are stubborn and stupid: they do not think along\n\nMore hurdles\n\ncase sensitivity: \\(a \\ne A\\)\nparameter sensitivity\nsofware dependencies\n\n\n\n\n\nStart Rstudio"
+  },
+  {
+    "objectID": "qmd/S03_Colours.html",
+    "href": "qmd/S03_Colours.html",
+    "title": "S03: Colours",
+    "section": "",
+    "text": "Colours\nColours can be referenced in different ways:\n\n\nCode\nplot(iris$Petal.Length, col = \"red\")      # by name: try colours()\n\n\n\n\n\n\n\n\n\nCode\nplot(iris$Petal.Length, col = rgb(0,0,1)) # by RGB-value: ?rgb\n\n\n\n\n\n\n\n\n\nCode\nplot(iris$Petal.Length, col = 3)          # by index into color palette: ?palette()\n\n\n\n\n\n\n\n\n\n\n\nPalettes\nPalettes can be used to refer to colour by index.\n\n\nCode\nmycol=c(\"black\", \"skyblue\", \"maroon2\")     # define your own set of colours; Warning: don't overdo \npalette(mycol) \nplot(iris$Petal.Length, col=iris$Species)\n\n\n\n\n\n\n\n\n\nCode\npalette(\"default\")                         # not the best?\nplot(iris$Petal.Length, col=iris$Species)\n\n\n\n\n\n\n\n\n\nCode\npalette(\"Set 1\")                           # check palette.pals() for more choices\nplot(iris$Petal.Length, col=iris$Species)\n\n\n\n\n\n\n\n\n\n\n\n… and there is more\nLots of studies have been made on the choice of appropriate colour schemes: https://colorbrewer2.org\nThere are additional packages to simplify the choice of palette\n\n\nCode\nlibrary(RColorBrewer)\nmy_col=brewer.pal(4, \"Dark2\")\npalette(my_col)\nplot(iris$Petal.Length, col=iris$Species)"
+  },
+  {
+    "objectID": "qmd/02_HighDimData.html",
+    "href": "qmd/02_HighDimData.html",
+    "title": "02: Higher Dimensional Data",
+    "section": "",
+    "text": "Goal:\nReal data is much more complex than simple vectors of numbers or strings.\nHere we introduce new data structures, important functions, and some more jargon."
+  },
+  {
+    "objectID": "qmd/02_HighDimData.html#data",
+    "href": "qmd/02_HighDimData.html#data",
+    "title": "02: Higher Dimensional Data",
+    "section": "data()",
+    "text": "data()\nR comes with many pre-defined data sets. They are often used to illustrate statistical problems, data science concepts and functionality of software packages. Just type data() to get an overview.\n\n\nCode\ndata()\n\n\nOne particularly famous data set is iris. We will use it throughout this course:\n\n\n\nFlower Measurements\n\n\n(Image from blog of mathieu.guillame-bert.com)\nTasks: Explore the iris data set\n\nTry ?iris to learn more about this data set.\nType iris or View(iris). Why is this not the best way to explore data?\n\nQuery:\nHow many samples and variables does this data set contain?"
+  },
+  {
+    "objectID": "qmd/02_HighDimData.html#data-frames",
+    "href": "qmd/02_HighDimData.html#data-frames",
+    "title": "02: Higher Dimensional Data",
+    "section": "Data Frames",
+    "text": "Data Frames\nThis iris data object is more complex than simple vectors discussed before.\nTypical commands to explore such data objects are:\n\n\nCode\nstr(iris)      # the structure\n\n\n'data.frame':   150 obs. of  5 variables:\n $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...\n $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...\n $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...\n $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...\n $ Species     : Factor w/ 3 levels \"setosa\",\"versicolor\",..: 1 1 1 1 1 1 1 1 1 1 ...\n\n\nCode\nhead(iris)     # the first few lines\n\n\n  Sepal.Length Sepal.Width Petal.Length Petal.Width Species\n1          5.1         3.5          1.4         0.2  setosa\n2          4.9         3.0          1.4         0.2  setosa\n3          4.7         3.2          1.3         0.2  setosa\n4          4.6         3.1          1.5         0.2  setosa\n5          5.0         3.6          1.4         0.2  setosa\n6          5.4         3.9          1.7         0.4  setosa\n\n\nCode\ntail(iris,n=3) # last n lines\n\n\n    Sepal.Length Sepal.Width Petal.Length Petal.Width   Species\n148          6.5         3.0          5.2         2.0 virginica\n149          6.2         3.4          5.4         2.3 virginica\n150          5.9         3.0          5.1         1.8 virginica\n\n\nCode\nclass(iris)    # data frame is a \"class\"\n\n\n[1] \"data.frame\"\n\n\nCode\nsummary(iris)  # works well with data_frames\n\n\n  Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   \n Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  \n 1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  \n Median :5.800   Median :3.000   Median :4.350   Median :1.300  \n Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199  \n 3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800  \n Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500  \n       Species  \n setosa    :50  \n versicolor:50  \n virginica :50  \n                \n                \n                \n\n\nCode\ndim(iris)      # data frames ar 2D objects: rows x columns\n\n\n[1] 150   5\n\n\nData Frames are built from vectors with identical lengths.\n\n\n\nImage adopted from Michael Stadler (FMI)"
+  },
+  {
+    "objectID": "qmd/02_HighDimData.html#data-frame-access",
+    "href": "qmd/02_HighDimData.html#data-frame-access",
+    "title": "02: Higher Dimensional Data",
+    "section": "Data Frame Access",
+    "text": "Data Frame Access\nProgrammatic access to specific subsets of data is key to all analyses.\nThere are many basic ways to achieve this - and even more in later sections.\n\n\nCode\nd=iris    # just to reduce typing\n\nir=1:3    # vector of row indices\nic=c(2,5) # vector of col indices\nd[ir,ic]  # selecting specific elements in 2D data frame\n\n\n  Sepal.Width Species\n1         3.5  setosa\n2         3.0  setosa\n3         3.2  setosa\n\n\nCode\nir = c(7,20,19,69)   # just some arbitrary choice of indices\nd[ir,\"Species\"]      # access by index and column by name\n\n\n[1] setosa     setosa     setosa     versicolor\nLevels: setosa versicolor virginica\n\n\nCode\nd$Species[ir]        # the same, more common \n\n\n[1] setosa     setosa     setosa     versicolor\nLevels: setosa versicolor virginica\n\n\nCode\nd[ir,-5]               # unselecting column 5\n\n\n   Sepal.Length Sepal.Width Petal.Length Petal.Width\n7           4.6         3.4          1.4         0.3\n20          5.1         3.8          1.5         0.3\n19          5.7         3.8          1.7         0.3\n69          6.2         2.2          4.5         1.5"
+  },
+  {
+    "objectID": "qmd/02_HighDimData.html#conditional-access",
+    "href": "qmd/02_HighDimData.html#conditional-access",
+    "title": "02: Higher Dimensional Data",
+    "section": "Conditional Access",
+    "text": "Conditional Access\nUsually we want to access (or subset) data if certain conditions are met\n\n\nCode\n# select only species \"setosa\"\nib = d$Species == \"setosa\" \nd[ib,]\n\n\n   Sepal.Length Sepal.Width Petal.Length Petal.Width Species\n1           5.1         3.5          1.4         0.2  setosa\n2           4.9         3.0          1.4         0.2  setosa\n3           4.7         3.2          1.3         0.2  setosa\n4           4.6         3.1          1.5         0.2  setosa\n5           5.0         3.6          1.4         0.2  setosa\n6           5.4         3.9          1.7         0.4  setosa\n7           4.6         3.4          1.4         0.3  setosa\n8           5.0         3.4          1.5         0.2  setosa\n9           4.4         2.9          1.4         0.2  setosa\n10          4.9         3.1          1.5         0.1  setosa\n11          5.4         3.7          1.5         0.2  setosa\n12          4.8         3.4          1.6         0.2  setosa\n13          4.8         3.0          1.4         0.1  setosa\n14          4.3         3.0          1.1         0.1  setosa\n15          5.8         4.0          1.2         0.2  setosa\n16          5.7         4.4          1.5         0.4  setosa\n17          5.4         3.9          1.3         0.4  setosa\n18          5.1         3.5          1.4         0.3  setosa\n19          5.7         3.8          1.7         0.3  setosa\n20          5.1         3.8          1.5         0.3  setosa\n21          5.4         3.4          1.7         0.2  setosa\n22          5.1         3.7          1.5         0.4  setosa\n23          4.6         3.6          1.0         0.2  setosa\n24          5.1         3.3          1.7         0.5  setosa\n25          4.8         3.4          1.9         0.2  setosa\n26          5.0         3.0          1.6         0.2  setosa\n27          5.0         3.4          1.6         0.4  setosa\n28          5.2         3.5          1.5         0.2  setosa\n29          5.2         3.4          1.4         0.2  setosa\n30          4.7         3.2          1.6         0.2  setosa\n31          4.8         3.1          1.6         0.2  setosa\n32          5.4         3.4          1.5         0.4  setosa\n33          5.2         4.1          1.5         0.1  setosa\n34          5.5         4.2          1.4         0.2  setosa\n35          4.9         3.1          1.5         0.2  setosa\n36          5.0         3.2          1.2         0.2  setosa\n37          5.5         3.5          1.3         0.2  setosa\n38          4.9         3.6          1.4         0.1  setosa\n39          4.4         3.0          1.3         0.2  setosa\n40          5.1         3.4          1.5         0.2  setosa\n41          5.0         3.5          1.3         0.3  setosa\n42          4.5         2.3          1.3         0.3  setosa\n43          4.4         3.2          1.3         0.2  setosa\n44          5.0         3.5          1.6         0.6  setosa\n45          5.1         3.8          1.9         0.4  setosa\n46          4.8         3.0          1.4         0.3  setosa\n47          5.1         3.8          1.6         0.2  setosa\n48          4.6         3.2          1.4         0.2  setosa\n49          5.3         3.7          1.5         0.2  setosa\n50          5.0         3.3          1.4         0.2  setosa\n\n\nCode\n# select species \"setosa\" and \"small Sepal.Width\")\nib=(d$Species==\"setosa\") & (d$Sepal.Width&lt;3)\nd[ib,]\n\n\n   Sepal.Length Sepal.Width Petal.Length Petal.Width Species\n9           4.4         2.9          1.4         0.2  setosa\n42          4.5         2.3          1.3         0.3  setosa\n\n\nTask:\n\nLook at the vector ib in the above examples and understand what is meant with “access by truth value”.\nModify the criteria and try your own selections."
+  },
+  {
+    "objectID": "qmd/02_HighDimData.html#adding-data",
+    "href": "qmd/02_HighDimData.html#adding-data",
+    "title": "02: Higher Dimensional Data",
+    "section": "Adding Data",
+    "text": "Adding Data\n\n\nCode\nd$x = 1:3   # simple, but useless\nhead(d,10)\n\n\n   Sepal.Length Sepal.Width Petal.Length Petal.Width Species x\n1           5.1         3.5          1.4         0.2  setosa 1\n2           4.9         3.0          1.4         0.2  setosa 2\n3           4.7         3.2          1.3         0.2  setosa 3\n4           4.6         3.1          1.5         0.2  setosa 1\n5           5.0         3.6          1.4         0.2  setosa 2\n6           5.4         3.9          1.7         0.4  setosa 3\n7           4.6         3.4          1.4         0.3  setosa 1\n8           5.0         3.4          1.5         0.2  setosa 2\n9           4.4         2.9          1.4         0.2  setosa 3\n10          4.9         3.1          1.5         0.1  setosa 1"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#what-is-ggplot2",
+    "href": "qmd/09_DataVisualization.html#what-is-ggplot2",
+    "title": "09: Data visualization with ggplot2",
+    "section": "What is ggplot2?",
+    "text": "What is ggplot2?\n\nggplot2 is part of the tidyverse, a set of packages created by Hadley Wickham.\nggplot2 implements a grammar of graphics to enable creation of plots from modular building blocks\nggplot2 is designed to work with tidy data (we’ll get into this later today)."
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#graph-components",
+    "href": "qmd/09_DataVisualization.html#graph-components",
+    "title": "09: Data visualization with ggplot2",
+    "section": "Graph components",
+    "text": "Graph components\n\nPlots in ggplot2 consist of 3 main components:\n\nData: The dataset being summarized\nGeometry: The type of plot (scatterplot, boxplot, barplot, histogram, qqplot, smooth density, etc.)\nAesthetic mapping: Variables mapped to visual cues, such as x-axis and y-axis values and colors\n\n\nggplot(data = &lt;DATA&gt;, mapping = aes(&lt;MAPPINGS&gt;)) +  &lt;GEOM_FUNCTION&gt;()"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#graph-components-1",
+    "href": "qmd/09_DataVisualization.html#graph-components-1",
+    "title": "09: Data visualization with ggplot2",
+    "section": "Graph components",
+    "text": "Graph components\ngeoms\n\ngeom_point() for scatter plots, dot plots, etc.\ngeom_histogram() for histograms\ngeom_boxplot() for, well, boxplots!\ngeom_line() for trend lines, time series, etc.\nand many more …"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#graph-components-2",
+    "href": "qmd/09_DataVisualization.html#graph-components-2",
+    "title": "09: Data visualization with ggplot2",
+    "section": "Graph components",
+    "text": "Graph components\n\nThere are additional components:\n\nScale\nLabels, Title, Legend\nTheme/Style"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#our-dataset",
+    "href": "qmd/09_DataVisualization.html#our-dataset",
+    "title": "09: Data visualization with ggplot2",
+    "section": "Our dataset",
+    "text": "Our dataset\n\nlibrary(tidyverse)\n\nrnaseq_file = \"https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv\"\n\nrna = read_csv(rnaseq_file)\n\nrna \n\n# A tibble: 32,428 x 19\n   gene    sample  expression organism   age sex   infection strain  time tissue\n   &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n 1 Asl     GSM254~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 2 Apod    GSM254~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 3 Cyp2d22 GSM254~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 4 Klk6    GSM254~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 5 Fcrls   GSM254~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 6 Slc2a4  GSM254~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 7 Exd2    GSM254~       1619 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 8 Gjc2    GSM254~        288 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 9 Plp1    GSM254~      43217 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n10 Gnb4    GSM254~       1071 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n# i 32,418 more rows\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_histogram",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_histogram",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_histogram()",
+    "text": "ggplot2 in action - geom_histogram()\n\nggplot(data = rna, mapping = aes(x = expression)) +\n  geom_histogram()"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_histogram-1",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_histogram-1",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_histogram()",
+    "text": "ggplot2 in action - geom_histogram()\nGeoms have their own parameters, example bins for geom_histogram()\n\nggplot(data = rna, mapping = aes(x = expression)) +\n  geom_histogram(bins = 15)"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_histogram-2",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_histogram-2",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_histogram()",
+    "text": "ggplot2 in action - geom_histogram()\nWe can use a variable to store a template\n\n# Assign plot to a variable\nrna_plot = ggplot(data = rna,\n                   mapping = aes(x = expression))\n\n# Draw the plot\nrna_plot + geom_histogram()"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_histogram-3",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_histogram-3",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_histogram()",
+    "text": "ggplot2 in action - geom_histogram()\nWe can combine operations to improve the plotting, let’s do a histogram for log2(expression)\n\n# Add a new variable for the log2 values\nrna &lt;- rna %&gt;%\n  mutate(expression_log = log2(expression + 1))\n\n# Draw the plot\n\nggplot(rna, aes(x = expression_log)) + geom_histogram()\n\n\nWe can also use axis scale such as scale_x_log10(), but could not be ideal"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_points()",
+    "text": "ggplot2 in action - geom_points()\nFor scatter plots we can use geom_points()\nLet’s plot the log2 fold changes of expression comparing time 8 versus time 0, and time 4 versus time 0. To this end, we first need to compute the means of the log-transformed expression values by gene and time, then the log fold changes by subtracting the mean log expressions between time 8 and time 0 and between time 4 and time 0. Note that we also include here the gene biotype that we will use later on to represent the genes"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-1",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-1",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_points()",
+    "text": "ggplot2 in action - geom_points()\nNote that are we using “escaped” numbers\n\nrna_fc = rna %&gt;% select(gene, time,\n                         gene_biotype, expression_log) %&gt;%\n  group_by(gene, time, gene_biotype) %&gt;%\n  summarize(mean_exp = mean(expression_log)) %&gt;%\n  pivot_wider(names_from = time,\n              values_from = mean_exp) %&gt;%\n  mutate(time_8_vs_0 = `8` - `0`, time_4_vs_0 = `4` - `0`)\n\nrna_fc\n\n# A tibble: 1,474 x 7\n# Groups:   gene [1,474]\n   gene     gene_biotype     `0`   `4`   `8` time_8_vs_0 time_4_vs_0\n   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;\n 1 AI504432 lncRNA         10.0  10.1   9.97     -0.0357     0.0754 \n 2 AW046200 lncRNA          7.28  7.23  6.35     -0.930     -0.0497 \n 3 AW551984 protein_coding  7.86  7.26  8.19      0.334     -0.596  \n 4 Aamp     protein_coding 12.2  12.2  12.2       0.0391     0.0754 \n 5 Abca12   protein_coding  2.51  2.34  2.33     -0.180     -0.173  \n 6 Abcc8    protein_coding 11.3  11.3  11.2      -0.164      0.0234 \n 7 Abhd14a  protein_coding  9.20  9.08  8.75     -0.445     -0.115  \n 8 Abi2     protein_coding 12.2  12.2  12.3       0.0158    -0.00129\n 9 Abi3bp   protein_coding 10.2  10.0   9.57     -0.622     -0.154  \n10 Abl2     protein_coding 11.1  11.0  11.1      -0.0271    -0.0793 \n# i 1,464 more rows"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-2",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-2",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_points()",
+    "text": "ggplot2 in action - geom_points()\nNow, we can plot\n\nggplot(data = rna_fc, mapping = aes(x = time_4_vs_0, y = time_8_vs_0)) +\n  geom_point()"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-3",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-3",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_points()",
+    "text": "ggplot2 in action - geom_points()\nToo many points …, let’s reduce overplotting with alpha\n\nggplot(data = rna_fc, mapping = aes(x = time_4_vs_0, y = time_8_vs_0)) +\n  geom_point(alpha = 0.3)"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-4",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-4",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_points()",
+    "text": "ggplot2 in action - geom_points()\nI would like more colors …\n\nggplot(data = rna_fc, mapping = aes(x = time_4_vs_0, y = time_8_vs_0)) +\n  geom_point(alpha = 0.3, color = \"blue\")"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-5",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-5",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_points()",
+    "text": "ggplot2 in action - geom_points()\nCan we color by a categorie (gene_biotype)? Sure …\n\nggplot(data = rna_fc, mapping = aes(x = time_4_vs_0, y = time_8_vs_0)) +\n  geom_point(alpha = 0.3, aes(color = gene_biotype))"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-6",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-6",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_points()",
+    "text": "ggplot2 in action - geom_points()\nColor by categorie can be defined before the geom call\n\nggplot(data = rna_fc, mapping = aes(x = time_4_vs_0, y = time_8_vs_0,\n                                color = gene_biotype)) +\n  geom_point(alpha = 0.3)"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-7",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_points-7",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_points()",
+    "text": "ggplot2 in action - geom_points()\nAdding additional elements, such as a diagonal with geom_abline()\n\nggplot(data = rna_fc, mapping = aes(x = time_4_vs_0, y = time_8_vs_0,\n                                color = gene_biotype)) +\n  geom_point(alpha = 0.3) +\n  geom_abline(intercept = 0)"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_boxplot",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_boxplot",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_boxplot()",
+    "text": "ggplot2 in action - geom_boxplot()\nBoxplots are good to visualize distributions, let’s see gene expression over samples\n\nggplot(data = rna,\n         mapping = aes(y = expression_log, x = sample)) +\n  geom_boxplot()"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_boxplot-1",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_boxplot-1",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_boxplot()",
+    "text": "ggplot2 in action - geom_boxplot()\nWe can add the points over the boxplot with geom_jitter()\n\nggplot(data = rna,\n         mapping = aes(y = expression_log, x = sample)) +\n  geom_jitter(alpha = 0.2, color = \"tomato\") +\n  geom_boxplot(alpha = 0)"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_boxplot-2",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_boxplot-2",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_boxplot()",
+    "text": "ggplot2 in action - geom_boxplot()\nBut I can’t read the labels!!\ntheme can be used to modify the axis labels\n\nggplot(data = rna,\n         mapping = aes(y = expression_log, x = sample)) +\n  geom_jitter(alpha = 0.2, color = \"tomato\") +\n  geom_boxplot(alpha = 0) +\n  theme(axis.text.x = element_text(angle = 90,  hjust = 0.5, vjust = 0.5))"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_boxplot-3",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_boxplot-3",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_boxplot()",
+    "text": "ggplot2 in action - geom_boxplot()\nCan we color each sample per time point? Sure …\n\n# time as integer\nggplot(data = rna,\n         mapping = aes(y = expression_log,\n                       x = sample)) +\n  geom_jitter(alpha = 0.2, aes(color = time)) +\n  geom_boxplot(alpha = 0) +\n  theme(axis.text.x = element_text(angle = 90,  hjust = 0.5, vjust = 0.5))\n\n\nIs this what we want?"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_boxplot-4",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_boxplot-4",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_boxplot()",
+    "text": "ggplot2 in action - geom_boxplot()\nCan we color each sample per time point? Sure …\n\n# time as factor\nggplot(data = rna,\n         mapping = aes(y = expression_log,\n                       x = sample)) +\n  geom_jitter(alpha = 0.2, aes(color = as.factor(time))) +\n  geom_boxplot(alpha = 0) +\n  theme(axis.text.x = element_text(angle = 90,  hjust = 0.5, vjust = 0.5))\n\n\nBetter …"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_violin",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_violin",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_violin()",
+    "text": "ggplot2 in action - geom_violin()\nSame information can be plot in a Violin plot\n\nggplot(data = rna,\n         mapping = aes(y = expression_log, x = sample)) +\n  geom_violin(aes(fill = as.factor(time))) +\n  theme(axis.text.x = element_text(angle = 90,  hjust = 0.5, vjust = 0.5))"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_violin-1",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_violin-1",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_violin()",
+    "text": "ggplot2 in action - geom_violin()\nBut now I want to see colors by sex … OK\n\nggplot(data = rna,\n         mapping = aes(y = expression_log, x = sample)) +\n  geom_violin(aes(fill = sex)) +\n  theme(axis.text.x = element_text(angle = 90,  hjust = 0.5, vjust = 0.5))"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_line",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_line",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_line()",
+    "text": "ggplot2 in action - geom_line()\ngeom_line() can be used to generate “line” plots …\nLet’s generate a dataset of the mean expression per duration of the infection for the 10 genes having the highest log fold changes comparing time 8 versus time 0.\n\nrna_fc = rna_fc %&gt;% arrange(desc(time_8_vs_0))\n\ngenes_selected = rna_fc$gene[1:10]\n\nsub_rna &lt;- rna %&gt;%\n    filter(gene %in% genes_selected)\n\nmean_exp_by_time &lt;- sub_rna %&gt;%\n  group_by(gene,time) %&gt;%\n    summarize(mean_exp = mean(expression_log))\n\nmean_exp_by_time\n\n# A tibble: 30 x 3\n# Groups:   gene [10]\n   gene   time mean_exp\n   &lt;chr&gt; &lt;dbl&gt;    &lt;dbl&gt;\n 1 Acr       0     5.07\n 2 Acr       4     5.54\n 3 Acr       8     7.31\n 4 Aipl1     0     3.70\n 5 Aipl1     4     3.89\n 6 Aipl1     8     6.56\n 7 Bst1      0     3.20\n 8 Bst1      4     3.77\n 9 Bst1      8     5.22\n10 Chil3     0     4.00\n# i 20 more rows"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_line-1",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_line-1",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_line()",
+    "text": "ggplot2 in action - geom_line()\nNow, we can plot the patterns\n\nggplot(data = mean_exp_by_time,\n       mapping = aes(x = time, y = mean_exp, group = gene)) +\n  geom_line()\n\n\nWhy do we need group?"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_line-2",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---geom_line-2",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - geom_line()",
+    "text": "ggplot2 in action - geom_line()\nAdding colors and gene labels\n\nggplot(data = mean_exp_by_time,\n       mapping = aes(x = time, y = mean_exp, color = gene)) +\n  geom_line()\n\n\nNo group because …"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---facet_wrap",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---facet_wrap",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - facet_wrap()",
+    "text": "ggplot2 in action - facet_wrap()\nWe can plot multiple elements in a single plot separately with facet_wrap()\n\nggplot(data = mean_exp_by_time,\n       mapping = aes(x = time, y = mean_exp)) + geom_line() +\n  facet_wrap(~ gene)"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---facet_wrap-1",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---facet_wrap-1",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - facet_wrap()",
+    "text": "ggplot2 in action - facet_wrap()\nBy default, all scales are the same, to avoid this:\n\nggplot(data = mean_exp_by_time,\n       mapping = aes(x = time, y = mean_exp)) +\n  geom_line() +\n  facet_wrap(~ gene, scales = \"free_y\")"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---facet_wrap-2",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---facet_wrap-2",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - facet_wrap()",
+    "text": "ggplot2 in action - facet_wrap()\nTo plot the same per sex, we need to generate a new dataset\n\nmean_exp_by_time_sex &lt;- sub_rna %&gt;%\n  group_by(gene, time, sex) %&gt;%\n    summarize(mean_exp = mean(expression_log))\n\nmean_exp_by_time_sex\n\n# A tibble: 60 x 4\n# Groups:   gene, time [30]\n   gene   time sex    mean_exp\n   &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;\n 1 Acr       0 Female     5.13\n 2 Acr       0 Male       5.00\n 3 Acr       4 Female     5.93\n 4 Acr       4 Male       5.15\n 5 Acr       8 Female     7.27\n 6 Acr       8 Male       7.36\n 7 Aipl1     0 Female     3.67\n 8 Aipl1     0 Male       3.73\n 9 Aipl1     4 Female     4.07\n10 Aipl1     4 Male       3.72\n# i 50 more rows"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---facet_wrap-3",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---facet_wrap-3",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - facet_wrap()",
+    "text": "ggplot2 in action - facet_wrap()\nNow we plot …\n\nggplot(data = mean_exp_by_time_sex,\n       mapping = aes(x = time, y = mean_exp, color = sex)) +\n  geom_line() +\n  facet_wrap(~ gene, scales = \"free_y\")"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---theme_bw",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---theme_bw",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - theme_bw()",
+    "text": "ggplot2 in action - theme_bw()\nFor printing we could want to save ink, ggplot2 supports themes such as theme_bw()\n\nggplot(data = mean_exp_by_time_sex,\n       mapping = aes(x = time, y = mean_exp, color = sex)) +\n  geom_line() +\n  facet_wrap(~ gene, scales = \"free_y\") +\n  theme_bw() +\n  theme(panel.grid = element_blank())\n\n\n\nhttps://ggplot2.tidyverse.org/reference/ggtheme.html"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---customization",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---customization",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - customization",
+    "text": "ggplot2 in action - customization\nMany elements can be configured individually, helping to obtain the exact plot you want\n\nggplot(data = mean_exp_by_time_sex,\n       mapping = aes(x = time, y = mean_exp, color = sex)) +\n  geom_line() +\n  facet_wrap(~ gene, scales = \"free_y\") +\n  theme_bw() +\n  theme(panel.grid = element_blank()) +\n  labs(title = \"Mean gene expression by duration of the infection\",\n       x = \"Duration of the infection (in days)\",\n       y = \"Mean gene expression\")  +\n  theme(text = element_text(size = 16),\n        axis.text.x = element_text(colour = \"royalblue4\", size = 12),\n        axis.text.y = element_text(colour = \"royalblue4\", size = 12),\n        panel.grid = element_line(colour=\"lightsteelblue1\"),\n        legend.position = \"top\")"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#ggplot2-in-action---ggsave",
+    "href": "qmd/09_DataVisualization.html#ggplot2-in-action---ggsave",
+    "title": "09: Data visualization with ggplot2",
+    "section": "ggplot2 in action - ggsave()",
+    "text": "ggplot2 in action - ggsave()\nAt the end, we would like to save our gorgeous plot, we can use ggsave().\n\nmy_plot = ggplot(data = mean_exp_by_time_sex,\n       mapping = aes(x = time, y = mean_exp, color = sex)) +\n  geom_line() +\n  facet_wrap(~ gene, scales = \"free_y\") +\n  labs(title = \"Mean gene expression by duration of the infection\",\n         x = \"Duration of the infection (in days)\",\n         y = \"Mean gene expression\") +\n  guides(color=guide_legend(title=\"Gender\")) +\n  theme_bw() +\n  theme(axis.text.x = element_text(colour = \"royalblue4\", size = 12),\n        axis.text.y = element_text(colour = \"royalblue4\", size = 12),\n        text = element_text(size = 16),\n        panel.grid = element_line(colour=\"lightsteelblue1\"),\n        legend.position = \"top\")\n\nggsave(\"mean_exp_by_time_sex.png\", my_plot, width = 15,\n       height = 10)"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#tip-of-the-iceberg",
+    "href": "qmd/09_DataVisualization.html#tip-of-the-iceberg",
+    "title": "09: Data visualization with ggplot2",
+    "section": "Tip of the iceberg",
+    "text": "Tip of the iceberg\nSee this handy cheatsheet for lots more!\n\n\nhttps://github.com/rstudio/cheatsheets/blob/main/data-visualization.pdf"
+  },
+  {
+    "objectID": "qmd/09_DataVisualization.html#any-questions",
+    "href": "qmd/09_DataVisualization.html#any-questions",
+    "title": "09: Data visualization with ggplot2",
+    "section": "Any questions?",
+    "text": "Any questions?\nNext, we will learn a bit about tidying data."
+  },
+  {
+    "objectID": "qmd/P02_MontyHall_and_scripts.html",
+    "href": "qmd/P02_MontyHall_and_scripts.html",
+    "title": "P02: Sampling; Monty Hall Problem",
+    "section": "",
+    "text": "A showmaster presents three closed doors (1,2,3) to a candidate. Only behind one random door is a price (i.e a car). The canddiate is asked to pick one of the doors. Afterwards, the showmaster opens one of the other two doors which does not contain the price. Now two doors are still closed and the candidate has the choice to either stick to the original choice, or switch to the other closed door.\nQuery: which strategy is more likely to succeed in winning the price?"
+  },
+  {
+    "objectID": "qmd/P02_MontyHall_and_scripts.html#sampling",
+    "href": "qmd/P02_MontyHall_and_scripts.html#sampling",
+    "title": "P02: Sampling; Monty Hall Problem",
+    "section": "Sampling",
+    "text": "Sampling\nFirst assume that the doors are shuffled randomly\n\n\nCode\ndoors=sample(doors) # Why does this amount to shuffling?\ndoors\n\n\n[1] \"L2\" \"L1\" \"W\" \n\n\nNow the candidate picks a random door “pick” (hoping that it might be the winning door)\n\n\nCode\npick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)\npick\n\n\n[1] \"W\""
+  },
+  {
+    "objectID": "qmd/P02_MontyHall_and_scripts.html#a-function",
+    "href": "qmd/P02_MontyHall_and_scripts.html#a-function",
+    "title": "P02: Sampling; Monty Hall Problem",
+    "section": "A Function",
+    "text": "A Function\nOnly the show master knows the winning door. Depending on the picked door, the show master will reveal one door that does not contain the price, and not the picked door. This is a more complex task than simple samping - so let’s write a function that depends on “pick” and the doors content\n\n\nCode\nopen_door = function(pick, doors) {\n  # masters choices are limited: do not reveal \"win\" and do not reveal \"pick\"\n  choices = doors[ doors != \"W\" & doors != pick ]\n  return (sample(choices,1))\n}\n\n\nNow let’s use the function to open a door\n\n\nCode\nopen = open_door(pick,doors)\nopen\n\n\n[1] \"L2\"\n\n\nNotice that the showmaster does not really have a choice when the candidate has picked a loosing door (2/3 of the time).\nNow the candidate has the choice to switch to the other remaining door (not open, not previously picked).\nTo repeat the question: Will the switching strategy be more successful?\n\n\nCode\nswitch=doors[ doors != pick & doors != open]  \npaste(switch)\n\n\n[1] \"L1\"\n\n\nWith three doors, the candidate has only two choices to stay with “pick” or to switch to “switch”\nThe above results from sampling will vary (for each candiate and participant of the R-course). Now let’s play this game N times. The goal is to count the number of successes for the switching strategy."
+  },
+  {
+    "objectID": "qmd/P02_MontyHall_and_scripts.html#an-r-script",
+    "href": "qmd/P02_MontyHall_and_scripts.html#an-r-script",
+    "title": "P02: Sampling; Monty Hall Problem",
+    "section": "An R-script",
+    "text": "An R-script\nWe want to execute the commands above repeatedly. To this end the console is not very useful. Therefore we leave the console for a moment, and first collect the individual commands in a file (an Rscript). Thankfully Rstudio also has an editor for such purposes.\nTask: Open (a new and empty) Rscript file. Include the definition of the function “open_door” and save the lines below in a file called MontyHall.R.\nTip: Almost all command lines are already in your history, where you have tested that they are working properly. In the history panel, you can select those lines and send them “To Source”, i.e the newly opened file. This should avoid redundant typing and errors. All you need to do is to wrap the commands into the for loop.\n\n\nCode\n#Comment Line: A small Rscript to simulate the Monty Hall Problem\ndoors=c(\"W\",\"L1\",\"L2\")\nN=10000\nsuccess=0\nfor (i in 1:N){\n  doors = sample(doors)                           # shuffle doors\n  pick  = sample(doors,1)                         # candidate picks one door at random\n  open  = open_door(pick,doors)                   # show master picks one other door (!= pick != win)\n  switch= doors[ doors != pick & doors != open]   # candidate has choice to switch\n  if (switch==\"W\") { success=success+1}           # count if switching strategy is successful (= \"win\")\n}\n\ncat(\"successes with switching= \",success, \"success_rate: \", success/N, \"\\n\")\n\n\nCongratulations! You have just written your first “R script”. Save it with some suitable name. Return to the console and execute the script using the source command\n\n\nCode\nsource(\"MontyHall.R\")\n\n\nsuccesses with switching=  6556 success_rate:  0.6556 \nsuccesses with switching=  6680 success_rate:  0.668 \n\n\nYou can share the script easily with all people who speak R – especially those who don’t like to switch."
+  },
+  {
+    "objectID": "qmd/03_GettingData.html",
+    "href": "qmd/03_GettingData.html",
+    "title": "03: Getting Data In and Out",
+    "section": "",
+    "text": "Goal: Ultimately we want to access our own data and write results to file."
+  },
+  {
+    "objectID": "qmd/03_GettingData.html#lecture-material",
+    "href": "qmd/03_GettingData.html#lecture-material",
+    "title": "03: Getting Data In and Out",
+    "section": "Lecture material",
+    "text": "Lecture material\nThis lecture series is written in R Markdown and is publically available as github repository.\n\n\n\nGithub link. https://github.com/maxplanck-ie/Rintro.git\n\n\n\nBe aware that this course has seen various iterations - selecting the correct branch is crucial to avoid mix ups\n\nYou can access this material in various different ways:\n\ndownload as zip archive and unpack\nRstudio/Git: open a new Rproject (“New Project &gt; Version Control &gt; Git &gt; ) and provide the same link as Repository URL. Find the git tab and make sure to select the relevant branch.\n\nNotice 1:\nThe rmd files are provided for your convenience. This should save some typing (and common errors).\nHowever, this is an interactive course, so please use the code, understand it, change it, and break it !\nNotice 2:\nWe may update this material during the course ! If you want to retain and edit your own material make sure to save it somewhere differently.\nIf you use git you might want to checkout a different local branch and pull only to the original branch if an update is announced."
+  },
+  {
+    "objectID": "qmd/03_GettingData.html#csv-files",
+    "href": "qmd/03_GettingData.html#csv-files",
+    "title": "03: Getting Data In and Out",
+    "section": "CSV files",
+    "text": "CSV files\nComma-separated text files (ASCII) are both human and machine readible. Other separators may be chosen (tab or “|”). This format is frequently used for simple data, such as rows of different samples/observations and columns of multiple variables (per sample)\nImportant: Make sure that you know the precise location of your data file and provide this as filename.\nTopics:\n\nhome and working directory\nrelative and absolute path\n\n\n\nCode\ngetwd()                     # working directory\ndir()                       # display content\nfilename='../data/iris.csv' # relative to wd\nd = read.csv(filename)      # file content --&gt; memory (d)\nstr(d)\n\n\nThere are many different ways to load such data into memory and to customize the loading.\nTasks: - Explore ?read.csv to get a first overview how this function can be customized. - How would you read only the first 10 lines? - Explore the data object d - Optional bonus: try your own file and brace! Is it clean enough?"
+  },
+  {
+    "objectID": "qmd/03_GettingData.html#from-url",
+    "href": "qmd/03_GettingData.html#from-url",
+    "title": "03: Getting Data In and Out",
+    "section": "From URL",
+    "text": "From URL\nNotice that files do not need to be available locally, but might be provided by some URL.\nBe aware that in those cases there might be significant reduced loading speed, depending on your network connections.\n\n\nCode\nfilename='https://raw.githubusercontent.com/maxplanck-ie/Rintro/2023.03/data/iris.tsv'\nd = read.csv(filename, sep='\\t')  \nstr(d)"
+  },
+  {
+    "objectID": "qmd/03_GettingData.html#compressed-formats",
+    "href": "qmd/03_GettingData.html#compressed-formats",
+    "title": "03: Getting Data In and Out",
+    "section": "Compressed formats",
+    "text": "Compressed formats\nEspecially for big data it is common to store them in compressed format (e.g. *gz) to reduced the storage footprint and speed-up data transfer. Such files are not human readable (binary) can also be read\n\n\nCode\ncmd = \"gunzip -c ../data/iris.tsv.gz\"   # command to uncompress\nd = read.csv(pipe(cmd), sep='\\t')       # read as pipe\nstr(d)\n\n\n'data.frame':   150 obs. of  5 variables:\n $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...\n $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...\n $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...\n $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...\n $ Species     : chr  \"setosa\" \"setosa\" \"setosa\" \"setosa\" ..."
+  },
+  {
+    "objectID": "qmd/03_GettingData.html#writing-data",
+    "href": "qmd/03_GettingData.html#writing-data",
+    "title": "03: Getting Data In and Out",
+    "section": "Writing data",
+    "text": "Writing data\nThere are many ways to save data to text files. One of the simplest uses write.csv.\n\n\nCode\nwrite.csv(iris, file=\"output/iris.csv\", row.names=FALSE, quote=FALSE)\n\n\nFor large data you may prefer to write compressed version:\n\n\nCode\nwrite.csv(iris, gzfile(\"output/iris.csv.gz\"))\n\n\nTask:\n\nChange some of the parameters (row.names, quote) and observed their effect on the resulting file\nSave only the subset of flowers where Species=“setosa” to a file setosa.tsv"
+  },
+  {
+    "objectID": "qmd/03_GettingData.html#rdata",
+    "href": "qmd/03_GettingData.html#rdata",
+    "title": "03: Getting Data In and Out",
+    "section": "RData",
+    "text": "RData\nIn the context of the R-programming language, RData is a very convenient (binary) format that can be used to save multiple data structures or even whole environments It’s very efficient when you exchange your data with other R-users (or your future self)\n\nSpecific objects\n\n\nCode\nd = iris                # copy of iris data\nfn=\"output/iris.RData\"  # filename (and extension) of choice\nsave(d, file=fn)\nrm(d)             # remove object d for illustration - and watch global env\nload(fn)          # reload object d from file - and watch global env\n\n\n\n\nTask: All objects\nSometimes we want to save all objects and variable that have accumulated in the “Global Environment” - just to be sure. This task test some jargon, familiarity with directory structure and ability to find help. Please try it yourself.\n\nCreate a new data object for the iris data set as before and additional variables for your favorite numbers and perhaps some favorite strings.\nSave the whole environment (using save.image())\nDelete the whole environment aka “workspace”; e.g. using rm(list=ls())\nReload the environment and confirm that you successfully recreated all objects\nDetermine your current working directory (&gt;getwd())\nLocate saved image on disk and inspect its size. Delete it if you prefer.\n\n\n\nCode\n# your code snippet here\n\n\nNotice: The suffix is not strictly necessary, but it is best practice and used consistently by the community."
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#our-dataset",
+    "href": "qmd/10_TidyData.html#our-dataset",
+    "title": "10: Tidy Data",
+    "section": "Our dataset",
+    "text": "Our dataset\n\nlibrary(tidyverse)\n\nrnaseq_file = \"https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv\"\n\nrna = read_csv(rnaseq_file)\n\nrna \n\n# A tibble: 32,428 x 19\n   gene    sample  expression organism   age sex   infection strain  time tissue\n   &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n 1 Asl     GSM254~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 2 Apod    GSM254~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 3 Cyp2d22 GSM254~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 4 Klk6    GSM254~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 5 Fcrls   GSM254~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 6 Slc2a4  GSM254~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 7 Exd2    GSM254~       1619 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 8 Gjc2    GSM254~        288 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 9 Plp1    GSM254~      43217 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n10 Gnb4    GSM254~       1071 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n# i 32,418 more rows\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#what-is-tidy-data",
+    "href": "qmd/10_TidyData.html#what-is-tidy-data",
+    "title": "10: Tidy Data",
+    "section": "What is Tidy Data?",
+    "text": "What is Tidy Data?\n\nIn tidy data, each row is an observation and each column is a different variable (long-format).\nIn wide data, each row contains several observations, and the columns contain values (wide-format).\n\n\n\nhttps://maxplanck-ie.github.io/Rintro"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#the-data",
+    "href": "qmd/10_TidyData.html#the-data",
+    "title": "10: Tidy Data",
+    "section": "The data",
+    "text": "The data\nLook into the data structure, what is this?\n\nrna %&gt;%\n  arrange(gene)\n\n# A tibble: 32,428 x 19\n   gene     sample expression organism   age sex   infection strain  time tissue\n   &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n 1 AI504432 GSM25~       1230 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 2 AI504432 GSM25~       1085 Mus mus~     8 Fema~ NonInfec~ C57BL~     0 Cereb~\n 3 AI504432 GSM25~        969 Mus mus~     8 Fema~ NonInfec~ C57BL~     0 Cereb~\n 4 AI504432 GSM25~       1284 Mus mus~     8 Fema~ Influenz~ C57BL~     4 Cereb~\n 5 AI504432 GSM25~        966 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n 6 AI504432 GSM25~        918 Mus mus~     8 Male  Influenz~ C57BL~     8 Cereb~\n 7 AI504432 GSM25~        985 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 8 AI504432 GSM25~        972 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~\n 9 AI504432 GSM25~       1000 Mus mus~     8 Fema~ Influenz~ C57BL~     4 Cereb~\n10 AI504432 GSM25~        816 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n# i 32,418 more rows\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#but-i-want-a-more-human-readable-table",
+    "href": "qmd/10_TidyData.html#but-i-want-a-more-human-readable-table",
+    "title": "10: Tidy Data",
+    "section": "But I want a more human readable table …",
+    "text": "But I want a more human readable table …\nFirst, extract only the important values:\n\nrna_exp = rna %&gt;%\n  select(gene, sample, expression)\n\nrna_exp\n\n# A tibble: 32,428 x 3\n   gene    sample     expression\n   &lt;chr&gt;   &lt;chr&gt;           &lt;dbl&gt;\n 1 Asl     GSM2545336       1170\n 2 Apod    GSM2545336      36194\n 3 Cyp2d22 GSM2545336       4060\n 4 Klk6    GSM2545336        287\n 5 Fcrls   GSM2545336         85\n 6 Slc2a4  GSM2545336        782\n 7 Exd2    GSM2545336       1619\n 8 Gjc2    GSM2545336        288\n 9 Plp1    GSM2545336      43217\n10 Gnb4    GSM2545336       1071\n# i 32,418 more rows"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---pivot_wider",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---pivot_wider",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - pivot_wider()",
+    "text": "Dplyr in action - pivot_wider()\npivot_wider() can transform long-format to wide-format.\nIt takes three main arguments:\n\nthe data to be transformed\nthe names_from are the column whose values will become new column names\nthe values_from are the column whose values will fill the new columns"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---pivot_wider-1",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---pivot_wider-1",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - pivot_wider()",
+    "text": "Dplyr in action - pivot_wider()\n\nrna_wide = rna_exp %&gt;%\n  pivot_wider(names_from = sample,\n              values_from = expression)\n\nrna_wide\n\n# A tibble: 1,474 x 23\n   gene    GSM2545336 GSM2545337 GSM2545338 GSM2545339 GSM2545340 GSM2545341\n   &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n 1 Asl           1170        361        400        586        626        988\n 2 Apod         36194      10347       9173      10620      13021      29594\n 3 Cyp2d22       4060       1616       1603       1901       2171       3349\n 4 Klk6           287        629        641        578        448        195\n 5 Fcrls           85        233        244        237        180         38\n 6 Slc2a4         782        231        248        265        313        786\n 7 Exd2          1619       2288       2235       2513       2366       1359\n 8 Gjc2           288        595        568        551        310        146\n 9 Plp1         43217     101241      96534      58354      53126      27173\n10 Gnb4          1071       1791       1867       1430       1355        798\n# i 1,464 more rows\n# i 16 more variables: GSM2545342 &lt;dbl&gt;, GSM2545343 &lt;dbl&gt;, GSM2545344 &lt;dbl&gt;,\n#   GSM2545345 &lt;dbl&gt;, GSM2545346 &lt;dbl&gt;, GSM2545347 &lt;dbl&gt;, GSM2545348 &lt;dbl&gt;,\n#   GSM2545349 &lt;dbl&gt;, GSM2545350 &lt;dbl&gt;, GSM2545351 &lt;dbl&gt;, GSM2545352 &lt;dbl&gt;,\n#   GSM2545353 &lt;dbl&gt;, GSM2545354 &lt;dbl&gt;, GSM2545362 &lt;dbl&gt;, GSM2545363 &lt;dbl&gt;,\n#   GSM2545380 &lt;dbl&gt;"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---pivot_wider-2",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---pivot_wider-2",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - pivot_wider()",
+    "text": "Dplyr in action - pivot_wider()"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---pivot_wider-3",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---pivot_wider-3",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - pivot_wider()",
+    "text": "Dplyr in action - pivot_wider()\nBy default, missing values will be converted to NA, we can change it with values_fill\n\nrna_wide_noNAs = rna_exp %&gt;%\n  pivot_wider(names_from = sample,\n              values_from = expression,\n              values_fill = 0)\n\nrna_wide_noNAs\n\n# A tibble: 1,474 x 23\n   gene    GSM2545336 GSM2545337 GSM2545338 GSM2545339 GSM2545340 GSM2545341\n   &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n 1 Asl           1170        361        400        586        626        988\n 2 Apod         36194      10347       9173      10620      13021      29594\n 3 Cyp2d22       4060       1616       1603       1901       2171       3349\n 4 Klk6           287        629        641        578        448        195\n 5 Fcrls           85        233        244        237        180         38\n 6 Slc2a4         782        231        248        265        313        786\n 7 Exd2          1619       2288       2235       2513       2366       1359\n 8 Gjc2           288        595        568        551        310        146\n 9 Plp1         43217     101241      96534      58354      53126      27173\n10 Gnb4          1071       1791       1867       1430       1355        798\n# i 1,464 more rows\n# i 16 more variables: GSM2545342 &lt;dbl&gt;, GSM2545343 &lt;dbl&gt;, GSM2545344 &lt;dbl&gt;,\n#   GSM2545345 &lt;dbl&gt;, GSM2545346 &lt;dbl&gt;, GSM2545347 &lt;dbl&gt;, GSM2545348 &lt;dbl&gt;,\n#   GSM2545349 &lt;dbl&gt;, GSM2545350 &lt;dbl&gt;, GSM2545351 &lt;dbl&gt;, GSM2545352 &lt;dbl&gt;,\n#   GSM2545353 &lt;dbl&gt;, GSM2545354 &lt;dbl&gt;, GSM2545362 &lt;dbl&gt;, GSM2545363 &lt;dbl&gt;,\n#   GSM2545380 &lt;dbl&gt;"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---pivot_longer",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---pivot_longer",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - pivot_longer()",
+    "text": "Dplyr in action - pivot_longer()\nThe opposite operation is pivot_longer(), it takes similar inputs:\n\nthe data to be transformed;\nthe names_to the new column name we wish to create and populate with the current column names;\nthe values_to the new column name we wish to create and populate with current values;\nthe names of the columns to be used to populate the names_to and values_to variables (or to drop with -)."
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---pivot_longer-1",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---pivot_longer-1",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - pivot_longer()",
+    "text": "Dplyr in action - pivot_longer()\n\nrna_long = rna_wide %&gt;%\n    pivot_longer(names_to = \"sample\",\n                 values_to = \"expression\",\n                 -gene)\n\nrna_long\n\n# A tibble: 32,428 x 3\n   gene  sample     expression\n   &lt;chr&gt; &lt;chr&gt;           &lt;dbl&gt;\n 1 Asl   GSM2545336       1170\n 2 Asl   GSM2545337        361\n 3 Asl   GSM2545338        400\n 4 Asl   GSM2545339        586\n 5 Asl   GSM2545340        626\n 6 Asl   GSM2545341        988\n 7 Asl   GSM2545342        836\n 8 Asl   GSM2545343        535\n 9 Asl   GSM2545344        586\n10 Asl   GSM2545345        597\n# i 32,418 more rows"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---pivot_wider-4",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---pivot_wider-4",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - pivot_wider()",
+    "text": "Dplyr in action - pivot_wider()"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---pivot_longer-2",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---pivot_longer-2",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - pivot_longer()",
+    "text": "Dplyr in action - pivot_longer()\nColumn selection can be defined with patterns or ranges\n\nrna_wide %&gt;%\n    pivot_longer(names_to = \"sample\",\n                 values_to = \"expression\",\n                 cols = starts_with(\"GSM\"))\n\n# A tibble: 32,428 x 3\n   gene  sample     expression\n   &lt;chr&gt; &lt;chr&gt;           &lt;dbl&gt;\n 1 Asl   GSM2545336       1170\n 2 Asl   GSM2545337        361\n 3 Asl   GSM2545338        400\n 4 Asl   GSM2545339        586\n 5 Asl   GSM2545340        626\n 6 Asl   GSM2545341        988\n 7 Asl   GSM2545342        836\n 8 Asl   GSM2545343        535\n 9 Asl   GSM2545344        586\n10 Asl   GSM2545345        597\n# i 32,418 more rows"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---pivot_longer-3",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---pivot_longer-3",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - pivot_longer()",
+    "text": "Dplyr in action - pivot_longer()\nColumn selection can be defined with patterns or ranges\n\nrna_wide %&gt;%\n    pivot_longer(names_to = \"sample\",\n                 values_to = \"expression\",\n                 GSM2545336:GSM2545380)\n\n# A tibble: 32,428 x 3\n   gene  sample     expression\n   &lt;chr&gt; &lt;chr&gt;           &lt;dbl&gt;\n 1 Asl   GSM2545336       1170\n 2 Asl   GSM2545337        361\n 3 Asl   GSM2545338        400\n 4 Asl   GSM2545339        586\n 5 Asl   GSM2545340        626\n 6 Asl   GSM2545341        988\n 7 Asl   GSM2545342        836\n 8 Asl   GSM2545343        535\n 9 Asl   GSM2545344        586\n10 Asl   GSM2545345        597\n# i 32,418 more rows"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#hands-on",
+    "href": "qmd/10_TidyData.html#hands-on",
+    "title": "10: Tidy Data",
+    "section": "Hands on",
+    "text": "Hands on\n\nStarting from the rna table, use the pivot_wider() function to create a wide-format table giving the gene expression levels in each mouse.\nUse the rna dataset to create an expression matrix where each row represents the mean expression levels of genes and columns represent the different timepoints."
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#hands-on-1",
+    "href": "qmd/10_TidyData.html#hands-on-1",
+    "title": "10: Tidy Data",
+    "section": "Hands on",
+    "text": "Hands on\n\nStarting from the rna table, use the pivot_wider() function to create a wide-format table giving the gene expression levels in each mouse.\n\n\nrna_bymouse = rna %&gt;%\n  select(gene, mouse, expression) %&gt;%\n  pivot_wider(names_from = mouse, values_from = expression)\n\nrna_bymouse\n\n# A tibble: 1,474 x 23\n   gene     `14`    `9`  `10`  `15`  `18`   `6`   `5`  `11`  `22`  `13`  `23`\n   &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n 1 Asl      1170    361   400   586   626   988   836   535   586   597   938\n 2 Apod    36194  10347  9173 10620 13021 29594 24959 13668 13230 15868 27769\n 3 Cyp2d22  4060   1616  1603  1901  2171  3349  3122  2008  2254  2277  2985\n 4 Klk6      287    629   641   578   448   195   186  1101   537   567   327\n 5 Fcrls      85    233   244   237   180    38    68   375   199   177    89\n 6 Slc2a4    782    231   248   265   313   786   528   249   266   357   654\n 7 Exd2     1619   2288  2235  2513  2366  1359  1474  3126  2379  2173  1531\n 8 Gjc2      288    595   568   551   310   146   186   791   454   370   240\n 9 Plp1    43217 101241 96534 58354 53126 27173 28728 98658 61356 61647 38019\n10 Gnb4     1071   1791  1867  1430  1355   798   806  2437  1394  1554   960\n# i 1,464 more rows\n# i 11 more variables: `24` &lt;dbl&gt;, `8` &lt;dbl&gt;, `7` &lt;dbl&gt;, `1` &lt;dbl&gt;, `16` &lt;dbl&gt;,\n#   `21` &lt;dbl&gt;, `4` &lt;dbl&gt;, `2` &lt;dbl&gt;, `20` &lt;dbl&gt;, `12` &lt;dbl&gt;, `19` &lt;dbl&gt;"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#hands-on-2",
+    "href": "qmd/10_TidyData.html#hands-on-2",
+    "title": "10: Tidy Data",
+    "section": "Hands on",
+    "text": "Hands on\n\nUse the rna dataset to create an expression matrix where each row represents the mean expression levels of genes and columns represent the different timepoints.\n\n\nrna_time = rna %&gt;%\n  group_by(gene, time) %&gt;%\n  summarise(mean_exp = mean(expression)) %&gt;%\n  pivot_wider(names_from = time,\n              values_from = mean_exp)\n\nrna_time\n\n# A tibble: 1,474 x 4\n# Groups:   gene [1,474]\n   gene         `0`     `4`     `8`\n   &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;\n 1 AI504432 1034.   1104.   1014   \n 2 AW046200  155.    152.     81   \n 3 AW551984  238     302.    342.  \n 4 Aamp     4603.   4870    4763.  \n 5 Abca12      5.29    4.25    4.14\n 6 Abcc8    2576.   2609.   2292.  \n 7 Abhd14a   591.    547.    432.  \n 8 Abi2     4881.   4903.   4945.  \n 9 Abi3bp   1175.   1061.    762.  \n10 Abl2     2170.   2078.   2131.  \n# i 1,464 more rows"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---combining-tables",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---combining-tables",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - combining tables",
+    "text": "Dplyr in action - combining tables\nDplyr can also merge tables with the basic table operations:\n\nAn inner_join keeps observations that are present in both tables\nA left_join keeps observations that are present in the left (first) table, dropping those that are only present in the other\nA right_join keeps observations that are present in the right (second) table, dropping those that are only present in the other\nA full_join keeps all observations"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---combining-tables-1",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---combining-tables-1",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - combining tables",
+    "text": "Dplyr in action - combining tables\n \n\nhttps://carpentries-incubator.github.io/bioc-intro/30-dplyr.html"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---combining-tables-2",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---combining-tables-2",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - combining tables",
+    "text": "Dplyr in action - combining tables\nAs an example, let’s subset a part of the rna table\n\nrna_mini &lt;- rna %&gt;%\n   select(gene, sample, expression) %&gt;%\n   head(10)\n\nrna_mini\n\n# A tibble: 10 x 3\n   gene    sample     expression\n   &lt;chr&gt;   &lt;chr&gt;           &lt;dbl&gt;\n 1 Asl     GSM2545336       1170\n 2 Apod    GSM2545336      36194\n 3 Cyp2d22 GSM2545336       4060\n 4 Klk6    GSM2545336        287\n 5 Fcrls   GSM2545336         85\n 6 Slc2a4  GSM2545336        782\n 7 Exd2    GSM2545336       1619\n 8 Gjc2    GSM2545336        288\n 9 Plp1    GSM2545336      43217\n10 Gnb4    GSM2545336       1071"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---combining-tables-3",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---combining-tables-3",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - combining tables",
+    "text": "Dplyr in action - combining tables\nLoad the annotation table\n\nannot_file = \"https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/annot1.csv\"\n\nannot = read_csv(annot_file)\n\nannot\n\n# A tibble: 10 x 2\n   gene    gene_description                                                     \n   &lt;chr&gt;   &lt;chr&gt;                                                                \n 1 Cyp2d22 cytochrome P450, family 2, subfamily d, polypeptide 22 [Source:MGI S~\n 2 Klk6    kallikrein related-peptidase 6 [Source:MGI Symbol;Acc:MGI:1343166]   \n 3 Fcrls   Fc receptor-like S, scavenger receptor [Source:MGI Symbol;Acc:MGI:19~\n 4 Plp1    proteolipid protein (myelin) 1 [Source:MGI Symbol;Acc:MGI:97623]     \n 5 Exd2    exonuclease 3'-5' domain containing 2 [Source:MGI Symbol;Acc:MGI:192~\n 6 Apod    apolipoprotein D [Source:MGI Symbol;Acc:MGI:88056]                   \n 7 Gnb4    guanine nucleotide binding protein (G protein), beta 4 [Source:MGI S~\n 8 Slc2a4  solute carrier family 2 (facilitated glucose transporter), member 4 ~\n 9 Asl     argininosuccinate lyase [Source:MGI Symbol;Acc:MGI:88084]            \n10 Gjc2    gap junction protein, gamma 2 [Source:MGI Symbol;Acc:MGI:2153060]"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---combining-tables-4",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---combining-tables-4",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - combining tables",
+    "text": "Dplyr in action - combining tables\nCombine rna_mini with annot\n\nfull_join(rna_mini, annot)\n\n# A tibble: 10 x 4\n   gene    sample     expression gene_description                               \n   &lt;chr&gt;   &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;                                          \n 1 Asl     GSM2545336       1170 argininosuccinate lyase [Source:MGI Symbol;Acc~\n 2 Apod    GSM2545336      36194 apolipoprotein D [Source:MGI Symbol;Acc:MGI:88~\n 3 Cyp2d22 GSM2545336       4060 cytochrome P450, family 2, subfamily d, polype~\n 4 Klk6    GSM2545336        287 kallikrein related-peptidase 6 [Source:MGI Sym~\n 5 Fcrls   GSM2545336         85 Fc receptor-like S, scavenger receptor [Source~\n 6 Slc2a4  GSM2545336        782 solute carrier family 2 (facilitated glucose t~\n 7 Exd2    GSM2545336       1619 exonuclease 3'-5' domain containing 2 [Source:~\n 8 Gjc2    GSM2545336        288 gap junction protein, gamma 2 [Source:MGI Symb~\n 9 Plp1    GSM2545336      43217 proteolipid protein (myelin) 1 [Source:MGI Sym~\n10 Gnb4    GSM2545336       1071 guanine nucleotide binding protein (G protein)~"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---combining-tables-5",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---combining-tables-5",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - combining tables",
+    "text": "Dplyr in action - combining tables\nNote: both tables are compared in terms of variables, only matching variables are used to merge, in our case, both tables have a common column gene\nIn case the names don’t match, we need to define specific variables names for merging\n\nfull_join(rna_mini, annot, by = c(\"gene\" = \"gene_symbol\"))"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#dplyr-in-action---write_csv",
+    "href": "qmd/10_TidyData.html#dplyr-in-action---write_csv",
+    "title": "10: Tidy Data",
+    "section": "Dplyr in action - write_csv",
+    "text": "Dplyr in action - write_csv\nFinally, we could need to save our data as a new file for later use or sharing, we can use write_csv()\n\nwrite_csv(rna_wide, file = \"rna_wide.csv\")"
+  },
+  {
+    "objectID": "qmd/10_TidyData.html#any-questions",
+    "href": "qmd/10_TidyData.html#any-questions",
+    "title": "10: Tidy Data",
+    "section": "Any questions?",
+    "text": "Any questions?\n\n\nhttps://github.com/rstudio/cheatsheets/blob/main/tidyr.pdf"
+  },
+  {
+    "objectID": "qmd/05_DataModels.html",
+    "href": "qmd/05_DataModels.html",
+    "title": "05: Data Modeling",
+    "section": "",
+    "text": "Recap: All-Against-All Correlations\nTask: Generate all-against-all correlation plot. Understand:\n\ncols\nselection/unselection of elements [,-5]\nplot() function and arguments\n\n\n\nCode\n# assign species-colors to each observation \ncols = iris$Species                            # understand how color is defined\nplot(iris[,-5], col=cols, lower.panel=NULL)   # \"cols\" was defined in task above\n\n\n\n\n\n\n\n\n\n\n\n\nFrom Correlations to Models\nGoal:\nModel some dependent variable y as function of other explanatory variables x (features)\n\\[\ny = f(\\theta, x) = \\theta_1 x +  \\theta_0\n\\]\nFor \\(N\\) data points, choose parameters \\(\\theta\\) by ordinary least squares:\n\\[\nRSS=\\sum_{i=1}^{N} (y_i - f(\\theta, x_i))^2 \\to min\n\\]\nEasy in R:\n\n\nCode\nplot(Petal.Width ~ Petal.Length, data=iris, col=Species) # use model (\"formula\") notation\nfit=lm(Petal.Width ~ Petal.Length, data=iris)       # fit a linear model\nabline(fit, lwd=3, lty=2)                           # add regression line\n\n\n\n\n\n\n\n\n\nQuery: What class is the object fit?\nTask: Extract the coefficients of the fitted line.\n\n\n (Intercept) Petal.Length \n  -0.3630755    0.4157554 \n\n\n (Intercept) Petal.Length \n  -0.3630755    0.4157554 \n\n\n\n\nReporting the fit (model)\n\n\nCode\nsummary(fit)        # summary() behaves differently for fit objects\n\n\n\nCall:\nlm(formula = Petal.Width ~ Petal.Length, data = iris)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-0.56515 -0.12358 -0.01898  0.13288  0.64272 \n\nCoefficients:\n              Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  -0.363076   0.039762  -9.131  4.7e-16 ***\nPetal.Length  0.415755   0.009582  43.387  &lt; 2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.2065 on 148 degrees of freedom\nMultiple R-squared:  0.9271,    Adjusted R-squared:  0.9266 \nF-statistic:  1882 on 1 and 148 DF,  p-value: &lt; 2.2e-16\n\n\nCode\ncoefficients(fit)   # more functions for specific elements\n\n\n (Intercept) Petal.Length \n  -0.3630755    0.4157554 \n\n\nCode\nconfint(fit)        # Try to change the confidence level: ?confint\n\n\n                  2.5 %     97.5 %\n(Intercept)  -0.4416501 -0.2845010\nPetal.Length  0.3968193  0.4346915\n\n\nThis is a good fit as suggested by a\n\nsmall residual standard error\na large coefficient of variation \\(R^2\\)\na small p-value\nand by visualization\n\n\\[\nR^2 = 1 - \\frac{RSS}{TSS} = 1 - \\frac{\\sum_i(y_i - y(\\theta,x_i))^2}{\\sum_i(y_i-\\bar{y})^2}\n\\] There are manny more methods to access information for the lm class\n\n\nCode\nmethods(class='lm')\n\n\n [1] add1           alias          anova          case.names     coerce        \n [6] confint        cooks.distance deviance       dfbeta         dfbetas       \n[11] drop1          dummy.coef     effects        extractAIC     family        \n[16] formula        hatvalues      influence      initialize     kappa         \n[21] labels         logLik         model.frame    model.matrix   nobs          \n[26] plot           predict        print          proj           qr            \n[31] residuals      rstandard      rstudent       show           simulate      \n[36] slotsFromS3    summary        variable.names vcov          \nsee '?methods' for accessing help and source code\n\n\n\n\nPredictions (with confidence intervals)\nUncertainties in parameters become uncertainties in fits:\n\n\nCode\nx=iris$Petal.Length                       # explanatory variable from fit (here:Petal.Length)\nxn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables\nndf=data.frame(Petal.Length=xn)           # put them into new data frame\n\np=predict(fit, ndf, interval = 'confidence' , level = 0.95)\nplot(Petal.Width ~ Petal.Length, data=iris, col=Species)\nlines(xn, p[,\"lwr\"] )\nlines(xn, p[,\"upr\"] )\n\n#some fancy filling\npolygon(c(rev(xn), xn), c(rev(p[ ,\"upr\"]), p[ ,\"lwr\"]), col = rgb(1,0,0,0.5), border = NA)\n\n\n\n\n\n\n\n\n\nCode\n## using ggplot2 - full introduction later\n#library(ggplot2)\n#g = ggplot(iris, aes(Petal.Length, Petal.Width, colour=Species))\n#g + geom_point() + geom_smooth(method=\"lm\", se=TRUE, color=\"red\") + geom_smooth(method=\"loess\", colour=\"blue\")\n\n\n\n\nPoor Model\nJust replace “Petal” with “Sepal”\n\n\nCode\nplot(Sepal.Width ~ Sepal.Length, data=iris, col=cols)  \nfit1=lm(Sepal.Width ~ Sepal.Length, data=iris)     \nabline(fit1, lwd=3, lty=2)    \n\n\n\n\n\n\n\n\n\nCode\nconfint(fit1)                     # estimated slope is indistinguishable from zero\n\n\n                  2.5 %     97.5 %\n(Intercept)   2.9178767 3.92001694\nSepal.Length -0.1467928 0.02302323\n\n\nCode\nsummary(fit1)\n\n\n\nCall:\nlm(formula = Sepal.Width ~ Sepal.Length, data = iris)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-1.1095 -0.2454 -0.0167  0.2763  1.3338 \n\nCoefficients:\n             Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)   3.41895    0.25356   13.48   &lt;2e-16 ***\nSepal.Length -0.06188    0.04297   -1.44    0.152    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.4343 on 148 degrees of freedom\nMultiple R-squared:  0.01382,   Adjusted R-squared:  0.007159 \nF-statistic: 2.074 on 1 and 148 DF,  p-value: 0.1519\n\n\nInterpretation: slope is not significantly distinct from 0. Model does not account for much of the observed variation.\nTask: Use the above template to make predictions for the new poor model.\n\n\n\n\n\n\n\n\n\n\n\nFactorial variables as predictors\nIn the iris example the “Species” variable is a factorial (categorical) variable with 3 levels. Other typical examples: different experimental conditions or treatments.\n\n\nCode\nplot(Petal.Width ~ Species, data=iris)\n\n\n\n\n\n\n\n\n\nCode\nfit=lm(Petal.Width ~ Species, data=iris)\nsummary(fit)\n\n\n\nCall:\nlm(formula = Petal.Width ~ Species, data = iris)\n\nResiduals:\n   Min     1Q Median     3Q    Max \n-0.626 -0.126 -0.026  0.154  0.474 \n\nCoefficients:\n                  Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)        0.24600    0.02894    8.50 1.96e-14 ***\nSpeciesversicolor  1.08000    0.04093   26.39  &lt; 2e-16 ***\nSpeciesvirginica   1.78000    0.04093   43.49  &lt; 2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.2047 on 147 degrees of freedom\nMultiple R-squared:  0.9289,    Adjusted R-squared:  0.9279 \nF-statistic:   960 on 2 and 147 DF,  p-value: &lt; 2.2e-16\n\n\nInterpretation:\n\n“setosa” (1st species) has mean Petal.Width=0.246(29) - reference baseline\n“versicolor” (2nd species) has mean Petal.Width = Petal.Width(setosa) + 1.08(4)\n“virginica” (3rd species) has mean Petal.Width = Petal.Width(setosa) + 1.78(4)\n\n\n\nAnova\nsummary(fit) contains information on the individual coefficients. They are difficult to interpret\n\n\nCode\nanova(fit)    \n\n\nAnalysis of Variance Table\n\nResponse: Petal.Width\n           Df Sum Sq Mean Sq F value    Pr(&gt;F)    \nSpecies     2 80.413  40.207  960.01 &lt; 2.2e-16 ***\nResiduals 147  6.157   0.042                      \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\n\nInterpretation: variable “Species” accounts for much variation in “Petal.Width”\n\n\n\nMore complicated models\nDetermine residual standard error sigma for different fits with various complexity\n\n\nCode\nfit=lm(Petal.Width ~ Petal.Length, data=iris)\npaste(toString(fit$call), sigma(fit))\n\n\n[1] \"lm, Petal.Width ~ Petal.Length, iris 0.206484348913609\"\n\n\nCode\nfit=lm(Petal.Width ~ Petal.Length + Sepal.Length, data=iris)  # function of more than one variable\npaste(toString(fit$call), sigma(fit))\n\n\n[1] \"lm, Petal.Width ~ Petal.Length + Sepal.Length, iris 0.204445704742963\"\n\n\nCode\nfit=lm(Petal.Width ~ Species, data=iris)                      # function of categorical variables\npaste(toString(fit$call), sigma(fit))\n\n\n[1] \"lm, Petal.Width ~ Species, iris 0.204650024805914\"\n\n\nCode\nfit=lm(Petal.Width ~ . , data=iris)                           # function of all other variable (numerical and categorical)\npaste(toString(fit$call), sigma(fit))\n\n\n[1] \"lm, Petal.Width ~ ., iris 0.166615943019283\"\n\n\n… more complex models tend to have smaller residual standard error (overfitting?)\n\n\n\nModel Checking: Diagnostic Plots\n“fit” is a large object of the lm-class which contains also lots of diagnostic informmation. Notice how the behaviour of “plot” changes.\n\n\nCode\nfit=lm(Petal.Width ~ ., data=iris)\nop=par(no.readonly=TRUE)   # safe only resettable graphical parameters, avoids many warnings\npar(mfrow=c(2,2))          # change graphical parameters: 2x2 images on device\nplot(fit,col=iris$Species) # four plots rather than one\n\n\n\n\n\n\n\n\n\nCode\npar(op)                    # reset graphical parameters\n\n\nmore examples here: http://www.statmethods.net/stats/regression.html\nLinear models \\(y_i=\\theta_0 + \\theta_1  x_i + \\epsilon_i\\) make certain assumptions (\\(\\epsilon_i \\propto N(0,\\sigma^2)\\))\n\nresiduals \\(\\epsilon_i\\) are independent from each other (non-linear patterns?)\nresiduals are normally distributed\nhave equal variance \\(\\sigma^2\\) (homoscedascity)\nare there outliers (large residuals) or observations with strong influence on fit\n\n\n\n\nReview\n\ndependencies between variable can often be modeled\nlinear model lm(): fitting, summary and interpretation\ncorrelation coefficients can be misleading\nlinear models may not be appropriate. &gt;example(anscombe)"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#introduction-to-dplyr",
+    "href": "qmd/08_DataWrangling.html#introduction-to-dplyr",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Introduction to Dplyr",
+    "text": "Introduction to Dplyr\nDplyr uses a functions that act as verbs to transform data frames in ways to facilitate data analysis.\nThe six main verbs are:\n\nmutate(): creates new columns\nfilter(): filters rows based on criteria\nselect(): selects columns\n\n\nhttps://maxplanck-ie.github.io/Rintro"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#introduction-to-dplyr-1",
+    "href": "qmd/08_DataWrangling.html#introduction-to-dplyr-1",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Introduction to Dplyr",
+    "text": "Introduction to Dplyr\nDplyr uses a functions that act as verbs to transform data frames in ways to facilitate data analysis.\nThe six main verbs are:\n\nsummarize(): creates summary statistics\ngroup_by(): does analysis on subsets of the dataframe based on the contents of a column\narrange(): sorts rows"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action",
+    "text": "Dplyr in action\n\nlibrary(tidyverse)\n\nrnaseq_file = \"https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv\"\n\nrna = read_csv(rnaseq_file)\n\nhead(rna)\n\n# A tibble: 6 x 19\n  gene    sample   expression organism   age sex   infection strain  time tissue\n  &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n1 Asl     GSM2545~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n2 Apod    GSM2545~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n3 Cyp2d22 GSM2545~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n4 Klk6    GSM2545~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n5 Fcrls   GSM2545~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n6 Slc2a4  GSM2545~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---select",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---select",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - select()",
+    "text": "Dplyr in action - select()\n\n# column selection\nselect(rna, gene, sample, tissue, expression)\n\n# A tibble: 32,428 x 4\n   gene    sample     tissue     expression\n   &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt;\n 1 Asl     GSM2545336 Cerebellum       1170\n 2 Apod    GSM2545336 Cerebellum      36194\n 3 Cyp2d22 GSM2545336 Cerebellum       4060\n 4 Klk6    GSM2545336 Cerebellum        287\n 5 Fcrls   GSM2545336 Cerebellum         85\n 6 Slc2a4  GSM2545336 Cerebellum        782\n 7 Exd2    GSM2545336 Cerebellum       1619\n 8 Gjc2    GSM2545336 Cerebellum        288\n 9 Plp1    GSM2545336 Cerebellum      43217\n10 Gnb4    GSM2545336 Cerebellum       1071\n# i 32,418 more rows"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---select-1",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---select-1",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - select()",
+    "text": "Dplyr in action - select()\n\n# column exclusion\nselect(rna, -tissue, -organism)\n\n# A tibble: 32,428 x 17\n   gene    sample   expression   age sex   infection strain  time mouse ENTREZID\n   &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;\n 1 Asl     GSM2545~       1170     8 Fema~ Influenz~ C57BL~     8    14   109900\n 2 Apod    GSM2545~      36194     8 Fema~ Influenz~ C57BL~     8    14    11815\n 3 Cyp2d22 GSM2545~       4060     8 Fema~ Influenz~ C57BL~     8    14    56448\n 4 Klk6    GSM2545~        287     8 Fema~ Influenz~ C57BL~     8    14    19144\n 5 Fcrls   GSM2545~         85     8 Fema~ Influenz~ C57BL~     8    14    80891\n 6 Slc2a4  GSM2545~        782     8 Fema~ Influenz~ C57BL~     8    14    20528\n 7 Exd2    GSM2545~       1619     8 Fema~ Influenz~ C57BL~     8    14    97827\n 8 Gjc2    GSM2545~        288     8 Fema~ Influenz~ C57BL~     8    14   118454\n 9 Plp1    GSM2545~      43217     8 Fema~ Influenz~ C57BL~     8    14    18823\n10 Gnb4    GSM2545~       1071     8 Fema~ Influenz~ C57BL~     8    14    14696\n# i 32,418 more rows\n# i 7 more variables: product &lt;chr&gt;, ensembl_gene_id &lt;chr&gt;,\n#   external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;, gene_biotype &lt;chr&gt;,\n#   phenotype_description &lt;chr&gt;, hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---filter",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---filter",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - filter()",
+    "text": "Dplyr in action - filter()\n\n# get data which sex is Male\nfilter(rna, sex == \"Male\")\n\n# A tibble: 14,740 x 19\n   gene    sample  expression organism   age sex   infection strain  time tissue\n   &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n 1 Asl     GSM254~        626 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n 2 Apod    GSM254~      13021 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n 3 Cyp2d22 GSM254~       2171 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n 4 Klk6    GSM254~        448 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n 5 Fcrls   GSM254~        180 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n 6 Slc2a4  GSM254~        313 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n 7 Exd2    GSM254~       2366 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n 8 Gjc2    GSM254~        310 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n 9 Plp1    GSM254~      53126 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n10 Gnb4    GSM254~       1355 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n# i 14,730 more rows\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---filter-1",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---filter-1",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - filter()",
+    "text": "Dplyr in action - filter()\n\n# get data which sex is Male AND infection status is NonInfected\nfilter(rna, sex == \"Male\" & infection == \"NonInfected\")\n\n# A tibble: 4,422 x 19\n   gene    sample  expression organism   age sex   infection strain  time tissue\n   &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n 1 Asl     GSM254~        535 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~\n 2 Apod    GSM254~      13668 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~\n 3 Cyp2d22 GSM254~       2008 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~\n 4 Klk6    GSM254~       1101 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~\n 5 Fcrls   GSM254~        375 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~\n 6 Slc2a4  GSM254~        249 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~\n 7 Exd2    GSM254~       3126 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~\n 8 Gjc2    GSM254~        791 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~\n 9 Plp1    GSM254~      98658 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~\n10 Gnb4    GSM254~       2437 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~\n# i 4,412 more rows\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---filter-2",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---filter-2",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - filter()",
+    "text": "Dplyr in action - filter()\n\n# get data which human ortholog gene is not defined (*NA*) \nfilter(rna, is.na(hsapiens_homolog_associated_gene_name))\n\n# A tibble: 4,290 x 19\n   gene     sample expression organism   age sex   infection strain  time tissue\n   &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n 1 Prodh    GSM25~       2385 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 2 Tssk5    GSM25~        368 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 3 Vmn2r1   GSM25~        116 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 4 Gm10654  GSM25~        472 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 5 Hexa     GSM25~       1208 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 6 Sult1a1  GSM25~       1658 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 7 Gm6277   GSM25~        134 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 8 Tmem198b GSM25~        689 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 9 Adam1a   GSM25~        440 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n10 Ebp      GSM25~        798 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n# i 4,280 more rows\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---filter-3",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---filter-3",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - filter()",
+    "text": "Dplyr in action - filter()\n\n# get data which human ortholog gene is defined (not *NA*) \nfilter(rna, !is.na(hsapiens_homolog_associated_gene_name))\n\n# A tibble: 28,138 x 19\n   gene    sample  expression organism   age sex   infection strain  time tissue\n   &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n 1 Asl     GSM254~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 2 Apod    GSM254~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 3 Cyp2d22 GSM254~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 4 Klk6    GSM254~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 5 Fcrls   GSM254~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 6 Slc2a4  GSM254~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 7 Exd2    GSM254~       1619 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 8 Gjc2    GSM254~        288 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 9 Plp1    GSM254~      43217 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n10 Gnb4    GSM254~       1071 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n# i 28,128 more rows\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---pipes",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---pipes",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - Pipes",
+    "text": "Dplyr in action - Pipes\nWhat if you want to select and filter?\nOption 1. Generate intermediate tables\nOption 2. Use nested operations\nOption 3. Plumbering with Pipes"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---pipes-1",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---pipes-1",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - Pipes",
+    "text": "Dplyr in action - Pipes\nWhat if you want to select and filter?\nOption 1. Generate intermediate tables\n\n# step 1, filter males\nrna2 = filter(rna, sex == \"Male\")\n\n# step 2, filter columns\nrna3 = select(rna2, gene, sample, tissue, expression)\n\nrna3\n\n# A tibble: 14,740 x 4\n   gene    sample     tissue     expression\n   &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt;\n 1 Asl     GSM2545340 Cerebellum        626\n 2 Apod    GSM2545340 Cerebellum      13021\n 3 Cyp2d22 GSM2545340 Cerebellum       2171\n 4 Klk6    GSM2545340 Cerebellum        448\n 5 Fcrls   GSM2545340 Cerebellum        180\n 6 Slc2a4  GSM2545340 Cerebellum        313\n 7 Exd2    GSM2545340 Cerebellum       2366\n 8 Gjc2    GSM2545340 Cerebellum        310\n 9 Plp1    GSM2545340 Cerebellum      53126\n10 Gnb4    GSM2545340 Cerebellum       1355\n# i 14,730 more rows"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---pipes-2",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---pipes-2",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - Pipes",
+    "text": "Dplyr in action - Pipes\nWhat if you want to select and filter?\nOption 2. Use nested operations\n\nrna3 = select(filter(rna, sex == \"Male\"), gene, sample, tissue, expression)\n\nrna3\n\n# A tibble: 14,740 x 4\n   gene    sample     tissue     expression\n   &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt;\n 1 Asl     GSM2545340 Cerebellum        626\n 2 Apod    GSM2545340 Cerebellum      13021\n 3 Cyp2d22 GSM2545340 Cerebellum       2171\n 4 Klk6    GSM2545340 Cerebellum        448\n 5 Fcrls   GSM2545340 Cerebellum        180\n 6 Slc2a4  GSM2545340 Cerebellum        313\n 7 Exd2    GSM2545340 Cerebellum       2366\n 8 Gjc2    GSM2545340 Cerebellum        310\n 9 Plp1    GSM2545340 Cerebellum      53126\n10 Gnb4    GSM2545340 Cerebellum       1355\n# i 14,730 more rows"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---pipes-3",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---pipes-3",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - Pipes",
+    "text": "Dplyr in action - Pipes\nWhat if you want to select and filter?\nOption 3. Plumbering with Pipes - Yeah!\n\nrna3 = rna %&gt;%\n        filter(sex == \"Male\") %&gt;%\n        select(gene, sample, tissue, expression)\n\nrna3\n\n# A tibble: 14,740 x 4\n   gene    sample     tissue     expression\n   &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt;\n 1 Asl     GSM2545340 Cerebellum        626\n 2 Apod    GSM2545340 Cerebellum      13021\n 3 Cyp2d22 GSM2545340 Cerebellum       2171\n 4 Klk6    GSM2545340 Cerebellum        448\n 5 Fcrls   GSM2545340 Cerebellum        180\n 6 Slc2a4  GSM2545340 Cerebellum        313\n 7 Exd2    GSM2545340 Cerebellum       2366\n 8 Gjc2    GSM2545340 Cerebellum        310\n 9 Plp1    GSM2545340 Cerebellum      53126\n10 Gnb4    GSM2545340 Cerebellum       1355\n# i 14,730 more rows\n\n\nPipes in R look like %&gt;% (made available via the magrittr package) or |&gt; (through base R)"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#hands-on",
+    "href": "qmd/08_DataWrangling.html#hands-on",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Hands on",
+    "text": "Hands on\nUsing pipes, subset the rna data to keep observations in female mice at time 0, where the gene has an expression higher than 50000, and retain only the columns gene, sample, time, expression and age."
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#hands-on-1",
+    "href": "qmd/08_DataWrangling.html#hands-on-1",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Hands on",
+    "text": "Hands on\nUsing pipes, subset the rna data to keep observations in female mice at time 0, where the gene has an expression higher than 50000, and retain only the columns gene, sample, time, expression and age.\nSolution\n\nrna %&gt;%\n  filter(expression &gt; 50000,\n         sex == \"Female\",\n         time == 0 ) %&gt;%\n  select(gene, sample, time, expression, age)\n\n# A tibble: 9 x 5\n  gene   sample      time expression   age\n  &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;\n1 Plp1   GSM2545337     0     101241     8\n2 Atp1b1 GSM2545337     0      53260     8\n3 Plp1   GSM2545338     0      96534     8\n4 Atp1b1 GSM2545338     0      50614     8\n5 Plp1   GSM2545348     0     102790     8\n6 Atp1b1 GSM2545348     0      59544     8\n7 Plp1   GSM2545353     0      71237     8\n8 Glul   GSM2545353     0      52451     8\n9 Atp1b1 GSM2545353     0      61451     8"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---mutate",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---mutate",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - mutate()",
+    "text": "Dplyr in action - mutate()\nAs frequently we want to add new columns based on existing data, we can expand the tibble with mutate().\nIn our example, time is defined in days, let’s add a new column for time in hours (time_hours)\n\nrna %&gt;%\n  mutate(time_hours = time * 24) %&gt;%\n  select(time, time_hours)\n\n# A tibble: 32,428 x 2\n    time time_hours\n   &lt;dbl&gt;      &lt;dbl&gt;\n 1     8        192\n 2     8        192\n 3     8        192\n 4     8        192\n 5     8        192\n 6     8        192\n 7     8        192\n 8     8        192\n 9     8        192\n10     8        192\n# i 32,418 more rows"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---mutate-1",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---mutate-1",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - mutate()",
+    "text": "Dplyr in action - mutate()\nThe new columns can be used to generate another columns, for example, adding a time in minutes based on time in hours:\n\nrna %&gt;%\n  mutate(time_hours = time * 24,\n         time_min = time_hours * 60) %&gt;%\n  select(time, time_hours, time_min)\n\n# A tibble: 32,428 x 3\n    time time_hours time_min\n   &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;\n 1     8        192    11520\n 2     8        192    11520\n 3     8        192    11520\n 4     8        192    11520\n 5     8        192    11520\n 6     8        192    11520\n 7     8        192    11520\n 8     8        192    11520\n 9     8        192    11520\n10     8        192    11520\n# i 32,418 more rows"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#hands-on-2",
+    "href": "qmd/08_DataWrangling.html#hands-on-2",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Hands on",
+    "text": "Hands on\nCreate a new data frame from the rna data that meets the following criteria: contains only the gene, chromosome_name, phenotype_description, sample, and expression columns. The expression values should be log-transformed. This data frame must only contain genes located on sex chromosomes, associated with a phenotype_description, and with a log expression higher than 5.\nHint: think about how the commands should be ordered to produce this data frame!"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#hands-on-3",
+    "href": "qmd/08_DataWrangling.html#hands-on-3",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Hands on",
+    "text": "Hands on\nSolution:\n\nrna %&gt;%\n  mutate(expression = log(expression)) %&gt;%\n  select(gene, chromosome_name, phenotype_description, sample, expression) %&gt;%\n  filter(chromosome_name == \"X\" | chromosome_name == \"Y\") %&gt;%\n  filter(!is.na(phenotype_description)) %&gt;%\n  filter(expression &gt; 5)\n\n# A tibble: 649 x 5\n   gene   chromosome_name phenotype_description                sample expression\n   &lt;chr&gt;  &lt;chr&gt;           &lt;chr&gt;                                &lt;chr&gt;       &lt;dbl&gt;\n 1 Plp1   X               abnormal CNS glial cell morphology   GSM25~      10.7 \n 2 Slc7a3 X               decreased body length                GSM25~       5.46\n 3 Plxnb3 X               abnormal coat appearance             GSM25~       6.58\n 4 Rbm3   X               abnormal liver morphology            GSM25~       9.32\n 5 Cfp    X               abnormal cardiovascular system phys~ GSM25~       6.18\n 6 Ebp    X               abnormal embryonic erythrocyte morp~ GSM25~       6.68\n 7 Cd99l2 X               abnormal cellular extravasation      GSM25~       8.04\n 8 Piga   X               abnormal brain development           GSM25~       6.06\n 9 Pim2   X               decreased T cell proliferation       GSM25~       7.11\n10 Itm2a  X               no abnormal phenotype detected       GSM25~       7.48\n# i 639 more rows"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---group_by",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---group_by",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - group_by()",
+    "text": "Dplyr in action - group_by()\nData analysis commonly needs to split the data, perfom computations and then combine the results (split-apply-combine paradigm)\n\n# group data by 'gene'\nrna %&gt;%\n  group_by(gene)\n\n# A tibble: 32,428 x 19\n# Groups:   gene [1,474]\n   gene    sample  expression organism   age sex   infection strain  time tissue\n   &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n 1 Asl     GSM254~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 2 Apod    GSM254~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 3 Cyp2d22 GSM254~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 4 Klk6    GSM254~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 5 Fcrls   GSM254~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 6 Slc2a4  GSM254~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 7 Exd2    GSM254~       1619 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 8 Gjc2    GSM254~        288 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 9 Plp1    GSM254~      43217 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n10 Gnb4    GSM254~       1071 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n# i 32,418 more rows\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;\n\n\nNote the Groups: gene [1,474]"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---group_by-1",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---group_by-1",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - group_by()",
+    "text": "Dplyr in action - group_by()\n\n# group data by 'sample'\nrna %&gt;%\n  group_by(sample)\n\n# A tibble: 32,428 x 19\n# Groups:   sample [22]\n   gene    sample  expression organism   age sex   infection strain  time tissue\n   &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n 1 Asl     GSM254~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 2 Apod    GSM254~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 3 Cyp2d22 GSM254~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 4 Klk6    GSM254~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 5 Fcrls   GSM254~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 6 Slc2a4  GSM254~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 7 Exd2    GSM254~       1619 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 8 Gjc2    GSM254~        288 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 9 Plp1    GSM254~      43217 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n10 Gnb4    GSM254~       1071 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n# i 32,418 more rows\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;\n\n\nNote the Groups: sample [22]"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---summaryse",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---summaryse",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - summaryse()",
+    "text": "Dplyr in action - summaryse()\nAfter grouping, we can do some computation as summarise()\n\n# get average expression per gene\nrna %&gt;%\n  group_by(gene) %&gt;%\n  summarise(mean_expression = mean(expression))\n\n# A tibble: 1,474 x 2\n   gene     mean_expression\n   &lt;chr&gt;              &lt;dbl&gt;\n 1 AI504432         1053.  \n 2 AW046200          131.  \n 3 AW551984          295.  \n 4 Aamp             4751.  \n 5 Abca12              4.55\n 6 Abcc8            2498.  \n 7 Abhd14a           525.  \n 8 Abi2             4909.  \n 9 Abi3bp           1002.  \n10 Abl2             2124.  \n# i 1,464 more rows"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---summaryse-1",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---summaryse-1",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - summaryse()",
+    "text": "Dplyr in action - summaryse()\n\n# get average expression per sample\nrna %&gt;%\n  group_by(sample) %&gt;%\n  summarise(mean_expression = mean(expression))\n\n# A tibble: 22 x 2\n   sample     mean_expression\n   &lt;chr&gt;                &lt;dbl&gt;\n 1 GSM2545336           2062.\n 2 GSM2545337           1766.\n 3 GSM2545338           1668.\n 4 GSM2545339           1696.\n 5 GSM2545340           1682.\n 6 GSM2545341           1638.\n 7 GSM2545342           1594.\n 8 GSM2545343           2107.\n 9 GSM2545344           1712.\n10 GSM2545345           1700.\n# i 12 more rows"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---summaryse-2",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---summaryse-2",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - summaryse()",
+    "text": "Dplyr in action - summaryse()\nMultiple grouping levels\n\n# get average expression per gene + infection + time\nrna %&gt;%\n  group_by(gene, infection, time) %&gt;%\n  summarise(mean_expression = mean(expression))\n\n# A tibble: 4,422 x 4\n# Groups:   gene, infection [2,948]\n   gene     infection    time mean_expression\n   &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;           &lt;dbl&gt;\n 1 AI504432 InfluenzaA      4           1104.\n 2 AI504432 InfluenzaA      8           1014 \n 3 AI504432 NonInfected     0           1034.\n 4 AW046200 InfluenzaA      4            152.\n 5 AW046200 InfluenzaA      8             81 \n 6 AW046200 NonInfected     0            155.\n 7 AW551984 InfluenzaA      4            302.\n 8 AW551984 InfluenzaA      8            342.\n 9 AW551984 NonInfected     0            238 \n10 Aamp     InfluenzaA      4           4870 \n# i 4,412 more rows"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---summaryse-3",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---summaryse-3",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - summaryse()",
+    "text": "Dplyr in action - summaryse()\nMultiple summarise levels\n\n# get average and median expression per gene + infection + time\nrna %&gt;%\n  group_by(gene, infection, time) %&gt;%\n  summarise(mean_expression = mean(expression),\n            median_expression = median(expression))\n\n# A tibble: 4,422 x 5\n# Groups:   gene, infection [2,948]\n   gene     infection    time mean_expression median_expression\n   &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;           &lt;dbl&gt;             &lt;dbl&gt;\n 1 AI504432 InfluenzaA      4           1104.             1094.\n 2 AI504432 InfluenzaA      8           1014               985 \n 3 AI504432 NonInfected     0           1034.             1016 \n 4 AW046200 InfluenzaA      4            152.              144.\n 5 AW046200 InfluenzaA      8             81                82 \n 6 AW046200 NonInfected     0            155.              163 \n 7 AW551984 InfluenzaA      4            302.              245 \n 8 AW551984 InfluenzaA      8            342.              287 \n 9 AW551984 NonInfected     0            238               265 \n10 Aamp     InfluenzaA      4           4870              4708 \n# i 4,412 more rows"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#hands-on-4",
+    "href": "qmd/08_DataWrangling.html#hands-on-4",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Hands on",
+    "text": "Hands on\nCalculate the mean expression level of gene “Dok3” by timepoints."
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#hands-on-5",
+    "href": "qmd/08_DataWrangling.html#hands-on-5",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Hands on",
+    "text": "Hands on\nCalculate the mean expression level of gene “Dok3” by timepoints.\nSolution\n\nrna %&gt;%\n  filter(gene == \"Dok3\") %&gt;%\n  group_by(time) %&gt;%\n  summarise(mean = mean(expression))\n\n# A tibble: 3 x 2\n   time  mean\n  &lt;dbl&gt; &lt;dbl&gt;\n1     0  169 \n2     4  156.\n3     8   61"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---count",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---count",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - count()",
+    "text": "Dplyr in action - count()\ncount() summarise the total elements per category\n\n# get counts in infection classes\nrna %&gt;%\n    count(infection)\n\n# A tibble: 2 x 2\n  infection       n\n  &lt;chr&gt;       &lt;int&gt;\n1 InfluenzaA  22110\n2 NonInfected 10318\n\n\nthat is equivalent to:\n\nrna %&gt;%\n    group_by(infection) %&gt;%\n    summarise(n = n())\n\n# A tibble: 2 x 2\n  infection       n\n  &lt;chr&gt;       &lt;int&gt;\n1 InfluenzaA  22110\n2 NonInfected 10318"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---count-1",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---count-1",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - count()",
+    "text": "Dplyr in action - count()\nCounts can be also in multiple levels\n\nrna %&gt;%\n    count(infection, time)\n\n# A tibble: 3 x 3\n  infection    time     n\n  &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;\n1 InfluenzaA      4 11792\n2 InfluenzaA      8 10318\n3 NonInfected     0 10318"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---arrange",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---arrange",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - arrange()",
+    "text": "Dplyr in action - arrange()\nData can be sorted by column values with arrange()\n\nrna %&gt;%\n    arrange(gene)\n\n# A tibble: 32,428 x 19\n   gene     sample expression organism   age sex   infection strain  time tissue\n   &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n 1 AI504432 GSM25~       1230 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 2 AI504432 GSM25~       1085 Mus mus~     8 Fema~ NonInfec~ C57BL~     0 Cereb~\n 3 AI504432 GSM25~        969 Mus mus~     8 Fema~ NonInfec~ C57BL~     0 Cereb~\n 4 AI504432 GSM25~       1284 Mus mus~     8 Fema~ Influenz~ C57BL~     4 Cereb~\n 5 AI504432 GSM25~        966 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n 6 AI504432 GSM25~        918 Mus mus~     8 Male  Influenz~ C57BL~     8 Cereb~\n 7 AI504432 GSM25~        985 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 8 AI504432 GSM25~        972 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~\n 9 AI504432 GSM25~       1000 Mus mus~     8 Fema~ Influenz~ C57BL~     4 Cereb~\n10 AI504432 GSM25~        816 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n# i 32,418 more rows\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#dplyr-in-action---arrange-1",
+    "href": "qmd/08_DataWrangling.html#dplyr-in-action---arrange-1",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Dplyr in action - arrange()",
+    "text": "Dplyr in action - arrange()\nDefault is in ascending order, for descending order\n\nrna %&gt;%\n    arrange(desc(gene))\n\n# A tibble: 32,428 x 19\n   gene  sample    expression organism   age sex   infection strain  time tissue\n   &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n 1 Zw10  GSM25453~       1479 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 2 Zw10  GSM25453~       1394 Mus mus~     8 Fema~ NonInfec~ C57BL~     0 Cereb~\n 3 Zw10  GSM25453~       1279 Mus mus~     8 Fema~ NonInfec~ C57BL~     0 Cereb~\n 4 Zw10  GSM25453~       1376 Mus mus~     8 Fema~ Influenz~ C57BL~     4 Cereb~\n 5 Zw10  GSM25453~       1568 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n 6 Zw10  GSM25453~       1581 Mus mus~     8 Male  Influenz~ C57BL~     8 Cereb~\n 7 Zw10  GSM25453~       1271 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 8 Zw10  GSM25453~       1853 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~\n 9 Zw10  GSM25453~       1369 Mus mus~     8 Fema~ Influenz~ C57BL~     4 Cereb~\n10 Zw10  GSM25453~       1578 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~\n# i 32,418 more rows\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#hands-on-6",
+    "href": "qmd/08_DataWrangling.html#hands-on-6",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Hands on",
+    "text": "Hands on\n\nHow many genes were analysed in each sample?\nUse group_by() and summarise() to evaluate the sequencing depth (the sum of all counts) in each sample. Which sample has the highest sequencing depth?\nPick one sample and evaluate the number of genes by biotype.\nIdentify genes associated with the “abnormal DNA methylation” phenotype description, and calculate their mean expression (in log) at time 0, time 4 and time 8."
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#hands-on-7",
+    "href": "qmd/08_DataWrangling.html#hands-on-7",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Hands on",
+    "text": "Hands on\n\nHow many genes were analysed in each sample?\n\n\nrna %&gt;%\n  count(sample)\n\n# A tibble: 22 x 2\n   sample         n\n   &lt;chr&gt;      &lt;int&gt;\n 1 GSM2545336  1474\n 2 GSM2545337  1474\n 3 GSM2545338  1474\n 4 GSM2545339  1474\n 5 GSM2545340  1474\n 6 GSM2545341  1474\n 7 GSM2545342  1474\n 8 GSM2545343  1474\n 9 GSM2545344  1474\n10 GSM2545345  1474\n# i 12 more rows"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#hands-on-8",
+    "href": "qmd/08_DataWrangling.html#hands-on-8",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Hands on",
+    "text": "Hands on\n\nUse group_by() and summarise() to evaluate the sequencing depth (the sum of all counts) in each sample. Which sample has the highest sequencing depth?\n\n\nrna %&gt;%\n  group_by(sample) %&gt;%\n  summarise(seq_depth = sum(expression)) %&gt;%\n  arrange(desc(seq_depth))\n\n# A tibble: 22 x 2\n   sample     seq_depth\n   &lt;chr&gt;          &lt;dbl&gt;\n 1 GSM2545350   3255566\n 2 GSM2545352   3216163\n 3 GSM2545343   3105652\n 4 GSM2545336   3039671\n 5 GSM2545380   3036098\n 6 GSM2545353   2953249\n 7 GSM2545348   2913678\n 8 GSM2545362   2913517\n 9 GSM2545351   2782464\n10 GSM2545349   2758006\n# i 12 more rows"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#hands-on-9",
+    "href": "qmd/08_DataWrangling.html#hands-on-9",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Hands on",
+    "text": "Hands on\n\nPick one sample and evaluate the number of genes by biotype.\n\n\nrna %&gt;%\n  filter(sample == \"GSM2545336\") %&gt;%\n  count(gene_biotype) %&gt;%\n  arrange(desc(n))\n\n# A tibble: 13 x 2\n   gene_biotype                           n\n   &lt;chr&gt;                              &lt;int&gt;\n 1 protein_coding                      1321\n 2 lncRNA                                69\n 3 processed_pseudogene                  59\n 4 miRNA                                  7\n 5 snoRNA                                 5\n 6 TEC                                    4\n 7 polymorphic_pseudogene                 2\n 8 unprocessed_pseudogene                 2\n 9 IG_C_gene                              1\n10 scaRNA                                 1\n11 transcribed_processed_pseudogene       1\n12 transcribed_unitary_pseudogene         1\n13 transcribed_unprocessed_pseudogene     1"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#hands-on-10",
+    "href": "qmd/08_DataWrangling.html#hands-on-10",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Hands on",
+    "text": "Hands on\n\nIdentify genes associated with the “abnormal DNA methylation” phenotype description, and calculate their mean expression (in log) at time 0, time 4 and time 8.\n\n\nrna %&gt;%\n  filter(phenotype_description == \"abnormal DNA methylation\") %&gt;%\n  group_by(gene, time) %&gt;%\n  summarise(mean_expression = mean(log(expression))) %&gt;%\n  arrange()\n\n# A tibble: 6 x 3\n# Groups:   gene [2]\n  gene   time mean_expression\n  &lt;chr&gt; &lt;dbl&gt;           &lt;dbl&gt;\n1 Xist      0            6.95\n2 Xist      4            6.34\n3 Xist      8            7.13\n4 Zdbf2     0            6.27\n5 Zdbf2     4            6.27\n6 Zdbf2     8            6.19"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#the-tip-of-the-iceberg",
+    "href": "qmd/08_DataWrangling.html#the-tip-of-the-iceberg",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "The tip of the iceberg",
+    "text": "The tip of the iceberg\n\nFor more, see this handy cheatsheet!"
+  },
+  {
+    "objectID": "qmd/08_DataWrangling.html#any-questions",
+    "href": "qmd/08_DataWrangling.html#any-questions",
+    "title": "08: Intro to Data Wrangling with Dplyr",
+    "section": "Any questions?",
+    "text": "Any questions?\nNext, we will learn about data visualization techniques with ggplot2."
+  },
+  {
+    "objectID": "qmd/01_FirstSteps.html",
+    "href": "qmd/01_FirstSteps.html",
+    "title": "01: First Steps",
+    "section": "",
+    "text": "Create R project\nBest practice:\nEach R project should have their dedicated directory. This directory will hold code, data, results etc.\nTask: Open a new project with “File &gt; New Project …”\nNotice the following distinction:\n\nWhen running Rstudio locally, the project directory will reside on your local computer.\nWhen accessing a web server, the project directory will also be on that server.\n\nTask: Familiarize yourself with the layout and the various panels in Rstudio.\nQuery: Utilization: https://pollev.com/thomasmanke101\n\n\nConsole and Commands\nFor now, the most important panel is the so-called “Console” with the prompt (“&gt;”).\nThis is where the first interactions with the R-software will take place.\nThe other panels are for: output, help and other information.\nTask: In the Console try to repeat and understand the following operations\n\n\nCode\n2+2\n\n\n[1] 4\n\n\nCode\n2^3        # This is a comment: try also 2**3\n\n\n[1] 8\n\n\nCode\n1+2+3/6    # beware of precedence rules\n\n\n[1] 3.5\n\n\nCode\nsqrt(2)    # functions\n\n\n[1] 1.414214\n\n\nCode\nsin(pi/2)  # functions and built-in constants\n\n\n[1] 1\n\n\nCode\n# Special values\n1/0        # R knows infinity! Try 1/Inf and 1/inf\n\n\n[1] Inf\n\n\nCode\n0/0        # Not a number!     Try sqrt(-1)\n\n\n[1] NaN\n\n\n\n\nCommand History\nAll R-commands are tracked in a history. It maybe accessed using the cursors (or the history panel in RStudio). This is extremely useful to navigate to previous commands, repeat them, or change them slightly.\nTask: Using the history, determine \\(\\sqrt 3\\).\n\n\nFirst help\nThere are various different ways to get help\n\n\nCode\n?sin\n\n\nUse help to find out more about: sqrt, exp or anything else of interest.\n\n\nCommunity help\n\nonline courses: https://software-carpentry.org/lessons, Coursera, Udacity, …\nbootcamp: https://github.com/jknowles/r_tutorial_ed\nQuickR: https://www.statmethods.net\nhttps://stackoverflow.com, https://www.r-bloggers.com/\n\n\n\nSessionInfo\nEvery language operates in a certain context and is context-dependent.\nSoftware depends on other software and packages.\nIt is important to be aware of those (often complex) dependencies.\nOne way to communicate this context is with the output from sessionInfo().\n\n\nCode\nsessionInfo()\n\n\nR version 4.2.3 (2023-03-15)\nPlatform: x86_64-conda-linux-gnu (64-bit)\nRunning under: Debian GNU/Linux 12 (bookworm)\n\nMatrix products: default\nBLAS/LAPACK: /github/home/micromamba/envs/Rintro/lib/libopenblasp-r0.3.26.so\n\nlocale:\n[1] C\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nloaded via a namespace (and not attached):\n [1] compiler_4.2.3  fastmap_1.1.1   cli_3.6.2       tools_4.2.3    \n [5] htmltools_0.5.8 yaml_2.3.8      rmarkdown_2.25  knitr_1.45     \n [9] jsonlite_1.8.8  xfun_0.43       digest_0.6.35   rlang_1.1.3    \n[13] evaluate_0.23  \n\n\n\n\n\nAssigning values to objects\nGoal: store results of computation in new variables\n\n\nCode\nx &lt;- 2*pi # pre-defined constant pi\nx         # see value of object x = show(x) \n\n\n[1] 6.283185\n\n\nCode\nx &lt; -2    # Careful: what's going on here?\n\n\n[1] FALSE\n\n\nCode\nx\n\n\n[1] 6.283185\n\n\nCode\nx = 2  # \"=\" as in most other languages.  \nx      # x was overwritten\n\n\n[1] 2\n\n\nCode\nx==3   # another logical comparison (x unchanged)\n\n\n[1] FALSE\n\n\nCode\nx+x    # passing objects to functions (+)\n\n\n[1] 4\n\n\nTask: look at the following objects and understand the differences\n\n\nCode\npi \nhi\n\"hi\"\n\n\n\n\n\nSimple Vectors\nVectors illustrate how complex data structures can be built from smaller blocks. Here we learn how to create and inspect vectors.\n\n\nCode\nv=c(1,2)            # combine arguments into vector\nv                   # display v\n\n\n[1] 1 2\n\n\nCode\n# functions for vectors\nstr(v)              # structure of v (especially useful for long and structured objects)\n\n\n num [1:2] 1 2\n\n\nCode\ntypeof(v)           # type of v ( ~ storage mode)\n\n\n[1] \"double\"\n\n\nCode\nclass(v)            # class of v (determines how certain functions will work with v)\n\n\n[1] \"numeric\"\n\n\nCode\nlength(v)\n\n\n[1] 2\n\n\nCode\nsum(v)\n\n\n[1] 3\n\n\nCode\nsummary(v)\n\n\n   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. \n   1.00    1.25    1.50    1.50    1.75    2.00 \n\n\n\n\nAccessing Vectors\nFrequently we need to access specific elements from a vector\n\n\nCode\nv[1]\n\n\n[1] 1\n\n\nTask: access the following vector elements: v[1], v[2], v[3], v[1:3], v[-1]\n\n\nVector Generation\n\n\nCode\nv=c(1,2,3,4,5)    # combining many elements can get cumbersome\nv=1:5             # more efficient\n\nv=seq(from=1, to=5, by=1) # same as before but more flexibilty\nv=seq(1,5,0.5)            # short-hand defaults\n\n\nTasks:\n\nExplore the seq() function and inspect other parameter options.\nCreate a vector with 5 numbers equally spaced from +2 to -1.9\n\n\n\n[1]  2.000  1.025  0.050 -0.925 -1.900\n\n\nTask: Understand the difference between the two vectors v1 and v2\n\n\nCode\nv1=1:10-1\nv2=1:(10-1)\n\n\n\n\nVector Operations\n\n\nCode\nv1=1:3      # = c(1,2,3)\nv2=rep(2,3) # = c(2,2,2)\n\nv1+v2      # elementwise addition\nv1*v2      # ... multiplication\nv1 &gt; v2    # ... comparisons\nv1 %*% v2  # scalar product\n\n\nTask: Define your own vectors and explore some numerical operations\n\n\nMisc: Concepts and Pecularities\n\n\nCode\nv=1:4                    # Vector Definition\n\nv + 10                   # Recycling\nv + c(10,20)             # Recycling\nv + c(10,20,30)          # Warning != Error\n\n#v %*% c(10,20,30)        # Error = Error\n\nletters                  # built-in vector. Try LETTERS \ntypeof(letters)          # there is more than numbers\n\nnames(v)=letters[1:4]    # naming of vector elements (for convenience)\nv[\"b\"]                   # index by name\n\nrev(v)                   # reverse vectors\n\n\n\n\n\nLearning Curve:\n\nRstudio: Starting an R project\nwork with console\nsimple functions (input, output), logical operations and parameters\ncreating simple objects and assigning values\ninspecting objects: v, str(v), typeof(v), length(v)\nflexible creation of vectors\nvector indices and subsetting\nvector operations and recycling\nspecial values: Inf, NaN, NA\nfunctions can behave differently on different input: summary()\nsee warning messages and errors\ngetting help: ?sqrt\nsoftware dependencies and the importance of sesssionInfo()"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#before-we-begin",
+    "href": "qmd/07_DataImport.html#before-we-begin",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Before we begin",
+    "text": "Before we begin\n\nIf you are not using Workbench, please install the following packages:\n\n\ninstall.packages(\"tidyverse\")\n\n\nThe command will install a large set of packages that are designed to work together, including ggplot2.\n\nAnd load the package\n\nlibrary(tidyverse)"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#credit",
+    "href": "qmd/07_DataImport.html#credit",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Credit",
+    "text": "Credit\n\nThis presentation is heavily influenced by Rafael Irizarry’s book Introduction to Data Science and his corresponding course on EdX.\nIt also draws on material from previous MPI R courses given by Devon Ryan and David Koppstein.\nUpdated with the Software Carpentry course “Introduction to data analysis with R and Bioconductor”\n\n  \n\nhttps://www.edx.org/bio/rafael-irizarry https://carpentries-incubator.github.io/bioc-intro/30-dplyr.html"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#following-along",
+    "href": "qmd/07_DataImport.html#following-along",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Following along",
+    "text": "Following along\n\nFor each module, please create a separate R script and type in and execute the commands that are to follow along.\nThe code from some slides depends on the previous slides!\nYou can execute each line individually using Command-Enter on Mac, alt-Enter on Workbench."
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#data-import-in-the-tidyverse",
+    "href": "qmd/07_DataImport.html#data-import-in-the-tidyverse",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Data Import in the Tidyverse",
+    "text": "Data Import in the Tidyverse\nThe first step for any analysis is importing the data into a machine-readable format. The tidyverse offers the readr:: and readxl:: packages.\nNote:\n\nmost data can be easy to import when it’s properly formatted in a text format\nMS Excel files can be read and/or write but should be avoided"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#formats",
+    "href": "qmd/07_DataImport.html#formats",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Formats",
+    "text": "Formats\nCSV (comma separated values)\nlabel1,label2,label3,\"label num 4\"&lt;NL&gt;\nvalue1,value2,value3,\"value num 4\"&lt;NL&gt;\nsample,sex,age,treatment,response\nA001,M,8,KO,5200\nA002,M,4,WT,4430\nA003,F,4,KO,344\nB001,F,6,WT,2328"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#formats-1",
+    "href": "qmd/07_DataImport.html#formats-1",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Formats",
+    "text": "Formats\nTSV (tab separated values)\nlabel1&lt;TAB&gt;label2&lt;TAB&gt;label3&lt;TAB&gt;\"label num 4\"&lt;NL&gt;\nvalue1&lt;TAB&gt;value2&lt;TAB&gt;value3&lt;TAB&gt;\"value num 4\"&lt;NL&gt;\nsample\\tsex\\tage\\ttreatment\\tresponse\nA001\\tM\\t8\\tKO\\t5200\nA002\\tM\\t4\\tWT\\t4430\nA003\\tF\\t4\\tKO\\t344\nB001\\tF\\t6t\\tWT\\t2328"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#formats-2",
+    "href": "qmd/07_DataImport.html#formats-2",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Formats",
+    "text": "Formats\nDELIM (char separated values)\nlabel1;label2;label3;\"label num 4\"$value1;value2;value3;\"value num 4\"//\nsample;sex;age;treatment;response$A001;M;8;KO;5200$A002;M;4;WT;4430$A003;F;4;KO;344$B001;F;6;WT;2328//"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#readr",
+    "href": "qmd/07_DataImport.html#readr",
+    "title": "07: Data Import with Tidyverse",
+    "section": "readr::",
+    "text": "readr::\n\nreadr:: is the Tidyverse library for reading data from text formats.\nread_csv(), read_tsv(), read_table(), and read_delim() are some of the functions provided\nread_csv2() allows for reading of European-style CSV files (e.g. using ;)\n\n\nhttps://readr.tidyverse.org/"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#readr-in-action",
+    "href": "qmd/07_DataImport.html#readr-in-action",
+    "title": "07: Data Import with Tidyverse",
+    "section": "readr:: in action",
+    "text": "readr:: in action\n\n# read file in CSV format, file is in working directory\ndat = read_csv(\"file.csv\")\n\n# read file using full path, file is anywhere in the filesystem\ndat = read_csv(\"/full/path/to/file.csv\")\n\n# read file using URL, file is anywhere in the internet\ndat = read_csv(\"https://server.com/region/file.csv\")"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#readr-in-action-1",
+    "href": "qmd/07_DataImport.html#readr-in-action-1",
+    "title": "07: Data Import with Tidyverse",
+    "section": "readr:: in action",
+    "text": "readr:: in action\n\nrnaseq_file = \"https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv\"\n\nrna = read_csv(rnaseq_file)\n\nrna \n\n# A tibble: 32,428 x 19\n   gene    sample  expression organism   age sex   infection strain  time tissue\n   &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n 1 Asl     GSM254~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 2 Apod    GSM254~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 3 Cyp2d22 GSM254~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 4 Klk6    GSM254~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 5 Fcrls   GSM254~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 6 Slc2a4  GSM254~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 7 Exd2    GSM254~       1619 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 8 Gjc2    GSM254~        288 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 9 Plp1    GSM254~      43217 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n10 Gnb4    GSM254~       1071 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n# i 32,418 more rows\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;\n\n\nWhat is this “rna”?"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#what-is-a-tibble",
+    "href": "qmd/07_DataImport.html#what-is-a-tibble",
+    "title": "07: Data Import with Tidyverse",
+    "section": "What is a tibble?",
+    "text": "What is a tibble?\n\nTibbles are like data frames, but more modern, and are built for the Tidyverse\nThe interface is the same, using e.g. $ for columns\nTibbles can contain more complex objects than just strings, numbers, or booleans, like lists or functions\nTibbles can be grouped\nYou can see the types of each column in a tibble"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#quick-exercise",
+    "href": "qmd/07_DataImport.html#quick-exercise",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Quick exercise",
+    "text": "Quick exercise\nExplore the RNAseq data as a tibble.\n\nhead(rna)\n\n# A tibble: 6 x 19\n  gene    sample   expression organism   age sex   infection strain  time tissue\n  &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n1 Asl     GSM2545~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n2 Apod    GSM2545~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n3 Cyp2d22 GSM2545~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n4 Klk6    GSM2545~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n5 Fcrls   GSM2545~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n6 Slc2a4  GSM2545~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#quick-exercise-1",
+    "href": "qmd/07_DataImport.html#quick-exercise-1",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Quick exercise",
+    "text": "Quick exercise\nExplore the RNAseq data as a tibble.\n\ntail(rna)\n\n# A tibble: 6 x 19\n  gene    sample   expression organism   age sex   infection strain  time tissue\n  &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n1 Aldh9a1 GSM2545~       1770 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n2 Mgst3   GSM2545~       2151 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n3 Lrrc52  GSM2545~          5 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n4 Rxrg    GSM2545~         49 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n5 Lmx1a   GSM2545~         72 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n6 Pbx1    GSM2545~       4795 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#quick-exercise-2",
+    "href": "qmd/07_DataImport.html#quick-exercise-2",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Quick exercise",
+    "text": "Quick exercise\nExplore the RNAseq data as a tibble.\n\ndim(rna)\n\n[1] 32428    19"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#readxl",
+    "href": "qmd/07_DataImport.html#readxl",
+    "title": "07: Data Import with Tidyverse",
+    "section": "readxl::",
+    "text": "readxl::\n\nreadxl:: is the Tidyverse library for reading data from Excel formats.\nread_excel(), read_xls() and read_xlsx() are some of the functions provided\nThe excel_sheets() function yields the names of the sheets in the Excel file. These names are passed to the sheet argument for the readxl functions\nThe read_lines() function shows the first few lines of a file in R."
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#readxl-in-action",
+    "href": "qmd/07_DataImport.html#readxl-in-action",
+    "title": "07: Data Import with Tidyverse",
+    "section": "readxl:: in action",
+    "text": "readxl:: in action\n\nlibrary(readxl)\n\nfull_url = \"https://github.com/maxplanck-ie/Rintro/raw/2024.04/qmd/data/2010_bigfive_regents.xls\"\n\ndownload.file(url=full_url, destfile=\"2010_bigfive_regents.xls\")\n\nexcel_sheets(\"2010_bigfive_regents.xls\")\n\n[1] \"Sheet1\" \"Sheet2\" \"Sheet3\"\n\n\nexcel_sheets() lists the sheets in the Excel file"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#readxl-in-action-1",
+    "href": "qmd/07_DataImport.html#readxl-in-action-1",
+    "title": "07: Data Import with Tidyverse",
+    "section": "readxl:: in action",
+    "text": "readxl:: in action\nLoading the data in “Sheet1”\n\nsheet_one = read_xls(\"2010_bigfive_regents.xls\", sheet = \"Sheet1\")\n\nsheet_one\n\n# A tibble: 104 x 6\n   label     `INTEGRATED ALGEBRA` `GLOBAL HISTORY` `LIVING ENVIRONMENT` ENGLISH\n   &lt;chr&gt;                    &lt;dbl&gt;            &lt;dbl&gt;                &lt;dbl&gt;   &lt;dbl&gt;\n 1 test_year                 2010             2010                 2010    2010\n 2 Scores                  131024           113804               104201  103886\n 3 0                           56               55                   66     165\n 4 1                           NA                8                    3      69\n 5 2                            1                9                    2     237\n 6 3                           NA                3                    1     190\n 7 4                            3               15                    1     109\n 8 5                            2               11                   10     122\n 9 6                            4               29                    3     151\n10 7                            1               37                    2     175\n# i 94 more rows\n# i 1 more variable: `U.S. HISTORY` &lt;dbl&gt;"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#readxl-1",
+    "href": "qmd/07_DataImport.html#readxl-1",
+    "title": "07: Data Import with Tidyverse",
+    "section": "readxl::",
+    "text": "readxl::\n\nread_xls() is for xls files, read_xlsx for XML-based xlsx files\nyou can use read_excel() if you are unsure of the format"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#any-questions",
+    "href": "qmd/07_DataImport.html#any-questions",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Any questions?",
+    "text": "Any questions?\nWe will next talk about how to manipulate data in data frames/tibbles using the Tidyverse."
+  },
+  {
+    "objectID": "qmd/S02_tidyverse.html",
+    "href": "qmd/S02_tidyverse.html",
+    "title": "S02: Tidyverse",
+    "section": "",
+    "text": "Tidyverse\nSee also: R for Data Science: https://r4ds.had.co.nz/\n\n\nCode\ninstall.packages(\"tidyverse\") # only needed once\n\n\n\n\nCode\nlibrary(\"tidyverse\")\n\n\n-- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --\nv dplyr     1.1.4     v readr     2.1.5\nv forcats   1.0.0     v stringr   1.5.1\nv ggplot2   3.5.0     v tibble    3.2.1\nv lubridate 1.9.3     v tidyr     1.3.1\nv purrr     1.0.2     \n-- Conflicts ------------------------------------------ tidyverse_conflicts() --\nx dplyr::filter() masks stats::filter()\nx dplyr::lag()    masks stats::lag()\ni Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\n\n\nCode\ngetwd()  # know your working directory\n\n\n[1] \"/__w/Rintro/Rintro/qmd\"\n\n\nCode\nfile=\"data/GeneList.tsv\"   # set file name relative to working directory\nD = read_tsv(file, comment=\"%\")\n\n\nRows: 6 Columns: 6\n-- Column specification --------------------------------------------------------\nDelimiter: \"\\t\"\nchr (2): GeneName, Description\ndbl (3): Exp1, Exp2, Exp3\nlgl (1): Planned\n\ni Use `spec()` to retrieve the full column specification for this data.\ni Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\nCode\nD\n\n\n# A tibble: 6 x 6\n  GeneName Description  Exp1  Exp2  Exp3 Planned\n  &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;  \n1 ABC      unknown       1.2   1.5   1.3 NA     \n2 DEF1     &lt;NA&gt;          1.3   4.7  NA   NA     \n3 5'XYZ    pseudogene   50    20    12   NA     \n4 3'UVW    &lt;NA&gt;         10    20    34   NA     \n5 Sep7     &lt;NA&gt;         20    NA    22   NA     \n6 Oct1     important     1     1     1   NA     \n\n\n\n\nA new style: Pipes\n\n\nCode\niris %&gt;% str()\n\n\n'data.frame':   150 obs. of  5 variables:\n $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...\n $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...\n $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...\n $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...\n $ Species     : Factor w/ 3 levels \"setosa\",\"versicolor\",..: 1 1 1 1 1 1 1 1 1 1 ...\n\n\nCode\niris %&gt;% head()\n\n\n  Sepal.Length Sepal.Width Petal.Length Petal.Width Species\n1          5.1         3.5          1.4         0.2  setosa\n2          4.9         3.0          1.4         0.2  setosa\n3          4.7         3.2          1.3         0.2  setosa\n4          4.6         3.1          1.5         0.2  setosa\n5          5.0         3.6          1.4         0.2  setosa\n6          5.4         3.9          1.7         0.4  setosa\n\n\n\n\nSelection\n\n\nCode\n# column selection / unselection\niris %&gt;% select(-Species) %&gt;% head()                            \n\n\n  Sepal.Length Sepal.Width Petal.Length Petal.Width\n1          5.1         3.5          1.4         0.2\n2          4.9         3.0          1.4         0.2\n3          4.7         3.2          1.3         0.2\n4          4.6         3.1          1.5         0.2\n5          5.0         3.6          1.4         0.2\n6          5.4         3.9          1.7         0.4\n\n\nCode\niris %&gt;% select(matches(\"Length\")) %&gt;% head()\n\n\n  Sepal.Length Petal.Length\n1          5.1          1.4\n2          4.9          1.4\n3          4.7          1.3\n4          4.6          1.5\n5          5.0          1.4\n6          5.4          1.7\n\n\nCode\n# row selection\niris %&gt;% slice(-c(4:150))\n\n\n  Sepal.Length Sepal.Width Petal.Length Petal.Width Species\n1          5.1         3.5          1.4         0.2  setosa\n2          4.9         3.0          1.4         0.2  setosa\n3          4.7         3.2          1.3         0.2  setosa\n\n\nCode\niris %&gt;% filter(Petal.Length==min(Petal.Length))      \n\n\n  Sepal.Length Sepal.Width Petal.Length Petal.Width Species\n1          4.6         3.6            1         0.2  setosa\n\n\nCode\niris %&gt;% filter(Petal.Length&lt;2 & Sepal.Width&gt;4) \n\n\n  Sepal.Length Sepal.Width Petal.Length Petal.Width Species\n1          5.7         4.4          1.5         0.4  setosa\n2          5.2         4.1          1.5         0.1  setosa\n3          5.5         4.2          1.4         0.2  setosa\n\n\n\n\nData Munging and Reshaping\nSame data can come in various shapes:\n\n\nCode\niris %&gt;% gather(Measurement, Value, -Species)   # convert between wide and long forms\n\n\n       Species  Measurement Value\n1       setosa Sepal.Length   5.1\n2       setosa Sepal.Length   4.9\n3       setosa Sepal.Length   4.7\n4       setosa Sepal.Length   4.6\n5       setosa Sepal.Length   5.0\n6       setosa Sepal.Length   5.4\n7       setosa Sepal.Length   4.6\n8       setosa Sepal.Length   5.0\n9       setosa Sepal.Length   4.4\n10      setosa Sepal.Length   4.9\n11      setosa Sepal.Length   5.4\n12      setosa Sepal.Length   4.8\n13      setosa Sepal.Length   4.8\n14      setosa Sepal.Length   4.3\n15      setosa Sepal.Length   5.8\n16      setosa Sepal.Length   5.7\n17      setosa Sepal.Length   5.4\n18      setosa Sepal.Length   5.1\n19      setosa Sepal.Length   5.7\n20      setosa Sepal.Length   5.1\n21      setosa Sepal.Length   5.4\n22      setosa Sepal.Length   5.1\n23      setosa Sepal.Length   4.6\n24      setosa Sepal.Length   5.1\n25      setosa Sepal.Length   4.8\n26      setosa Sepal.Length   5.0\n27      setosa Sepal.Length   5.0\n28      setosa Sepal.Length   5.2\n29      setosa Sepal.Length   5.2\n30      setosa Sepal.Length   4.7\n31      setosa Sepal.Length   4.8\n32      setosa Sepal.Length   5.4\n33      setosa Sepal.Length   5.2\n34      setosa Sepal.Length   5.5\n35      setosa Sepal.Length   4.9\n36      setosa Sepal.Length   5.0\n37      setosa Sepal.Length   5.5\n38      setosa Sepal.Length   4.9\n39      setosa Sepal.Length   4.4\n40      setosa Sepal.Length   5.1\n41      setosa Sepal.Length   5.0\n42      setosa Sepal.Length   4.5\n43      setosa Sepal.Length   4.4\n44      setosa Sepal.Length   5.0\n45      setosa Sepal.Length   5.1\n46      setosa Sepal.Length   4.8\n47      setosa Sepal.Length   5.1\n48      setosa Sepal.Length   4.6\n49      setosa Sepal.Length   5.3\n50      setosa Sepal.Length   5.0\n51  versicolor Sepal.Length   7.0\n52  versicolor Sepal.Length   6.4\n53  versicolor Sepal.Length   6.9\n54  versicolor Sepal.Length   5.5\n55  versicolor Sepal.Length   6.5\n56  versicolor Sepal.Length   5.7\n57  versicolor Sepal.Length   6.3\n58  versicolor Sepal.Length   4.9\n59  versicolor Sepal.Length   6.6\n60  versicolor Sepal.Length   5.2\n61  versicolor Sepal.Length   5.0\n62  versicolor Sepal.Length   5.9\n63  versicolor Sepal.Length   6.0\n64  versicolor Sepal.Length   6.1\n65  versicolor Sepal.Length   5.6\n66  versicolor Sepal.Length   6.7\n67  versicolor Sepal.Length   5.6\n68  versicolor Sepal.Length   5.8\n69  versicolor Sepal.Length   6.2\n70  versicolor Sepal.Length   5.6\n71  versicolor Sepal.Length   5.9\n72  versicolor Sepal.Length   6.1\n73  versicolor Sepal.Length   6.3\n74  versicolor Sepal.Length   6.1\n75  versicolor Sepal.Length   6.4\n76  versicolor Sepal.Length   6.6\n77  versicolor Sepal.Length   6.8\n78  versicolor Sepal.Length   6.7\n79  versicolor Sepal.Length   6.0\n80  versicolor Sepal.Length   5.7\n81  versicolor Sepal.Length   5.5\n82  versicolor Sepal.Length   5.5\n83  versicolor Sepal.Length   5.8\n84  versicolor Sepal.Length   6.0\n85  versicolor Sepal.Length   5.4\n86  versicolor Sepal.Length   6.0\n87  versicolor Sepal.Length   6.7\n88  versicolor Sepal.Length   6.3\n89  versicolor Sepal.Length   5.6\n90  versicolor Sepal.Length   5.5\n91  versicolor Sepal.Length   5.5\n92  versicolor Sepal.Length   6.1\n93  versicolor Sepal.Length   5.8\n94  versicolor Sepal.Length   5.0\n95  versicolor Sepal.Length   5.6\n96  versicolor Sepal.Length   5.7\n97  versicolor Sepal.Length   5.7\n98  versicolor Sepal.Length   6.2\n99  versicolor Sepal.Length   5.1\n100 versicolor Sepal.Length   5.7\n101  virginica Sepal.Length   6.3\n102  virginica Sepal.Length   5.8\n103  virginica Sepal.Length   7.1\n104  virginica Sepal.Length   6.3\n105  virginica Sepal.Length   6.5\n106  virginica Sepal.Length   7.6\n107  virginica Sepal.Length   4.9\n108  virginica Sepal.Length   7.3\n109  virginica Sepal.Length   6.7\n110  virginica Sepal.Length   7.2\n111  virginica Sepal.Length   6.5\n112  virginica Sepal.Length   6.4\n113  virginica Sepal.Length   6.8\n114  virginica Sepal.Length   5.7\n115  virginica Sepal.Length   5.8\n116  virginica Sepal.Length   6.4\n117  virginica Sepal.Length   6.5\n118  virginica Sepal.Length   7.7\n119  virginica Sepal.Length   7.7\n120  virginica Sepal.Length   6.0\n121  virginica Sepal.Length   6.9\n122  virginica Sepal.Length   5.6\n123  virginica Sepal.Length   7.7\n124  virginica Sepal.Length   6.3\n125  virginica Sepal.Length   6.7\n126  virginica Sepal.Length   7.2\n127  virginica Sepal.Length   6.2\n128  virginica Sepal.Length   6.1\n129  virginica Sepal.Length   6.4\n130  virginica Sepal.Length   7.2\n131  virginica Sepal.Length   7.4\n132  virginica Sepal.Length   7.9\n133  virginica Sepal.Length   6.4\n134  virginica Sepal.Length   6.3\n135  virginica Sepal.Length   6.1\n136  virginica Sepal.Length   7.7\n137  virginica Sepal.Length   6.3\n138  virginica Sepal.Length   6.4\n139  virginica Sepal.Length   6.0\n140  virginica Sepal.Length   6.9\n141  virginica Sepal.Length   6.7\n142  virginica Sepal.Length   6.9\n143  virginica Sepal.Length   5.8\n144  virginica Sepal.Length   6.8\n145  virginica Sepal.Length   6.7\n146  virginica Sepal.Length   6.7\n147  virginica Sepal.Length   6.3\n148  virginica Sepal.Length   6.5\n149  virginica Sepal.Length   6.2\n150  virginica Sepal.Length   5.9\n151     setosa  Sepal.Width   3.5\n152     setosa  Sepal.Width   3.0\n153     setosa  Sepal.Width   3.2\n154     setosa  Sepal.Width   3.1\n155     setosa  Sepal.Width   3.6\n156     setosa  Sepal.Width   3.9\n157     setosa  Sepal.Width   3.4\n158     setosa  Sepal.Width   3.4\n159     setosa  Sepal.Width   2.9\n160     setosa  Sepal.Width   3.1\n161     setosa  Sepal.Width   3.7\n162     setosa  Sepal.Width   3.4\n163     setosa  Sepal.Width   3.0\n164     setosa  Sepal.Width   3.0\n165     setosa  Sepal.Width   4.0\n166     setosa  Sepal.Width   4.4\n167     setosa  Sepal.Width   3.9\n168     setosa  Sepal.Width   3.5\n169     setosa  Sepal.Width   3.8\n170     setosa  Sepal.Width   3.8\n171     setosa  Sepal.Width   3.4\n172     setosa  Sepal.Width   3.7\n173     setosa  Sepal.Width   3.6\n174     setosa  Sepal.Width   3.3\n175     setosa  Sepal.Width   3.4\n176     setosa  Sepal.Width   3.0\n177     setosa  Sepal.Width   3.4\n178     setosa  Sepal.Width   3.5\n179     setosa  Sepal.Width   3.4\n180     setosa  Sepal.Width   3.2\n181     setosa  Sepal.Width   3.1\n182     setosa  Sepal.Width   3.4\n183     setosa  Sepal.Width   4.1\n184     setosa  Sepal.Width   4.2\n185     setosa  Sepal.Width   3.1\n186     setosa  Sepal.Width   3.2\n187     setosa  Sepal.Width   3.5\n188     setosa  Sepal.Width   3.6\n189     setosa  Sepal.Width   3.0\n190     setosa  Sepal.Width   3.4\n191     setosa  Sepal.Width   3.5\n192     setosa  Sepal.Width   2.3\n193     setosa  Sepal.Width   3.2\n194     setosa  Sepal.Width   3.5\n195     setosa  Sepal.Width   3.8\n196     setosa  Sepal.Width   3.0\n197     setosa  Sepal.Width   3.8\n198     setosa  Sepal.Width   3.2\n199     setosa  Sepal.Width   3.7\n200     setosa  Sepal.Width   3.3\n201 versicolor  Sepal.Width   3.2\n202 versicolor  Sepal.Width   3.2\n203 versicolor  Sepal.Width   3.1\n204 versicolor  Sepal.Width   2.3\n205 versicolor  Sepal.Width   2.8\n206 versicolor  Sepal.Width   2.8\n207 versicolor  Sepal.Width   3.3\n208 versicolor  Sepal.Width   2.4\n209 versicolor  Sepal.Width   2.9\n210 versicolor  Sepal.Width   2.7\n211 versicolor  Sepal.Width   2.0\n212 versicolor  Sepal.Width   3.0\n213 versicolor  Sepal.Width   2.2\n214 versicolor  Sepal.Width   2.9\n215 versicolor  Sepal.Width   2.9\n216 versicolor  Sepal.Width   3.1\n217 versicolor  Sepal.Width   3.0\n218 versicolor  Sepal.Width   2.7\n219 versicolor  Sepal.Width   2.2\n220 versicolor  Sepal.Width   2.5\n221 versicolor  Sepal.Width   3.2\n222 versicolor  Sepal.Width   2.8\n223 versicolor  Sepal.Width   2.5\n224 versicolor  Sepal.Width   2.8\n225 versicolor  Sepal.Width   2.9\n226 versicolor  Sepal.Width   3.0\n227 versicolor  Sepal.Width   2.8\n228 versicolor  Sepal.Width   3.0\n229 versicolor  Sepal.Width   2.9\n230 versicolor  Sepal.Width   2.6\n231 versicolor  Sepal.Width   2.4\n232 versicolor  Sepal.Width   2.4\n233 versicolor  Sepal.Width   2.7\n234 versicolor  Sepal.Width   2.7\n235 versicolor  Sepal.Width   3.0\n236 versicolor  Sepal.Width   3.4\n237 versicolor  Sepal.Width   3.1\n238 versicolor  Sepal.Width   2.3\n239 versicolor  Sepal.Width   3.0\n240 versicolor  Sepal.Width   2.5\n241 versicolor  Sepal.Width   2.6\n242 versicolor  Sepal.Width   3.0\n243 versicolor  Sepal.Width   2.6\n244 versicolor  Sepal.Width   2.3\n245 versicolor  Sepal.Width   2.7\n246 versicolor  Sepal.Width   3.0\n247 versicolor  Sepal.Width   2.9\n248 versicolor  Sepal.Width   2.9\n249 versicolor  Sepal.Width   2.5\n250 versicolor  Sepal.Width   2.8\n251  virginica  Sepal.Width   3.3\n252  virginica  Sepal.Width   2.7\n253  virginica  Sepal.Width   3.0\n254  virginica  Sepal.Width   2.9\n255  virginica  Sepal.Width   3.0\n256  virginica  Sepal.Width   3.0\n257  virginica  Sepal.Width   2.5\n258  virginica  Sepal.Width   2.9\n259  virginica  Sepal.Width   2.5\n260  virginica  Sepal.Width   3.6\n261  virginica  Sepal.Width   3.2\n262  virginica  Sepal.Width   2.7\n263  virginica  Sepal.Width   3.0\n264  virginica  Sepal.Width   2.5\n265  virginica  Sepal.Width   2.8\n266  virginica  Sepal.Width   3.2\n267  virginica  Sepal.Width   3.0\n268  virginica  Sepal.Width   3.8\n269  virginica  Sepal.Width   2.6\n270  virginica  Sepal.Width   2.2\n271  virginica  Sepal.Width   3.2\n272  virginica  Sepal.Width   2.8\n273  virginica  Sepal.Width   2.8\n274  virginica  Sepal.Width   2.7\n275  virginica  Sepal.Width   3.3\n276  virginica  Sepal.Width   3.2\n277  virginica  Sepal.Width   2.8\n278  virginica  Sepal.Width   3.0\n279  virginica  Sepal.Width   2.8\n280  virginica  Sepal.Width   3.0\n281  virginica  Sepal.Width   2.8\n282  virginica  Sepal.Width   3.8\n283  virginica  Sepal.Width   2.8\n284  virginica  Sepal.Width   2.8\n285  virginica  Sepal.Width   2.6\n286  virginica  Sepal.Width   3.0\n287  virginica  Sepal.Width   3.4\n288  virginica  Sepal.Width   3.1\n289  virginica  Sepal.Width   3.0\n290  virginica  Sepal.Width   3.1\n291  virginica  Sepal.Width   3.1\n292  virginica  Sepal.Width   3.1\n293  virginica  Sepal.Width   2.7\n294  virginica  Sepal.Width   3.2\n295  virginica  Sepal.Width   3.3\n296  virginica  Sepal.Width   3.0\n297  virginica  Sepal.Width   2.5\n298  virginica  Sepal.Width   3.0\n299  virginica  Sepal.Width   3.4\n300  virginica  Sepal.Width   3.0\n301     setosa Petal.Length   1.4\n302     setosa Petal.Length   1.4\n303     setosa Petal.Length   1.3\n304     setosa Petal.Length   1.5\n305     setosa Petal.Length   1.4\n306     setosa Petal.Length   1.7\n307     setosa Petal.Length   1.4\n308     setosa Petal.Length   1.5\n309     setosa Petal.Length   1.4\n310     setosa Petal.Length   1.5\n311     setosa Petal.Length   1.5\n312     setosa Petal.Length   1.6\n313     setosa Petal.Length   1.4\n314     setosa Petal.Length   1.1\n315     setosa Petal.Length   1.2\n316     setosa Petal.Length   1.5\n317     setosa Petal.Length   1.3\n318     setosa Petal.Length   1.4\n319     setosa Petal.Length   1.7\n320     setosa Petal.Length   1.5\n321     setosa Petal.Length   1.7\n322     setosa Petal.Length   1.5\n323     setosa Petal.Length   1.0\n324     setosa Petal.Length   1.7\n325     setosa Petal.Length   1.9\n326     setosa Petal.Length   1.6\n327     setosa Petal.Length   1.6\n328     setosa Petal.Length   1.5\n329     setosa Petal.Length   1.4\n330     setosa Petal.Length   1.6\n331     setosa Petal.Length   1.6\n332     setosa Petal.Length   1.5\n333     setosa Petal.Length   1.5\n334     setosa Petal.Length   1.4\n335     setosa Petal.Length   1.5\n336     setosa Petal.Length   1.2\n337     setosa Petal.Length   1.3\n338     setosa Petal.Length   1.4\n339     setosa Petal.Length   1.3\n340     setosa Petal.Length   1.5\n341     setosa Petal.Length   1.3\n342     setosa Petal.Length   1.3\n343     setosa Petal.Length   1.3\n344     setosa Petal.Length   1.6\n345     setosa Petal.Length   1.9\n346     setosa Petal.Length   1.4\n347     setosa Petal.Length   1.6\n348     setosa Petal.Length   1.4\n349     setosa Petal.Length   1.5\n350     setosa Petal.Length   1.4\n351 versicolor Petal.Length   4.7\n352 versicolor Petal.Length   4.5\n353 versicolor Petal.Length   4.9\n354 versicolor Petal.Length   4.0\n355 versicolor Petal.Length   4.6\n356 versicolor Petal.Length   4.5\n357 versicolor Petal.Length   4.7\n358 versicolor Petal.Length   3.3\n359 versicolor Petal.Length   4.6\n360 versicolor Petal.Length   3.9\n361 versicolor Petal.Length   3.5\n362 versicolor Petal.Length   4.2\n363 versicolor Petal.Length   4.0\n364 versicolor Petal.Length   4.7\n365 versicolor Petal.Length   3.6\n366 versicolor Petal.Length   4.4\n367 versicolor Petal.Length   4.5\n368 versicolor Petal.Length   4.1\n369 versicolor Petal.Length   4.5\n370 versicolor Petal.Length   3.9\n371 versicolor Petal.Length   4.8\n372 versicolor Petal.Length   4.0\n373 versicolor Petal.Length   4.9\n374 versicolor Petal.Length   4.7\n375 versicolor Petal.Length   4.3\n376 versicolor Petal.Length   4.4\n377 versicolor Petal.Length   4.8\n378 versicolor Petal.Length   5.0\n379 versicolor Petal.Length   4.5\n380 versicolor Petal.Length   3.5\n381 versicolor Petal.Length   3.8\n382 versicolor Petal.Length   3.7\n383 versicolor Petal.Length   3.9\n384 versicolor Petal.Length   5.1\n385 versicolor Petal.Length   4.5\n386 versicolor Petal.Length   4.5\n387 versicolor Petal.Length   4.7\n388 versicolor Petal.Length   4.4\n389 versicolor Petal.Length   4.1\n390 versicolor Petal.Length   4.0\n391 versicolor Petal.Length   4.4\n392 versicolor Petal.Length   4.6\n393 versicolor Petal.Length   4.0\n394 versicolor Petal.Length   3.3\n395 versicolor Petal.Length   4.2\n396 versicolor Petal.Length   4.2\n397 versicolor Petal.Length   4.2\n398 versicolor Petal.Length   4.3\n399 versicolor Petal.Length   3.0\n400 versicolor Petal.Length   4.1\n401  virginica Petal.Length   6.0\n402  virginica Petal.Length   5.1\n403  virginica Petal.Length   5.9\n404  virginica Petal.Length   5.6\n405  virginica Petal.Length   5.8\n406  virginica Petal.Length   6.6\n407  virginica Petal.Length   4.5\n408  virginica Petal.Length   6.3\n409  virginica Petal.Length   5.8\n410  virginica Petal.Length   6.1\n411  virginica Petal.Length   5.1\n412  virginica Petal.Length   5.3\n413  virginica Petal.Length   5.5\n414  virginica Petal.Length   5.0\n415  virginica Petal.Length   5.1\n416  virginica Petal.Length   5.3\n417  virginica Petal.Length   5.5\n418  virginica Petal.Length   6.7\n419  virginica Petal.Length   6.9\n420  virginica Petal.Length   5.0\n421  virginica Petal.Length   5.7\n422  virginica Petal.Length   4.9\n423  virginica Petal.Length   6.7\n424  virginica Petal.Length   4.9\n425  virginica Petal.Length   5.7\n426  virginica Petal.Length   6.0\n427  virginica Petal.Length   4.8\n428  virginica Petal.Length   4.9\n429  virginica Petal.Length   5.6\n430  virginica Petal.Length   5.8\n431  virginica Petal.Length   6.1\n432  virginica Petal.Length   6.4\n433  virginica Petal.Length   5.6\n434  virginica Petal.Length   5.1\n435  virginica Petal.Length   5.6\n436  virginica Petal.Length   6.1\n437  virginica Petal.Length   5.6\n438  virginica Petal.Length   5.5\n439  virginica Petal.Length   4.8\n440  virginica Petal.Length   5.4\n441  virginica Petal.Length   5.6\n442  virginica Petal.Length   5.1\n443  virginica Petal.Length   5.1\n444  virginica Petal.Length   5.9\n445  virginica Petal.Length   5.7\n446  virginica Petal.Length   5.2\n447  virginica Petal.Length   5.0\n448  virginica Petal.Length   5.2\n449  virginica Petal.Length   5.4\n450  virginica Petal.Length   5.1\n451     setosa  Petal.Width   0.2\n452     setosa  Petal.Width   0.2\n453     setosa  Petal.Width   0.2\n454     setosa  Petal.Width   0.2\n455     setosa  Petal.Width   0.2\n456     setosa  Petal.Width   0.4\n457     setosa  Petal.Width   0.3\n458     setosa  Petal.Width   0.2\n459     setosa  Petal.Width   0.2\n460     setosa  Petal.Width   0.1\n461     setosa  Petal.Width   0.2\n462     setosa  Petal.Width   0.2\n463     setosa  Petal.Width   0.1\n464     setosa  Petal.Width   0.1\n465     setosa  Petal.Width   0.2\n466     setosa  Petal.Width   0.4\n467     setosa  Petal.Width   0.4\n468     setosa  Petal.Width   0.3\n469     setosa  Petal.Width   0.3\n470     setosa  Petal.Width   0.3\n471     setosa  Petal.Width   0.2\n472     setosa  Petal.Width   0.4\n473     setosa  Petal.Width   0.2\n474     setosa  Petal.Width   0.5\n475     setosa  Petal.Width   0.2\n476     setosa  Petal.Width   0.2\n477     setosa  Petal.Width   0.4\n478     setosa  Petal.Width   0.2\n479     setosa  Petal.Width   0.2\n480     setosa  Petal.Width   0.2\n481     setosa  Petal.Width   0.2\n482     setosa  Petal.Width   0.4\n483     setosa  Petal.Width   0.1\n484     setosa  Petal.Width   0.2\n485     setosa  Petal.Width   0.2\n486     setosa  Petal.Width   0.2\n487     setosa  Petal.Width   0.2\n488     setosa  Petal.Width   0.1\n489     setosa  Petal.Width   0.2\n490     setosa  Petal.Width   0.2\n491     setosa  Petal.Width   0.3\n492     setosa  Petal.Width   0.3\n493     setosa  Petal.Width   0.2\n494     setosa  Petal.Width   0.6\n495     setosa  Petal.Width   0.4\n496     setosa  Petal.Width   0.3\n497     setosa  Petal.Width   0.2\n498     setosa  Petal.Width   0.2\n499     setosa  Petal.Width   0.2\n500     setosa  Petal.Width   0.2\n501 versicolor  Petal.Width   1.4\n502 versicolor  Petal.Width   1.5\n503 versicolor  Petal.Width   1.5\n504 versicolor  Petal.Width   1.3\n505 versicolor  Petal.Width   1.5\n506 versicolor  Petal.Width   1.3\n507 versicolor  Petal.Width   1.6\n508 versicolor  Petal.Width   1.0\n509 versicolor  Petal.Width   1.3\n510 versicolor  Petal.Width   1.4\n511 versicolor  Petal.Width   1.0\n512 versicolor  Petal.Width   1.5\n513 versicolor  Petal.Width   1.0\n514 versicolor  Petal.Width   1.4\n515 versicolor  Petal.Width   1.3\n516 versicolor  Petal.Width   1.4\n517 versicolor  Petal.Width   1.5\n518 versicolor  Petal.Width   1.0\n519 versicolor  Petal.Width   1.5\n520 versicolor  Petal.Width   1.1\n521 versicolor  Petal.Width   1.8\n522 versicolor  Petal.Width   1.3\n523 versicolor  Petal.Width   1.5\n524 versicolor  Petal.Width   1.2\n525 versicolor  Petal.Width   1.3\n526 versicolor  Petal.Width   1.4\n527 versicolor  Petal.Width   1.4\n528 versicolor  Petal.Width   1.7\n529 versicolor  Petal.Width   1.5\n530 versicolor  Petal.Width   1.0\n531 versicolor  Petal.Width   1.1\n532 versicolor  Petal.Width   1.0\n533 versicolor  Petal.Width   1.2\n534 versicolor  Petal.Width   1.6\n535 versicolor  Petal.Width   1.5\n536 versicolor  Petal.Width   1.6\n537 versicolor  Petal.Width   1.5\n538 versicolor  Petal.Width   1.3\n539 versicolor  Petal.Width   1.3\n540 versicolor  Petal.Width   1.3\n541 versicolor  Petal.Width   1.2\n542 versicolor  Petal.Width   1.4\n543 versicolor  Petal.Width   1.2\n544 versicolor  Petal.Width   1.0\n545 versicolor  Petal.Width   1.3\n546 versicolor  Petal.Width   1.2\n547 versicolor  Petal.Width   1.3\n548 versicolor  Petal.Width   1.3\n549 versicolor  Petal.Width   1.1\n550 versicolor  Petal.Width   1.3\n551  virginica  Petal.Width   2.5\n552  virginica  Petal.Width   1.9\n553  virginica  Petal.Width   2.1\n554  virginica  Petal.Width   1.8\n555  virginica  Petal.Width   2.2\n556  virginica  Petal.Width   2.1\n557  virginica  Petal.Width   1.7\n558  virginica  Petal.Width   1.8\n559  virginica  Petal.Width   1.8\n560  virginica  Petal.Width   2.5\n561  virginica  Petal.Width   2.0\n562  virginica  Petal.Width   1.9\n563  virginica  Petal.Width   2.1\n564  virginica  Petal.Width   2.0\n565  virginica  Petal.Width   2.4\n566  virginica  Petal.Width   2.3\n567  virginica  Petal.Width   1.8\n568  virginica  Petal.Width   2.2\n569  virginica  Petal.Width   2.3\n570  virginica  Petal.Width   1.5\n571  virginica  Petal.Width   2.3\n572  virginica  Petal.Width   2.0\n573  virginica  Petal.Width   2.0\n574  virginica  Petal.Width   1.8\n575  virginica  Petal.Width   2.1\n576  virginica  Petal.Width   1.8\n577  virginica  Petal.Width   1.8\n578  virginica  Petal.Width   1.8\n579  virginica  Petal.Width   2.1\n580  virginica  Petal.Width   1.6\n581  virginica  Petal.Width   1.9\n582  virginica  Petal.Width   2.0\n583  virginica  Petal.Width   2.2\n584  virginica  Petal.Width   1.5\n585  virginica  Petal.Width   1.4\n586  virginica  Petal.Width   2.3\n587  virginica  Petal.Width   2.4\n588  virginica  Petal.Width   1.8\n589  virginica  Petal.Width   1.8\n590  virginica  Petal.Width   2.1\n591  virginica  Petal.Width   2.4\n592  virginica  Petal.Width   2.3\n593  virginica  Petal.Width   1.9\n594  virginica  Petal.Width   2.3\n595  virginica  Petal.Width   2.5\n596  virginica  Petal.Width   2.3\n597  virginica  Petal.Width   1.9\n598  virginica  Petal.Width   2.0\n599  virginica  Petal.Width   2.3\n600  virginica  Petal.Width   1.8\n\n\n\n\nSorting and Ordering\n\n\nCode\niris %&gt;% top_n(4, Petal.Length) %&gt;% arrange(desc(Petal.Length))\n\n\n  Sepal.Length Sepal.Width Petal.Length Petal.Width   Species\n1          7.7         2.6          6.9         2.3 virginica\n2          7.7         3.8          6.7         2.2 virginica\n3          7.7         2.8          6.7         2.0 virginica\n4          7.6         3.0          6.6         2.1 virginica\n\n\n\n\nCode\niris %&gt;% distinct(Species)\n\n\n     Species\n1     setosa\n2 versicolor\n3  virginica\n\n\nCode\niris %&gt;% count(Species)\n\n\n     Species  n\n1     setosa 50\n2 versicolor 50\n3  virginica 50\n\n\nTask count Petal.Length\n\n\nAdding data\n\n\nCode\n# a silly example: convert Petal.Length from centimeters --&gt; meters\niris %&gt;% mutate(pl_m=Petal.Length/100) %&gt;% head()\n\n\n  Sepal.Length Sepal.Width Petal.Length Petal.Width Species  pl_m\n1          5.1         3.5          1.4         0.2  setosa 0.014\n2          4.9         3.0          1.4         0.2  setosa 0.014\n3          4.7         3.2          1.3         0.2  setosa 0.013\n4          4.6         3.1          1.5         0.2  setosa 0.015\n5          5.0         3.6          1.4         0.2  setosa 0.014\n6          5.4         3.9          1.7         0.4  setosa 0.017\n\n\nCode\n# perhaps more useful\niris %&gt;% mutate(PLr=rank(Petal.Length)) %&gt;% arrange(Petal.Length) %&gt;% head()\n\n\n  Sepal.Length Sepal.Width Petal.Length Petal.Width Species PLr\n1          4.6         3.6          1.0         0.2  setosa 1.0\n2          4.3         3.0          1.1         0.1  setosa 2.0\n3          5.8         4.0          1.2         0.2  setosa 3.5\n4          5.0         3.2          1.2         0.2  setosa 3.5\n5          4.7         3.2          1.3         0.2  setosa 8.0\n6          5.4         3.9          1.3         0.4  setosa 8.0\n\n\n\n\nGrouping and Summarizing\n\n\nCode\niris %&gt;% group_by(Species) %&gt;% summarise(m=mean(Petal.Length))\n\n\n# A tibble: 3 x 2\n  Species        m\n  &lt;fct&gt;      &lt;dbl&gt;\n1 setosa      1.46\n2 versicolor  4.26\n3 virginica   5.55\n\n\nTask1 Plot the standard deviation [hint: ?sd] of Petal.Length within each group\nTask2 Plot the mean(Petal.Length) against the mean(Petal.Width) where the means are for each Species\n\n\nMerging Data frames\n\n\nCode\n# create two data sets for Sepal and Petal measurments, but add ID to keep track of the flow-ID\nirisS=iris%&gt;% select(matches(\"Sepal\")) %&gt;% mutate(id=row_number())                           \nirisP=iris%&gt;% select(matches(\"Petal\")) %&gt;% mutate(id=row_number()) %&gt;% sample_frac(0.05)  # second plant is subsampled\n\nleft_join(irisP,irisS, by=\"id\")\n\n\n  Petal.Length Petal.Width  id Sepal.Length Sepal.Width\n1          4.7         1.5  87          6.7         3.1\n2          1.6         0.6  44          5.0         3.5\n3          5.3         1.9 112          6.4         2.7\n4          1.4         0.2  50          5.0         3.3\n5          1.3         0.3  41          5.0         3.5\n6          5.0         1.7  78          6.7         3.0\n7          5.4         2.3 149          6.2         3.4\n8          5.6         2.4 137          6.3         3.4\n\n\nCode\nright_join(irisP,irisS, by=\"id\")\n\n\n    Petal.Length Petal.Width  id Sepal.Length Sepal.Width\n1            4.7         1.5  87          6.7         3.1\n2            1.6         0.6  44          5.0         3.5\n3            5.3         1.9 112          6.4         2.7\n4            1.4         0.2  50          5.0         3.3\n5            1.3         0.3  41          5.0         3.5\n6            5.0         1.7  78          6.7         3.0\n7            5.4         2.3 149          6.2         3.4\n8            5.6         2.4 137          6.3         3.4\n9             NA          NA   1          5.1         3.5\n10            NA          NA   2          4.9         3.0\n11            NA          NA   3          4.7         3.2\n12            NA          NA   4          4.6         3.1\n13            NA          NA   5          5.0         3.6\n14            NA          NA   6          5.4         3.9\n15            NA          NA   7          4.6         3.4\n16            NA          NA   8          5.0         3.4\n17            NA          NA   9          4.4         2.9\n18            NA          NA  10          4.9         3.1\n19            NA          NA  11          5.4         3.7\n20            NA          NA  12          4.8         3.4\n21            NA          NA  13          4.8         3.0\n22            NA          NA  14          4.3         3.0\n23            NA          NA  15          5.8         4.0\n24            NA          NA  16          5.7         4.4\n25            NA          NA  17          5.4         3.9\n26            NA          NA  18          5.1         3.5\n27            NA          NA  19          5.7         3.8\n28            NA          NA  20          5.1         3.8\n29            NA          NA  21          5.4         3.4\n30            NA          NA  22          5.1         3.7\n31            NA          NA  23          4.6         3.6\n32            NA          NA  24          5.1         3.3\n33            NA          NA  25          4.8         3.4\n34            NA          NA  26          5.0         3.0\n35            NA          NA  27          5.0         3.4\n36            NA          NA  28          5.2         3.5\n37            NA          NA  29          5.2         3.4\n38            NA          NA  30          4.7         3.2\n39            NA          NA  31          4.8         3.1\n40            NA          NA  32          5.4         3.4\n41            NA          NA  33          5.2         4.1\n42            NA          NA  34          5.5         4.2\n43            NA          NA  35          4.9         3.1\n44            NA          NA  36          5.0         3.2\n45            NA          NA  37          5.5         3.5\n46            NA          NA  38          4.9         3.6\n47            NA          NA  39          4.4         3.0\n48            NA          NA  40          5.1         3.4\n49            NA          NA  42          4.5         2.3\n50            NA          NA  43          4.4         3.2\n51            NA          NA  45          5.1         3.8\n52            NA          NA  46          4.8         3.0\n53            NA          NA  47          5.1         3.8\n54            NA          NA  48          4.6         3.2\n55            NA          NA  49          5.3         3.7\n56            NA          NA  51          7.0         3.2\n57            NA          NA  52          6.4         3.2\n58            NA          NA  53          6.9         3.1\n59            NA          NA  54          5.5         2.3\n60            NA          NA  55          6.5         2.8\n61            NA          NA  56          5.7         2.8\n62            NA          NA  57          6.3         3.3\n63            NA          NA  58          4.9         2.4\n64            NA          NA  59          6.6         2.9\n65            NA          NA  60          5.2         2.7\n66            NA          NA  61          5.0         2.0\n67            NA          NA  62          5.9         3.0\n68            NA          NA  63          6.0         2.2\n69            NA          NA  64          6.1         2.9\n70            NA          NA  65          5.6         2.9\n71            NA          NA  66          6.7         3.1\n72            NA          NA  67          5.6         3.0\n73            NA          NA  68          5.8         2.7\n74            NA          NA  69          6.2         2.2\n75            NA          NA  70          5.6         2.5\n76            NA          NA  71          5.9         3.2\n77            NA          NA  72          6.1         2.8\n78            NA          NA  73          6.3         2.5\n79            NA          NA  74          6.1         2.8\n80            NA          NA  75          6.4         2.9\n81            NA          NA  76          6.6         3.0\n82            NA          NA  77          6.8         2.8\n83            NA          NA  79          6.0         2.9\n84            NA          NA  80          5.7         2.6\n85            NA          NA  81          5.5         2.4\n86            NA          NA  82          5.5         2.4\n87            NA          NA  83          5.8         2.7\n88            NA          NA  84          6.0         2.7\n89            NA          NA  85          5.4         3.0\n90            NA          NA  86          6.0         3.4\n91            NA          NA  88          6.3         2.3\n92            NA          NA  89          5.6         3.0\n93            NA          NA  90          5.5         2.5\n94            NA          NA  91          5.5         2.6\n95            NA          NA  92          6.1         3.0\n96            NA          NA  93          5.8         2.6\n97            NA          NA  94          5.0         2.3\n98            NA          NA  95          5.6         2.7\n99            NA          NA  96          5.7         3.0\n100           NA          NA  97          5.7         2.9\n101           NA          NA  98          6.2         2.9\n102           NA          NA  99          5.1         2.5\n103           NA          NA 100          5.7         2.8\n104           NA          NA 101          6.3         3.3\n105           NA          NA 102          5.8         2.7\n106           NA          NA 103          7.1         3.0\n107           NA          NA 104          6.3         2.9\n108           NA          NA 105          6.5         3.0\n109           NA          NA 106          7.6         3.0\n110           NA          NA 107          4.9         2.5\n111           NA          NA 108          7.3         2.9\n112           NA          NA 109          6.7         2.5\n113           NA          NA 110          7.2         3.6\n114           NA          NA 111          6.5         3.2\n115           NA          NA 113          6.8         3.0\n116           NA          NA 114          5.7         2.5\n117           NA          NA 115          5.8         2.8\n118           NA          NA 116          6.4         3.2\n119           NA          NA 117          6.5         3.0\n120           NA          NA 118          7.7         3.8\n121           NA          NA 119          7.7         2.6\n122           NA          NA 120          6.0         2.2\n123           NA          NA 121          6.9         3.2\n124           NA          NA 122          5.6         2.8\n125           NA          NA 123          7.7         2.8\n126           NA          NA 124          6.3         2.7\n127           NA          NA 125          6.7         3.3\n128           NA          NA 126          7.2         3.2\n129           NA          NA 127          6.2         2.8\n130           NA          NA 128          6.1         3.0\n131           NA          NA 129          6.4         2.8\n132           NA          NA 130          7.2         3.0\n133           NA          NA 131          7.4         2.8\n134           NA          NA 132          7.9         3.8\n135           NA          NA 133          6.4         2.8\n136           NA          NA 134          6.3         2.8\n137           NA          NA 135          6.1         2.6\n138           NA          NA 136          7.7         3.0\n139           NA          NA 138          6.4         3.1\n140           NA          NA 139          6.0         3.0\n141           NA          NA 140          6.9         3.1\n142           NA          NA 141          6.7         3.1\n143           NA          NA 142          6.9         3.1\n144           NA          NA 143          5.8         2.7\n145           NA          NA 144          6.8         3.2\n146           NA          NA 145          6.7         3.3\n147           NA          NA 146          6.7         3.0\n148           NA          NA 147          6.3         2.5\n149           NA          NA 148          6.5         3.0\n150           NA          NA 150          5.9         3.0\n\n\nCode\ninner_join(irisP,irisS, by=\"id\")\n\n\n  Petal.Length Petal.Width  id Sepal.Length Sepal.Width\n1          4.7         1.5  87          6.7         3.1\n2          1.6         0.6  44          5.0         3.5\n3          5.3         1.9 112          6.4         2.7\n4          1.4         0.2  50          5.0         3.3\n5          1.3         0.3  41          5.0         3.5\n6          5.0         1.7  78          6.7         3.0\n7          5.4         2.3 149          6.2         3.4\n8          5.6         2.4 137          6.3         3.4\n\n\nTask Explore the resulting data\n\n\nggplot: Powerful plotting\n\n\nCode\ng = ggplot(iris, aes(x=Petal.Length, y=Petal.Width, colour=Species))\ng + geom_point() +\n    geom_smooth(method=\"lm\", se=TRUE, color=\"yellow\") +\n    geom_smooth(method=\"loess\", colour=\"orange\")\n\n\n`geom_smooth()` using formula = 'y ~ x'\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\n\n\nGrouping\n\n\nCode\ng + geom_point() + facet_grid(~Species) # arrange subplot by categorical variable, try setting sclaes=\"free\"\n\n\n\n\n\n\n\n\n\nCode\ng + geom_smooth(aes(group=Species))   # smooth based on group defined by species\n\n\n`geom_smooth()` using method = 'loess' and formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\n\n\nCode\ng = ggplot(iris, aes(x=Species, y=Petal.Width, colour=Species))\ng + geom_violin() +\n    scale_x_discrete(limits=c(\"versicolor\", \"setosa\",\"virginica\"))  # change order"
+  },
+  {
+    "objectID": "qmd/06_DataVisualization.html",
+    "href": "qmd/06_DataVisualization.html",
+    "title": "06: Data Visualization",
+    "section": "",
+    "text": "It’s good practice to normalize the different variables\n\n\nCode\nd=iris[,-5]   # numerical iris data (without speciee) \nds=scale(d)   # scaled iris data (column-wise)\n\nbr=seq(-5,7,by=0.5)                                           # set common break points for the histograms below\nhist(d[,\"Sepal.Width\"], breaks = br)                          # illustrate scaling for specific column\nhist(ds[,\"Sepal.Width\"], breaks = br, add=TRUE, col=\"red\")    # add histogram to current plot\nlegend(\"topright\", c(\"orig\",\"scaled\"), fill=c(\"white\", \"red\"))\n\n\n\n\n\n\n\n\n\n\n\n\nHeatmaps are color-coded representations of numerical matrices.\nTypically the rows and columns are re-ordered according to some distance measure (default: Euclidean) and hierarchical clustering method (default: complete)\nThere are many tools to draw heatmaps in R. Here we use the pheatmap package to provide this powerful functionality\n\n\nCode\n#install.packages(\"pheatmap\")  # That's how we install new packages - more later\nlibrary(pheatmap)              # make packaged functions available\npaste('loaded pheatmap version:', packageVersion('pheatmap'))\n\n\n[1] \"loaded pheatmap version: 1.0.12\"\n\n\nCode\nds  = scale(iris[,-5])                # scaled data for heatmap\nann = data.frame(Species = iris[,5])  # meta data for annotations\n\n# explicitly set rownames to retain association between data and metadata\nrownames(ds)=rownames(iris)\nrownames(ann)=rownames(iris)\n\npheatmap(ds, \n         annotation_row = ann,\n         show_rownames = FALSE,\n         )\n\n\n\n\n\n\n\n\n\nThere is many more parameters for more control - if you have lots of time read “?pheatmap”\n\n\n\n\nIn Rstudio, we can export figures from the “Plots” tab. On the console we can define a pdf file as a new device for all subsequent figures. This is usually done only after the image is sufficiently optimized\n\n\nCode\npdf(\"output/heatmap.pdf\")                                        # similar for jpeg, png, ...\npheatmap(ds, annotation_row = ann, show_rownames = FALSE)\ndev.off()                                                 # close device = pdf file\n\n\npdf \n  3"
+  },
+  {
+    "objectID": "qmd/06_DataVisualization.html#scaling",
+    "href": "qmd/06_DataVisualization.html#scaling",
+    "title": "06: Data Visualization",
+    "section": "",
+    "text": "It’s good practice to normalize the different variables\n\n\nCode\nd=iris[,-5]   # numerical iris data (without speciee) \nds=scale(d)   # scaled iris data (column-wise)\n\nbr=seq(-5,7,by=0.5)                                           # set common break points for the histograms below\nhist(d[,\"Sepal.Width\"], breaks = br)                          # illustrate scaling for specific column\nhist(ds[,\"Sepal.Width\"], breaks = br, add=TRUE, col=\"red\")    # add histogram to current plot\nlegend(\"topright\", c(\"orig\",\"scaled\"), fill=c(\"white\", \"red\"))"
+  },
+  {
+    "objectID": "qmd/06_DataVisualization.html#heatmaps",
+    "href": "qmd/06_DataVisualization.html#heatmaps",
+    "title": "06: Data Visualization",
+    "section": "",
+    "text": "Heatmaps are color-coded representations of numerical matrices.\nTypically the rows and columns are re-ordered according to some distance measure (default: Euclidean) and hierarchical clustering method (default: complete)\nThere are many tools to draw heatmaps in R. Here we use the pheatmap package to provide this powerful functionality\n\n\nCode\n#install.packages(\"pheatmap\")  # That's how we install new packages - more later\nlibrary(pheatmap)              # make packaged functions available\npaste('loaded pheatmap version:', packageVersion('pheatmap'))\n\n\n[1] \"loaded pheatmap version: 1.0.12\"\n\n\nCode\nds  = scale(iris[,-5])                # scaled data for heatmap\nann = data.frame(Species = iris[,5])  # meta data for annotations\n\n# explicitly set rownames to retain association between data and metadata\nrownames(ds)=rownames(iris)\nrownames(ann)=rownames(iris)\n\npheatmap(ds, \n         annotation_row = ann,\n         show_rownames = FALSE,\n         )\n\n\n\n\n\n\n\n\n\nThere is many more parameters for more control - if you have lots of time read “?pheatmap”"
+  },
+  {
+    "objectID": "qmd/06_DataVisualization.html#sending-plots-to-files",
+    "href": "qmd/06_DataVisualization.html#sending-plots-to-files",
+    "title": "06: Data Visualization",
+    "section": "",
+    "text": "In Rstudio, we can export figures from the “Plots” tab. On the console we can define a pdf file as a new device for all subsequent figures. This is usually done only after the image is sufficiently optimized\n\n\nCode\npdf(\"output/heatmap.pdf\")                                        # similar for jpeg, png, ...\npheatmap(ds, annotation_row = ann, show_rownames = FALSE)\ndev.off()                                                 # close device = pdf file\n\n\npdf \n  3"
+  },
+  {
+    "objectID": "qmd/06_DataVisualization.html#pca-goals",
+    "href": "qmd/06_DataVisualization.html#pca-goals",
+    "title": "06: Data Visualization",
+    "section": "PCA Goals",
+    "text": "PCA Goals\n\nsimplify description of data matrix \\(M\\): data reduction & extract most important information\nmaximal variance: look for direction in which data shows maximal variation\nminimal error: allow accurate reconstruction of original data\n\n from amoeba @ https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues"
+  },
+  {
+    "objectID": "qmd/06_DataVisualization.html#pca-with-r",
+    "href": "qmd/06_DataVisualization.html#pca-with-r",
+    "title": "06: Data Visualization",
+    "section": "PCA with R",
+    "text": "PCA with R\n\n\nCode\npca = prcomp(M, scale=TRUE)\n\n\nTask: What kind of object is pca?"
+  },
+  {
+    "objectID": "qmd/06_DataVisualization.html#covariance-structure",
+    "href": "qmd/06_DataVisualization.html#covariance-structure",
+    "title": "06: Data Visualization",
+    "section": "Covariance Structure",
+    "text": "Covariance Structure\n\n\nCode\nS=pca$x          # score matrix = rotated and scaled data matrix\n\npairs(S, col=s)\n\n\n\n\n\n\n\n\n\nCode\npheatmap(cov(M)) # original covariance matrix\n\n\n\n\n\n\n\n\n\nCode\n# covariance matrix of scores is diagonal (by design)\n# --&gt; principal components are uncorrelated\npheatmap(cov(S)) \n\n\n\n\n\n\n\n\n\nNotice that the higher components do not add much to the variance, so we may as well represent the transformed data in only the first two dimensions:\n\n\nCode\nplot(S[,1:2],pch=21, bg=s)  # score-plot"
+  },
+  {
+    "objectID": "qmd/P01_DataExploration_short.html",
+    "href": "qmd/P01_DataExploration_short.html",
+    "title": "P01: Data Exploration; Regulatory Modules from ChIP-seq",
+    "section": "",
+    "text": "Input: genome-wide binding data for 113 transcription factors in yeast (ChIP-chip): –&gt; 6000 x 113 matrix\nAnalysis: identify combinations of TF\nOutput: a reproducible analysis document (Rmd) and report (html)\nReference: Lee et al. (2002) Transcriptional Regulatory Networks in Saccharomyces cerevisea.\nData Set: chip=“http://jura.wi.mit.edu/young_public/regulatory_network/binding_by_gene.tsv”"
+  },
+  {
+    "objectID": "qmd/P01_DataExploration_short.html#summary-plots",
+    "href": "qmd/P01_DataExploration_short.html#summary-plots",
+    "title": "P01: Data Exploration; Regulatory Modules from ChIP-seq",
+    "section": "Summary Plots",
+    "text": "Summary Plots\n\n\nCode\nboxplot(P)         # distribution\n\n\n\n\n\n\n\n\n\nCode\n#hist(as.matrix(P)) # hist() requires matrix as input"
+  },
+  {
+    "objectID": "qmd/P01_DataExploration_short.html#show-me-all-the-data",
+    "href": "qmd/P01_DataExploration_short.html#show-me-all-the-data",
+    "title": "P01: Data Exploration; Regulatory Modules from ChIP-seq",
+    "section": "Show me all the data",
+    "text": "Show me all the data\nThis might be slow.\n\n\nCode\npheatmap(P, show_rownames=FALSE)"
+  },
+  {
+    "objectID": "qmd/index.html",
+    "href": "qmd/index.html",
+    "title": "Modules",
+    "section": "",
+    "text": "The lecture material is broken into several modules:\n\n\n   \n     \n     \n       Order By\n       Default\n         \n          Title\n        \n         \n          Author\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\n00: Introduction\n\n\nThomas Manke\n\n\n\n\n01: First Steps\n\n\nThomas Manke\n\n\n\n\n02: Higher Dimensional Data\n\n\nThomas Manke\n\n\n\n\n03: Getting Data In and Out\n\n\nThomas Manke\n\n\n\n\n04: Data Descriptions and Visualizations\n\n\nThomas Manke\n\n\n\n\n05: Data Modeling\n\n\nThomas Manke\n\n\n\n\n06: Data Visualization\n\n\nThomas Manke\n\n\n\n\n07: Data Import with Tidyverse\n\n\nJuan Caballero\n\n\n\n\n08: Intro to Data Wrangling with Dplyr\n\n\nJuan Caballero\n\n\n\n\n09: Data visualization with ggplot2\n\n\nJuan Caballero\n\n\n\n\n10: Tidy Data\n\n\nJuan Caballero\n\n\n\n\nP01: Data Exploration; Regulatory Modules from ChIP-seq\n\n\nThomas Manke\n\n\n\n\nP02: Sampling; Monty Hall Problem\n\n\nThomas Manke\n\n\n\n\nS01: PCA\n\n\nThomas Manke\n\n\n\n\nS02: Tidyverse\n\n\nThomas Manke\n\n\n\n\nS03: Colours\n\n\nThomas Manke\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "qmd/04_DataDescriptions.html",
+    "href": "qmd/04_DataDescriptions.html",
+    "title": "04: Data Descriptions and Visualizations",
+    "section": "",
+    "text": "R Markdown\nR scripts (.R) help to define and run reproducible analysis workflows, but they lack documentation (other than comments).\nR Markdown files (*.Rmd) combine scripts with powerful text formatting. They can be rendered (=“knit”) to produce html and pdf.\nTask: In Rstudio,\n\nopen a new R markdown document with File &gt; New File &gt; R Markdown.... (This will open a template for an Rmd file that can be knit)\nTo convert this file into html press Knit - try it out! You may have to save it first as - e.g. “first.Rmd”\nThere is a YAML header that contains parameters which will affect the rendering process - customize them\nThe rest of the document are text blocks (with simple format instructions) and code blocks (with R code)\nIn R studio, the code blocks can also be run individually using the embedded Play button - try it out\nPlay time: Modify the yaml header, text blocks or code - or all of it. “knit” the documnt and observe changes.\n\n\n\n\nDescriptive Statistics\n\n\nCode\nsummary(iris)\n\n\n  Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   \n Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  \n 1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  \n Median :5.800   Median :3.000   Median :4.350   Median :1.300  \n Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199  \n 3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800  \n Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500  \n       Species  \n setosa    :50  \n versicolor:50  \n virginica :50  \n                \n                \n                \n\n\nCode\nplot(iris$Petal.Length) # a plot at last. Simple, but many arguments: ?plot \n\n\n\n\n\n\n\n\n\nCode\nhist(iris$Petal.Length) # and a histogram\n\n\n\n\n\n\n\n\n\nTask hist() can have many arguments. Use help to find out how the histogram can be customized (e.g. number of break points, title, colors). Try some of it.\n\n\nBoxplot: a more condensed summary\n\n\nCode\nboxplot(iris$Petal.Length)\n\n\n\n\n\n\n\n\n\nTask: The boxplot above is for all data. Create a boxplot of petal length for species “setosa” only.\n\n\n\n\n\n\n\n\n\nBoxplot understands data frames\n\n\nCode\nboxplot(iris) \n\n\n\n\n\n\n\n\n\nQuery: What does the boxplot for Species mean?\n\n\nInterlude: Factors = categorical variables\nFactors denote a special class of R-objects that can be thought of as categories (here: species). They have a given number of levels which are internally represented as integers.\n\n\nCode\nclass(iris$Species)\n\n\n[1] \"factor\"\n\n\nCode\ntypeof(iris$Species)\n\n\n[1] \"integer\"\n\n\nCode\nts=table(iris$Species)  # returns a contigency table ~&gt; histogram for categorical data\nbarplot(ts, col=rainbow(3), ylab=\"observations\", cex.names=0.9)\n\n\n\n\n\n\n\n\n\nCode\npie(ts,col=rainbow(3))  # if you really must\n\n\n\n\n\n\n\n\n\n\nBoxplot understands factors in data frames\n\n\nCode\nboxplot( Petal.Length ~ Species, data = iris, las=2) # what does las=2 do ?\n\n\n\n\n\n\n\n\n\nTask: Use help to add three different colors:\n\n\n\n\n\n\n\n\n\n\n\nCorrelations\nIf a data set has many numerical variables we often want to understand their correlations structure\n\n\nCode\nx=iris$Petal.Length\ny=iris$Petal.Width\nplot(x,y)                              # again: this can be customized\nabline(v=mean(x),h=mean(y),col=\"red\")  # add vertical/horizontal lines\n\n\n\n\n\n\n\n\n\nCode\ncor(x,y)                               # a correlation coefficient: which one?\n\n\n[1] 0.9628654\n\n\n\n\nAll-Against-All Correlations\nTask: remove the Species variable from “iris” and store the result in a new data.frame “niris”\n\n\n'data.frame':   150 obs. of  4 variables:\n $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...\n $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...\n $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...\n $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...\n\n\n\n\nCode\ncor(niris)  # correlation matrix. Which correlation coefficient?\n\n\n             Sepal.Length Sepal.Width Petal.Length Petal.Width\nSepal.Length    1.0000000  -0.1175698    0.8717538   0.8179411\nSepal.Width    -0.1175698   1.0000000   -0.4284401  -0.3661259\nPetal.Length    0.8717538  -0.4284401    1.0000000   0.9628654\nPetal.Width     0.8179411  -0.3661259    0.9628654   1.0000000\n\n\nCode\nplot(niris) # provide a visualization for data frames, try also pairs(iris)\n\n\n\n\n\n\n\n\n\nCode\n# assign species-colors to each observation \ncols = iris$Species                        # understand how color is defined\nplot(niris, col=cols, lower.panel=NULL)   # \"cols\" was defined in task above\n\n\n\n\n\n\n\n\n\n\n\n\nReview\n\nR markdown files extend scripts and can be converted to html/pdf\nsummary for descriptive statistics\nsimple plots with simple commands: plot(), hist(), …\nlots of parameters for customization: line width, colours, …\ncorrelation between variables: cor(), plot() - class specific behaviour\nNotice that the data used was extremely clean and structured: data()"
+  },
+  {
+    "objectID": "qmd/S01_PCA.html",
+    "href": "qmd/S01_PCA.html",
+    "title": "S01: PCA",
+    "section": "",
+    "text": "Recap\n\n\n\nAchievments\n\n\n\n\nMain points so far\n\nR and Rstudio. Notebooks for reproducible analysis\nStructured data: vectors, data frames, list\nFunctions: structured input –&gt; structured output, parameters & customization\n( plotting and colors )\npackages: provide new functionality. CRAN & Bioconductor\nworking with files: R objects, tab-separated files, I/O difficulties (standardization)\n\n\n\nHeatmaps: Show me all the data\n\n\nCode\nM=scale(iris[,-5])\ncols=rainbow(3)[iris$Species]\nheatmap(M,scale=\"none\", RowSideColors=cols,labRow=FALSE, cexCol=0.9)\n\n\n\n\n\n\n\n\n\n\n\nDimensional Reduction: PCA\n\nsimplify description of data matrix \\(M\\): data reduction & extract most important information\nmaximal variance: look for direction in which data shows maximal variation\nminimal error: allow accurate reconstruction of original data\n\n from amoeba @ https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues\n\n\nCode\npca=prcomp(M, scale=TRUE)\n\n\nTask: What kind of object is pca?\n\n\nCode\nS=pca$x                                # score matrix = rotated data points\n\n\n\n\nCode\nplot(S[,1:2],  pch=21, bg=iris$Species, main=\"Score Plots\") \n\n\n\n\n\n\n\n\n\nCode\nplot(iris[,-5],pch=21, bg=iris$Species, main=\"Data Plots\")"
+  }
+]

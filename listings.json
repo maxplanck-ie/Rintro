@@ -1,0 +1,23 @@
+[
+  {
+    "listing": "/qmd/index.html",
+    "items": [
+      "/qmd/00_Introduction.html",
+      "/qmd/01_FirstSteps.html",
+      "/qmd/02_HighDimData.html",
+      "/qmd/03_GettingData.html",
+      "/qmd/04_DataDescriptions.html",
+      "/qmd/05_DataModels.html",
+      "/qmd/06_DataVisualization.html",
+      "/qmd/07_DataImport.html",
+      "/qmd/08_DataWrangling.html",
+      "/qmd/09_DataVisualization.html",
+      "/qmd/10_TidyData.html",
+      "/qmd/P01_DataExploration_short.html",
+      "/qmd/P02_MontyHall_and_scripts.html",
+      "/qmd/S01_PCA.html",
+      "/qmd/S02_tidyverse.html",
+      "/qmd/S03_Colours.html"
+    ]
+  }
+]

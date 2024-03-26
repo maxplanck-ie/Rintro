@@ -1,0 +1,2067 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Thomas Manke">
+
+<title>Rintro 2024 - S02: Tidyverse</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Rintro 2024</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../qmd/index.html"> <i class="bi bi-book" role="img">
+</i> 
+<span class="menu-text">Modules</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/maxplanck-ie/Rintro/tree/2024.04"> <i class="bi bi-fa-github" role="img">
+</i> 
+<span class="menu-text">GitHub</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#tidyverse" id="toc-tidyverse" class="nav-link active" data-scroll-target="#tidyverse">Tidyverse</a></li>
+  <li><a href="#a-new-style-pipes" id="toc-a-new-style-pipes" class="nav-link" data-scroll-target="#a-new-style-pipes">A new style: Pipes</a></li>
+  <li><a href="#selection" id="toc-selection" class="nav-link" data-scroll-target="#selection">Selection</a></li>
+  <li><a href="#data-munging-and-reshaping" id="toc-data-munging-and-reshaping" class="nav-link" data-scroll-target="#data-munging-and-reshaping">Data Munging and Reshaping</a></li>
+  <li><a href="#sorting-and-ordering" id="toc-sorting-and-ordering" class="nav-link" data-scroll-target="#sorting-and-ordering">Sorting and Ordering</a></li>
+  <li><a href="#adding-data" id="toc-adding-data" class="nav-link" data-scroll-target="#adding-data">Adding data</a></li>
+  <li><a href="#grouping-and-summarizing" id="toc-grouping-and-summarizing" class="nav-link" data-scroll-target="#grouping-and-summarizing">Grouping and Summarizing</a></li>
+  <li><a href="#merging-data-frames" id="toc-merging-data-frames" class="nav-link" data-scroll-target="#merging-data-frames">Merging Data frames</a></li>
+  <li><a href="#ggplot-powerful-plotting" id="toc-ggplot-powerful-plotting" class="nav-link" data-scroll-target="#ggplot-powerful-plotting">ggplot: Powerful plotting</a></li>
+  <li><a href="#grouping" id="toc-grouping" class="nav-link" data-scroll-target="#grouping">Grouping</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">S02: Tidyverse</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+  <div class="quarto-categories">
+    <div class="quarto-category">tidyverse</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Thomas Manke </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="tidyverse" class="level1">
+<h1>Tidyverse</h1>
+<p>See also: R for Data Science: https://r4ds.had.co.nz/</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>) <span class="co"># only needed once</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>-- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+v dplyr     1.1.4     v readr     2.1.5
+v forcats   1.0.0     v stringr   1.5.1
+v ggplot2   3.5.0     v tibble    3.2.1
+v lubridate 1.9.3     v tidyr     1.3.1
+v purrr     1.0.2     
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+i Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()  <span class="co"># know your working directory</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "/__w/Rintro/Rintro/qmd"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>file<span class="ot">=</span><span class="st">"data/GeneList.tsv"</span>   <span class="co"># set file name relative to working directory</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>D <span class="ot">=</span> <span class="fu">read_tsv</span>(file, <span class="at">comment=</span><span class="st">"%"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 6 Columns: 6
+-- Column specification --------------------------------------------------------
+Delimiter: "\t"
+chr (2): GeneName, Description
+dbl (3): Exp1, Exp2, Exp3
+lgl (1): Planned
+
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>D</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 x 6
+  GeneName Description  Exp1  Exp2  Exp3 Planned
+  &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;  
+1 ABC      unknown       1.2   1.5   1.3 NA     
+2 DEF1     &lt;NA&gt;          1.3   4.7  NA   NA     
+3 5'XYZ    pseudogene   50    20    12   NA     
+4 3'UVW    &lt;NA&gt;         10    20    34   NA     
+5 Sep7     &lt;NA&gt;         20    NA    22   NA     
+6 Oct1     important     1     1     1   NA     </code></pre>
+</div>
+</div>
+</section>
+<section id="a-new-style-pipes" class="level1">
+<h1>A new style: Pipes</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">str</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   150 obs. of  5 variables:
+ $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+ $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+ $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+ $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+ $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa</code></pre>
+</div>
+</div>
+</section>
+<section id="selection" class="level1">
+<h1>Selection</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># column selection / unselection</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Species) <span class="sc">%&gt;%</span> <span class="fu">head</span>()                            </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width
+1          5.1         3.5          1.4         0.2
+2          4.9         3.0          1.4         0.2
+3          4.7         3.2          1.3         0.2
+4          4.6         3.1          1.5         0.2
+5          5.0         3.6          1.4         0.2
+6          5.4         3.9          1.7         0.4</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">"Length"</span>)) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Sepal.Length Petal.Length
+1          5.1          1.4
+2          4.9          1.4
+3          4.7          1.3
+4          4.6          1.5
+5          5.0          1.4
+6          5.4          1.7</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># row selection</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">150</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Petal.Length<span class="sc">==</span><span class="fu">min</span>(Petal.Length))      </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          4.6         3.6            1         0.2  setosa</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Petal.Length<span class="sc">&lt;</span><span class="dv">2</span> <span class="sc">&amp;</span> Sepal.Width<span class="sc">&gt;</span><span class="dv">4</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.7         4.4          1.5         0.4  setosa
+2          5.2         4.1          1.5         0.1  setosa
+3          5.5         4.2          1.4         0.2  setosa</code></pre>
+</div>
+</div>
+</section>
+<section id="data-munging-and-reshaping" class="level1">
+<h1>Data Munging and Reshaping</h1>
+<p>Same data can come in various shapes:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">gather</span>(Measurement, Value, <span class="sc">-</span>Species)   <span class="co"># convert between wide and long forms</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Species  Measurement Value
+1       setosa Sepal.Length   5.1
+2       setosa Sepal.Length   4.9
+3       setosa Sepal.Length   4.7
+4       setosa Sepal.Length   4.6
+5       setosa Sepal.Length   5.0
+6       setosa Sepal.Length   5.4
+7       setosa Sepal.Length   4.6
+8       setosa Sepal.Length   5.0
+9       setosa Sepal.Length   4.4
+10      setosa Sepal.Length   4.9
+11      setosa Sepal.Length   5.4
+12      setosa Sepal.Length   4.8
+13      setosa Sepal.Length   4.8
+14      setosa Sepal.Length   4.3
+15      setosa Sepal.Length   5.8
+16      setosa Sepal.Length   5.7
+17      setosa Sepal.Length   5.4
+18      setosa Sepal.Length   5.1
+19      setosa Sepal.Length   5.7
+20      setosa Sepal.Length   5.1
+21      setosa Sepal.Length   5.4
+22      setosa Sepal.Length   5.1
+23      setosa Sepal.Length   4.6
+24      setosa Sepal.Length   5.1
+25      setosa Sepal.Length   4.8
+26      setosa Sepal.Length   5.0
+27      setosa Sepal.Length   5.0
+28      setosa Sepal.Length   5.2
+29      setosa Sepal.Length   5.2
+30      setosa Sepal.Length   4.7
+31      setosa Sepal.Length   4.8
+32      setosa Sepal.Length   5.4
+33      setosa Sepal.Length   5.2
+34      setosa Sepal.Length   5.5
+35      setosa Sepal.Length   4.9
+36      setosa Sepal.Length   5.0
+37      setosa Sepal.Length   5.5
+38      setosa Sepal.Length   4.9
+39      setosa Sepal.Length   4.4
+40      setosa Sepal.Length   5.1
+41      setosa Sepal.Length   5.0
+42      setosa Sepal.Length   4.5
+43      setosa Sepal.Length   4.4
+44      setosa Sepal.Length   5.0
+45      setosa Sepal.Length   5.1
+46      setosa Sepal.Length   4.8
+47      setosa Sepal.Length   5.1
+48      setosa Sepal.Length   4.6
+49      setosa Sepal.Length   5.3
+50      setosa Sepal.Length   5.0
+51  versicolor Sepal.Length   7.0
+52  versicolor Sepal.Length   6.4
+53  versicolor Sepal.Length   6.9
+54  versicolor Sepal.Length   5.5
+55  versicolor Sepal.Length   6.5
+56  versicolor Sepal.Length   5.7
+57  versicolor Sepal.Length   6.3
+58  versicolor Sepal.Length   4.9
+59  versicolor Sepal.Length   6.6
+60  versicolor Sepal.Length   5.2
+61  versicolor Sepal.Length   5.0
+62  versicolor Sepal.Length   5.9
+63  versicolor Sepal.Length   6.0
+64  versicolor Sepal.Length   6.1
+65  versicolor Sepal.Length   5.6
+66  versicolor Sepal.Length   6.7
+67  versicolor Sepal.Length   5.6
+68  versicolor Sepal.Length   5.8
+69  versicolor Sepal.Length   6.2
+70  versicolor Sepal.Length   5.6
+71  versicolor Sepal.Length   5.9
+72  versicolor Sepal.Length   6.1
+73  versicolor Sepal.Length   6.3
+74  versicolor Sepal.Length   6.1
+75  versicolor Sepal.Length   6.4
+76  versicolor Sepal.Length   6.6
+77  versicolor Sepal.Length   6.8
+78  versicolor Sepal.Length   6.7
+79  versicolor Sepal.Length   6.0
+80  versicolor Sepal.Length   5.7
+81  versicolor Sepal.Length   5.5
+82  versicolor Sepal.Length   5.5
+83  versicolor Sepal.Length   5.8
+84  versicolor Sepal.Length   6.0
+85  versicolor Sepal.Length   5.4
+86  versicolor Sepal.Length   6.0
+87  versicolor Sepal.Length   6.7
+88  versicolor Sepal.Length   6.3
+89  versicolor Sepal.Length   5.6
+90  versicolor Sepal.Length   5.5
+91  versicolor Sepal.Length   5.5
+92  versicolor Sepal.Length   6.1
+93  versicolor Sepal.Length   5.8
+94  versicolor Sepal.Length   5.0
+95  versicolor Sepal.Length   5.6
+96  versicolor Sepal.Length   5.7
+97  versicolor Sepal.Length   5.7
+98  versicolor Sepal.Length   6.2
+99  versicolor Sepal.Length   5.1
+100 versicolor Sepal.Length   5.7
+101  virginica Sepal.Length   6.3
+102  virginica Sepal.Length   5.8
+103  virginica Sepal.Length   7.1
+104  virginica Sepal.Length   6.3
+105  virginica Sepal.Length   6.5
+106  virginica Sepal.Length   7.6
+107  virginica Sepal.Length   4.9
+108  virginica Sepal.Length   7.3
+109  virginica Sepal.Length   6.7
+110  virginica Sepal.Length   7.2
+111  virginica Sepal.Length   6.5
+112  virginica Sepal.Length   6.4
+113  virginica Sepal.Length   6.8
+114  virginica Sepal.Length   5.7
+115  virginica Sepal.Length   5.8
+116  virginica Sepal.Length   6.4
+117  virginica Sepal.Length   6.5
+118  virginica Sepal.Length   7.7
+119  virginica Sepal.Length   7.7
+120  virginica Sepal.Length   6.0
+121  virginica Sepal.Length   6.9
+122  virginica Sepal.Length   5.6
+123  virginica Sepal.Length   7.7
+124  virginica Sepal.Length   6.3
+125  virginica Sepal.Length   6.7
+126  virginica Sepal.Length   7.2
+127  virginica Sepal.Length   6.2
+128  virginica Sepal.Length   6.1
+129  virginica Sepal.Length   6.4
+130  virginica Sepal.Length   7.2
+131  virginica Sepal.Length   7.4
+132  virginica Sepal.Length   7.9
+133  virginica Sepal.Length   6.4
+134  virginica Sepal.Length   6.3
+135  virginica Sepal.Length   6.1
+136  virginica Sepal.Length   7.7
+137  virginica Sepal.Length   6.3
+138  virginica Sepal.Length   6.4
+139  virginica Sepal.Length   6.0
+140  virginica Sepal.Length   6.9
+141  virginica Sepal.Length   6.7
+142  virginica Sepal.Length   6.9
+143  virginica Sepal.Length   5.8
+144  virginica Sepal.Length   6.8
+145  virginica Sepal.Length   6.7
+146  virginica Sepal.Length   6.7
+147  virginica Sepal.Length   6.3
+148  virginica Sepal.Length   6.5
+149  virginica Sepal.Length   6.2
+150  virginica Sepal.Length   5.9
+151     setosa  Sepal.Width   3.5
+152     setosa  Sepal.Width   3.0
+153     setosa  Sepal.Width   3.2
+154     setosa  Sepal.Width   3.1
+155     setosa  Sepal.Width   3.6
+156     setosa  Sepal.Width   3.9
+157     setosa  Sepal.Width   3.4
+158     setosa  Sepal.Width   3.4
+159     setosa  Sepal.Width   2.9
+160     setosa  Sepal.Width   3.1
+161     setosa  Sepal.Width   3.7
+162     setosa  Sepal.Width   3.4
+163     setosa  Sepal.Width   3.0
+164     setosa  Sepal.Width   3.0
+165     setosa  Sepal.Width   4.0
+166     setosa  Sepal.Width   4.4
+167     setosa  Sepal.Width   3.9
+168     setosa  Sepal.Width   3.5
+169     setosa  Sepal.Width   3.8
+170     setosa  Sepal.Width   3.8
+171     setosa  Sepal.Width   3.4
+172     setosa  Sepal.Width   3.7
+173     setosa  Sepal.Width   3.6
+174     setosa  Sepal.Width   3.3
+175     setosa  Sepal.Width   3.4
+176     setosa  Sepal.Width   3.0
+177     setosa  Sepal.Width   3.4
+178     setosa  Sepal.Width   3.5
+179     setosa  Sepal.Width   3.4
+180     setosa  Sepal.Width   3.2
+181     setosa  Sepal.Width   3.1
+182     setosa  Sepal.Width   3.4
+183     setosa  Sepal.Width   4.1
+184     setosa  Sepal.Width   4.2
+185     setosa  Sepal.Width   3.1
+186     setosa  Sepal.Width   3.2
+187     setosa  Sepal.Width   3.5
+188     setosa  Sepal.Width   3.6
+189     setosa  Sepal.Width   3.0
+190     setosa  Sepal.Width   3.4
+191     setosa  Sepal.Width   3.5
+192     setosa  Sepal.Width   2.3
+193     setosa  Sepal.Width   3.2
+194     setosa  Sepal.Width   3.5
+195     setosa  Sepal.Width   3.8
+196     setosa  Sepal.Width   3.0
+197     setosa  Sepal.Width   3.8
+198     setosa  Sepal.Width   3.2
+199     setosa  Sepal.Width   3.7
+200     setosa  Sepal.Width   3.3
+201 versicolor  Sepal.Width   3.2
+202 versicolor  Sepal.Width   3.2
+203 versicolor  Sepal.Width   3.1
+204 versicolor  Sepal.Width   2.3
+205 versicolor  Sepal.Width   2.8
+206 versicolor  Sepal.Width   2.8
+207 versicolor  Sepal.Width   3.3
+208 versicolor  Sepal.Width   2.4
+209 versicolor  Sepal.Width   2.9
+210 versicolor  Sepal.Width   2.7
+211 versicolor  Sepal.Width   2.0
+212 versicolor  Sepal.Width   3.0
+213 versicolor  Sepal.Width   2.2
+214 versicolor  Sepal.Width   2.9
+215 versicolor  Sepal.Width   2.9
+216 versicolor  Sepal.Width   3.1
+217 versicolor  Sepal.Width   3.0
+218 versicolor  Sepal.Width   2.7
+219 versicolor  Sepal.Width   2.2
+220 versicolor  Sepal.Width   2.5
+221 versicolor  Sepal.Width   3.2
+222 versicolor  Sepal.Width   2.8
+223 versicolor  Sepal.Width   2.5
+224 versicolor  Sepal.Width   2.8
+225 versicolor  Sepal.Width   2.9
+226 versicolor  Sepal.Width   3.0
+227 versicolor  Sepal.Width   2.8
+228 versicolor  Sepal.Width   3.0
+229 versicolor  Sepal.Width   2.9
+230 versicolor  Sepal.Width   2.6
+231 versicolor  Sepal.Width   2.4
+232 versicolor  Sepal.Width   2.4
+233 versicolor  Sepal.Width   2.7
+234 versicolor  Sepal.Width   2.7
+235 versicolor  Sepal.Width   3.0
+236 versicolor  Sepal.Width   3.4
+237 versicolor  Sepal.Width   3.1
+238 versicolor  Sepal.Width   2.3
+239 versicolor  Sepal.Width   3.0
+240 versicolor  Sepal.Width   2.5
+241 versicolor  Sepal.Width   2.6
+242 versicolor  Sepal.Width   3.0
+243 versicolor  Sepal.Width   2.6
+244 versicolor  Sepal.Width   2.3
+245 versicolor  Sepal.Width   2.7
+246 versicolor  Sepal.Width   3.0
+247 versicolor  Sepal.Width   2.9
+248 versicolor  Sepal.Width   2.9
+249 versicolor  Sepal.Width   2.5
+250 versicolor  Sepal.Width   2.8
+251  virginica  Sepal.Width   3.3
+252  virginica  Sepal.Width   2.7
+253  virginica  Sepal.Width   3.0
+254  virginica  Sepal.Width   2.9
+255  virginica  Sepal.Width   3.0
+256  virginica  Sepal.Width   3.0
+257  virginica  Sepal.Width   2.5
+258  virginica  Sepal.Width   2.9
+259  virginica  Sepal.Width   2.5
+260  virginica  Sepal.Width   3.6
+261  virginica  Sepal.Width   3.2
+262  virginica  Sepal.Width   2.7
+263  virginica  Sepal.Width   3.0
+264  virginica  Sepal.Width   2.5
+265  virginica  Sepal.Width   2.8
+266  virginica  Sepal.Width   3.2
+267  virginica  Sepal.Width   3.0
+268  virginica  Sepal.Width   3.8
+269  virginica  Sepal.Width   2.6
+270  virginica  Sepal.Width   2.2
+271  virginica  Sepal.Width   3.2
+272  virginica  Sepal.Width   2.8
+273  virginica  Sepal.Width   2.8
+274  virginica  Sepal.Width   2.7
+275  virginica  Sepal.Width   3.3
+276  virginica  Sepal.Width   3.2
+277  virginica  Sepal.Width   2.8
+278  virginica  Sepal.Width   3.0
+279  virginica  Sepal.Width   2.8
+280  virginica  Sepal.Width   3.0
+281  virginica  Sepal.Width   2.8
+282  virginica  Sepal.Width   3.8
+283  virginica  Sepal.Width   2.8
+284  virginica  Sepal.Width   2.8
+285  virginica  Sepal.Width   2.6
+286  virginica  Sepal.Width   3.0
+287  virginica  Sepal.Width   3.4
+288  virginica  Sepal.Width   3.1
+289  virginica  Sepal.Width   3.0
+290  virginica  Sepal.Width   3.1
+291  virginica  Sepal.Width   3.1
+292  virginica  Sepal.Width   3.1
+293  virginica  Sepal.Width   2.7
+294  virginica  Sepal.Width   3.2
+295  virginica  Sepal.Width   3.3
+296  virginica  Sepal.Width   3.0
+297  virginica  Sepal.Width   2.5
+298  virginica  Sepal.Width   3.0
+299  virginica  Sepal.Width   3.4
+300  virginica  Sepal.Width   3.0
+301     setosa Petal.Length   1.4
+302     setosa Petal.Length   1.4
+303     setosa Petal.Length   1.3
+304     setosa Petal.Length   1.5
+305     setosa Petal.Length   1.4
+306     setosa Petal.Length   1.7
+307     setosa Petal.Length   1.4
+308     setosa Petal.Length   1.5
+309     setosa Petal.Length   1.4
+310     setosa Petal.Length   1.5
+311     setosa Petal.Length   1.5
+312     setosa Petal.Length   1.6
+313     setosa Petal.Length   1.4
+314     setosa Petal.Length   1.1
+315     setosa Petal.Length   1.2
+316     setosa Petal.Length   1.5
+317     setosa Petal.Length   1.3
+318     setosa Petal.Length   1.4
+319     setosa Petal.Length   1.7
+320     setosa Petal.Length   1.5
+321     setosa Petal.Length   1.7
+322     setosa Petal.Length   1.5
+323     setosa Petal.Length   1.0
+324     setosa Petal.Length   1.7
+325     setosa Petal.Length   1.9
+326     setosa Petal.Length   1.6
+327     setosa Petal.Length   1.6
+328     setosa Petal.Length   1.5
+329     setosa Petal.Length   1.4
+330     setosa Petal.Length   1.6
+331     setosa Petal.Length   1.6
+332     setosa Petal.Length   1.5
+333     setosa Petal.Length   1.5
+334     setosa Petal.Length   1.4
+335     setosa Petal.Length   1.5
+336     setosa Petal.Length   1.2
+337     setosa Petal.Length   1.3
+338     setosa Petal.Length   1.4
+339     setosa Petal.Length   1.3
+340     setosa Petal.Length   1.5
+341     setosa Petal.Length   1.3
+342     setosa Petal.Length   1.3
+343     setosa Petal.Length   1.3
+344     setosa Petal.Length   1.6
+345     setosa Petal.Length   1.9
+346     setosa Petal.Length   1.4
+347     setosa Petal.Length   1.6
+348     setosa Petal.Length   1.4
+349     setosa Petal.Length   1.5
+350     setosa Petal.Length   1.4
+351 versicolor Petal.Length   4.7
+352 versicolor Petal.Length   4.5
+353 versicolor Petal.Length   4.9
+354 versicolor Petal.Length   4.0
+355 versicolor Petal.Length   4.6
+356 versicolor Petal.Length   4.5
+357 versicolor Petal.Length   4.7
+358 versicolor Petal.Length   3.3
+359 versicolor Petal.Length   4.6
+360 versicolor Petal.Length   3.9
+361 versicolor Petal.Length   3.5
+362 versicolor Petal.Length   4.2
+363 versicolor Petal.Length   4.0
+364 versicolor Petal.Length   4.7
+365 versicolor Petal.Length   3.6
+366 versicolor Petal.Length   4.4
+367 versicolor Petal.Length   4.5
+368 versicolor Petal.Length   4.1
+369 versicolor Petal.Length   4.5
+370 versicolor Petal.Length   3.9
+371 versicolor Petal.Length   4.8
+372 versicolor Petal.Length   4.0
+373 versicolor Petal.Length   4.9
+374 versicolor Petal.Length   4.7
+375 versicolor Petal.Length   4.3
+376 versicolor Petal.Length   4.4
+377 versicolor Petal.Length   4.8
+378 versicolor Petal.Length   5.0
+379 versicolor Petal.Length   4.5
+380 versicolor Petal.Length   3.5
+381 versicolor Petal.Length   3.8
+382 versicolor Petal.Length   3.7
+383 versicolor Petal.Length   3.9
+384 versicolor Petal.Length   5.1
+385 versicolor Petal.Length   4.5
+386 versicolor Petal.Length   4.5
+387 versicolor Petal.Length   4.7
+388 versicolor Petal.Length   4.4
+389 versicolor Petal.Length   4.1
+390 versicolor Petal.Length   4.0
+391 versicolor Petal.Length   4.4
+392 versicolor Petal.Length   4.6
+393 versicolor Petal.Length   4.0
+394 versicolor Petal.Length   3.3
+395 versicolor Petal.Length   4.2
+396 versicolor Petal.Length   4.2
+397 versicolor Petal.Length   4.2
+398 versicolor Petal.Length   4.3
+399 versicolor Petal.Length   3.0
+400 versicolor Petal.Length   4.1
+401  virginica Petal.Length   6.0
+402  virginica Petal.Length   5.1
+403  virginica Petal.Length   5.9
+404  virginica Petal.Length   5.6
+405  virginica Petal.Length   5.8
+406  virginica Petal.Length   6.6
+407  virginica Petal.Length   4.5
+408  virginica Petal.Length   6.3
+409  virginica Petal.Length   5.8
+410  virginica Petal.Length   6.1
+411  virginica Petal.Length   5.1
+412  virginica Petal.Length   5.3
+413  virginica Petal.Length   5.5
+414  virginica Petal.Length   5.0
+415  virginica Petal.Length   5.1
+416  virginica Petal.Length   5.3
+417  virginica Petal.Length   5.5
+418  virginica Petal.Length   6.7
+419  virginica Petal.Length   6.9
+420  virginica Petal.Length   5.0
+421  virginica Petal.Length   5.7
+422  virginica Petal.Length   4.9
+423  virginica Petal.Length   6.7
+424  virginica Petal.Length   4.9
+425  virginica Petal.Length   5.7
+426  virginica Petal.Length   6.0
+427  virginica Petal.Length   4.8
+428  virginica Petal.Length   4.9
+429  virginica Petal.Length   5.6
+430  virginica Petal.Length   5.8
+431  virginica Petal.Length   6.1
+432  virginica Petal.Length   6.4
+433  virginica Petal.Length   5.6
+434  virginica Petal.Length   5.1
+435  virginica Petal.Length   5.6
+436  virginica Petal.Length   6.1
+437  virginica Petal.Length   5.6
+438  virginica Petal.Length   5.5
+439  virginica Petal.Length   4.8
+440  virginica Petal.Length   5.4
+441  virginica Petal.Length   5.6
+442  virginica Petal.Length   5.1
+443  virginica Petal.Length   5.1
+444  virginica Petal.Length   5.9
+445  virginica Petal.Length   5.7
+446  virginica Petal.Length   5.2
+447  virginica Petal.Length   5.0
+448  virginica Petal.Length   5.2
+449  virginica Petal.Length   5.4
+450  virginica Petal.Length   5.1
+451     setosa  Petal.Width   0.2
+452     setosa  Petal.Width   0.2
+453     setosa  Petal.Width   0.2
+454     setosa  Petal.Width   0.2
+455     setosa  Petal.Width   0.2
+456     setosa  Petal.Width   0.4
+457     setosa  Petal.Width   0.3
+458     setosa  Petal.Width   0.2
+459     setosa  Petal.Width   0.2
+460     setosa  Petal.Width   0.1
+461     setosa  Petal.Width   0.2
+462     setosa  Petal.Width   0.2
+463     setosa  Petal.Width   0.1
+464     setosa  Petal.Width   0.1
+465     setosa  Petal.Width   0.2
+466     setosa  Petal.Width   0.4
+467     setosa  Petal.Width   0.4
+468     setosa  Petal.Width   0.3
+469     setosa  Petal.Width   0.3
+470     setosa  Petal.Width   0.3
+471     setosa  Petal.Width   0.2
+472     setosa  Petal.Width   0.4
+473     setosa  Petal.Width   0.2
+474     setosa  Petal.Width   0.5
+475     setosa  Petal.Width   0.2
+476     setosa  Petal.Width   0.2
+477     setosa  Petal.Width   0.4
+478     setosa  Petal.Width   0.2
+479     setosa  Petal.Width   0.2
+480     setosa  Petal.Width   0.2
+481     setosa  Petal.Width   0.2
+482     setosa  Petal.Width   0.4
+483     setosa  Petal.Width   0.1
+484     setosa  Petal.Width   0.2
+485     setosa  Petal.Width   0.2
+486     setosa  Petal.Width   0.2
+487     setosa  Petal.Width   0.2
+488     setosa  Petal.Width   0.1
+489     setosa  Petal.Width   0.2
+490     setosa  Petal.Width   0.2
+491     setosa  Petal.Width   0.3
+492     setosa  Petal.Width   0.3
+493     setosa  Petal.Width   0.2
+494     setosa  Petal.Width   0.6
+495     setosa  Petal.Width   0.4
+496     setosa  Petal.Width   0.3
+497     setosa  Petal.Width   0.2
+498     setosa  Petal.Width   0.2
+499     setosa  Petal.Width   0.2
+500     setosa  Petal.Width   0.2
+501 versicolor  Petal.Width   1.4
+502 versicolor  Petal.Width   1.5
+503 versicolor  Petal.Width   1.5
+504 versicolor  Petal.Width   1.3
+505 versicolor  Petal.Width   1.5
+506 versicolor  Petal.Width   1.3
+507 versicolor  Petal.Width   1.6
+508 versicolor  Petal.Width   1.0
+509 versicolor  Petal.Width   1.3
+510 versicolor  Petal.Width   1.4
+511 versicolor  Petal.Width   1.0
+512 versicolor  Petal.Width   1.5
+513 versicolor  Petal.Width   1.0
+514 versicolor  Petal.Width   1.4
+515 versicolor  Petal.Width   1.3
+516 versicolor  Petal.Width   1.4
+517 versicolor  Petal.Width   1.5
+518 versicolor  Petal.Width   1.0
+519 versicolor  Petal.Width   1.5
+520 versicolor  Petal.Width   1.1
+521 versicolor  Petal.Width   1.8
+522 versicolor  Petal.Width   1.3
+523 versicolor  Petal.Width   1.5
+524 versicolor  Petal.Width   1.2
+525 versicolor  Petal.Width   1.3
+526 versicolor  Petal.Width   1.4
+527 versicolor  Petal.Width   1.4
+528 versicolor  Petal.Width   1.7
+529 versicolor  Petal.Width   1.5
+530 versicolor  Petal.Width   1.0
+531 versicolor  Petal.Width   1.1
+532 versicolor  Petal.Width   1.0
+533 versicolor  Petal.Width   1.2
+534 versicolor  Petal.Width   1.6
+535 versicolor  Petal.Width   1.5
+536 versicolor  Petal.Width   1.6
+537 versicolor  Petal.Width   1.5
+538 versicolor  Petal.Width   1.3
+539 versicolor  Petal.Width   1.3
+540 versicolor  Petal.Width   1.3
+541 versicolor  Petal.Width   1.2
+542 versicolor  Petal.Width   1.4
+543 versicolor  Petal.Width   1.2
+544 versicolor  Petal.Width   1.0
+545 versicolor  Petal.Width   1.3
+546 versicolor  Petal.Width   1.2
+547 versicolor  Petal.Width   1.3
+548 versicolor  Petal.Width   1.3
+549 versicolor  Petal.Width   1.1
+550 versicolor  Petal.Width   1.3
+551  virginica  Petal.Width   2.5
+552  virginica  Petal.Width   1.9
+553  virginica  Petal.Width   2.1
+554  virginica  Petal.Width   1.8
+555  virginica  Petal.Width   2.2
+556  virginica  Petal.Width   2.1
+557  virginica  Petal.Width   1.7
+558  virginica  Petal.Width   1.8
+559  virginica  Petal.Width   1.8
+560  virginica  Petal.Width   2.5
+561  virginica  Petal.Width   2.0
+562  virginica  Petal.Width   1.9
+563  virginica  Petal.Width   2.1
+564  virginica  Petal.Width   2.0
+565  virginica  Petal.Width   2.4
+566  virginica  Petal.Width   2.3
+567  virginica  Petal.Width   1.8
+568  virginica  Petal.Width   2.2
+569  virginica  Petal.Width   2.3
+570  virginica  Petal.Width   1.5
+571  virginica  Petal.Width   2.3
+572  virginica  Petal.Width   2.0
+573  virginica  Petal.Width   2.0
+574  virginica  Petal.Width   1.8
+575  virginica  Petal.Width   2.1
+576  virginica  Petal.Width   1.8
+577  virginica  Petal.Width   1.8
+578  virginica  Petal.Width   1.8
+579  virginica  Petal.Width   2.1
+580  virginica  Petal.Width   1.6
+581  virginica  Petal.Width   1.9
+582  virginica  Petal.Width   2.0
+583  virginica  Petal.Width   2.2
+584  virginica  Petal.Width   1.5
+585  virginica  Petal.Width   1.4
+586  virginica  Petal.Width   2.3
+587  virginica  Petal.Width   2.4
+588  virginica  Petal.Width   1.8
+589  virginica  Petal.Width   1.8
+590  virginica  Petal.Width   2.1
+591  virginica  Petal.Width   2.4
+592  virginica  Petal.Width   2.3
+593  virginica  Petal.Width   1.9
+594  virginica  Petal.Width   2.3
+595  virginica  Petal.Width   2.5
+596  virginica  Petal.Width   2.3
+597  virginica  Petal.Width   1.9
+598  virginica  Petal.Width   2.0
+599  virginica  Petal.Width   2.3
+600  virginica  Petal.Width   1.8</code></pre>
+</div>
+</div>
+</section>
+<section id="sorting-and-ordering" class="level1">
+<h1>Sorting and Ordering</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">top_n</span>(<span class="dv">4</span>, Petal.Length) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(Petal.Length))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+1          7.7         2.6          6.9         2.3 virginica
+2          7.7         3.8          6.7         2.2 virginica
+3          7.7         2.8          6.7         2.0 virginica
+4          7.6         3.0          6.6         2.1 virginica</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">distinct</span>(Species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Species
+1     setosa
+2 versicolor
+3  virginica</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">count</span>(Species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Species  n
+1     setosa 50
+2 versicolor 50
+3  virginica 50</code></pre>
+</div>
+</div>
+<p><strong>Task</strong> count Petal.Length</p>
+</section>
+<section id="adding-data" class="level1">
+<h1>Adding data</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a silly example: convert Petal.Length from centimeters --&gt; meters</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">pl_m=</span>Petal.Length<span class="sc">/</span><span class="dv">100</span>) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width Species  pl_m
+1          5.1         3.5          1.4         0.2  setosa 0.014
+2          4.9         3.0          1.4         0.2  setosa 0.014
+3          4.7         3.2          1.3         0.2  setosa 0.013
+4          4.6         3.1          1.5         0.2  setosa 0.015
+5          5.0         3.6          1.4         0.2  setosa 0.014
+6          5.4         3.9          1.7         0.4  setosa 0.017</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># perhaps more useful</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">PLr=</span><span class="fu">rank</span>(Petal.Length)) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(Petal.Length) <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width Species PLr
+1          4.6         3.6          1.0         0.2  setosa 1.0
+2          4.3         3.0          1.1         0.1  setosa 2.0
+3          5.8         4.0          1.2         0.2  setosa 3.5
+4          5.0         3.2          1.2         0.2  setosa 3.5
+5          4.7         3.2          1.3         0.2  setosa 8.0
+6          5.4         3.9          1.3         0.4  setosa 8.0</code></pre>
+</div>
+</div>
+</section>
+<section id="grouping-and-summarizing" class="level1">
+<h1>Grouping and Summarizing</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">m=</span><span class="fu">mean</span>(Petal.Length))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 x 2
+  Species        m
+  &lt;fct&gt;      &lt;dbl&gt;
+1 setosa      1.46
+2 versicolor  4.26
+3 virginica   5.55</code></pre>
+</div>
+</div>
+<p><strong>Task1</strong> Plot the standard deviation [hint: ?sd] of Petal.Length within each group</p>
+<p><strong>Task2</strong> Plot the mean(Petal.Length) against the mean(Petal.Width) where the means are for each Species</p>
+</section>
+<section id="merging-data-frames" class="level1">
+<h1>Merging Data frames</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create two data sets for Sepal and Petal measurments, but add ID to keep track of the flow-ID</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>irisS<span class="ot">=</span>iris<span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">"Sepal"</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">id=</span><span class="fu">row_number</span>())                           </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>irisP<span class="ot">=</span>iris<span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">"Petal"</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">id=</span><span class="fu">row_number</span>()) <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(<span class="fl">0.05</span>)  <span class="co"># second plant is subsampled</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">left_join</span>(irisP,irisS, <span class="at">by=</span><span class="st">"id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Petal.Length Petal.Width  id Sepal.Length Sepal.Width
+1          4.7         1.5  87          6.7         3.1
+2          1.6         0.6  44          5.0         3.5
+3          5.3         1.9 112          6.4         2.7
+4          1.4         0.2  50          5.0         3.3
+5          1.3         0.3  41          5.0         3.5
+6          5.0         1.7  78          6.7         3.0
+7          5.4         2.3 149          6.2         3.4
+8          5.6         2.4 137          6.3         3.4</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">right_join</span>(irisP,irisS, <span class="at">by=</span><span class="st">"id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Petal.Length Petal.Width  id Sepal.Length Sepal.Width
+1            4.7         1.5  87          6.7         3.1
+2            1.6         0.6  44          5.0         3.5
+3            5.3         1.9 112          6.4         2.7
+4            1.4         0.2  50          5.0         3.3
+5            1.3         0.3  41          5.0         3.5
+6            5.0         1.7  78          6.7         3.0
+7            5.4         2.3 149          6.2         3.4
+8            5.6         2.4 137          6.3         3.4
+9             NA          NA   1          5.1         3.5
+10            NA          NA   2          4.9         3.0
+11            NA          NA   3          4.7         3.2
+12            NA          NA   4          4.6         3.1
+13            NA          NA   5          5.0         3.6
+14            NA          NA   6          5.4         3.9
+15            NA          NA   7          4.6         3.4
+16            NA          NA   8          5.0         3.4
+17            NA          NA   9          4.4         2.9
+18            NA          NA  10          4.9         3.1
+19            NA          NA  11          5.4         3.7
+20            NA          NA  12          4.8         3.4
+21            NA          NA  13          4.8         3.0
+22            NA          NA  14          4.3         3.0
+23            NA          NA  15          5.8         4.0
+24            NA          NA  16          5.7         4.4
+25            NA          NA  17          5.4         3.9
+26            NA          NA  18          5.1         3.5
+27            NA          NA  19          5.7         3.8
+28            NA          NA  20          5.1         3.8
+29            NA          NA  21          5.4         3.4
+30            NA          NA  22          5.1         3.7
+31            NA          NA  23          4.6         3.6
+32            NA          NA  24          5.1         3.3
+33            NA          NA  25          4.8         3.4
+34            NA          NA  26          5.0         3.0
+35            NA          NA  27          5.0         3.4
+36            NA          NA  28          5.2         3.5
+37            NA          NA  29          5.2         3.4
+38            NA          NA  30          4.7         3.2
+39            NA          NA  31          4.8         3.1
+40            NA          NA  32          5.4         3.4
+41            NA          NA  33          5.2         4.1
+42            NA          NA  34          5.5         4.2
+43            NA          NA  35          4.9         3.1
+44            NA          NA  36          5.0         3.2
+45            NA          NA  37          5.5         3.5
+46            NA          NA  38          4.9         3.6
+47            NA          NA  39          4.4         3.0
+48            NA          NA  40          5.1         3.4
+49            NA          NA  42          4.5         2.3
+50            NA          NA  43          4.4         3.2
+51            NA          NA  45          5.1         3.8
+52            NA          NA  46          4.8         3.0
+53            NA          NA  47          5.1         3.8
+54            NA          NA  48          4.6         3.2
+55            NA          NA  49          5.3         3.7
+56            NA          NA  51          7.0         3.2
+57            NA          NA  52          6.4         3.2
+58            NA          NA  53          6.9         3.1
+59            NA          NA  54          5.5         2.3
+60            NA          NA  55          6.5         2.8
+61            NA          NA  56          5.7         2.8
+62            NA          NA  57          6.3         3.3
+63            NA          NA  58          4.9         2.4
+64            NA          NA  59          6.6         2.9
+65            NA          NA  60          5.2         2.7
+66            NA          NA  61          5.0         2.0
+67            NA          NA  62          5.9         3.0
+68            NA          NA  63          6.0         2.2
+69            NA          NA  64          6.1         2.9
+70            NA          NA  65          5.6         2.9
+71            NA          NA  66          6.7         3.1
+72            NA          NA  67          5.6         3.0
+73            NA          NA  68          5.8         2.7
+74            NA          NA  69          6.2         2.2
+75            NA          NA  70          5.6         2.5
+76            NA          NA  71          5.9         3.2
+77            NA          NA  72          6.1         2.8
+78            NA          NA  73          6.3         2.5
+79            NA          NA  74          6.1         2.8
+80            NA          NA  75          6.4         2.9
+81            NA          NA  76          6.6         3.0
+82            NA          NA  77          6.8         2.8
+83            NA          NA  79          6.0         2.9
+84            NA          NA  80          5.7         2.6
+85            NA          NA  81          5.5         2.4
+86            NA          NA  82          5.5         2.4
+87            NA          NA  83          5.8         2.7
+88            NA          NA  84          6.0         2.7
+89            NA          NA  85          5.4         3.0
+90            NA          NA  86          6.0         3.4
+91            NA          NA  88          6.3         2.3
+92            NA          NA  89          5.6         3.0
+93            NA          NA  90          5.5         2.5
+94            NA          NA  91          5.5         2.6
+95            NA          NA  92          6.1         3.0
+96            NA          NA  93          5.8         2.6
+97            NA          NA  94          5.0         2.3
+98            NA          NA  95          5.6         2.7
+99            NA          NA  96          5.7         3.0
+100           NA          NA  97          5.7         2.9
+101           NA          NA  98          6.2         2.9
+102           NA          NA  99          5.1         2.5
+103           NA          NA 100          5.7         2.8
+104           NA          NA 101          6.3         3.3
+105           NA          NA 102          5.8         2.7
+106           NA          NA 103          7.1         3.0
+107           NA          NA 104          6.3         2.9
+108           NA          NA 105          6.5         3.0
+109           NA          NA 106          7.6         3.0
+110           NA          NA 107          4.9         2.5
+111           NA          NA 108          7.3         2.9
+112           NA          NA 109          6.7         2.5
+113           NA          NA 110          7.2         3.6
+114           NA          NA 111          6.5         3.2
+115           NA          NA 113          6.8         3.0
+116           NA          NA 114          5.7         2.5
+117           NA          NA 115          5.8         2.8
+118           NA          NA 116          6.4         3.2
+119           NA          NA 117          6.5         3.0
+120           NA          NA 118          7.7         3.8
+121           NA          NA 119          7.7         2.6
+122           NA          NA 120          6.0         2.2
+123           NA          NA 121          6.9         3.2
+124           NA          NA 122          5.6         2.8
+125           NA          NA 123          7.7         2.8
+126           NA          NA 124          6.3         2.7
+127           NA          NA 125          6.7         3.3
+128           NA          NA 126          7.2         3.2
+129           NA          NA 127          6.2         2.8
+130           NA          NA 128          6.1         3.0
+131           NA          NA 129          6.4         2.8
+132           NA          NA 130          7.2         3.0
+133           NA          NA 131          7.4         2.8
+134           NA          NA 132          7.9         3.8
+135           NA          NA 133          6.4         2.8
+136           NA          NA 134          6.3         2.8
+137           NA          NA 135          6.1         2.6
+138           NA          NA 136          7.7         3.0
+139           NA          NA 138          6.4         3.1
+140           NA          NA 139          6.0         3.0
+141           NA          NA 140          6.9         3.1
+142           NA          NA 141          6.7         3.1
+143           NA          NA 142          6.9         3.1
+144           NA          NA 143          5.8         2.7
+145           NA          NA 144          6.8         3.2
+146           NA          NA 145          6.7         3.3
+147           NA          NA 146          6.7         3.0
+148           NA          NA 147          6.3         2.5
+149           NA          NA 148          6.5         3.0
+150           NA          NA 150          5.9         3.0</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inner_join</span>(irisP,irisS, <span class="at">by=</span><span class="st">"id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Petal.Length Petal.Width  id Sepal.Length Sepal.Width
+1          4.7         1.5  87          6.7         3.1
+2          1.6         0.6  44          5.0         3.5
+3          5.3         1.9 112          6.4         2.7
+4          1.4         0.2  50          5.0         3.3
+5          1.3         0.3  41          5.0         3.5
+6          5.0         1.7  78          6.7         3.0
+7          5.4         2.3 149          6.2         3.4
+8          5.6         2.4 137          6.3         3.4</code></pre>
+</div>
+</div>
+<p><strong>Task</strong> Explore the resulting data</p>
+</section>
+<section id="ggplot-powerful-plotting" class="level1">
+<h1>ggplot: Powerful plotting</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">ggplot</span>(iris, <span class="fu">aes</span>(<span class="at">x=</span>Petal.Length, <span class="at">y=</span>Petal.Width, <span class="at">colour=</span>Species))</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>g <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>, <span class="at">se=</span><span class="cn">TRUE</span>, <span class="at">color=</span><span class="st">"yellow"</span>) <span class="sc">+</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"loess"</span>, <span class="at">colour=</span><span class="st">"orange"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'
+`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="S02_tidyverse_files/figure-html/ggplot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="grouping" class="level1">
+<h1>Grouping</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>g <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">facet_grid</span>(<span class="sc">~</span>Species) <span class="co"># arrange subplot by categorical variable, try setting sclaes="free"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="S02_tidyverse_files/figure-html/group-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>g <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">group=</span>Species))   <span class="co"># smooth based on group defined by species</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'loess' and formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="S02_tidyverse_files/figure-html/group-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">ggplot</span>(iris, <span class="fu">aes</span>(<span class="at">x=</span>Species, <span class="at">y=</span>Petal.Width, <span class="at">colour=</span>Species))</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>g <span class="sc">+</span> <span class="fu">geom_violin</span>() <span class="sc">+</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_discrete</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="st">"versicolor"</span>, <span class="st">"setosa"</span>,<span class="st">"virginica"</span>))  <span class="co"># change order</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="S02_tidyverse_files/figure-html/other-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = true;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb50" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> 'S02: Tidyverse'</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Thomas Manke"</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="co">  - tidyverse</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup, include=FALSE}</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="in">knitr::opts_chunk$set(echo = TRUE)</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="in">knitr::opts_chunk$set(cache=TRUE)</span></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a><span class="fu"># Tidyverse</span></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>See also: R for Data Science:  https://r4ds.had.co.nz/</span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a><span class="in">```{r installation, eval=FALSE}</span></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="in">install.packages("tidyverse") # only needed once</span></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup_package}</span></span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a><span class="in">library("tidyverse")</span></span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a><span class="in">```{r read_data}</span></span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a><span class="in">getwd()  # know your working directory</span></span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a><span class="in">file="data/GeneList.tsv"   # set file name relative to working directory</span></span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a><span class="in">D = read_tsv(file, comment="%")</span></span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a><span class="in">D</span></span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a><span class="fu"># A new style: Pipes</span></span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a><span class="in">```{r tidyverse_style}</span></span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a><span class="in">iris %&gt;% str()</span></span>
+<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a><span class="in">iris %&gt;% head()</span></span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a><span class="fu"># Selection</span></span>
+<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a><span class="in">```{r selection}</span></span>
+<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a><span class="in"># column selection / unselection</span></span>
+<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a><span class="in">iris %&gt;% select(-Species) %&gt;% head()                            </span></span>
+<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a><span class="in">iris %&gt;% select(matches("Length")) %&gt;% head()</span></span>
+<span id="cb50-44"><a href="#cb50-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a><span class="in"># row selection</span></span>
+<span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a><span class="in">iris %&gt;% slice(-c(4:150))</span></span>
+<span id="cb50-47"><a href="#cb50-47" aria-hidden="true" tabindex="-1"></a><span class="in">iris %&gt;% filter(Petal.Length==min(Petal.Length))      </span></span>
+<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a><span class="in">iris %&gt;% filter(Petal.Length&lt;2 &amp; Sepal.Width&gt;4) </span></span>
+<span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-51"><a href="#cb50-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-52"><a href="#cb50-52" aria-hidden="true" tabindex="-1"></a><span class="fu"># Data Munging and Reshaping</span></span>
+<span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-54"><a href="#cb50-54" aria-hidden="true" tabindex="-1"></a>Same data can come in various shapes:</span>
+<span id="cb50-55"><a href="#cb50-55" aria-hidden="true" tabindex="-1"></a><span class="in">```{r }</span></span>
+<span id="cb50-56"><a href="#cb50-56" aria-hidden="true" tabindex="-1"></a><span class="in">iris %&gt;% gather(Measurement, Value, -Species)   # convert between wide and long forms</span></span>
+<span id="cb50-57"><a href="#cb50-57" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-58"><a href="#cb50-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-59"><a href="#cb50-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-60"><a href="#cb50-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-61"><a href="#cb50-61" aria-hidden="true" tabindex="-1"></a><span class="fu"># Sorting and Ordering</span></span>
+<span id="cb50-64"><a href="#cb50-64" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-65"><a href="#cb50-65" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">top_n</span>(<span class="dv">4</span>, Petal.Length) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(Petal.Length))</span>
+<span id="cb50-66"><a href="#cb50-66" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-67"><a href="#cb50-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-68"><a href="#cb50-68" aria-hidden="true" tabindex="-1"></a><span class="in">```{r counting}</span></span>
+<span id="cb50-69"><a href="#cb50-69" aria-hidden="true" tabindex="-1"></a><span class="in">iris %&gt;% distinct(Species)</span></span>
+<span id="cb50-70"><a href="#cb50-70" aria-hidden="true" tabindex="-1"></a><span class="in">iris %&gt;% count(Species)</span></span>
+<span id="cb50-71"><a href="#cb50-71" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-72"><a href="#cb50-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-73"><a href="#cb50-73" aria-hidden="true" tabindex="-1"></a>**Task** count Petal.Length</span>
+<span id="cb50-74"><a href="#cb50-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-75"><a href="#cb50-75" aria-hidden="true" tabindex="-1"></a><span class="fu"># Adding data</span></span>
+<span id="cb50-76"><a href="#cb50-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{r adding_data}</span></span>
+<span id="cb50-77"><a href="#cb50-77" aria-hidden="true" tabindex="-1"></a><span class="in"># a silly example: convert Petal.Length from centimeters --&gt; meters</span></span>
+<span id="cb50-78"><a href="#cb50-78" aria-hidden="true" tabindex="-1"></a><span class="in">iris %&gt;% mutate(pl_m=Petal.Length/100) %&gt;% head()</span></span>
+<span id="cb50-79"><a href="#cb50-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-80"><a href="#cb50-80" aria-hidden="true" tabindex="-1"></a><span class="in"># perhaps more useful</span></span>
+<span id="cb50-81"><a href="#cb50-81" aria-hidden="true" tabindex="-1"></a><span class="in">iris %&gt;% mutate(PLr=rank(Petal.Length)) %&gt;% arrange(Petal.Length) %&gt;% head()</span></span>
+<span id="cb50-82"><a href="#cb50-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-83"><a href="#cb50-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-84"><a href="#cb50-84" aria-hidden="true" tabindex="-1"></a><span class="fu"># Grouping and Summarizing</span></span>
+<span id="cb50-85"><a href="#cb50-85" aria-hidden="true" tabindex="-1"></a><span class="in">```{r group_and_sum}</span></span>
+<span id="cb50-86"><a href="#cb50-86" aria-hidden="true" tabindex="-1"></a><span class="in">iris %&gt;% group_by(Species) %&gt;% summarise(m=mean(Petal.Length))</span></span>
+<span id="cb50-87"><a href="#cb50-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-88"><a href="#cb50-88" aria-hidden="true" tabindex="-1"></a>**Task1** Plot the standard deviation <span class="co">[</span><span class="ot">hint: ?sd</span><span class="co">]</span> of Petal.Length within each group</span>
+<span id="cb50-89"><a href="#cb50-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-90"><a href="#cb50-90" aria-hidden="true" tabindex="-1"></a>**Task2** Plot the mean(Petal.Length) against the mean(Petal.Width) where the means are for each Species </span>
+<span id="cb50-91"><a href="#cb50-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-92"><a href="#cb50-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-93"><a href="#cb50-93" aria-hidden="true" tabindex="-1"></a><span class="fu"># Merging Data frames</span></span>
+<span id="cb50-96"><a href="#cb50-96" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb50-97"><a href="#cb50-97" aria-hidden="true" tabindex="-1"></a><span class="co"># create two data sets for Sepal and Petal measurments, but add ID to keep track of the flow-ID</span></span>
+<span id="cb50-98"><a href="#cb50-98" aria-hidden="true" tabindex="-1"></a>irisS<span class="ot">=</span>iris<span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">"Sepal"</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">id=</span><span class="fu">row_number</span>())                           </span>
+<span id="cb50-99"><a href="#cb50-99" aria-hidden="true" tabindex="-1"></a>irisP<span class="ot">=</span>iris<span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">"Petal"</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">id=</span><span class="fu">row_number</span>()) <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(<span class="fl">0.05</span>)  <span class="co"># second plant is subsampled</span></span>
+<span id="cb50-100"><a href="#cb50-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-101"><a href="#cb50-101" aria-hidden="true" tabindex="-1"></a><span class="fu">left_join</span>(irisP,irisS, <span class="at">by=</span><span class="st">"id"</span>)</span>
+<span id="cb50-102"><a href="#cb50-102" aria-hidden="true" tabindex="-1"></a><span class="fu">right_join</span>(irisP,irisS, <span class="at">by=</span><span class="st">"id"</span>)</span>
+<span id="cb50-103"><a href="#cb50-103" aria-hidden="true" tabindex="-1"></a><span class="fu">inner_join</span>(irisP,irisS, <span class="at">by=</span><span class="st">"id"</span>)</span>
+<span id="cb50-104"><a href="#cb50-104" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-105"><a href="#cb50-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-106"><a href="#cb50-106" aria-hidden="true" tabindex="-1"></a>**Task** Explore the resulting data</span>
+<span id="cb50-107"><a href="#cb50-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-108"><a href="#cb50-108" aria-hidden="true" tabindex="-1"></a><span class="fu"># ggplot: Powerful plotting</span></span>
+<span id="cb50-109"><a href="#cb50-109" aria-hidden="true" tabindex="-1"></a><span class="in">```{r ggplot}</span></span>
+<span id="cb50-110"><a href="#cb50-110" aria-hidden="true" tabindex="-1"></a><span class="in">g = ggplot(iris, aes(x=Petal.Length, y=Petal.Width, colour=Species))</span></span>
+<span id="cb50-111"><a href="#cb50-111" aria-hidden="true" tabindex="-1"></a><span class="in">g + geom_point() +</span></span>
+<span id="cb50-112"><a href="#cb50-112" aria-hidden="true" tabindex="-1"></a><span class="in">    geom_smooth(method="lm", se=TRUE, color="yellow") +</span></span>
+<span id="cb50-113"><a href="#cb50-113" aria-hidden="true" tabindex="-1"></a><span class="in">    geom_smooth(method="loess", colour="orange")</span></span>
+<span id="cb50-114"><a href="#cb50-114" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-115"><a href="#cb50-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-116"><a href="#cb50-116" aria-hidden="true" tabindex="-1"></a><span class="fu"># Grouping</span></span>
+<span id="cb50-117"><a href="#cb50-117" aria-hidden="true" tabindex="-1"></a><span class="in">```{r group}</span></span>
+<span id="cb50-118"><a href="#cb50-118" aria-hidden="true" tabindex="-1"></a><span class="in">g + geom_point() + facet_grid(~Species) # arrange subplot by categorical variable, try setting sclaes="free"</span></span>
+<span id="cb50-119"><a href="#cb50-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-120"><a href="#cb50-120" aria-hidden="true" tabindex="-1"></a><span class="in">g + geom_smooth(aes(group=Species))   # smooth based on group defined by species</span></span>
+<span id="cb50-121"><a href="#cb50-121" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-122"><a href="#cb50-122" aria-hidden="true" tabindex="-1"></a><span class="in">```{r other}</span></span>
+<span id="cb50-123"><a href="#cb50-123" aria-hidden="true" tabindex="-1"></a><span class="in">g = ggplot(iris, aes(x=Species, y=Petal.Width, colour=Species))</span></span>
+<span id="cb50-124"><a href="#cb50-124" aria-hidden="true" tabindex="-1"></a><span class="in">g + geom_violin() +</span></span>
+<span id="cb50-125"><a href="#cb50-125" aria-hidden="true" tabindex="-1"></a><span class="in">    scale_x_discrete(limits=c("versicolor", "setosa","virginica"))  # change order</span></span>
+<span id="cb50-126"><a href="#cb50-126" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-127"><a href="#cb50-127" aria-hidden="true" tabindex="-1"></a></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Bioinfo Core @ MPI-IE Freiburg (2024)</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/maxplanck-ie">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

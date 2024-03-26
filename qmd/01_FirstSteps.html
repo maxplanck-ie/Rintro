@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Thomas Manke">
+
+<title>Rintro 2024 - 01: First Steps</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Rintro 2024</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../qmd/index.html"> <i class="bi bi-book" role="img">
+</i> 
+<span class="menu-text">Modules</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/maxplanck-ie/Rintro/tree/2024.04"> <i class="bi bi-fa-github" role="img">
+</i> 
+<span class="menu-text">GitHub</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#create-r-project" id="toc-create-r-project" class="nav-link active" data-scroll-target="#create-r-project">Create R project</a></li>
+  <li><a href="#console-and-commands" id="toc-console-and-commands" class="nav-link" data-scroll-target="#console-and-commands">Console and Commands</a></li>
+  <li><a href="#command-history" id="toc-command-history" class="nav-link" data-scroll-target="#command-history">Command History</a></li>
+  <li><a href="#first-help" id="toc-first-help" class="nav-link" data-scroll-target="#first-help">First help</a></li>
+  <li><a href="#community-help" id="toc-community-help" class="nav-link" data-scroll-target="#community-help">Community help</a></li>
+  <li><a href="#sessioninfo" id="toc-sessioninfo" class="nav-link" data-scroll-target="#sessioninfo">SessionInfo</a></li>
+  <li><a href="#assigning-values-to-objects" id="toc-assigning-values-to-objects" class="nav-link" data-scroll-target="#assigning-values-to-objects">Assigning values to objects</a></li>
+  <li><a href="#simple-vectors" id="toc-simple-vectors" class="nav-link" data-scroll-target="#simple-vectors">Simple Vectors</a></li>
+  <li><a href="#accessing-vectors" id="toc-accessing-vectors" class="nav-link" data-scroll-target="#accessing-vectors">Accessing Vectors</a></li>
+  <li><a href="#vector-generation" id="toc-vector-generation" class="nav-link" data-scroll-target="#vector-generation">Vector Generation</a></li>
+  <li><a href="#vector-operations" id="toc-vector-operations" class="nav-link" data-scroll-target="#vector-operations">Vector Operations</a></li>
+  <li><a href="#misc-concepts-and-pecularities" id="toc-misc-concepts-and-pecularities" class="nav-link" data-scroll-target="#misc-concepts-and-pecularities">Misc: Concepts and Pecularities</a></li>
+  <li><a href="#learning-curve" id="toc-learning-curve" class="nav-link" data-scroll-target="#learning-curve">Learning Curve:</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">01: First Steps</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+  <div class="quarto-categories">
+    <div class="quarto-category">vectors</div>
+    <div class="quarto-category">indexing</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Thomas Manke </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="create-r-project" class="level1">
+<h1>Create R project</h1>
+<p><strong>Best practice:</strong><br>
+Each R project should have their dedicated directory. This directory will hold code, data, results etc.</p>
+<p><strong>Task</strong>: Open a new project with “File &gt; New Project …”</p>
+<p>Notice the following distinction:</p>
+<ul>
+<li>When running Rstudio locally, the project directory will reside on your <strong>local</strong> computer.</li>
+<li>When accessing a web server, the project directory will also be on that server.</li>
+</ul>
+<p><strong>Task</strong>: Familiarize yourself with the layout and the various panels in Rstudio.</p>
+<p><strong>Query</strong>: Utilization: https://pollev.com/thomasmanke101</p>
+</section>
+<section id="console-and-commands" class="level1">
+<h1>Console and Commands</h1>
+<p>For now, the most important panel is the so-called “Console” with the prompt (“&gt;”).</p>
+<p>This is where the first interactions with the R-software will take place.</p>
+<p>The other panels are for: output, help and other information.</p>
+<p><strong>Task</strong>: In the Console try to repeat and understand the following operations</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">+</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">^</span><span class="dv">3</span>        <span class="co"># This is a comment: try also 2**3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">+</span><span class="dv">2</span><span class="sc">+</span><span class="dv">3</span><span class="sc">/</span><span class="dv">6</span>    <span class="co"># beware of precedence rules</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.5</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">2</span>)    <span class="co"># functions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.414214</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sin</span>(pi<span class="sc">/</span><span class="dv">2</span>)  <span class="co"># functions and built-in constants</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Special values</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">/</span><span class="dv">0</span>        <span class="co"># R knows infinity! Try 1/Inf and 1/inf</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] Inf</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span><span class="sc">/</span><span class="dv">0</span>        <span class="co"># Not a number!     Try sqrt(-1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NaN</code></pre>
+</div>
+</div>
+</section>
+<section id="command-history" class="level1">
+<h1>Command History</h1>
+<p>All R-commands are tracked in a <em>history</em>. It maybe accessed using the cursors (or the history panel in RStudio). This is extremely useful to navigate to previous commands, repeat them, or change them slightly.</p>
+<p><strong>Task</strong>: Using the history, determine <span class="math inline">\(\sqrt 3\)</span>.</p>
+</section>
+<section id="first-help" class="level1">
+<h1>First help</h1>
+<p>There are various different ways to get help</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>?sin</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Use help to find out more about: sqrt, exp or anything else of interest.</p>
+</section>
+<section id="community-help" class="level1">
+<h1>Community help</h1>
+<ul>
+<li>online courses: https://software-carpentry.org/lessons, Coursera, Udacity, …</li>
+<li>bootcamp: https://github.com/jknowles/r_tutorial_ed</li>
+<li>QuickR: https://www.statmethods.net</li>
+<li>https://stackoverflow.com, https://www.r-bloggers.com/</li>
+</ul>
+</section>
+<section id="sessioninfo" class="level1">
+<h1>SessionInfo</h1>
+<p>Every language operates in a certain context and is context-dependent.</p>
+<p>Software depends on other software and packages.</p>
+<p>It is important to be aware of those (often complex) dependencies.</p>
+<p>One way to communicate this context is with the output from sessionInfo().</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.2.3 (2023-03-15)
+Platform: x86_64-conda-linux-gnu (64-bit)
+Running under: Debian GNU/Linux 12 (bookworm)
+
+Matrix products: default
+BLAS/LAPACK: /github/home/micromamba/envs/Rintro/lib/libopenblasp-r0.3.26.so
+
+locale:
+[1] C
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] compiler_4.2.3  fastmap_1.1.1   cli_3.6.2       tools_4.2.3    
+ [5] htmltools_0.5.8 yaml_2.3.8      rmarkdown_2.25  knitr_1.45     
+ [9] jsonlite_1.8.8  xfun_0.43       digest_0.6.35   rlang_1.1.3    
+[13] evaluate_0.23  </code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="assigning-values-to-objects" class="level1">
+<h1>Assigning values to objects</h1>
+<p><strong>Goal</strong>: store results of computation in new variables</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>pi <span class="co"># pre-defined constant pi</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>x         <span class="co"># see value of object x = show(x) </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.283185</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">&lt;</span> <span class="sc">-</span><span class="dv">2</span>    <span class="co"># Careful: what's going on here?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.283185</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="dv">2</span>  <span class="co"># "=" as in most other languages.  </span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>x      <span class="co"># x was overwritten</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>x<span class="sc">==</span><span class="dv">3</span>   <span class="co"># another logical comparison (x unchanged)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>x<span class="sc">+</span>x    <span class="co"># passing objects to functions (+)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p><strong>Task</strong>: look at the following objects and understand the differences</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>pi </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>hi</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="st">"hi"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+</section>
+<section id="simple-vectors" class="level1">
+<h1>Simple Vectors</h1>
+<p>Vectors illustrate how complex data structures can be built from smaller blocks. Here we learn how to create and inspect vectors.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>v<span class="ot">=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)            <span class="co"># combine arguments into vector</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>v                   <span class="co"># display v</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># functions for vectors</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(v)              <span class="co"># structure of v (especially useful for long and structured objects)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> num [1:2] 1 2</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(v)           <span class="co"># type of v ( ~ storage mode)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "double"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(v)            <span class="co"># class of v (determines how certain functions will work with v)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   1.00    1.25    1.50    1.50    1.75    2.00 </code></pre>
+</div>
+</div>
+</section>
+<section id="accessing-vectors" class="level1">
+<h1>Accessing Vectors</h1>
+<p>Frequently we need to access specific elements from a vector</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>v[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+<p><strong>Task</strong>: access the following vector elements: v[1], v[2], v[3], v[1:3], v[-1]</p>
+</section>
+<section id="vector-generation" class="level1">
+<h1>Vector Generation</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>v<span class="ot">=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)    <span class="co"># combining many elements can get cumbersome</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>v<span class="ot">=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>             <span class="co"># more efficient</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>v<span class="ot">=</span><span class="fu">seq</span>(<span class="at">from=</span><span class="dv">1</span>, <span class="at">to=</span><span class="dv">5</span>, <span class="at">by=</span><span class="dv">1</span>) <span class="co"># same as before but more flexibilty</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>v<span class="ot">=</span><span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="fl">0.5</span>)            <span class="co"># short-hand defaults</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><strong>Tasks</strong>:</p>
+<ul>
+<li>Explore the seq() function and inspect other parameter options.</li>
+<li>Create a vector with 5 numbers equally spaced from +2 to -1.9</li>
+</ul>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  2.000  1.025  0.050 -0.925 -1.900</code></pre>
+</div>
+</div>
+<p><strong>Task</strong>: Understand the difference between the two vectors v1 and v2</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>v1<span class="ot">=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10-1</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>v2<span class="ot">=</span><span class="dv">1</span><span class="sc">:</span>(<span class="dv">10-1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="vector-operations" class="level1">
+<h1>Vector Operations</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>v1<span class="ot">=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>      <span class="co"># = c(1,2,3)</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>v2<span class="ot">=</span><span class="fu">rep</span>(<span class="dv">2</span>,<span class="dv">3</span>) <span class="co"># = c(2,2,2)</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>v1<span class="sc">+</span>v2      <span class="co"># elementwise addition</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>v1<span class="sc">*</span>v2      <span class="co"># ... multiplication</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>v1 <span class="sc">&gt;</span> v2    <span class="co"># ... comparisons</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>v1 <span class="sc">%*%</span> v2  <span class="co"># scalar product</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><strong>Task</strong>: Define your own vectors and explore some numerical operations</p>
+</section>
+<section id="misc-concepts-and-pecularities" class="level1">
+<h1>Misc: Concepts and Pecularities</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>v<span class="ot">=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>                    <span class="co"># Vector Definition</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>v <span class="sc">+</span> <span class="dv">10</span>                   <span class="co"># Recycling</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>v <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>)             <span class="co"># Recycling</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>v <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>)          <span class="co"># Warning != Error</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="co">#v %*% c(10,20,30)        # Error = Error</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>letters                  <span class="co"># built-in vector. Try LETTERS </span></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(letters)          <span class="co"># there is more than numbers</span></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(v)<span class="ot">=</span>letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]    <span class="co"># naming of vector elements (for convenience)</span></span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>v[<span class="st">"b"</span>]                   <span class="co"># index by name</span></span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a><span class="fu">rev</span>(v)                   <span class="co"># reverse vectors</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+</section>
+<section id="learning-curve" class="level1">
+<h1>Learning Curve:</h1>
+<ul>
+<li>Rstudio: Starting an R project</li>
+<li>work with console</li>
+<li>simple functions (input, output), logical operations and parameters</li>
+<li>creating simple objects and assigning values</li>
+<li>inspecting objects: v, str(v), typeof(v), length(v)</li>
+<li>flexible creation of vectors</li>
+<li>vector indices and subsetting</li>
+<li>vector operations and recycling</li>
+<li>special values: Inf, NaN, NA</li>
+<li>functions can behave differently on different input: summary()</li>
+<li>see warning messages and errors</li>
+<li>getting help: ?sqrt</li>
+<li>software dependencies and the importance of sesssionInfo()</li>
+</ul>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = true;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb52" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "01: First Steps"</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Thomas Manke"</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="co">  - vectors</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - indexing</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a><span class="fu"># Create R project</span></span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>**Best practice:**   </span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>Each R project should have their dedicated directory. This directory will hold code, data, results etc.</span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>**Task**: Open a new project with "File &gt; New Project ..."</span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>Notice the following distinction:</span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>When running Rstudio locally, the project directory will reside on your **local** computer.</span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>When accessing a web server, the project directory will also be on that server.</span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a>**Task**: Familiarize yourself with the layout and the various panels in Rstudio. </span>
+<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-22"><a href="#cb52-22" aria-hidden="true" tabindex="-1"></a>**Query**: Utilization: https://pollev.com/thomasmanke101</span>
+<span id="cb52-23"><a href="#cb52-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a><span class="fu"># Console and Commands</span></span>
+<span id="cb52-25"><a href="#cb52-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-26"><a href="#cb52-26" aria-hidden="true" tabindex="-1"></a>For now, the most important panel is the so-called "Console" with the prompt ("&gt;"). </span>
+<span id="cb52-27"><a href="#cb52-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-28"><a href="#cb52-28" aria-hidden="true" tabindex="-1"></a>This is where the first interactions with the R-software will take place. </span>
+<span id="cb52-29"><a href="#cb52-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-30"><a href="#cb52-30" aria-hidden="true" tabindex="-1"></a>The other panels are for: output, help and other information.</span>
+<span id="cb52-31"><a href="#cb52-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-32"><a href="#cb52-32" aria-hidden="true" tabindex="-1"></a>**Task**: In the Console try to repeat and understand the following operations</span>
+<span id="cb52-33"><a href="#cb52-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{r console}</span></span>
+<span id="cb52-34"><a href="#cb52-34" aria-hidden="true" tabindex="-1"></a><span class="in">2+2</span></span>
+<span id="cb52-35"><a href="#cb52-35" aria-hidden="true" tabindex="-1"></a><span class="in">2^3        # This is a comment: try also 2**3</span></span>
+<span id="cb52-36"><a href="#cb52-36" aria-hidden="true" tabindex="-1"></a><span class="in">1+2+3/6    # beware of precedence rules</span></span>
+<span id="cb52-37"><a href="#cb52-37" aria-hidden="true" tabindex="-1"></a><span class="in">sqrt(2)    # functions</span></span>
+<span id="cb52-38"><a href="#cb52-38" aria-hidden="true" tabindex="-1"></a><span class="in">sin(pi/2)  # functions and built-in constants</span></span>
+<span id="cb52-39"><a href="#cb52-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-40"><a href="#cb52-40" aria-hidden="true" tabindex="-1"></a><span class="in"># Special values</span></span>
+<span id="cb52-41"><a href="#cb52-41" aria-hidden="true" tabindex="-1"></a><span class="in">1/0        # R knows infinity! Try 1/Inf and 1/inf</span></span>
+<span id="cb52-42"><a href="#cb52-42" aria-hidden="true" tabindex="-1"></a><span class="in">0/0        # Not a number!     Try sqrt(-1)</span></span>
+<span id="cb52-43"><a href="#cb52-43" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb52-44"><a href="#cb52-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-45"><a href="#cb52-45" aria-hidden="true" tabindex="-1"></a><span class="fu"># Command History</span></span>
+<span id="cb52-46"><a href="#cb52-46" aria-hidden="true" tabindex="-1"></a>All R-commands are tracked in a *history*. It maybe accessed using the cursors (or the history panel in RStudio). This is extremely useful to navigate to previous commands, repeat them, or change them slightly.</span>
+<span id="cb52-47"><a href="#cb52-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-48"><a href="#cb52-48" aria-hidden="true" tabindex="-1"></a>**Task**: Using the history, determine $\sqrt 3$.</span>
+<span id="cb52-49"><a href="#cb52-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-50"><a href="#cb52-50" aria-hidden="true" tabindex="-1"></a><span class="fu"># First help</span></span>
+<span id="cb52-51"><a href="#cb52-51" aria-hidden="true" tabindex="-1"></a>There are various different ways to get help</span>
+<span id="cb52-52"><a href="#cb52-52" aria-hidden="true" tabindex="-1"></a><span class="in">```{r help, eval=FALSE}</span></span>
+<span id="cb52-53"><a href="#cb52-53" aria-hidden="true" tabindex="-1"></a><span class="in">?sin</span></span>
+<span id="cb52-54"><a href="#cb52-54" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb52-55"><a href="#cb52-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-56"><a href="#cb52-56" aria-hidden="true" tabindex="-1"></a>Use help to find out more about: sqrt, exp or anything else of interest.</span>
+<span id="cb52-57"><a href="#cb52-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-58"><a href="#cb52-58" aria-hidden="true" tabindex="-1"></a><span class="fu"># Community help</span></span>
+<span id="cb52-59"><a href="#cb52-59" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>online courses: https://software-carpentry.org/lessons, Coursera, Udacity, ...</span>
+<span id="cb52-60"><a href="#cb52-60" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>bootcamp: https://github.com/jknowles/r_tutorial_ed</span>
+<span id="cb52-61"><a href="#cb52-61" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>QuickR: https://www.statmethods.net </span>
+<span id="cb52-62"><a href="#cb52-62" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>https://stackoverflow.com, https://www.r-bloggers.com/</span>
+<span id="cb52-63"><a href="#cb52-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-64"><a href="#cb52-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-65"><a href="#cb52-65" aria-hidden="true" tabindex="-1"></a><span class="fu"># SessionInfo</span></span>
+<span id="cb52-66"><a href="#cb52-66" aria-hidden="true" tabindex="-1"></a>Every language operates in a certain context and is context-dependent.</span>
+<span id="cb52-67"><a href="#cb52-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-68"><a href="#cb52-68" aria-hidden="true" tabindex="-1"></a>Software depends on other software and packages.</span>
+<span id="cb52-69"><a href="#cb52-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-70"><a href="#cb52-70" aria-hidden="true" tabindex="-1"></a>It is important to be aware of those (often complex) dependencies.</span>
+<span id="cb52-71"><a href="#cb52-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-72"><a href="#cb52-72" aria-hidden="true" tabindex="-1"></a>One way to communicate this context is with the output from sessionInfo().</span>
+<span id="cb52-73"><a href="#cb52-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-74"><a href="#cb52-74" aria-hidden="true" tabindex="-1"></a><span class="in">```{r sessionInfo}</span></span>
+<span id="cb52-75"><a href="#cb52-75" aria-hidden="true" tabindex="-1"></a><span class="in">sessionInfo()</span></span>
+<span id="cb52-76"><a href="#cb52-76" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb52-77"><a href="#cb52-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-78"><a href="#cb52-78" aria-hidden="true" tabindex="-1"></a>****</span>
+<span id="cb52-79"><a href="#cb52-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-80"><a href="#cb52-80" aria-hidden="true" tabindex="-1"></a><span class="fu"># Assigning values to objects</span></span>
+<span id="cb52-81"><a href="#cb52-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-82"><a href="#cb52-82" aria-hidden="true" tabindex="-1"></a>**Goal**: store results of computation in new variables</span>
+<span id="cb52-83"><a href="#cb52-83" aria-hidden="true" tabindex="-1"></a><span class="in">```{r simple_obejcts}</span></span>
+<span id="cb52-84"><a href="#cb52-84" aria-hidden="true" tabindex="-1"></a><span class="in">x &lt;- 2*pi # pre-defined constant pi</span></span>
+<span id="cb52-85"><a href="#cb52-85" aria-hidden="true" tabindex="-1"></a><span class="in">x         # see value of object x = show(x) </span></span>
+<span id="cb52-86"><a href="#cb52-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-87"><a href="#cb52-87" aria-hidden="true" tabindex="-1"></a><span class="in">x &lt; -2    # Careful: what's going on here?</span></span>
+<span id="cb52-88"><a href="#cb52-88" aria-hidden="true" tabindex="-1"></a><span class="in">x</span></span>
+<span id="cb52-89"><a href="#cb52-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-90"><a href="#cb52-90" aria-hidden="true" tabindex="-1"></a><span class="in">x = 2  # "=" as in most other languages.  </span></span>
+<span id="cb52-91"><a href="#cb52-91" aria-hidden="true" tabindex="-1"></a><span class="in">x      # x was overwritten</span></span>
+<span id="cb52-92"><a href="#cb52-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-93"><a href="#cb52-93" aria-hidden="true" tabindex="-1"></a><span class="in">x==3   # another logical comparison (x unchanged)</span></span>
+<span id="cb52-94"><a href="#cb52-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-95"><a href="#cb52-95" aria-hidden="true" tabindex="-1"></a><span class="in">x+x    # passing objects to functions (+)</span></span>
+<span id="cb52-96"><a href="#cb52-96" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb52-97"><a href="#cb52-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-98"><a href="#cb52-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-99"><a href="#cb52-99" aria-hidden="true" tabindex="-1"></a>**Task**: look at the following objects and understand the differences</span>
+<span id="cb52-100"><a href="#cb52-100" aria-hidden="true" tabindex="-1"></a><span class="in">```{r more_obejects, eval=FALSE, echo=TRUE}</span></span>
+<span id="cb52-101"><a href="#cb52-101" aria-hidden="true" tabindex="-1"></a><span class="in">pi </span></span>
+<span id="cb52-102"><a href="#cb52-102" aria-hidden="true" tabindex="-1"></a><span class="in">hi</span></span>
+<span id="cb52-103"><a href="#cb52-103" aria-hidden="true" tabindex="-1"></a><span class="in">"hi"</span></span>
+<span id="cb52-104"><a href="#cb52-104" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb52-105"><a href="#cb52-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-106"><a href="#cb52-106" aria-hidden="true" tabindex="-1"></a>****</span>
+<span id="cb52-107"><a href="#cb52-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-108"><a href="#cb52-108" aria-hidden="true" tabindex="-1"></a><span class="fu"># Simple Vectors</span></span>
+<span id="cb52-109"><a href="#cb52-109" aria-hidden="true" tabindex="-1"></a>Vectors illustrate how complex data structures can be built from smaller blocks. </span>
+<span id="cb52-110"><a href="#cb52-110" aria-hidden="true" tabindex="-1"></a>Here we learn how to create and inspect vectors.</span>
+<span id="cb52-111"><a href="#cb52-111" aria-hidden="true" tabindex="-1"></a><span class="in">```{r vectors}</span></span>
+<span id="cb52-112"><a href="#cb52-112" aria-hidden="true" tabindex="-1"></a><span class="in">v=c(1,2)            # combine arguments into vector</span></span>
+<span id="cb52-113"><a href="#cb52-113" aria-hidden="true" tabindex="-1"></a><span class="in">v                   # display v</span></span>
+<span id="cb52-114"><a href="#cb52-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-115"><a href="#cb52-115" aria-hidden="true" tabindex="-1"></a><span class="in"># functions for vectors</span></span>
+<span id="cb52-116"><a href="#cb52-116" aria-hidden="true" tabindex="-1"></a><span class="in">str(v)              # structure of v (especially useful for long and structured objects)</span></span>
+<span id="cb52-117"><a href="#cb52-117" aria-hidden="true" tabindex="-1"></a><span class="in">typeof(v)           # type of v ( ~ storage mode)</span></span>
+<span id="cb52-118"><a href="#cb52-118" aria-hidden="true" tabindex="-1"></a><span class="in">class(v)            # class of v (determines how certain functions will work with v)</span></span>
+<span id="cb52-119"><a href="#cb52-119" aria-hidden="true" tabindex="-1"></a><span class="in">length(v)</span></span>
+<span id="cb52-120"><a href="#cb52-120" aria-hidden="true" tabindex="-1"></a><span class="in">sum(v)</span></span>
+<span id="cb52-121"><a href="#cb52-121" aria-hidden="true" tabindex="-1"></a><span class="in">summary(v)</span></span>
+<span id="cb52-122"><a href="#cb52-122" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb52-123"><a href="#cb52-123" aria-hidden="true" tabindex="-1"></a><span class="fu"># Accessing Vectors</span></span>
+<span id="cb52-124"><a href="#cb52-124" aria-hidden="true" tabindex="-1"></a>Frequently we need to access specific elements from a vector</span>
+<span id="cb52-125"><a href="#cb52-125" aria-hidden="true" tabindex="-1"></a><span class="in">```{r access}</span></span>
+<span id="cb52-126"><a href="#cb52-126" aria-hidden="true" tabindex="-1"></a><span class="in">v[1]</span></span>
+<span id="cb52-127"><a href="#cb52-127" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb52-128"><a href="#cb52-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-129"><a href="#cb52-129" aria-hidden="true" tabindex="-1"></a>**Task**:  access the following vector elements: v<span class="co">[</span><span class="ot">1</span><span class="co">]</span>, v<span class="co">[</span><span class="ot">2</span><span class="co">]</span>, v<span class="co">[</span><span class="ot">3</span><span class="co">]</span>, v<span class="co">[</span><span class="ot">1:3</span><span class="co">]</span>, v<span class="co">[</span><span class="ot">-1</span><span class="co">]</span></span>
+<span id="cb52-130"><a href="#cb52-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-131"><a href="#cb52-131" aria-hidden="true" tabindex="-1"></a><span class="fu"># Vector Generation</span></span>
+<span id="cb52-132"><a href="#cb52-132" aria-hidden="true" tabindex="-1"></a><span class="in">```{r vector_generation}</span></span>
+<span id="cb52-133"><a href="#cb52-133" aria-hidden="true" tabindex="-1"></a><span class="in">v=c(1,2,3,4,5)    # combining many elements can get cumbersome</span></span>
+<span id="cb52-134"><a href="#cb52-134" aria-hidden="true" tabindex="-1"></a><span class="in">v=1:5             # more efficient</span></span>
+<span id="cb52-135"><a href="#cb52-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-136"><a href="#cb52-136" aria-hidden="true" tabindex="-1"></a><span class="in">v=seq(from=1, to=5, by=1) # same as before but more flexibilty</span></span>
+<span id="cb52-137"><a href="#cb52-137" aria-hidden="true" tabindex="-1"></a><span class="in">v=seq(1,5,0.5)            # short-hand defaults</span></span>
+<span id="cb52-138"><a href="#cb52-138" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb52-139"><a href="#cb52-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-140"><a href="#cb52-140" aria-hidden="true" tabindex="-1"></a>**Tasks**: </span>
+<span id="cb52-141"><a href="#cb52-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-142"><a href="#cb52-142" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Explore the seq() function and inspect other parameter options. </span>
+<span id="cb52-143"><a href="#cb52-143" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Create a vector with 5 numbers equally spaced from +2 to -1.9</span>
+<span id="cb52-144"><a href="#cb52-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-145"><a href="#cb52-145" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo=FALSE}</span></span>
+<span id="cb52-146"><a href="#cb52-146" aria-hidden="true" tabindex="-1"></a><span class="in">v=seq(2,-1.9,length.out=5)</span></span>
+<span id="cb52-147"><a href="#cb52-147" aria-hidden="true" tabindex="-1"></a><span class="in">v</span></span>
+<span id="cb52-148"><a href="#cb52-148" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb52-149"><a href="#cb52-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-150"><a href="#cb52-150" aria-hidden="true" tabindex="-1"></a>**Task**: Understand the difference between the two vectors v1 and v2</span>
+<span id="cb52-151"><a href="#cb52-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval=FALSE}</span></span>
+<span id="cb52-152"><a href="#cb52-152" aria-hidden="true" tabindex="-1"></a><span class="in">v1=1:10-1</span></span>
+<span id="cb52-153"><a href="#cb52-153" aria-hidden="true" tabindex="-1"></a><span class="in">v2=1:(10-1)</span></span>
+<span id="cb52-154"><a href="#cb52-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb52-155"><a href="#cb52-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-156"><a href="#cb52-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-157"><a href="#cb52-157" aria-hidden="true" tabindex="-1"></a><span class="fu"># Vector Operations</span></span>
+<span id="cb52-158"><a href="#cb52-158" aria-hidden="true" tabindex="-1"></a><span class="in">```{r eval=FALSE}</span></span>
+<span id="cb52-159"><a href="#cb52-159" aria-hidden="true" tabindex="-1"></a><span class="in">v1=1:3      # = c(1,2,3)</span></span>
+<span id="cb52-160"><a href="#cb52-160" aria-hidden="true" tabindex="-1"></a><span class="in">v2=rep(2,3) # = c(2,2,2)</span></span>
+<span id="cb52-161"><a href="#cb52-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-162"><a href="#cb52-162" aria-hidden="true" tabindex="-1"></a><span class="in">v1+v2      # elementwise addition</span></span>
+<span id="cb52-163"><a href="#cb52-163" aria-hidden="true" tabindex="-1"></a><span class="in">v1*v2      # ... multiplication</span></span>
+<span id="cb52-164"><a href="#cb52-164" aria-hidden="true" tabindex="-1"></a><span class="in">v1 &gt; v2    # ... comparisons</span></span>
+<span id="cb52-165"><a href="#cb52-165" aria-hidden="true" tabindex="-1"></a><span class="in">v1 %*% v2  # scalar product</span></span>
+<span id="cb52-166"><a href="#cb52-166" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb52-167"><a href="#cb52-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-168"><a href="#cb52-168" aria-hidden="true" tabindex="-1"></a>**Task**: Define your own vectors and explore some numerical operations</span>
+<span id="cb52-169"><a href="#cb52-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-170"><a href="#cb52-170" aria-hidden="true" tabindex="-1"></a><span class="fu"># Misc: Concepts and Pecularities</span></span>
+<span id="cb52-171"><a href="#cb52-171" aria-hidden="true" tabindex="-1"></a><span class="in">```{r misc, eval=FALSE}</span></span>
+<span id="cb52-172"><a href="#cb52-172" aria-hidden="true" tabindex="-1"></a><span class="in">v=1:4                    # Vector Definition</span></span>
+<span id="cb52-173"><a href="#cb52-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-174"><a href="#cb52-174" aria-hidden="true" tabindex="-1"></a><span class="in">v + 10                   # Recycling</span></span>
+<span id="cb52-175"><a href="#cb52-175" aria-hidden="true" tabindex="-1"></a><span class="in">v + c(10,20)             # Recycling</span></span>
+<span id="cb52-176"><a href="#cb52-176" aria-hidden="true" tabindex="-1"></a><span class="in">v + c(10,20,30)          # Warning != Error</span></span>
+<span id="cb52-177"><a href="#cb52-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-178"><a href="#cb52-178" aria-hidden="true" tabindex="-1"></a><span class="in">#v %*% c(10,20,30)        # Error = Error</span></span>
+<span id="cb52-179"><a href="#cb52-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-180"><a href="#cb52-180" aria-hidden="true" tabindex="-1"></a><span class="in">letters                  # built-in vector. Try LETTERS </span></span>
+<span id="cb52-181"><a href="#cb52-181" aria-hidden="true" tabindex="-1"></a><span class="in">typeof(letters)          # there is more than numbers</span></span>
+<span id="cb52-182"><a href="#cb52-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-183"><a href="#cb52-183" aria-hidden="true" tabindex="-1"></a><span class="in">names(v)=letters[1:4]    # naming of vector elements (for convenience)</span></span>
+<span id="cb52-184"><a href="#cb52-184" aria-hidden="true" tabindex="-1"></a><span class="in">v["b"]                   # index by name</span></span>
+<span id="cb52-185"><a href="#cb52-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-186"><a href="#cb52-186" aria-hidden="true" tabindex="-1"></a><span class="in">rev(v)                   # reverse vectors</span></span>
+<span id="cb52-187"><a href="#cb52-187" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb52-188"><a href="#cb52-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-189"><a href="#cb52-189" aria-hidden="true" tabindex="-1"></a>****</span>
+<span id="cb52-190"><a href="#cb52-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-191"><a href="#cb52-191" aria-hidden="true" tabindex="-1"></a><span class="fu"># Learning Curve:</span></span>
+<span id="cb52-192"><a href="#cb52-192" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Rstudio: Starting an R project</span>
+<span id="cb52-193"><a href="#cb52-193" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>work with console </span>
+<span id="cb52-194"><a href="#cb52-194" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>simple functions (input, output), logical operations and parameters</span>
+<span id="cb52-195"><a href="#cb52-195" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>creating simple objects and assigning values</span>
+<span id="cb52-196"><a href="#cb52-196" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>inspecting objects: v, str(v), typeof(v), length(v)</span>
+<span id="cb52-197"><a href="#cb52-197" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>flexible creation of vectors</span>
+<span id="cb52-198"><a href="#cb52-198" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>vector indices and subsetting</span>
+<span id="cb52-199"><a href="#cb52-199" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>vector operations and recycling</span>
+<span id="cb52-200"><a href="#cb52-200" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>special values: Inf, NaN, NA</span>
+<span id="cb52-201"><a href="#cb52-201" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>functions can behave differently on different input: summary()</span>
+<span id="cb52-202"><a href="#cb52-202" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>see warning messages and errors</span>
+<span id="cb52-203"><a href="#cb52-203" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>getting help: ?sqrt</span>
+<span id="cb52-204"><a href="#cb52-204" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>software dependencies and the importance of sesssionInfo()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Bioinfo Core @ MPI-IE Freiburg (2024)</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/maxplanck-ie">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
