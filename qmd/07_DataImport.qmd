@@ -18,6 +18,13 @@ install.packages("tidyverse")
 
 -   The command will install a large set of packages that are designed to work together, including ggplot2.
 
+And load the package
+```{r}
+#| echo: true
+library(tidyverse)
+```
+
+
 ## Credit
 
 -   This presentation is heavily influenced by Rafael Irizarry's book [Introduction to Data Science](https://rafalab.dfci.harvard.edu/dsbook) and his corresponding course on EdX.
