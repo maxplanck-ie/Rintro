@@ -110,6 +110,7 @@ sample;sex;age;treatment;response$A001;M;8;KO;5200$A002;M;4;WT;4430$A003;F;4;KO;
 
 ```{r}
 #| echo: true
+#| eval: false
 
 # read file in CSV format, file is in working directory
 dat = read_csv("file.csv")
