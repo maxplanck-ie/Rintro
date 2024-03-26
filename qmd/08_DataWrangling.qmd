@@ -34,394 +34,438 @@ The six main verbs are:
 
 ```{r}
 #| echo: true
-library(dplyr)
-library(dslabs)
-data("murders")
+library(tidyverse)
 
-head(murders)
-```
+rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv"
 
-## Dplyr in action - `mutate()` {auto-animate="true"}
+rna = read_csv(rnaseq_file)
 
-```{r}
-#| echo: true
-library(dplyr)
-library(dslabs)
-data("murders")
-
-# adding a column with mutate
-murders <- mutate(murders, rate = total / population * 100000)
-head(murders)
-```
-
-## Dplyr in action - `mutate()` {auto-animate="true"}
-
-```{r}
-#| echo: true
-#| code-line-numbers: "6"
-library(dplyr)
-library(dslabs)
-data("murders")
-
-# adding a column with mutate
-murders <- mutate(murders, rate = total / population * 100000)
-head(murders, 2)
-```
-
-## A brief note on non-standard evaluation {auto-animate="true"}
-
-```{r}
-#| echo: true
-murders <- mutate(murders, rate = total / population * 100000)
-head(murders, 2)
-```
-
-Within the `mutate()` call, `total` and `population` are inferred to call `murders$total` and `murders$population` *per row*
-
-## A brief note on non-standard evaluation {auto-animate="true"}
-
-```{r}
-#| echo: true
-params <- c("total", "population")
-df <- mutate(murders, rate = !!sym(params[1]) / !!sym(params[2]) * 100000)
-head(df, 2)
-```
-
-This can be super confusing for people who come from traditional programming languages!
-
-Advanced tip: use `!!` and `sym` to specify variables programatically
-
-::: footer
-<http://adv-r.had.co.nz/Computing-on-the-language.html>
-:::
-
-## Dplyr in action - `filter()` {auto-animate="true"}
-
-```{r}
-#| echo: true
-# subsetting with filter
-filtered_murders <- filter(murders, rate <= 0.71)
-head(filtered_murders)
-```
-
-## Dplyr in action - `filter()` {auto-animate="true"}
-
-```{r}
-#| echo: true
-# subsetting with filter
-south_west <- c("South", "West")
-filtered_murders <- filter(murders, region %in% south_west)
-head(filtered_murders)
+head(rna)
 ```
 
 ## Dplyr in action - `select()` {auto-animate="true"}
 
 ```{r}
 #| echo: true
-# selecting columns with select
-new_table <- select(murders, state, region, rate)
-head(new_table)
+
+# column selection
+select(rna, gene, sample, tissue, expression)
+
 ```
 
 ## Dplyr in action - `select()` {auto-animate="true"}
 
 ```{r}
 #| echo: true
-# selecting all columns except specified ones
-new_table <- select(murders, -state, -region)
-head(new_table)
+
+# column exclusion
+select(rna, -tissue, -organism)
+
 ```
 
-## Dplyr in action - using the pipe {auto-animate="true"}
-
-```{r}
-#| echo: true
-# using the pipe
-murders %>% 
-  select(state, region, rate) %>%
-  filter(rate <= 0.71) %>%
-  head()
-```
-
-## A note about pipes
-
--   Piping is shorthand to pass the output of one function as input to the next
--   `h(g(f(x)))` becomes `x %>% f() %>% g() %>% h()`
--   There are two pipes:
-    -   `%>%` (from `magrittr`) - Ctrl-shift-M!
-    -   `|>` (native to R, introduced in R 4.1)
--   We will use `%>%` going forward, but feel free to read about the differences and use what you need
-
-::: footer
-<https://stackoverflow.com/questions/67633022/what-are-the-differences-between-rs-new-native-pipe-and-the-magrittr-pipe>
-:::
-
-## A quick look at the data {auto-animate="true"}
-
-```{r}
-#| echo: true
-# a simple scatterplot of total murders versus population
-x <- murders$population / 10^6
-y <- murders$total
-plot(x, y)
-```
-
-## A quick look at the data {auto-animate="true"}
-
-```{r}
-#| echo: true
-# a histogram of murder rates
-murder_rates <- mutate(murders, rate = total / population * 100000)
-hist(murder_rates$rate)
-```
-
-## A quick look at the data {auto-animate="true"}
-
-```{r}
-#| echo: true
-# boxplots of murder rates by region
-boxplot(rate~region, data = murder_rates)
-```
-
-## Dplyr in action - `summarize()`
-
-```{r}
-#| echo: true
-murder_summary <- murder_rates %>%
-  filter(region == "West") %>%
-  summarize(minimum = min(rate),
-            median = median(rate),
-            maximum = max(rate))
-murder_summary
-```
-
-## Dplyr in action - `summarize()`
-
-```{r}
-#| echo: true
-murder_summary <- murder_rates %>%
-  filter(region == "West") %>%
-  summarize(minimum = min(rate),
-            median = median(rate),
-            maximum = max(rate))
-murder_summary
-```
-
-## Quick exercise {auto-animate="true"}
-
-What is the average murder rate in the United States?
-
-## Quick exercise {auto-animate="true"}
-
-What is the average murder rate in the United States?
-
-```{r}
-#| echo: true
-# average rate unadjusted by population size
-mean(murders$rate)
-```
-
-## Quick exercise {auto-animate="true"}
-
-What is the average murder rate in the United States?
-
-```{r}
-#| echo: true
-# average rate adjusted by population size
-us_murder_rate <- murders %>% 
-  summarize(rate = sum(total) / sum(population) * 10^5)
-us_murder_rate
-```
-
-## `pull()` in action
-
-We can also use `pull` to return the numerical value of a given column directly.
-
-```{r}
-#| echo: true
-# average rate adjusted by population size
-us_murder_rate <- murders %>% 
-  summarize(rate = sum(total) / sum(population) * 10^5) %>%
-  pull(rate)
-us_murder_rate
-```
-
-## The dot placeholder {auto-animate="true"}
-
-Another way to access the rate column directly is to use the dot placeholder:
-
-`.`
-
-This is a feature of the `magrittr` pipe `%>%`, and allows passing the previously piped value to the next function at the specific location specified rather than as the first value as usual.
-
-NB: In R4.2, the `|>` operator uses `_` instead of `.` Use this going forward!
-
-## The dot placeholder {auto-animate="true"}
-
-```{r}
-#| echo: true
-# average rate adjusted by population size
-us_murder_rate <- murders %>% 
-  summarize(rate = sum(total) / sum(population) * 10^5) %>%
-  .$rate
-us_murder_rate
-```
-
-## Using the dot place holder for formulas
+## Dplyr in action - `filter()` {auto-animate="true"}
 
 ```{r}
 #| echo: true
 
-fit <- mtcars %>%
-	lm(mpg ~ disp, data = .)
+# get data which sex is Male
+filter(rna, sex == "Male")
 
-plot(mtcars$disp, mtcars$mpg)
-abline(fit, col = "red")
 ```
 
-## Group then summarize {auto-animate="true"}
-
-![](images/groupby.png)
-
-## Group then summarize {auto-animate="true"}
+## Dplyr in action - `filter()` {auto-animate="true"}
 
 ```{r}
 #| echo: true
-# group by region
-murders %>% group_by(region)
+
+# get data which sex is Male AND infection status is NonInfected
+filter(rna, sex == "Male" & infection == "NonInfected")
+
 ```
 
-## Group then summarize {auto-animate="true"}
+## Dplyr in action - `filter()` {auto-animate="true"}
 
 ```{r}
 #| echo: true
-# summarize after grouping
-murders %>% 
-  group_by(region) %>%
-  summarize(median = median(rate))
+
+# get data which human ortholog gene is not defined (*NA*) 
+filter(rna, is.na(hsapiens_homolog_associated_gene_name))
+
 ```
 
-## `arrange()` in action {auto-animate="true"}
+## Dplyr in action - `filter()` {auto-animate="true"}
 
 ```{r}
 #| echo: true
-murders <- mutate(murders, rate = total / population * 10^5)
+
+# get data which human ortholog gene is defined (not *NA*) 
+filter(rna, !is.na(hsapiens_homolog_associated_gene_name))
+
 ```
 
-## `arrange()` in action {auto-animate="true"}
+## Dplyr in action - Pipes {auto-animate="true"}
+
+What if you want to select and filter?
+
+Option 1. Generate intermediate tables
+
+Option 2. Use nested operations
+
+Option 3. Plumbering with Pipes
+
+## Dplyr in action - Pipes {auto-animate="true"}
+
+What if you want to select and filter?
+
+Option 1. Generate intermediate tables
 
 ```{r}
 #| echo: true
-murders <- mutate(murders, rate = total / population * 10^5)
 
-# order the states by population size
-murders %>% arrange(population) %>% head()
+# step 1, filter males
+rna2 = filter(rna, sex == "Male")
+
+# step 2, filter columns
+rna3 = select(rna2, gene, sample, tissue, expression)
+
+rna3
 ```
 
-## `arrange()` in action {auto-animate="true"}
+## Dplyr in action - Pipes {auto-animate="true"}
+
+What if you want to select and filter?
+
+Option 2. Use nested operations
 
 ```{r}
 #| echo: true
-murders <- mutate(murders, rate = total / population * 10^5)
 
-# order the states by murder rate - the default is ascending order
-murders %>% arrange(rate) %>% head()
+rna3 = select(filter(rna, sex == "Male"), gene, sample, tissue, expression)
+
+rna3
 ```
 
-## `arrange()` in action {auto-animate="true"}
+## Dplyr in action - Pipes {auto-animate="true"}
+
+What if you want to select and filter?
+
+Option 3. Plumbering with Pipes - Yeah!
 
 ```{r}
 #| echo: true
-murders <- mutate(murders, rate = total / population * 10^5)
 
-# order the states by region and then by murder rate within region
-murders %>% arrange(region, rate)
+rna3 = rna %>%
+        filter(sex == "Male") %>%
+        select(gene, sample, tissue, expression)
+
+rna3
 ```
 
-## `arrange()` in action {auto-animate="true"}
+Pipes in R look like `%>%` (made available via the magrittr package) or `|>` (through base R)
+
+## Hands on {auto-animate="true"}
+
+Using pipes, subset the `rna` data to keep observations in female mice at time 0, where the gene has an expression higher than 50000, and retain only the columns `gene`, `sample`, `time`, `expression` and `age`.
+
+
+## Hands on {auto-animate="true"}
+
+Using pipes, subset the `rna` data to keep observations in female mice at time 0, where the gene has an expression higher than 50000, and retain only the columns `gene`, `sample`, `time`, `expression` and `age`.
+
+Solution
 
 ```{r}
 #| echo: true
-murders <- mutate(murders, rate = total / population * 10^5)
 
-# order the states by murder rate in descending order
-murders %>% arrange(desc(rate)) %>% head()
+rna %>%
+  filter(expression > 50000,
+         sex == "Female",
+         time == 0 ) %>%
+  select(gene, sample, time, expression, age)
+
 ```
 
-Side note 1: You can also use the `slice_max` function
+## Dplyr in action - `mutate()` {auto-animate="true"}
 
-## Exercises with gapminder
+As frequently we want to add new columns based on existing data, we can expand the tibble with `mutate()`.
 
--   The `gapminder` dataset was developed by Hans Rosling, a famous sociologist and health expert, to help visualize global socioeconomic data
+In our example, `time` is defined in days, let's add a new column for time in hours (`time_hours`)
 
 ```{r}
 #| echo: true
-data(gapminder)
-head(gapminder, 3)
+
+rna %>%
+  mutate(time_hours = time * 24) %>%
+  select(time, time_hours)
+
 ```
 
-## Which five countries have the highest population in 2012? {auto-animate="true"}
+## Dplyr in action - `mutate()` {auto-animate="true"}
 
-Store it in a vector.
+The new columns can be used to generate another columns, for example, adding a time in minutes based on time in hours:
+```{r}
+#| echo: true
 
-## Which five countries have the highest population in 2012? {auto-animate="true"}
+rna %>%
+  mutate(time_hours = time * 24,
+         time_min = time_hours * 60) %>%
+  select(time, time_hours, time_min)
 
-Store it in a vector.
+```
+
+## Hands on {auto-animate="true"}
+
+Create a new data frame from the rna data that meets the following criteria: contains only the gene, chromosome_name, phenotype_description, sample, and expression columns. The expression values should be log-transformed. This data frame must only contain genes located on sex chromosomes, associated with a phenotype_description, and with a log expression higher than 5.
+
+Hint: think about how the commands should be ordered to produce this data frame!
+
+## Hands on {auto-animate="true"}
+
+Create a new data frame from the rna data that meets the following criteria: contains only the gene, chromosome_name, phenotype_description, sample, and expression columns. The expression values should be log-transformed. This data frame must only contain genes located on sex chromosomes, associated with a phenotype_description, and with a log expression higher than 5.
+
+Hint: think about how the commands should be ordered to produce this data frame!
 
 ```{r}
 #| echo: true
-top5_countries <- gapminder %>%
-  filter(year == 2012) %>% 
-  arrange(desc(population)) %>% 
-  head(5) %>%
-  pull(country)
-top5_countries
+
+rna %>%
+  mutate(expression = log(expression)) %>%
+  select(gene, chromosome_name, phenotype_description, sample, expression) %>%
+  filter(chromosome_name == "X" | chromosome_name == "Y") %>%
+  filter(!is.na(phenotype_description)) %>%
+  filter(expression > 5)
+
 ```
 
-## What is the approximate daily income (~gdp per person per day) for a German person in 1989? {auto-animate="true"}
+## Dplyr in action - `group_by()` {auto-animate="true"}
 
-## What is the approximate daily income (~gdp per person per day) for a German person in 1989? {auto-animate="true"}
+Data analysis commonly needs to split the data, perfom computations and then combine the results (*split-apply-combine* paradigm)
 
 ```{r}
 #| echo: true
-gapminder %>%
-  filter(country == "Germany", year == 1989) %>%
-  mutate(dollars_per_day = gdp/population/365) %>%
-  pull()
+
+# group data by 'gene'
+rna %>%
+  group_by(gene)
+
 ```
 
-## Rank the following countries based on their infant mortality rate in 2012. {auto-animate="true"}
+Note the `Groups: gene [1,474]`
 
-Turkey, Argentina, South Korea, Georgia, Thailand, Australia
+## Dplyr in action - `group_by()` {auto-animate="true"}
 
-## Rank the following countries based on their infant mortality rate in 2012. {auto-animate="true"}
-
-Turkey, Argentina, South Korea, Georgia, Thailand, Australia
 
 ```{r}
 #| echo: true
-gapminder %>%
-  filter(year==2012, country %in% c("Turkey", "Argentina", "South Korea", "Georgia", "Thailand", "Australia")) %>%
-  arrange(infant_mortality) %>%
-  select(country, infant_mortality)
+
+# group data by 'sample'
+rna %>%
+  group_by(sample)
+
 ```
 
-## What are the six regions with lowest median life expectancy between 2000-2009? {auto-animate="true"}
+Note the `Groups: sample [22]`
 
-Calculate them and return a sorted vector. 
 
-## What are the six regions with lowest median life expectancy between 2000-2009? {auto-animate="true"}
+## Dplyr in action - `summaryse()` {auto-animate="true"}
 
-Calculate them and return a sorted vector. 
+After grouping, we can do some computation as `summarise()`
 
 ```{r}
 #| echo: true
-gapminder %>%
-  filter(year %in% 2000:2009) %>%
-  group_by(region) %>%
-  summarise(med_life_exp = median(life_expectancy)) %>%
-  arrange(med_life_exp) %>%
-  head(6)
+
+# get average expression per gene
+rna %>%
+  group_by(gene) %>%
+  summarise(mean_expression = mean(expression))
+
+```
+
+## Dplyr in action - `summaryse()` {auto-animate="true"}
+
+```{r}
+#| echo: true
+
+# get average expression per sample
+rna %>%
+  group_by(sample) %>%
+  summarise(mean_expression = mean(expression))
+
+```
+
+## Dplyr in action - `summaryse()` {auto-animate="true"}
+
+Multiple grouping levels
+
+```{r}
+#| echo: true
+
+# get average expression per gene + infection + time
+rna %>%
+  group_by(gene, infection, time) %>%
+  summarise(mean_expression = mean(expression))
+
+```
+
+## Dplyr in action - `summaryse()` {auto-animate="true"}
+
+Multiple summarise levels
+
+```{r}
+#| echo: true
+
+# get average and median expression per gene + infection + time
+rna %>%
+  group_by(gene, infection, time) %>%
+  summarise(mean_expression = mean(expression),
+            median_expression = median(expression))
+# get average and median expression per gene + infection + time
+
+```
+
+## Hands on {auto-animate="true"}
+
+Calculate the mean expression level of gene “Dok3” by timepoints.
+
+
+## Hands on {auto-animate="true"}
+
+Calculate the mean expression level of gene “Dok3” by timepoints.
+
+Solution
+
+```{r}
+#| echo: true
+
+rna %>%
+  filter(gene == "Dok3") %>%
+  group_by(time) %>%
+  summarise(mean = mean(expression))
+
+```
+
+## Dplyr in action - `count()` {auto-animate="true"}
+
+`count()` summarise the total elements per category
+
+```{r}
+#| echo: true
+
+# get counts in infection classes
+rna %>%
+    count(infection)
+
+```
+
+that is equivalent to:
+
+```{r}
+#| echo: true
+
+rna %>%
+    group_by(infection) %>%
+    summarise(n = n())
+```
+
+## Dplyr in action - `count()` {auto-animate="true"}
+
+Counts can be also in multiple levels
+
+```{r}
+#| echo: true
+
+rna %>%
+    count(infection, time)
+
+```
+
+## Dplyr in action - `arrange()` {auto-animate="true"}
+
+Data can be sorted by column values with `arrange()`
+
+```{r}
+#| echo: true
+
+rna %>%
+    arrange(gene)
+
+```
+
+## Dplyr in action - `arrange()` {auto-animate="true"}
+
+Default is in ascending order, for descending order
+
+```{r}
+#| echo: true
+
+rna %>%
+    arrange(desc(gene))
+
+```
+
+## Hands on {auto-animate="true"}
+
+1. How many genes were analysed in each sample?
+
+2. Use group_by() and summarise() to evaluate the sequencing depth (the sum of all counts) in each sample. Which sample has the highest sequencing depth?
+
+3. Pick one sample and evaluate the number of genes by biotype.
+
+4. Identify genes associated with the “abnormal DNA methylation” phenotype description, and calculate their mean expression (in log) at time 0, time 4 and time 8.
+
+## Hands on {auto-animate="true"}
+
+1. How many genes were analysed in each sample?
+
+```{r}
+#| echo: true
+
+rna %>%
+  count(sample)
+
+```
+
+## Hands on {auto-animate="true"}
+
+2. Use group_by() and summarise() to evaluate the sequencing depth (the sum of all counts) in each sample. Which sample has the highest sequencing depth?
+
+
+```{r}
+#| echo: true
+
+rna %>%
+  group_by(sample) %>%
+  summarise(seq_depth = sum(expression)) %>%
+  arrange(desc(seq_depth))
+
+```
+
+## Hands on {auto-animate="true"}
+
+3. Pick one sample and evaluate the number of genes by biotype.
+
+```{r}
+#| echo: true
+
+rna %>%
+  filter(sample == "GSM2545336") %>%
+  count(gene_biotype) %>%
+  arrange(desc(n))
+
+```
+## Hands on {auto-animate="true"}
+
+4. Identify genes associated with the “abnormal DNA methylation” phenotype description, and calculate their mean expression (in log) at time 0, time 4 and time 8.
+
+```{r}
+#| echo: true
+
+rna %>%
+  filter(phenotype_description == "abnormal DNA methylation") %>%
+  group_by(gene, time) %>%
+  summarise(mean_expression = mean(log(expression))) %>%
+  arrange()
+
 ```
 
 ## The tip of the iceberg
@@ -431,10 +475,6 @@ gapminder %>%
 For more, see this handy cheatsheet!
 
 ![](images/dplyr_cheat_sheet.png){fig-align="center"}
-
-::: footer
-<https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf>
-:::
 
 ## Any questions?
 

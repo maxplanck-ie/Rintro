@@ -6,10 +6,24 @@ author: "Juan Caballero"
 ```{r, child="_setup.qmd"}
 ```
 
+## Our dataset
+
+```{r}
+#| echo: true
+library(tidyverse)
+
+rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv"
+
+rna = read_csv(rnaseq_file)
+
+rna 
+
+```
+
 ## What is Tidy Data? 
 
-- In tidy data, each row is an observation and each column is a different variable. 
-- In wide data, each row contains several observations, and the columns contain values. 
+- In tidy data, each row is an observation and each column is a different variable (*long-format*). 
+- In wide data, each row contains several observations, and the columns contain values (*wide-format*). 
 
 ![](images/tidy_data.png)
 
@@ -17,457 +31,257 @@ author: "Juan Caballero"
 <https://maxplanck-ie.github.io/Rintro>
 :::
 
-## Example of a tidy data frame
+## The data 
+
+Look into the data structure, what is this?
 
 ```{r}
 #| echo: true
-library(tidyverse)
-library(dslabs)
-data(gapminder)
-tidy_data <- gapminder %>% 
-  filter(country %in% c("South Korea", "Germany")) %>%
-  select(country, year, fertility)
-head(tidy_data)
+
+rna %>%
+  arrange(gene)
+
 ```
 
-## Plotting tidy data is simple with `ggplot2`
+## But I want a more human readable table ...
+
+First, extract only the important values:
 
 ```{r}
 #| echo: true
-tidy_data %>% 
-  ggplot(aes(year, fertility, color = country)) +
-  geom_point()
+
+rna_exp = rna %>%
+  select(gene, sample, expression)
+
+rna_exp
+
 ```
 
-## Example of wide data
+## Dplyr in action - `pivot_wider()` {auto-animate="true"}
+
+`pivot_wider()` can transform long-format to wide-format.
+
+It takes three main arguments:
+
+1. the `data` to be transformed
+
+2. the `names_from` are the column whose values will become new column names
+
+3. the `values_from` are the column whose values will fill the new columns
+
+## Dplyr in action - `pivot_wider()` {auto-animate="true"}
 
 ```{r}
 #| echo: true
-# import and inspect example of original Gapminder data in wide format
-path <- system.file("extdata", package="dslabs")
-filename <- file.path(path,  "fertility-two-countries-example.csv")
-wide_data <- read_csv(filename)
-wide_data %>% select(country, `1960`:`1967`)
+
+rna_wide = rna_exp %>%
+  pivot_wider(names_from = sample,
+              values_from = expression)
+
+rna_wide
+
 ```
 
-## Converting wide to tidy data {auto-animate="true"}
+## Dplyr in action - `pivot_wider()` {auto-animate="true"}
 
-- The `pivot_longer()` function converts wide data into tidy data.
-- The second argument specifies the columns containing values to be moved into a single column.
-- By default, the new column of values is called `value` and the column containing the original names is called `name`.
+![](images/pivot_wider.png)
 
-## `pivot_longer()` in action {auto-animate="true"}
+## Dplyr in action - `pivot_wider()` {auto-animate="true"}
+
+By default, missing values will be converted to `NA`, we can change it with `values_fill`
 
 ```{r}
 #| echo: true
-wide_data %>% pivot_longer(`1960`:`2015`)
+
+rna_wide_noNAs = rna_exp %>%
+  pivot_wider(names_from = sample,
+              values_from = expression,
+              values_fill = 0)
+
+rna_wide_noNAs
+
 ```
 
-## `pivot_longer()` in action {auto-animate="true"}
+## Dplyr in action - `pivot_longer()` {auto-animate="true"}
+
+The opposite operation is `pivot_longer()`, it takes similar inputs:
+
+1. the `data` to be transformed;
+2. the `names_to` the new column name we wish to create and populate with the current column names;
+3. the `values_to` the new column name we wish to create and populate with current values;
+4. the names of the columns to be used to populate the `names_to` and `values_to` variables (or to drop with `-`).
+
+## Dplyr in action - `pivot_longer()` {auto-animate="true"}
 
 ```{r}
 #| echo: true
-# another way to do this - only country isn't being pivoted
-wide_data %>% pivot_longer(-country)
+
+rna_long = rna_wide %>%
+    pivot_longer(names_to = "sample",
+                 values_to = "expression",
+                 -gene)
+
+rna_long
+
 ```
 
-## `pivot_longer()` in action {auto-animate="true"}
+## Dplyr in action - `pivot_wider()` {auto-animate="true"}
+
+![](images/pivot_longer.png)
+
+## Dplyr in action - `pivot_longer()` {auto-animate="true"}
+
+Column selection can be defined with patterns or ranges
 
 ```{r}
 #| echo: true
-new_tidy_data <- wide_data %>% 
-  pivot_longer(-country, names_to = "year", values_to = "fertility")
-head(new_tidy_data)
+
+rna_wide %>%
+    pivot_longer(names_to = "sample",
+                 values_to = "expression",
+                 cols = starts_with("GSM"))
+
 ```
 
-## `pivot_longer()` in action {auto-animate="true"}
+## Dplyr in action - `pivot_longer()` {auto-animate="true"}
+
+Column selection can be defined with patterns or ranges
 
 ```{r}
 #| echo: true
-# compare the class from our original tidy data (year is an integer) and in the new version (year is a character)
-class(tidy_data$year)
-class(new_tidy_data$year)
+
+rna_wide %>%
+    pivot_longer(names_to = "sample",
+                 values_to = "expression",
+                 GSM2545336:GSM2545380)
+
 ```
 
-## `pivot_longer()` in action {auto-animate="true"}
+## Hands on {auto-animate="true"}
+
+1. Starting from the `rna` table, use the `pivot_wider()` function to create a wide-format table giving the gene expression levels in each mouse.
+
+2. Use the `rna` dataset to create an expression matrix where each row represents the mean expression levels of genes and columns represent the different timepoints.
+
+## Hands on {auto-animate="true"}
+
+1. Starting from the `rna` table, use the `pivot_wider()` function to create a wide-format table giving the gene expression levels in each mouse.
 
 ```{r}
 #| echo: true
-# use the names_transform argument to change the class of the year values to numeric
-new_tidy_data <- wide_data %>% 
-  pivot_longer(-country, names_to = "year", values_to = "fertility", 
-               names_transform = list(year=as.numeric))
+
+rna_bymouse = rna %>%
+  select(gene, mouse, expression) %>%
+  pivot_wider(names_from = mouse, values_from = expression)
+
+rna_bymouse
+
 ```
 
-## `pivot_wider()` {auto-animate="true"}
+## Hands on {auto-animate="true"}
 
-
-- The `pivot_wider()` function converts tidy data into wide data
-- The data frame to be reshaped is the first argument in `pivot_wider()`
-- The argument `names_from` tells `pivot_wider()` which variable will be used for the column names, `values_from` which variable to use to fill in the values.
-
-## `pivot_wider()` in action {auto-animate="true"}
+2. Use the `rna` dataset to create an expression matrix where each row represents the mean expression levels of genes and columns represent the different timepoints.
 
 ```{r}
 #| echo: true
-# convert the tidy data to wide data
-new_wide_data <- new_tidy_data %>% 
-  pivot_wider(names_from = year, values_from = fertility)
-select(new_wide_data, country, `1960`:`1967`)
+
+rna_time = rna %>%
+  group_by(gene, time) %>%
+  summarise(mean_exp = mean(expression)) %>%
+  pivot_wider(names_from = time,
+              values_from = mean_exp)
+
+rna_time
+
 ```
 
-## Exercise {auto-animate="true"}
+## Dplyr in action - combining tables {auto-animate="true"}
 
-- Use the built-in `co2` dataset from dslabs. 
-- Convert it to a wide format using the following: 
+Dplyr can also merge tables with the basic table operations:
+
+1. An `inner_join` keeps observations that are present in both tables
+
+2. A `left_join` keeps observations that are present in the left (first) table, dropping those that are only present in the other
+
+3. A `right_join` keeps observations that are present in the right (second) table, dropping those that are only present in the other
+
+4. A `full_join` keeps all observations
+
+## Dplyr in action - combining tables {auto-animate="true"}
+
+![](images/join-inner.png)
+![](images/join-outer.png)
+
+::: footer
+<https://carpentries-incubator.github.io/bioc-intro/30-dplyr.html>
+:::
+
+## Dplyr in action - combining tables {auto-animate="true"}
+
+As an example, let's subset a part of the `rna` table
 
 ```{r}
 #| echo: true
-co2_wide <- data.frame(matrix(co2, ncol = 12, byrow = TRUE)) %>% 
-    setNames(1:12) %>%
-    mutate(year = as.character(1959:1997))
-head(co2_wide)
+
+rna_mini <- rna %>%
+   select(gene, sample, expression) %>%
+   head(10)
+
+rna_mini
+
 ```
 
-## Exercise {auto-animate="true"}
+## Dplyr in action - combining tables {auto-animate="true"}
 
-- Convert the wide format to a tidy format. 
-- Use ggplot to plot CO2 vs. month with a different curve per year
-
-## Exercise - part 1 {auto-animate="true"}
+Load the annotation table
 
 ```{r}
 #| echo: true
-co2_tidy <- pivot_longer(co2_wide, -year, names_to = "month", values_to = "co2")
-co2_tidy
+
+annot_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/annnot1.csv"
+
+annot = read_csv(annot_file)
+
+annot
+
 ```
 
-## Exercise - part 2 {auto-animate="true"}
+## Dplyr in action - combining tables {auto-animate="true"}
+
+Combine `rna_mini` with `annot`
 
 ```{r}
 #| echo: true
-      
-co2_tidy %>% 
-  ggplot(aes(as.numeric(month), co2, color = year)) + 
-  geom_line()
+
+full_join(rna_mini, annot)
+
 ```
 
-## `separate()` {auto-animate="true"}
+## Dplyr in action - combining tables {auto-animate="true"}
 
-- splits one column into two or more columns at a specified character 
-- takes three parameters: the name of the column to be separated, the names to be used for the new columns, and the character that separates the variables.
-- use `extra = "merge"` to merge rest in case of additional separation
+Note: both tables are compared in terms of variables, only matching variables are used to merge, in our case, both tables have a common column `gene`
 
-## `separate()` in action {auto-animate="true"}
+In case the names don't match, we need to define specific variables names for merging
 
 ```{r}
 #| echo: true
-path <- system.file("extdata", package = "dslabs")
-fname <-"life-expectancy-and-fertility-two-countries-example.csv"
-filename <- file.path(path, fname)
-raw_dat <- read_csv(filename)
-select(raw_dat, 1:4)
+
+full_join(rna_mini, annot, by = c("gene" = "gene_symbol"))
+
 ```
 
-## `separate()` in action {auto-animate="true"}
+## Dplyr in action - `write_csv` {auto-animate="true"}
+
+Finally, we could need to save our data as a new file for later use or sharing, we can use `write_csv()`
 
 ```{r}
 #| echo: true
-# pivot all columns except country
-dat <- raw_dat %>% pivot_longer(-country)
-head(dat)
-dat$name[1:5]
+
+write_csv(rna_wide, file = "rna_wide.csv")
+
 ```
 
-## `separate()` in action {auto-animate="true"}
 
-```{r}
-#| echo: true
-# separate on underscores
-dat %>% separate(name, c("year", "name"), sep = "_")
-```
-
-## `separate()` in action {auto-animate="true"}
-
-```{r}
-#| echo: true
-# separate on underscores (the default), convert years to numeric
-dat %>% separate(name, c("year", "name"), convert = TRUE)
-```
-
-## `separate()` in action {auto-animate="true"}
-
-```{r}
-#| echo: true
-# separate on underscores
-# split on all underscores, pad empty cells with NA
-dat %>% separate(name, c("year", "name_1", "name_2"), 
-                 fill = "right", convert = TRUE)
-```
-
-## `separate()` in action {auto-animate="true"}
-
-```{r}
-#| echo: true
-# split on first underscore but keep life_expectancy merged
-dat %>% separate(name, c("year", "name"), sep = "_", 
-                 extra = "merge", convert = TRUE)
-```
-
-## `separate()` in action {auto-animate="true"}
-
-```{r}
-#| echo: true
-# separate then create a new column for each variable using pivot_wider
-dat %>% separate(name, c("year", "name"), sep = "_", 
-                 extra = "merge", convert = TRUE) %>%
-  pivot_wider()
-```
-
-## `unite()`
-
-- does the opposite of `separate()`
-
-## `unite()` in action {auto-animate="true"}
-
-```{r}
-#| echo: true
-# what if we had used this suboptimal way of separating
-dat %>% 
-  separate(name, c("year", "name_1", "name_2"), 
-           fill = "right", convert = TRUE)
-```
-
-## `unite()` in action {auto-animate="true"}
-
-```{r}
-#| echo: true
-# we could unite the second and third columns using unite()
-dat %>% 
-  separate(name, c("year", "name_1", "name_2"), 
-           fill = "right", convert = TRUE) %>%
-  unite(variable_name, name_1, name_2, sep="_")
-```
-
-## `unite()` in action {auto-animate="true"}
-
-```{r}
-#| echo: true
-# spread the columns
-dat %>% 
-  separate(name, c("year", "name_1", "name_2"), 
-           fill = "right", convert = TRUE) %>%
-  unite(name, name_1, name_2, sep="_") %>%
-  pivot_wider(names_from = "name", values_from = "value") %>%
-  rename(fertility = fertility_NA)
-```
-
-## Combining tables {auto-animate="true"}
-
-- The `join` functions in the **dplyr** package combine two tables such that matching rows are together.
-- `left_join()` only keeps rows that have information in the first table.
-- `right_join()` only keeps rows that have information in the second table.
-- `inner_join()` only keeps rows that have information in both tables.
-
-## Combining tables {auto-animate="true"}
-
-- `full_join()` keeps all rows from both tables.
-- `semi_join()` keeps the part of first table for which we have information in the second.
-- `anti_join()` keeps the elements of the first table for which there is no information in the second.
-
-## Joins in action {auto-animate="true"}
-
-```{r}
-#| echo: true
-library(dslabs)
-data(murders)
-# import US election results data
-data(polls_us_election_2016)
-head(results_us_election_2016)
-identical(results_us_election_2016$state, murders$state)
-```
-
-## Joins in action {auto-animate="true"}
-
-```{r}
-#| echo: true
-# join the murders table and US election results table
-tab <- left_join(murders, results_us_election_2016, by = "state")
-tab
-```
-
-## Plot votes vs. population {auto-animate="true"}
-
-```{r}
-#| echo: true
-#| eval: false
-tab %>% 
-  ggplot(aes(population/10^6, electoral_votes, label = abb)) +           geom_point() + 
-  geom_text_repel() + 
-  scale_x_continuous(trans = "log2") +  
-  scale_y_continuous(trans = "log2") + 
-  geom_smooth(method = "lm", se = FALSE)
-```
-
-## Plot votes vs. population {auto-animate="true"}
-
-```{r}
-#| eval: true
-#| echo: false
-library(ggrepel)
-tab %>% 
-  ggplot(aes(population/10^6, electoral_votes, label = abb)) +           geom_point() + 
-  geom_text_repel() + 
-  scale_x_continuous(trans = "log2") +  
-  scale_y_continuous(trans = "log2") + 
-  geom_smooth(method = "lm", se = FALSE)
-```
-
-## Joins in action {auto-animate="true"}
-
-```{r}
-#| echo: true
-# make two smaller tables to demonstrate joins
-tab1 <- slice(murders, 1:6) %>% select(state, population)
-tab1
-```
-
-## Joins in action {auto-animate="true"}
-
-```{r}
-#| echo: true
-tab2 <- slice(results_us_election_2016, c(1:3, 5, 7:8)) %>% select(state, electoral_votes)
-tab2
-```
-
-## Experiment with different joins {auto-animate="true"}
-
-```{r}
-#| echo: true
-# experiment with different joins
-left_join(tab1, tab2)
-```
-
-## Experiment with different joins {auto-animate="true"}
-
-```{r}
-#| echo: true
-# experiment with different joins
-tab1 %>% left_join(tab2)
-```
-
-## Experiment with different joins {auto-animate="true"}
-
-```{r}
-#| echo: true
-# experiment with different joins
-tab1 %>% right_join(tab2)
-```
-
-## Experiment with different joins {auto-animate="true"}
-
-```{r}
-#| echo: true
-# experiment with different joins
-inner_join(tab1, tab2)
-```
-
-## Experiment with different joins {auto-animate="true"}
-
-```{r}
-#| echo: true
-# experiment with different joins
-semi_join(tab1, tab2)
-```
-
-## Experiment with different joins {auto-animate="true"}
-
-```{r}
-#| echo: true
-# experiment with different joins
-anti_join(tab1, tab2)
-```
-
-## Exercises  {auto-animate="true"}
-
-We previously created a tidy version of the `co2` dataset:
-
-```{r}
-#| echo: true
-co2_tidy <- data.frame(matrix(co2, ncol = 12, byrow = TRUE)) %>% 
-  setNames(1:12) %>%
-  mutate(year = 1959:1997) %>%
-  pivot_longer(-year, names_to = "month", values_to = "co2") %>%
-  mutate(month = as.numeric(month))
-```
-
-## Exercises  {auto-animate="true"}
-
-- We want to see if the monthly trend is changing so we are going to remove the year effects and then plot the results. 
-- First compute the year averages. 
-- Use the `group_by` and `summarize` to compute the average co2 for each year. Save in an object called yearly_avg.
-
-## Exercises {auto-animate="true"}
-
-```{r}
-#| echo: true
-yearly_avg <- co2_tidy %>%
-  group_by(year) %>%
-  summarize(avg_co2 = mean(co2))
-```
-
-## Exercise {auto-animate="true"}
-
-- Now use the `left_join` function to add the yearly average to the co2_tidy dataset. 
-- Then compute the residuals: observed co2 measure - yearly average.
-- Plot the residuals by year as before after removing the year effect. 
-- What is happening to the seasonal variation? Modify the plot to look at one year in every decade. 
-
-## Exercise - part 1 {auto-animate="true"}
-
-```{r}
-#| echo: true
-joined_co2 <- co2_tidy %>% 
-  left_join(yearly_avg) %>%
-  mutate(residual = co2 - avg_co2)
-```
-
-## Exercise - part 2 {auto-animate="true}
-
-```{r}
-#| echo: true
-joined_co2 %>% 
-  ggplot(aes(month, residual, color = as.factor(year))) + 
-  geom_line()
-```
-
-## Exercise - part 3 {auto-animate="true}
-
-```{r}
-#| echo: true
-joined_co2 %>% 
-  filter(year %in% seq(min(joined_co2$year), max(joined_co2$year), 10)) %>%
-  ggplot(aes(month, residual, color = as.factor(year))) + 
-  geom_line()
-```
-## Exercise - part 3 {auto-animate="true}
-
-```{r}
-#| echo: true
-co2_stats <- joined_co2 %>% 
-  mutate(decade = round(year/ 10)*10) %>%
-  group_by(decade, month) %>%
-  summarize(avg_per_month = mean(residual)) 
-```
-
-## Exercise - part 3 {auto-animate="true}
-
-```{r}
-#| echo: true
-co2_stats %>% 
-  ggplot(aes(month, avg_per_month, color = as.factor(decade))) + 
-  geom_line()
-```
 
 ## Any questions?
 

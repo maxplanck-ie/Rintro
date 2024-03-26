@@ -14,16 +14,15 @@ author: "Juan Caballero"
 #| eval: false
 #| echo: true
 install.packages("tidyverse")
-install.packages("dslabs")
 ```
 
--   The first command will install a large set of packages that are designed to work together, including ggplot2.
--   The second command installs some datasets we will use from Rafael Irizarry's book, "*Introduction to Data Science*"
+-   The command will install a large set of packages that are designed to work together, including ggplot2.
 
 ## Credit
 
 -   This presentation is heavily influenced by Rafael Irizarry's book [Introduction to Data Science](https://rafalab.dfci.harvard.edu/dsbook) and his corresponding course on EdX.
 -   It also draws on material from previous MPI R courses given by Devon Ryan and David Koppstein.
+-   Updated with the Software Carpentry course "*Introduction to data analysis with R and Bioconductor*"
 
 ![](images/Rafael_Irizarry.jpg){.absolute bottom="25" left="100" width="250"} 
 ![](images/Devon_Ryan.jpeg){.absolute bottom="25" left="450" width="250"}
@@ -31,6 +30,7 @@ install.packages("dslabs")
 
 ::: footer
 <https://www.edx.org/bio/rafael-irizarry>
+<https://carpentries-incubator.github.io/bioc-intro/30-dplyr.html>
 :::
 
 ## Following along
@@ -45,36 +45,56 @@ install.packages("dslabs")
 
 The first step for any analysis is importing the data into a machine-readable format. The tidyverse offers the `readr::` and `readxl::` packages.
 
-## Data Import in the Tidyverse
+Note:
 
-```{r}
-#| echo: true
-# set path to the location for raw data files in the dslabs package and list files
-library(dslabs)
-path = system.file("extdata", package="dslabs")
-list.files(path)
+- most data can be easy to import when it's properly formatted in a text format
+
+- MS Excel files can be read and/or write but **should be avoided**
+
+## Formats {auto-animate="true"}
+
+CSV (*comma separated values*)
+
+```
+label1,label2,label3,"label num 4"<NL>
+value1,value2,value3,"value num 4"<NL>
 ```
 
-## File operations
-
--   Use the `file.path()` function to generate a full path from a relative path and a file name. Use `file.path()` instead of `paste()` because `file.path()` is aware of your operating system and will use the correct slashes to navigate your machine.
--   The `file.copy()` function copies a file to a new path.
-
-## File operations in practice
-
-```{r}
-#| echo: true
-# generate a full path to a file
-filename <- "murders.csv"
-fullpath <- file.path(path, filename)
-fullpath
-
-# copy file from dslabs package to your working directory
-file.copy(fullpath, getwd())
-
-# check if the file exists
-file.exists(filename)
 ```
+sample,sex,age,treatment,response
+A001,M,8,KO,5200
+A002,M,4,WT,4430
+A003,F,4,KO,344
+B001,F,6,WT,2328
+```
+## Formats {auto-animate="true"}
+
+TSV (*tab separated values*)
+
+```
+label1<TAB>label2<TAB>label3<TAB>"label num 4"<NL>
+value1<TAB>value2<TAB>value3<TAB>"value num 4"<NL>
+```
+
+```
+sample\tsex\tage\ttreatment\tresponse
+A001\tM\t8\tKO\t5200
+A002\tM\t4\tWT\t4430
+A003\tF\t4\tKO\t344
+B001\tF\t6t\tWT\t2328
+```
+## Formats {auto-animate="true"}
+
+DELIM (*char separated values*)
+
+```
+label1;label2;label3;"label num 4"$value1;value2;value3;"value num 4"//
+```
+
+```
+sample;sex;age;treatment;response$A001;M;8;KO;5200$A002;M;4;WT;4430$A003;F;4;KO;344$B001;F;6;WT;2328//
+```
+
 
 ## `readr::` {auto-animate="true"}
 
@@ -82,21 +102,37 @@ file.exists(filename)
 -   `read_csv()`, `read_tsv()`, `read_table()`, and `read_delim()` are some of the functions provided
 -   `read_csv2()` allows for reading of European-style CSV files (e.g. using `;`)
 
+::: footer
+<https://readr.tidyverse.org/>
+:::
+
 ## `readr::` in action {auto-animate="true"}
 
 ```{r}
 #| echo: true
-# inspect the first 3 lines
-library(readr)
-read_lines("murders.csv", n_max = 3)
 
-# read file in CSV format
-dat <- read_csv(filename)
+# read file in CSV format, file is in working directory
+dat = read_csv("file.csv")
 
-#read using full path
-dat <- read_csv(fullpath)
-head(dat, n = 4)
+# read file using full path, file is anywhere in the filesystem
+dat = read_csv("/full/path/to/file.csv")
+
+# read file using URL, file is anywhere in the internet
+dat = read_csv("https://server.com/region/file.csv")
 ```
+
+## `readr::` in action {auto-animate="true"}
+
+```{r}
+#| echo: true
+rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv"
+
+rna = read_csv(rnaseq_file)
+
+rna 
+```
+
+What is this "*rna*"?
 
 ## What is a tibble?
 
@@ -108,63 +144,29 @@ head(dat, n = 4)
 
 ## Quick exercise {auto-animate="true"}
 
-Read the following data into a tibble. Give it the following column names: `star, magnitude, temp, type`
+Explore the RNAseq data as a tibble.
 
 ```{r}
 #| echo: true
-library(dslabs)
-path <- system.file("extdata", package="dslabs")
-fullpath <- file.path(path, "HRlist2.txt")
+head(rna)
 ```
 
 ## Quick exercise {auto-animate="true"}
 
-Read the following data into a tibble. Give it the following column names: `star, magnitude, temp, type`
+Explore the RNAseq data as a tibble.
 
 ```{r}
 #| echo: true
-library(dslabs)
-path <- system.file("extdata", package="dslabs")
-full_path <- file.path(path, "HRlist2.txt")
-read_lines(full_path, n_max = 3)
+tail(rna)
 ```
 
 ## Quick exercise {auto-animate="true"}
 
-Read the following data into a tibble. Give it the following column names: `star, magnitude, temp, type`
+Explore the RNAseq data as a tibble.
 
 ```{r}
 #| echo: true
-library(dslabs)
-path <- system.file("extdata", package="dslabs")
-full_path <- file.path(path, "HRlist2.txt")
-read_lines(full_path, n_max = 3)
-```
-
-## Quick exercise {auto-animate="true"}
-
-Read the following data into a tibble. Give it the following column names: `star, magnitude, temp, type`
-
-```{r}
-#| echo: true
-library(dslabs)
-path <- system.file("extdata", package="dslabs")
-full_path <- file.path(path, "HRlist2.txt")
-tbl <- read_table(full_path)
-head(tbl)
-```
-
-## Quick exercise {auto-animate="true"}
-
-Read the following data into a tibble. Give it the following column names: `star, magnitude, temp, type`
-
-```{r}
-#| echo: true
-library(dslabs)
-path <- system.file("extdata", package="dslabs")
-full_path <- file.path(path, "HRlist2.txt")
-tbl <- read_table(full_path, col_names = c("star", "magnitude", "temp", "type"))
-head(tbl)
+dim(rna)
 ```
 
 ## `readxl::` {auto-animate="true"}
@@ -178,18 +180,23 @@ head(tbl)
 
 ```{r}
 #| echo: true
-library(readxl)
-full_path <- file.path(path, "2010_bigfive_regents.xls")
-excel_sheets(full_path)
+full_url = "https://github.com/maxplanck-ie/Rintro/raw/2024.04/qmd/data/2010_bigfive_regents.xls"
+
+download.file(url=full_url, destfile="2010_bigfive_regents.xls")
+
+excel_sheets("2010_bigfive_regents.xls")
 ```
+
+`excel_sheets()` lists the sheets in the Excel file
 
 ## `readxl::` in action {auto-animate="true"}
 
+Loading the data in "Sheet1"
+
 ```{r}
 #| echo: true
-library(readxl)
-full_path <- file.path(path, "2010_bigfive_regents.xls")
-sheet_one <- read_xls(full_path, sheet = "Sheet1")
+sheet_one = read_xls("2010_bigfive_regents.xls", sheet = "Sheet1")
+
 sheet_one
 ```
 
