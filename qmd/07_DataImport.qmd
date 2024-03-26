@@ -1,6 +1,10 @@
 ---
 title: "07: Data Import with Tidyverse"
 author: "Juan Caballero"
+format:
+  revealjs:
+    logo: images/maxplanck-ie.jpg
+    theme: beige
 ---
 
 ```{r, child="_setup.qmd"}
@@ -31,9 +35,9 @@ library(tidyverse)
 -   It also draws on material from previous MPI R courses given by Devon Ryan and David Koppstein.
 -   Updated with the Software Carpentry course "*Introduction to data analysis with R and Bioconductor*"
 
-![](images/Rafael_Irizarry.jpg){.absolute bottom="25" left="100" width="250"} 
-![](images/Devon_Ryan.jpeg){.absolute bottom="25" left="450" width="250"}
-![](images/David_Koppstein.jpg){.absolute bottom="25" left="800" width="250"}
+![](images/Rafael_Irizarry.jpg){width="150"}
+![](images/Devon_Ryan.jpeg){width="150"}
+![](images/David_Koppstein.jpg){width="150"}
 
 ::: footer
 <https://www.edx.org/bio/rafael-irizarry>

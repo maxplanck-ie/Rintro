@@ -1,6 +1,10 @@
 ---
 title: "10: Tidy Data"
 author: "Juan Caballero"
+format:
+  revealjs:
+    logo: images/maxplanck-ie.jpg
+    theme: beige
 ---
 
 ```{r, child="_setup.qmd"}

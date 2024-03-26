@@ -1,6 +1,10 @@
 ---
 title: "09: Data visualization with ggplot2"
 author: "Juan Caballero"
+format:
+  revealjs:
+    logo: images/maxplanck-ie.jpg
+    theme: beige
 ---
 
 ```{r, child="_setup.qmd"}
@@ -122,6 +126,8 @@ then the log fold changes by subtracting the mean log expressions between time 8
 time 4 and time 0. Note that we also include here the gene biotype that we will use later on to represent
 the genes
 
+## ggplot2 in action - `geom_points()`  {auto-animate="true"}
+*Note that are we using "escaped" numbers*
 ```{r}
 #| echo: true
 
@@ -133,9 +139,8 @@ rna_fc = rna %>% select(gene, time,
               values_from = mean_exp) %>%
   mutate(time_8_vs_0 = `8` - `0`, time_4_vs_0 = `4` - `0`)
 
+rna_fc
 ```
-
-Why are we using "escaped" numbers?
 
 ## ggplot2 in action - `geom_points()`  {auto-animate="true"}
 
@@ -480,9 +485,7 @@ ggplot(data = mean_exp_by_time_sex,
 
 ## ggplot2 in action - `ggsave()`  {auto-animate="true"}
 
-At the end, we would like to save our gorgeous plot, we can use `ggsave()`, defining file location, dpi and size.
-
-It automatically detect the file type by the extension (png, jpg/jpeg, pdf, svg, ...) and export in that format.
+At the end, we would like to save our gorgeous plot, we can use `ggsave()`.
 
 ```{r}
 #| echo: true

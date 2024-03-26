@@ -1,6 +1,10 @@
 ---
 title: "08: Intro to Data Wrangling with Dplyr"
 author: "Juan Caballero"
+format:
+  revealjs:
+    logo: images/maxplanck-ie.jpg
+    theme: beige
 ---
 
 ```{r, child="_setup.qmd"}
@@ -215,15 +219,17 @@ rna %>%
 
 ## Hands on {auto-animate="true"}
 
-Create a new data frame from the rna data that meets the following criteria: contains only the gene, chromosome_name, phenotype_description, sample, and expression columns. The expression values should be log-transformed. This data frame must only contain genes located on sex chromosomes, associated with a phenotype_description, and with a log expression higher than 5.
+Create a new data frame from the rna data that meets the following criteria: 
+contains only the gene, chromosome_name, phenotype_description, sample, and 
+expression columns. The expression values should be log-transformed. This data 
+frame must only contain genes located on sex chromosomes, associated with a 
+phenotype_description, and with a log expression higher than 5.
 
 Hint: think about how the commands should be ordered to produce this data frame!
 
 ## Hands on {auto-animate="true"}
 
-Create a new data frame from the rna data that meets the following criteria: contains only the gene, chromosome_name, phenotype_description, sample, and expression columns. The expression values should be log-transformed. This data frame must only contain genes located on sex chromosomes, associated with a phenotype_description, and with a log expression higher than 5.
-
-Hint: think about how the commands should be ordered to produce this data frame!
+Solution: 
 
 ```{r}
 #| echo: true
@@ -319,7 +325,6 @@ rna %>%
   group_by(gene, infection, time) %>%
   summarise(mean_expression = mean(expression),
             median_expression = median(expression))
-# get average and median expression per gene + infection + time
 
 ```
 
