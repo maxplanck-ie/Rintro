@@ -213,8 +213,7 @@ Dplyr can also merge tables with the basic table operations:
 
 ## Dplyr in action - combining tables {auto-animate="true"}
 
-![](images/join-inner.png)
-![](images/join-outer.png)
+![](images/joins.png)
 
 ::: footer
 <https://carpentries-incubator.github.io/bioc-intro/30-dplyr.html>
