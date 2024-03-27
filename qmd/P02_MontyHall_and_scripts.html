@@ -258,7 +258,7 @@ window.Quarto = {
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>doors</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "L1" "L2" "W" </code></pre>
+<pre><code>[1] "L1" "W"  "L2"</code></pre>
 </div>
 </div>
 <p>Now the candidate picks a random door “pick” (hoping that it might be the winning door)</p>
@@ -269,7 +269,7 @@ window.Quarto = {
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pick</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "W"</code></pre>
+<pre><code>[1] "L2"</code></pre>
 </div>
 </div>
 </section>
@@ -294,7 +294,7 @@ window.Quarto = {
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>open</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "L2"</code></pre>
+<pre><code>[1] "L1"</code></pre>
 </div>
 </div>
 <p>Notice that the showmaster does not really have a choice when the candidate has picked a loosing door (2/3 of the time).</p>
@@ -307,7 +307,7 @@ window.Quarto = {
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="cf">switch</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "L1"</code></pre>
+<pre><code>[1] "W"</code></pre>
 </div>
 </div>
 <p>With three doors, the candidate has only two choices to stay with “pick” or to switch to “switch”</p>
@@ -343,8 +343,8 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"MontyHall.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>successes with switching=  6692 success_rate:  0.6692 
-successes with switching=  6692 success_rate:  0.6692 </code></pre>
+<pre><code>successes with switching=  6687 success_rate:  0.6687 
+successes with switching=  6713 success_rate:  0.6713 </code></pre>
 </div>
 </div>
 <p>You can share the script easily with all people who speak R – especially those who don’t like to switch.</p>
