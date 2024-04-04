@@ -29,9 +29,11 @@ jobs:
         uses: mamba-org/setup-micromamba@main
         with:
           environment-file: configs/conda.yml
-          cache-environment: true
-          cache-downloads: true
           environment-name: Rintro
+# caching seems to slow down jobs
+#          cache-environment: true
+#          cache-downloads: true
+
 
       - name: Activate Environment
         run: micromamba activate Rintro
