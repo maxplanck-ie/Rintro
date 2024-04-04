@@ -23,7 +23,7 @@ jobs:
           echo "Shell version: $($SHELL --version)"
           uname -a || true
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Check yaml
         run: |
           cat configs/conda.yml || true
@@ -48,23 +48,22 @@ jobs:
 
       - name: Installation non-conda packages 
         run: |
-          Rscript -e 'install.packages(c("dslabs","KernSmooth"), repos="https://cloud.r-project.org")'
+          Rscript -e 'install.packages(c("KernSmooth"), repos="https://cloud.r-project.org")'
 
       - name: Inspect dslabs ext_data
         run: |
-          Rscript -e '.libPaths()'
-          Rscript -e 'find.package("dslabs")'
-          Rscript -e 'list.files(system.file(package="dslabs"))'
-          Rscript -e 'list.files(system.file("extdata", package="dslabs"))'           
+          Rscript -e '.libPaths()'     
 
       - name: Render quarto
-        continue-on-error: true # only for error tracking
+        # continue-on-error: true # only for error tracking
         run: |
-          ls -Rl /github/home/micromamba/envs/Rintro/lib/R/library/dslabs
           quarto render qmd
 
-      - name: Show all files
-        run: ls -Ral
+      - name: Show all files in docs
+        run: ls -Ral docs
+
+      - name: Show all files in docs
+        run: cat docs/index.html
 
       - name: Upload
         uses: actions/upload-pages-artifact@v3
