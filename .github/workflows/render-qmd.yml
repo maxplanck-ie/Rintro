@@ -23,7 +23,7 @@ jobs:
           echo "Shell version: $($SHELL --version)"
           uname -a || true
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Check yaml
         run: |
           cat configs/conda.yml || true
@@ -62,8 +62,10 @@ jobs:
       - name: Show all files in docs
         run: ls -Ral docs
 
-      - name: Show all files in docs
-        run: cat docs/index.html
+      - name: Show file contents
+        run: | 
+          cat index.qmd
+          cat docs/index.html
 
       - name: Upload
         uses: actions/upload-pages-artifact@v3
