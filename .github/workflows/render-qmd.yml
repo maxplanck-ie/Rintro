@@ -5,16 +5,20 @@ on:
   push:
     branches: ["thomas"] 
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+defaults:
+  run:
+    shell: bash -l {0}
+
 jobs:
   
   build:
-    name: Conda Tests
+    name: Build Pages
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    defaults:
-       run:
-         shell: bash -l {0}
 #    container: node:latest
 
     steps:
@@ -75,14 +79,12 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
-# the following does not work; micromamba env and installs seem not to be recoginized
+# the following does not work; micromamba env and installs seem not to be recognized
 # see also: https://github.com/quarto-dev/quarto-actions/issues/47
 #      - name: Set up Quarto
 #        uses: quarto-dev/quarto-actions/setup@v2
