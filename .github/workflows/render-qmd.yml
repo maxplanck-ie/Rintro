@@ -57,7 +57,7 @@ jobs:
       - name: Render quarto
         # continue-on-error: true # only for error tracking
         run: |
-          quarto render qmd
+          quarto render
 
       - name: Show all files in docs
         run: ls -Ral docs
