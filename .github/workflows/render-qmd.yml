@@ -54,28 +54,36 @@ jobs:
         run: |
           Rscript -e '.libPaths()'     
 
-      - name: Render quarto
+        #- name: Render quarto
         # continue-on-error: true # only for error tracking
-        run: |
-          quarto render
+        #run: |
+        #quarto render
 
-      - name: Show all files in docs
-        run: ls -Ral docs
+          #- name: Show all files in docs
+          #run: ls -Ral docs
 
-      - name: Show file contents
-        run: | 
-          cat docs/index.html
+          #- name: Show file contents
+          #run: | 
+          #cat docs/index.html
 
-      - name: Upload
-        uses: actions/upload-pages-artifact@v3
+          #- name: Upload
+          #uses: actions/upload-pages-artifact@v3
+          #with:
+          #path: ./docs
+
+          #- name: Deploy to GitHub Pages
+          #uses: peaceiris/actions-gh-pages@v3
+          #if: ${{ !env.ACT }}
+          #with:
+          #github_token: ${{ secrets.GITHUB_TOKEN }}
+          #publish_dir: |
+          #./docs
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Render and Publish
+        uses: quarto-dev/quarto-actions/publish@v2
         with:
-          path: ./docs
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ !env.ACT }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: |
-            ./docs
-
+          target: gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
