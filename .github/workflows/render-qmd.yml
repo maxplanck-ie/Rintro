@@ -64,7 +64,6 @@ jobs:
 
       - name: Show file contents
         run: | 
-          cat index.qmd
           cat docs/index.html
 
       - name: Upload
@@ -80,13 +79,3 @@ jobs:
           publish_dir: |
             ./docs
 
-#  deploy:
-#    needs: build
-#    environment:
-#      name: github-pages
-#      url: ${{ steps.deployment.outputs.page_url }}
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Deploy to GitHub Pages
-#        id: deployment
-#        uses: actions/deploy-pages@v4
