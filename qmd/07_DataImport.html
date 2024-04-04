@@ -505,7 +505,7 @@ B001\tF\t6t\tWT\t2328</code></pre>
 <span id="cb6-4" class="hljs-ln-code"><a></a></span>
 <span id="cb6-5" class="hljs-ln-code"><a></a>rna </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1,474 x 23
+<pre><code># A tibble: 1,474 × 23
    gene    GSM2545336 GSM2545337 GSM2545338 GSM2545339 GSM2545340 GSM2545341
    &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
  1 Asl           1170        361        400        586        626        988
@@ -518,8 +518,8 @@ B001\tF\t6t\tWT\t2328</code></pre>
  8 Gjc2           288        595        568        551        310        146
  9 Plp1         43217     101241      96534      58354      53126      27173
 10 Gnb4          1071       1791       1867       1430       1355        798
-# i 1,464 more rows
-# i 16 more variables: GSM2545342 &lt;dbl&gt;, GSM2545343 &lt;dbl&gt;, GSM2545344 &lt;dbl&gt;,
+# ℹ 1,464 more rows
+# ℹ 16 more variables: GSM2545342 &lt;dbl&gt;, GSM2545343 &lt;dbl&gt;, GSM2545344 &lt;dbl&gt;,
 #   GSM2545345 &lt;dbl&gt;, GSM2545346 &lt;dbl&gt;, GSM2545347 &lt;dbl&gt;, GSM2545348 &lt;dbl&gt;,
 #   GSM2545349 &lt;dbl&gt;, GSM2545350 &lt;dbl&gt;, GSM2545351 &lt;dbl&gt;, GSM2545352 &lt;dbl&gt;,
 #   GSM2545353 &lt;dbl&gt;, GSM2545354 &lt;dbl&gt;, GSM2545362 &lt;dbl&gt;, GSM2545363 &lt;dbl&gt;,
@@ -574,7 +574,7 @@ rna_long = pivot_longer(
 
 rna_long</code></pre>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 32,428 x 3
+<pre><code># A tibble: 32,428 × 3
    gene  sample     expression
    &lt;chr&gt; &lt;chr&gt;           &lt;dbl&gt;
  1 Asl   GSM2545336       1170
@@ -587,7 +587,7 @@ rna_long</code></pre>
  8 Asl   GSM2545343        535
  9 Asl   GSM2545344        586
 10 Asl   GSM2545345        597
-# i 32,418 more rows</code></pre>
+# ℹ 32,418 more rows</code></pre>
 </div>
 <p>:::</p>
 </section>
@@ -637,7 +637,7 @@ rna_long</code></pre>
 <span id="cb12-5" class="hljs-ln-code"><a></a></span>
 <span id="cb12-6" class="hljs-ln-code"><a></a>rna_wide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1,474 x 23
+<pre><code># A tibble: 1,474 × 23
    gene    GSM2545336 GSM2545337 GSM2545338 GSM2545339 GSM2545340 GSM2545341
    &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
  1 Asl           1170        361        400        586        626        988
@@ -650,8 +650,8 @@ rna_long</code></pre>
  8 Gjc2           288        595        568        551        310        146
  9 Plp1         43217     101241      96534      58354      53126      27173
 10 Gnb4          1071       1791       1867       1430       1355        798
-# i 1,464 more rows
-# i 16 more variables: GSM2545342 &lt;dbl&gt;, GSM2545343 &lt;dbl&gt;, GSM2545344 &lt;dbl&gt;,
+# ℹ 1,464 more rows
+# ℹ 16 more variables: GSM2545342 &lt;dbl&gt;, GSM2545343 &lt;dbl&gt;, GSM2545344 &lt;dbl&gt;,
 #   GSM2545345 &lt;dbl&gt;, GSM2545346 &lt;dbl&gt;, GSM2545347 &lt;dbl&gt;, GSM2545348 &lt;dbl&gt;,
 #   GSM2545349 &lt;dbl&gt;, GSM2545350 &lt;dbl&gt;, GSM2545351 &lt;dbl&gt;, GSM2545352 &lt;dbl&gt;,
 #   GSM2545353 &lt;dbl&gt;, GSM2545354 &lt;dbl&gt;, GSM2545362 &lt;dbl&gt;, GSM2545363 &lt;dbl&gt;,
@@ -675,7 +675,7 @@ rna_long</code></pre>
 <span id="cb14-6" class="hljs-ln-code"><a></a></span>
 <span id="cb14-7" class="hljs-ln-code"><a></a>rna_wide_noNAs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1,474 x 23
+<pre><code># A tibble: 1,474 × 23
    gene    GSM2545336 GSM2545337 GSM2545338 GSM2545339 GSM2545340 GSM2545341
    &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
  1 Asl           1170        361        400        586        626        988
@@ -688,8 +688,8 @@ rna_long</code></pre>
  8 Gjc2           288        595        568        551        310        146
  9 Plp1         43217     101241      96534      58354      53126      27173
 10 Gnb4          1071       1791       1867       1430       1355        798
-# i 1,464 more rows
-# i 16 more variables: GSM2545342 &lt;dbl&gt;, GSM2545343 &lt;dbl&gt;, GSM2545344 &lt;dbl&gt;,
+# ℹ 1,464 more rows
+# ℹ 16 more variables: GSM2545342 &lt;dbl&gt;, GSM2545343 &lt;dbl&gt;, GSM2545344 &lt;dbl&gt;,
 #   GSM2545345 &lt;dbl&gt;, GSM2545346 &lt;dbl&gt;, GSM2545347 &lt;dbl&gt;, GSM2545348 &lt;dbl&gt;,
 #   GSM2545349 &lt;dbl&gt;, GSM2545350 &lt;dbl&gt;, GSM2545351 &lt;dbl&gt;, GSM2545352 &lt;dbl&gt;,
 #   GSM2545353 &lt;dbl&gt;, GSM2545354 &lt;dbl&gt;, GSM2545362 &lt;dbl&gt;, GSM2545363 &lt;dbl&gt;,

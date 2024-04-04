@@ -455,21 +455,21 @@ Juan Caballero
 <span id="cb2-6"><a></a></span>
 <span id="cb2-7"><a></a>rna </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 32,428 x 19
+<pre><code># A tibble: 32,428 × 19
    gene    sample  expression organism   age sex   infection strain  time tissue
    &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; 
- 1 Asl     GSM254~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 2 Apod    GSM254~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 3 Cyp2d22 GSM254~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 4 Klk6    GSM254~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 5 Fcrls   GSM254~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 6 Slc2a4  GSM254~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 7 Exd2    GSM254~       1619 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 8 Gjc2    GSM254~        288 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 9 Plp1    GSM254~      43217 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-10 Gnb4    GSM254~       1071 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-# i 32,418 more rows
-# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
+ 1 Asl     GSM254…       1170 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 2 Apod    GSM254…      36194 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 3 Cyp2d22 GSM254…       4060 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 4 Klk6    GSM254…        287 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 5 Fcrls   GSM254…         85 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 6 Slc2a4  GSM254…        782 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 7 Exd2    GSM254…       1619 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 8 Gjc2    GSM254…        288 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 9 Plp1    GSM254…      43217 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+10 Gnb4    GSM254…       1071 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+# ℹ 32,418 more rows
+# ℹ 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
 #   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,
 #   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,
 #   hsapiens_homolog_associated_gene_name &lt;chr&gt;</code></pre>
@@ -540,7 +540,7 @@ Juan Caballero
 <span id="cb8-8" class="hljs-ln-code"><a></a></span>
 <span id="cb8-9" class="hljs-ln-code"><a></a>rna_fc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1,474 x 7
+<pre><code># A tibble: 1,474 × 7
 # Groups:   gene [1,474]
    gene     gene_biotype     `0`   `4`   `8` time_8_vs_0 time_4_vs_0
    &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
@@ -554,7 +554,7 @@ Juan Caballero
  8 Abi2     protein_coding 12.2  12.2  12.3       0.0158    -0.00129
  9 Abi3bp   protein_coding 10.2  10.0   9.57     -0.622     -0.154  
 10 Abl2     protein_coding 11.1  11.0  11.1      -0.0271    -0.0793 
-# i 1,464 more rows</code></pre>
+# ℹ 1,464 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -719,7 +719,7 @@ Juan Caballero
 <span id="cb23-11" class="hljs-ln-code"><a></a></span>
 <span id="cb23-12" class="hljs-ln-code"><a></a>mean_exp_by_time</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 30 x 3
+<pre><code># A tibble: 30 × 3
 # Groups:   gene [10]
    gene   time mean_exp
    &lt;chr&gt; &lt;dbl&gt;    &lt;dbl&gt;
@@ -733,7 +733,7 @@ Juan Caballero
  8 Bst1      4     3.77
  9 Bst1      8     5.22
 10 Chil3     0     4.00
-# i 20 more rows</code></pre>
+# ℹ 20 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -790,7 +790,7 @@ Juan Caballero
 <span id="cb29-4" class="hljs-ln-code"><a></a></span>
 <span id="cb29-5" class="hljs-ln-code"><a></a>mean_exp_by_time_sex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 60 x 4
+<pre><code># A tibble: 60 × 4
 # Groups:   gene, time [30]
    gene   time sex    mean_exp
    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;
@@ -804,7 +804,7 @@ Juan Caballero
  8 Aipl1     0 Male       3.73
  9 Aipl1     4 Female     4.07
 10 Aipl1     4 Male       3.72
-# i 50 more rows</code></pre>
+# ℹ 50 more rows</code></pre>
 </div>
 </div>
 </section>

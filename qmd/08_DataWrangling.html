@@ -436,16 +436,16 @@ Juan Caballero
 <span id="cb1-6" class="hljs-ln-code"><a></a></span>
 <span id="cb1-7" class="hljs-ln-code"><a></a><span class="fu">head</span>(rna)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 x 19
+<pre><code># A tibble: 6 × 19
   gene    sample   expression organism   age sex   infection strain  time tissue
   &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; 
-1 Asl     GSM2545~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-2 Apod    GSM2545~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-3 Cyp2d22 GSM2545~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-4 Klk6    GSM2545~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-5 Fcrls   GSM2545~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-6 Slc2a4  GSM2545~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
+1 Asl     GSM2545…       1170 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+2 Apod    GSM2545…      36194 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+3 Cyp2d22 GSM2545…       4060 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+4 Klk6    GSM2545…        287 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+5 Fcrls   GSM2545…         85 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+6 Slc2a4  GSM2545…        782 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+# ℹ 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
 #   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,
 #   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,
 #   hsapiens_homolog_associated_gene_name &lt;chr&gt;</code></pre>
@@ -458,7 +458,7 @@ Juan Caballero
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb3-1" class="hljs-ln-code"><a></a><span class="co"># column selection</span></span>
 <span id="cb3-2" class="hljs-ln-code"><a></a><span class="fu">select</span>(rna, gene, sample, tissue, expression)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 32,428 x 4
+<pre><code># A tibble: 32,428 × 4
    gene    sample     tissue     expression
    &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt;
  1 Asl     GSM2545336 Cerebellum       1170
@@ -471,7 +471,7 @@ Juan Caballero
  8 Gjc2    GSM2545336 Cerebellum        288
  9 Plp1    GSM2545336 Cerebellum      43217
 10 Gnb4    GSM2545336 Cerebellum       1071
-# i 32,418 more rows</code></pre>
+# ℹ 32,418 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -481,21 +481,21 @@ Juan Caballero
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb5-1" class="hljs-ln-code"><a></a><span class="co"># column exclusion</span></span>
 <span id="cb5-2" class="hljs-ln-code"><a></a><span class="fu">select</span>(rna, <span class="sc">-</span>tissue, <span class="sc">-</span>organism)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 32,428 x 17
+<pre><code># A tibble: 32,428 × 17
    gene    sample   expression   age sex   infection strain  time mouse ENTREZID
    &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
- 1 Asl     GSM2545~       1170     8 Fema~ Influenz~ C57BL~     8    14   109900
- 2 Apod    GSM2545~      36194     8 Fema~ Influenz~ C57BL~     8    14    11815
- 3 Cyp2d22 GSM2545~       4060     8 Fema~ Influenz~ C57BL~     8    14    56448
- 4 Klk6    GSM2545~        287     8 Fema~ Influenz~ C57BL~     8    14    19144
- 5 Fcrls   GSM2545~         85     8 Fema~ Influenz~ C57BL~     8    14    80891
- 6 Slc2a4  GSM2545~        782     8 Fema~ Influenz~ C57BL~     8    14    20528
- 7 Exd2    GSM2545~       1619     8 Fema~ Influenz~ C57BL~     8    14    97827
- 8 Gjc2    GSM2545~        288     8 Fema~ Influenz~ C57BL~     8    14   118454
- 9 Plp1    GSM2545~      43217     8 Fema~ Influenz~ C57BL~     8    14    18823
-10 Gnb4    GSM2545~       1071     8 Fema~ Influenz~ C57BL~     8    14    14696
-# i 32,418 more rows
-# i 7 more variables: product &lt;chr&gt;, ensembl_gene_id &lt;chr&gt;,
+ 1 Asl     GSM2545…       1170     8 Fema… Influenz… C57BL…     8    14   109900
+ 2 Apod    GSM2545…      36194     8 Fema… Influenz… C57BL…     8    14    11815
+ 3 Cyp2d22 GSM2545…       4060     8 Fema… Influenz… C57BL…     8    14    56448
+ 4 Klk6    GSM2545…        287     8 Fema… Influenz… C57BL…     8    14    19144
+ 5 Fcrls   GSM2545…         85     8 Fema… Influenz… C57BL…     8    14    80891
+ 6 Slc2a4  GSM2545…        782     8 Fema… Influenz… C57BL…     8    14    20528
+ 7 Exd2    GSM2545…       1619     8 Fema… Influenz… C57BL…     8    14    97827
+ 8 Gjc2    GSM2545…        288     8 Fema… Influenz… C57BL…     8    14   118454
+ 9 Plp1    GSM2545…      43217     8 Fema… Influenz… C57BL…     8    14    18823
+10 Gnb4    GSM2545…       1071     8 Fema… Influenz… C57BL…     8    14    14696
+# ℹ 32,418 more rows
+# ℹ 7 more variables: product &lt;chr&gt;, ensembl_gene_id &lt;chr&gt;,
 #   external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;, gene_biotype &lt;chr&gt;,
 #   phenotype_description &lt;chr&gt;, hsapiens_homolog_associated_gene_name &lt;chr&gt;</code></pre>
 </div>
@@ -507,21 +507,21 @@ Juan Caballero
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb7-1" class="hljs-ln-code"><a></a><span class="co"># get data which sex is Male</span></span>
 <span id="cb7-2" class="hljs-ln-code"><a></a><span class="fu">filter</span>(rna, sex <span class="sc">==</span> <span class="st">"Male"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 14,740 x 19
+<pre><code># A tibble: 14,740 × 19
    gene    sample  expression organism   age sex   infection strain  time tissue
    &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; 
- 1 Asl     GSM254~        626 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
- 2 Apod    GSM254~      13021 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
- 3 Cyp2d22 GSM254~       2171 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
- 4 Klk6    GSM254~        448 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
- 5 Fcrls   GSM254~        180 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
- 6 Slc2a4  GSM254~        313 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
- 7 Exd2    GSM254~       2366 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
- 8 Gjc2    GSM254~        310 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
- 9 Plp1    GSM254~      53126 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
-10 Gnb4    GSM254~       1355 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
-# i 14,730 more rows
-# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
+ 1 Asl     GSM254…        626 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+ 2 Apod    GSM254…      13021 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+ 3 Cyp2d22 GSM254…       2171 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+ 4 Klk6    GSM254…        448 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+ 5 Fcrls   GSM254…        180 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+ 6 Slc2a4  GSM254…        313 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+ 7 Exd2    GSM254…       2366 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+ 8 Gjc2    GSM254…        310 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+ 9 Plp1    GSM254…      53126 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+10 Gnb4    GSM254…       1355 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+# ℹ 14,730 more rows
+# ℹ 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
 #   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,
 #   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,
 #   hsapiens_homolog_associated_gene_name &lt;chr&gt;</code></pre>
@@ -534,21 +534,21 @@ Juan Caballero
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb9-1" class="hljs-ln-code"><a></a><span class="co"># get data which sex is Male AND infection status is NonInfected</span></span>
 <span id="cb9-2" class="hljs-ln-code"><a></a><span class="fu">filter</span>(rna, sex <span class="sc">==</span> <span class="st">"Male"</span> <span class="sc">&amp;</span> infection <span class="sc">==</span> <span class="st">"NonInfected"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4,422 x 19
+<pre><code># A tibble: 4,422 × 19
    gene    sample  expression organism   age sex   infection strain  time tissue
    &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; 
- 1 Asl     GSM254~        535 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~
- 2 Apod    GSM254~      13668 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~
- 3 Cyp2d22 GSM254~       2008 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~
- 4 Klk6    GSM254~       1101 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~
- 5 Fcrls   GSM254~        375 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~
- 6 Slc2a4  GSM254~        249 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~
- 7 Exd2    GSM254~       3126 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~
- 8 Gjc2    GSM254~        791 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~
- 9 Plp1    GSM254~      98658 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~
-10 Gnb4    GSM254~       2437 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~
-# i 4,412 more rows
-# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
+ 1 Asl     GSM254…        535 Mus mus…     8 Male  NonInfec… C57BL…     0 Cereb…
+ 2 Apod    GSM254…      13668 Mus mus…     8 Male  NonInfec… C57BL…     0 Cereb…
+ 3 Cyp2d22 GSM254…       2008 Mus mus…     8 Male  NonInfec… C57BL…     0 Cereb…
+ 4 Klk6    GSM254…       1101 Mus mus…     8 Male  NonInfec… C57BL…     0 Cereb…
+ 5 Fcrls   GSM254…        375 Mus mus…     8 Male  NonInfec… C57BL…     0 Cereb…
+ 6 Slc2a4  GSM254…        249 Mus mus…     8 Male  NonInfec… C57BL…     0 Cereb…
+ 7 Exd2    GSM254…       3126 Mus mus…     8 Male  NonInfec… C57BL…     0 Cereb…
+ 8 Gjc2    GSM254…        791 Mus mus…     8 Male  NonInfec… C57BL…     0 Cereb…
+ 9 Plp1    GSM254…      98658 Mus mus…     8 Male  NonInfec… C57BL…     0 Cereb…
+10 Gnb4    GSM254…       2437 Mus mus…     8 Male  NonInfec… C57BL…     0 Cereb…
+# ℹ 4,412 more rows
+# ℹ 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
 #   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,
 #   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,
 #   hsapiens_homolog_associated_gene_name &lt;chr&gt;</code></pre>
@@ -561,21 +561,21 @@ Juan Caballero
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb11-1" class="hljs-ln-code"><a></a><span class="co"># get data which human ortholog gene is not defined (*NA*) </span></span>
 <span id="cb11-2" class="hljs-ln-code"><a></a><span class="fu">filter</span>(rna, <span class="fu">is.na</span>(hsapiens_homolog_associated_gene_name))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4,290 x 19
+<pre><code># A tibble: 4,290 × 19
    gene     sample expression organism   age sex   infection strain  time tissue
    &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; 
- 1 Prodh    GSM25~       2385 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 2 Tssk5    GSM25~        368 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 3 Vmn2r1   GSM25~        116 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 4 Gm10654  GSM25~        472 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 5 Hexa     GSM25~       1208 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 6 Sult1a1  GSM25~       1658 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 7 Gm6277   GSM25~        134 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 8 Tmem198b GSM25~        689 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 9 Adam1a   GSM25~        440 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-10 Ebp      GSM25~        798 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-# i 4,280 more rows
-# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
+ 1 Prodh    GSM25…       2385 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 2 Tssk5    GSM25…        368 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 3 Vmn2r1   GSM25…        116 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 4 Gm10654  GSM25…        472 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 5 Hexa     GSM25…       1208 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 6 Sult1a1  GSM25…       1658 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 7 Gm6277   GSM25…        134 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 8 Tmem198b GSM25…        689 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 9 Adam1a   GSM25…        440 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+10 Ebp      GSM25…        798 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+# ℹ 4,280 more rows
+# ℹ 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
 #   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,
 #   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,
 #   hsapiens_homolog_associated_gene_name &lt;chr&gt;</code></pre>
@@ -588,21 +588,21 @@ Juan Caballero
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb13-1" class="hljs-ln-code"><a></a><span class="co"># get data which human ortholog gene is defined (not *NA*) </span></span>
 <span id="cb13-2" class="hljs-ln-code"><a></a><span class="fu">filter</span>(rna, <span class="sc">!</span><span class="fu">is.na</span>(hsapiens_homolog_associated_gene_name))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 28,138 x 19
+<pre><code># A tibble: 28,138 × 19
    gene    sample  expression organism   age sex   infection strain  time tissue
    &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; 
- 1 Asl     GSM254~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 2 Apod    GSM254~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 3 Cyp2d22 GSM254~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 4 Klk6    GSM254~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 5 Fcrls   GSM254~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 6 Slc2a4  GSM254~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 7 Exd2    GSM254~       1619 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 8 Gjc2    GSM254~        288 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 9 Plp1    GSM254~      43217 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-10 Gnb4    GSM254~       1071 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-# i 28,128 more rows
-# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
+ 1 Asl     GSM254…       1170 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 2 Apod    GSM254…      36194 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 3 Cyp2d22 GSM254…       4060 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 4 Klk6    GSM254…        287 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 5 Fcrls   GSM254…         85 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 6 Slc2a4  GSM254…        782 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 7 Exd2    GSM254…       1619 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 8 Gjc2    GSM254…        288 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 9 Plp1    GSM254…      43217 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+10 Gnb4    GSM254…       1071 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+# ℹ 28,128 more rows
+# ℹ 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
 #   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,
 #   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,
 #   hsapiens_homolog_associated_gene_name &lt;chr&gt;</code></pre>
@@ -629,7 +629,7 @@ Juan Caballero
 <span id="cb15-6" class="hljs-ln-code"><a></a></span>
 <span id="cb15-7" class="hljs-ln-code"><a></a>rna3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 14,740 x 4
+<pre><code># A tibble: 14,740 × 4
    gene    sample     tissue     expression
    &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt;
  1 Asl     GSM2545340 Cerebellum        626
@@ -642,7 +642,7 @@ Juan Caballero
  8 Gjc2    GSM2545340 Cerebellum        310
  9 Plp1    GSM2545340 Cerebellum      53126
 10 Gnb4    GSM2545340 Cerebellum       1355
-# i 14,730 more rows</code></pre>
+# ℹ 14,730 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -655,7 +655,7 @@ Juan Caballero
 <span id="cb17-2" class="hljs-ln-code"><a></a></span>
 <span id="cb17-3" class="hljs-ln-code"><a></a>rna3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 14,740 x 4
+<pre><code># A tibble: 14,740 × 4
    gene    sample     tissue     expression
    &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt;
  1 Asl     GSM2545340 Cerebellum        626
@@ -668,7 +668,7 @@ Juan Caballero
  8 Gjc2    GSM2545340 Cerebellum        310
  9 Plp1    GSM2545340 Cerebellum      53126
 10 Gnb4    GSM2545340 Cerebellum       1355
-# i 14,730 more rows</code></pre>
+# ℹ 14,730 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -683,7 +683,7 @@ Juan Caballero
 <span id="cb19-4" class="hljs-ln-code"><a></a></span>
 <span id="cb19-5" class="hljs-ln-code"><a></a>rna3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 14,740 x 4
+<pre><code># A tibble: 14,740 × 4
    gene    sample     tissue     expression
    &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt;
  1 Asl     GSM2545340 Cerebellum        626
@@ -696,7 +696,7 @@ Juan Caballero
  8 Gjc2    GSM2545340 Cerebellum        310
  9 Plp1    GSM2545340 Cerebellum      53126
 10 Gnb4    GSM2545340 Cerebellum       1355
-# i 14,730 more rows</code></pre>
+# ℹ 14,730 more rows</code></pre>
 </div>
 </div>
 <p>Pipes in R look like <code>%&gt;%</code> (made available via the magrittr package) or <code>|&gt;</code> (through base R)</p>
@@ -716,7 +716,7 @@ Juan Caballero
 <span id="cb21-4" class="hljs-ln-code"><a></a>         time <span class="sc">==</span> <span class="dv">0</span> ) <span class="sc">%&gt;%</span></span>
 <span id="cb21-5" class="hljs-ln-code"><a></a>  <span class="fu">select</span>(gene, sample, time, expression, age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 9 x 5
+<pre><code># A tibble: 9 × 5
   gene   sample      time expression   age
   &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;
 1 Plp1   GSM2545337     0     101241     8
@@ -740,7 +740,7 @@ Juan Caballero
 <span id="cb23-2" class="hljs-ln-code"><a></a>  <span class="fu">mutate</span>(<span class="at">time_hours =</span> time <span class="sc">*</span> <span class="dv">24</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb23-3" class="hljs-ln-code"><a></a>  <span class="fu">select</span>(time, time_hours)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 32,428 x 2
+<pre><code># A tibble: 32,428 × 2
     time time_hours
    &lt;dbl&gt;      &lt;dbl&gt;
  1     8        192
@@ -753,7 +753,7 @@ Juan Caballero
  8     8        192
  9     8        192
 10     8        192
-# i 32,418 more rows</code></pre>
+# ℹ 32,418 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -766,7 +766,7 @@ Juan Caballero
 <span id="cb25-3" class="hljs-ln-code"><a></a>         <span class="at">time_min =</span> time_hours <span class="sc">*</span> <span class="dv">60</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb25-4" class="hljs-ln-code"><a></a>  <span class="fu">select</span>(time, time_hours, time_min)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 32,428 x 3
+<pre><code># A tibble: 32,428 × 3
     time time_hours time_min
    &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
  1     8        192    11520
@@ -779,7 +779,7 @@ Juan Caballero
  8     8        192    11520
  9     8        192    11520
 10     8        192    11520
-# i 32,418 more rows</code></pre>
+# ℹ 32,418 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -799,20 +799,20 @@ Juan Caballero
 <span id="cb27-5" class="hljs-ln-code"><a></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(phenotype_description)) <span class="sc">%&gt;%</span></span>
 <span id="cb27-6" class="hljs-ln-code"><a></a>  <span class="fu">filter</span>(expression <span class="sc">&gt;</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 649 x 5
+<pre><code># A tibble: 649 × 5
    gene   chromosome_name phenotype_description                sample expression
    &lt;chr&gt;  &lt;chr&gt;           &lt;chr&gt;                                &lt;chr&gt;       &lt;dbl&gt;
- 1 Plp1   X               abnormal CNS glial cell morphology   GSM25~      10.7 
- 2 Slc7a3 X               decreased body length                GSM25~       5.46
- 3 Plxnb3 X               abnormal coat appearance             GSM25~       6.58
- 4 Rbm3   X               abnormal liver morphology            GSM25~       9.32
- 5 Cfp    X               abnormal cardiovascular system phys~ GSM25~       6.18
- 6 Ebp    X               abnormal embryonic erythrocyte morp~ GSM25~       6.68
- 7 Cd99l2 X               abnormal cellular extravasation      GSM25~       8.04
- 8 Piga   X               abnormal brain development           GSM25~       6.06
- 9 Pim2   X               decreased T cell proliferation       GSM25~       7.11
-10 Itm2a  X               no abnormal phenotype detected       GSM25~       7.48
-# i 639 more rows</code></pre>
+ 1 Plp1   X               abnormal CNS glial cell morphology   GSM25…      10.7 
+ 2 Slc7a3 X               decreased body length                GSM25…       5.46
+ 3 Plxnb3 X               abnormal coat appearance             GSM25…       6.58
+ 4 Rbm3   X               abnormal liver morphology            GSM25…       9.32
+ 5 Cfp    X               abnormal cardiovascular system phys… GSM25…       6.18
+ 6 Ebp    X               abnormal embryonic erythrocyte morp… GSM25…       6.68
+ 7 Cd99l2 X               abnormal cellular extravasation      GSM25…       8.04
+ 8 Piga   X               abnormal brain development           GSM25…       6.06
+ 9 Pim2   X               decreased T cell proliferation       GSM25…       7.11
+10 Itm2a  X               no abnormal phenotype detected       GSM25…       7.48
+# ℹ 639 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -824,22 +824,22 @@ Juan Caballero
 <span id="cb29-2" class="hljs-ln-code"><a></a>rna <span class="sc">%&gt;%</span></span>
 <span id="cb29-3" class="hljs-ln-code"><a></a>  <span class="fu">group_by</span>(gene)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 32,428 x 19
+<pre><code># A tibble: 32,428 × 19
 # Groups:   gene [1,474]
    gene    sample  expression organism   age sex   infection strain  time tissue
    &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; 
- 1 Asl     GSM254~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 2 Apod    GSM254~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 3 Cyp2d22 GSM254~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 4 Klk6    GSM254~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 5 Fcrls   GSM254~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 6 Slc2a4  GSM254~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 7 Exd2    GSM254~       1619 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 8 Gjc2    GSM254~        288 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 9 Plp1    GSM254~      43217 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-10 Gnb4    GSM254~       1071 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-# i 32,418 more rows
-# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
+ 1 Asl     GSM254…       1170 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 2 Apod    GSM254…      36194 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 3 Cyp2d22 GSM254…       4060 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 4 Klk6    GSM254…        287 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 5 Fcrls   GSM254…         85 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 6 Slc2a4  GSM254…        782 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 7 Exd2    GSM254…       1619 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 8 Gjc2    GSM254…        288 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 9 Plp1    GSM254…      43217 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+10 Gnb4    GSM254…       1071 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+# ℹ 32,418 more rows
+# ℹ 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
 #   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,
 #   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,
 #   hsapiens_homolog_associated_gene_name &lt;chr&gt;</code></pre>
@@ -854,22 +854,22 @@ Juan Caballero
 <span id="cb31-2" class="hljs-ln-code"><a></a>rna <span class="sc">%&gt;%</span></span>
 <span id="cb31-3" class="hljs-ln-code"><a></a>  <span class="fu">group_by</span>(sample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 32,428 x 19
+<pre><code># A tibble: 32,428 × 19
 # Groups:   sample [22]
    gene    sample  expression organism   age sex   infection strain  time tissue
    &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; 
- 1 Asl     GSM254~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 2 Apod    GSM254~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 3 Cyp2d22 GSM254~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 4 Klk6    GSM254~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 5 Fcrls   GSM254~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 6 Slc2a4  GSM254~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 7 Exd2    GSM254~       1619 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 8 Gjc2    GSM254~        288 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 9 Plp1    GSM254~      43217 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-10 Gnb4    GSM254~       1071 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
-# i 32,418 more rows
-# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
+ 1 Asl     GSM254…       1170 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 2 Apod    GSM254…      36194 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 3 Cyp2d22 GSM254…       4060 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 4 Klk6    GSM254…        287 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 5 Fcrls   GSM254…         85 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 6 Slc2a4  GSM254…        782 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 7 Exd2    GSM254…       1619 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 8 Gjc2    GSM254…        288 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 9 Plp1    GSM254…      43217 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+10 Gnb4    GSM254…       1071 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+# ℹ 32,418 more rows
+# ℹ 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
 #   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,
 #   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,
 #   hsapiens_homolog_associated_gene_name &lt;chr&gt;</code></pre>
@@ -886,7 +886,7 @@ Juan Caballero
 <span id="cb33-3" class="hljs-ln-code"><a></a>  <span class="fu">group_by</span>(gene) <span class="sc">%&gt;%</span></span>
 <span id="cb33-4" class="hljs-ln-code"><a></a>  <span class="fu">summarise</span>(<span class="at">mean_expression =</span> <span class="fu">mean</span>(expression))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1,474 x 2
+<pre><code># A tibble: 1,474 × 2
    gene     mean_expression
    &lt;chr&gt;              &lt;dbl&gt;
  1 AI504432         1053.  
@@ -899,7 +899,7 @@ Juan Caballero
  8 Abi2             4909.  
  9 Abi3bp           1002.  
 10 Abl2             2124.  
-# i 1,464 more rows</code></pre>
+# ℹ 1,464 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -911,7 +911,7 @@ Juan Caballero
 <span id="cb35-3" class="hljs-ln-code"><a></a>  <span class="fu">group_by</span>(sample) <span class="sc">%&gt;%</span></span>
 <span id="cb35-4" class="hljs-ln-code"><a></a>  <span class="fu">summarise</span>(<span class="at">mean_expression =</span> <span class="fu">mean</span>(expression))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 22 x 2
+<pre><code># A tibble: 22 × 2
    sample     mean_expression
    &lt;chr&gt;                &lt;dbl&gt;
  1 GSM2545336           2062.
@@ -924,7 +924,7 @@ Juan Caballero
  8 GSM2545343           2107.
  9 GSM2545344           1712.
 10 GSM2545345           1700.
-# i 12 more rows</code></pre>
+# ℹ 12 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -937,7 +937,7 @@ Juan Caballero
 <span id="cb37-3" class="hljs-ln-code"><a></a>  <span class="fu">group_by</span>(gene, infection, time) <span class="sc">%&gt;%</span></span>
 <span id="cb37-4" class="hljs-ln-code"><a></a>  <span class="fu">summarise</span>(<span class="at">mean_expression =</span> <span class="fu">mean</span>(expression))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4,422 x 4
+<pre><code># A tibble: 4,422 × 4
 # Groups:   gene, infection [2,948]
    gene     infection    time mean_expression
    &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;           &lt;dbl&gt;
@@ -951,7 +951,7 @@ Juan Caballero
  8 AW551984 InfluenzaA      8            342.
  9 AW551984 NonInfected     0            238 
 10 Aamp     InfluenzaA      4           4870 
-# i 4,412 more rows</code></pre>
+# ℹ 4,412 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -965,7 +965,7 @@ Juan Caballero
 <span id="cb39-4" class="hljs-ln-code"><a></a>  <span class="fu">summarise</span>(<span class="at">mean_expression =</span> <span class="fu">mean</span>(expression),</span>
 <span id="cb39-5" class="hljs-ln-code"><a></a>            <span class="at">median_expression =</span> <span class="fu">median</span>(expression))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4,422 x 5
+<pre><code># A tibble: 4,422 × 5
 # Groups:   gene, infection [2,948]
    gene     infection    time mean_expression median_expression
    &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;           &lt;dbl&gt;             &lt;dbl&gt;
@@ -979,7 +979,7 @@ Juan Caballero
  8 AW551984 InfluenzaA      8            342.              287 
  9 AW551984 NonInfected     0            238               265 
 10 Aamp     InfluenzaA      4           4870              4708 
-# i 4,412 more rows</code></pre>
+# ℹ 4,412 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -997,7 +997,7 @@ Juan Caballero
 <span id="cb41-3" class="hljs-ln-code"><a></a>  <span class="fu">group_by</span>(time) <span class="sc">%&gt;%</span></span>
 <span id="cb41-4" class="hljs-ln-code"><a></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(expression))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 x 2
+<pre><code># A tibble: 3 × 2
    time  mean
   &lt;dbl&gt; &lt;dbl&gt;
 1     0  169 
@@ -1014,7 +1014,7 @@ Juan Caballero
 <span id="cb43-2"><a></a>rna <span class="sc">%&gt;%</span></span>
 <span id="cb43-3"><a></a>    <span class="fu">count</span>(infection)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 x 2
+<pre><code># A tibble: 2 × 2
   infection       n
   &lt;chr&gt;       &lt;int&gt;
 1 InfluenzaA  22110
@@ -1027,7 +1027,7 @@ Juan Caballero
 <span id="cb45-2"><a></a>    <span class="fu">group_by</span>(infection) <span class="sc">%&gt;%</span></span>
 <span id="cb45-3"><a></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 x 2
+<pre><code># A tibble: 2 × 2
   infection       n
   &lt;chr&gt;       &lt;int&gt;
 1 InfluenzaA  22110
@@ -1042,7 +1042,7 @@ Juan Caballero
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb47-1" class="hljs-ln-code"><a></a>rna <span class="sc">%&gt;%</span></span>
 <span id="cb47-2" class="hljs-ln-code"><a></a>    <span class="fu">count</span>(infection, time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 x 3
+<pre><code># A tibble: 3 × 3
   infection    time     n
   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;
 1 InfluenzaA      4 11792
@@ -1058,21 +1058,21 @@ Juan Caballero
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb49-1" class="hljs-ln-code"><a></a>rna <span class="sc">%&gt;%</span></span>
 <span id="cb49-2" class="hljs-ln-code"><a></a>    <span class="fu">arrange</span>(gene)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 32,428 x 19
+<pre><code># A tibble: 32,428 × 19
    gene     sample expression organism   age sex   infection strain  time tissue
    &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; 
- 1 AI504432 GSM25~       1230 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 2 AI504432 GSM25~       1085 Mus mus~     8 Fema~ NonInfec~ C57BL~     0 Cereb~
- 3 AI504432 GSM25~        969 Mus mus~     8 Fema~ NonInfec~ C57BL~     0 Cereb~
- 4 AI504432 GSM25~       1284 Mus mus~     8 Fema~ Influenz~ C57BL~     4 Cereb~
- 5 AI504432 GSM25~        966 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
- 6 AI504432 GSM25~        918 Mus mus~     8 Male  Influenz~ C57BL~     8 Cereb~
- 7 AI504432 GSM25~        985 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 8 AI504432 GSM25~        972 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~
- 9 AI504432 GSM25~       1000 Mus mus~     8 Fema~ Influenz~ C57BL~     4 Cereb~
-10 AI504432 GSM25~        816 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
-# i 32,418 more rows
-# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
+ 1 AI504432 GSM25…       1230 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 2 AI504432 GSM25…       1085 Mus mus…     8 Fema… NonInfec… C57BL…     0 Cereb…
+ 3 AI504432 GSM25…        969 Mus mus…     8 Fema… NonInfec… C57BL…     0 Cereb…
+ 4 AI504432 GSM25…       1284 Mus mus…     8 Fema… Influenz… C57BL…     4 Cereb…
+ 5 AI504432 GSM25…        966 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+ 6 AI504432 GSM25…        918 Mus mus…     8 Male  Influenz… C57BL…     8 Cereb…
+ 7 AI504432 GSM25…        985 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 8 AI504432 GSM25…        972 Mus mus…     8 Male  NonInfec… C57BL…     0 Cereb…
+ 9 AI504432 GSM25…       1000 Mus mus…     8 Fema… Influenz… C57BL…     4 Cereb…
+10 AI504432 GSM25…        816 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+# ℹ 32,418 more rows
+# ℹ 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
 #   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,
 #   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,
 #   hsapiens_homolog_associated_gene_name &lt;chr&gt;</code></pre>
@@ -1086,21 +1086,21 @@ Juan Caballero
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb51-1" class="hljs-ln-code"><a></a>rna <span class="sc">%&gt;%</span></span>
 <span id="cb51-2" class="hljs-ln-code"><a></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(gene))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 32,428 x 19
+<pre><code># A tibble: 32,428 × 19
    gene  sample    expression organism   age sex   infection strain  time tissue
    &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; 
- 1 Zw10  GSM25453~       1479 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 2 Zw10  GSM25453~       1394 Mus mus~     8 Fema~ NonInfec~ C57BL~     0 Cereb~
- 3 Zw10  GSM25453~       1279 Mus mus~     8 Fema~ NonInfec~ C57BL~     0 Cereb~
- 4 Zw10  GSM25453~       1376 Mus mus~     8 Fema~ Influenz~ C57BL~     4 Cereb~
- 5 Zw10  GSM25453~       1568 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
- 6 Zw10  GSM25453~       1581 Mus mus~     8 Male  Influenz~ C57BL~     8 Cereb~
- 7 Zw10  GSM25453~       1271 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~
- 8 Zw10  GSM25453~       1853 Mus mus~     8 Male  NonInfec~ C57BL~     0 Cereb~
- 9 Zw10  GSM25453~       1369 Mus mus~     8 Fema~ Influenz~ C57BL~     4 Cereb~
-10 Zw10  GSM25453~       1578 Mus mus~     8 Male  Influenz~ C57BL~     4 Cereb~
-# i 32,418 more rows
-# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
+ 1 Zw10  GSM25453…       1479 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 2 Zw10  GSM25453…       1394 Mus mus…     8 Fema… NonInfec… C57BL…     0 Cereb…
+ 3 Zw10  GSM25453…       1279 Mus mus…     8 Fema… NonInfec… C57BL…     0 Cereb…
+ 4 Zw10  GSM25453…       1376 Mus mus…     8 Fema… Influenz… C57BL…     4 Cereb…
+ 5 Zw10  GSM25453…       1568 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+ 6 Zw10  GSM25453…       1581 Mus mus…     8 Male  Influenz… C57BL…     8 Cereb…
+ 7 Zw10  GSM25453…       1271 Mus mus…     8 Fema… Influenz… C57BL…     8 Cereb…
+ 8 Zw10  GSM25453…       1853 Mus mus…     8 Male  NonInfec… C57BL…     0 Cereb…
+ 9 Zw10  GSM25453…       1369 Mus mus…     8 Fema… Influenz… C57BL…     4 Cereb…
+10 Zw10  GSM25453…       1578 Mus mus…     8 Male  Influenz… C57BL…     4 Cereb…
+# ℹ 32,418 more rows
+# ℹ 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,
 #   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,
 #   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,
 #   hsapiens_homolog_associated_gene_name &lt;chr&gt;</code></pre>
@@ -1125,7 +1125,7 @@ Juan Caballero
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb53-1" class="hljs-ln-code"><a></a>rna <span class="sc">%&gt;%</span></span>
 <span id="cb53-2" class="hljs-ln-code"><a></a>  <span class="fu">count</span>(sample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 22 x 2
+<pre><code># A tibble: 22 × 2
    sample         n
    &lt;chr&gt;      &lt;int&gt;
  1 GSM2545336  1474
@@ -1138,7 +1138,7 @@ Juan Caballero
  8 GSM2545343  1474
  9 GSM2545344  1474
 10 GSM2545345  1474
-# i 12 more rows</code></pre>
+# ℹ 12 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -1153,7 +1153,7 @@ Juan Caballero
 <span id="cb55-3" class="hljs-ln-code"><a></a>  <span class="fu">summarise</span>(<span class="at">seq_depth =</span> <span class="fu">sum</span>(expression)) <span class="sc">%&gt;%</span></span>
 <span id="cb55-4" class="hljs-ln-code"><a></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(seq_depth))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 22 x 2
+<pre><code># A tibble: 22 × 2
    sample     seq_depth
    &lt;chr&gt;          &lt;dbl&gt;
  1 GSM2545350   3255566
@@ -1166,7 +1166,7 @@ Juan Caballero
  8 GSM2545362   2913517
  9 GSM2545351   2782464
 10 GSM2545349   2758006
-# i 12 more rows</code></pre>
+# ℹ 12 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -1181,7 +1181,7 @@ Juan Caballero
 <span id="cb57-3" class="hljs-ln-code"><a></a>  <span class="fu">count</span>(gene_biotype) <span class="sc">%&gt;%</span></span>
 <span id="cb57-4" class="hljs-ln-code"><a></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 13 x 2
+<pre><code># A tibble: 13 × 2
    gene_biotype                           n
    &lt;chr&gt;                              &lt;int&gt;
  1 protein_coding                      1321
@@ -1212,7 +1212,7 @@ Juan Caballero
 <span id="cb59-4" class="hljs-ln-code"><a></a>  <span class="fu">summarise</span>(<span class="at">mean_expression =</span> <span class="fu">mean</span>(<span class="fu">log</span>(expression))) <span class="sc">%&gt;%</span></span>
 <span id="cb59-5" class="hljs-ln-code"><a></a>  <span class="fu">arrange</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 x 3
+<pre><code># A tibble: 6 × 3
 # Groups:   gene [2]
   gene   time mean_expression
   &lt;chr&gt; &lt;dbl&gt;           &lt;dbl&gt;
