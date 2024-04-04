@@ -61,13 +61,24 @@ jobs:
         with:
           path: ./docs
 
+#      - name: Deploy to GitHub Pages
+#        uses: peaceiris/actions-gh-pages@v3
+#        if: ${{ !env.ACT }}
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          publish_dir: |
+#            ./docs
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ !env.ACT }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: |
-            ./docs
+        id: deployment
+        uses: actions/deploy-pages@v4
 
 # the following does not work; micromamba env and installs seem not to be recoginized
 # see also: https://github.com/quarto-dev/quarto-actions/issues/47
