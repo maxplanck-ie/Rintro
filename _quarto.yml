@@ -4,7 +4,8 @@ project:
 
 website:
   title: "Rintro 2024"
-
+  site-url: "https://maxplanck-ie.github.io/Rintro"
+  
   navbar:
     left: 
       - text: "Modules"

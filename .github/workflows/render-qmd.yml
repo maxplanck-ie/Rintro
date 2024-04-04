@@ -5,37 +5,33 @@ on:
   push:
     branches: ["2024.04"] 
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+defaults:
+  run:
+    shell: bash -l {0}
 
 jobs:
   
   build:
-    name: Conda Tests
+    name: Build Pages
     runs-on: ubuntu-latest
-    defaults:
-       run:
-         shell: bash -l {0}
-    container: node:latest
+#    container: node:latest
 
     steps:
-      - name: Print shell information
-        run: |
-          echo "Shell: $SHELL"
-          echo "Shell version: $($SHELL --version)"
-          uname -a || true
-
-      - uses: actions/checkout@v4
-      - name: Check yaml
-        run: |
-          cat configs/conda.yml || true
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Install Conda environment with Micromamba
         uses: mamba-org/setup-micromamba@main
         with:
           environment-file: configs/conda.yml
-
-      - name: List Available Environment
-        shell: bash -l {0}
-        run: micromamba list
+          cache-environment: true
+          cache-downloads: true
+          environment-name: Rintro
 
       - name: Activate Environment
         run: micromamba activate Rintro
@@ -45,25 +41,26 @@ jobs:
           echo "after conda activate Rintro: PATH=$PATH;"
           which R || true
           R --version || true
+          which micromamba || true 
+          micromamba --version || true
+          which quarto || true 
+          quarto --version || true
 
       - name: Installation non-conda packages 
         run: |
           Rscript -e 'install.packages(c("KernSmooth"), repos="https://cloud.r-project.org")'
-
-      - name: Inspect .libPaths
-        run: |
-          Rscript -e '.libPaths()'     
+          Rscript -e '.libPaths()' || true
 
       - name: Render quarto
         #continue-on-error: true # only for error tracking
         run: |
-          quarto render
+          quarto render .
 
       - name: Show all files in docs
         run: ls -Ral docs
 
       - name: Show file contents
-        run: | 
+        run: |
           cat docs/index.html
 
       - name: Upload
@@ -71,10 +68,32 @@ jobs:
         with:
           path: ./docs
 
+#      - name: Deploy to GitHub Pages
+#        uses: peaceiris/actions-gh-pages@v3
+#        if: ${{ !env.ACT }}
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          publish_dir: |
+#            ./docs
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ !env.ACT }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: |
-            ./docs
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+# the following does not work; micromamba env and installs seem not to be recognized
+# see also: https://github.com/quarto-dev/quarto-actions/issues/47
+#      - name: Set up Quarto
+#        uses: quarto-dev/quarto-actions/setup@v2
+#      - name: Render and Publish
+#        uses: quarto-dev/quarto-actions/publish@v2
+#        with:
+#          target: gh-pages
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
