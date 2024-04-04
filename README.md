@@ -33,7 +33,7 @@ Rscript -e 'install.packages(c("KernSmooth"), repos="https://cloud.r-project.org
 
 To render all material into a full web site under `docs` run
 ```{bash}
-quarto render qmd
+quarto render .
 ```
 
 The same is available also here: https://maxplanck-ie.github.io/Rintro/
