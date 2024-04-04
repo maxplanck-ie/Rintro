@@ -1,5 +1,5 @@
 ## Lecture material
-This lecture series is written in R Markdown and is publically available as github repository. 
+This lecture series is written with quarto and is publically available as github repository. 
 
 
 ![Github link. https://github.com/maxplanck-ie/Rintro.git](qmd/images/Rintro_QR.png)
