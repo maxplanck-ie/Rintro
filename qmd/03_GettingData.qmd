@@ -30,7 +30,7 @@ Topics:
 ```{r csv, eval=FALSE}
 getwd()                     # working directory
 dir()                       # display content
-filename='../data/iris.csv' # relative to wd
+filename='data/iris.csv'    # relative to wd
 d = read.csv(filename)      # file content --> memory (d)
 str(d)
 ```
@@ -60,7 +60,7 @@ Especially for big data it is common to store them in compressed format (e.g. *g
 Such files are not human readable (binary) can also be read
 
 ```{r gzip}
-cmd = "gunzip -c ../data/iris.tsv.gz"   # command to uncompress
+cmd = "gunzip -c data/iris.tsv.gz"   # command to uncompress
 d = read.csv(pipe(cmd), sep='\t')       # read as pipe
 str(d)
 ```
@@ -193,7 +193,7 @@ Many external data is badly formatted, leading to much wasted time - before any 
 
 The code snippets below are not run - but try them out
 ```{r trial_and_error, eval=FALSE, error=TRUE}
-file="../data/GeneList.tsv"     
+file="data/GeneList.tsv"     
 # file="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/GeneList.tsv"  
 read.csv(file)      
 read.csv(file, comment.char = "%")                        # comment lines
