@@ -13,7 +13,7 @@ You can access this material in various different ways:
 - Rstudio/Git: open a new Rproject ("New Project > Version Control > Git > ) and provide the same link as Repository URL. Find the `git` tab and make sure to select the relevant branch.
 
 **Notice 1**:   
-The rmd files are provided for your convenience. This should save some typing (and common errors).   
+The qmd files are provided for your convenience. This should save some typing (and common errors).
 However, this is an **interactive** course, so please use the code, understand it, change it, and break it !
 
 **Notice 2**:  

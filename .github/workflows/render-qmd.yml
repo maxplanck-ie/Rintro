@@ -50,7 +50,7 @@ jobs:
         run: |
           Rscript -e 'install.packages(c("KernSmooth"), repos="https://cloud.r-project.org")'
 
-      - name: Inspect dslabs ext_data
+      - name: Inspect .libPaths
         run: |
           Rscript -e '.libPaths()'     
 
