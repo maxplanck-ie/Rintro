@@ -326,7 +326,7 @@
     "href": "qmd/P02_MontyHall_and_scripts.html#sampling",
     "title": "P02: Sampling; Monty Hall Problem",
     "section": "Sampling",
-    "text": "Sampling\nFirst assume that the doors are shuffled randomly\n\n\nCode\ndoors=sample(doors) # Why does this amount to shuffling?\ndoors\n\n\n[1] \"L2\" \"L1\" \"W\" \n\n\nNow the candidate picks a random door “pick” (hoping that it might be the winning door)\n\n\nCode\npick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)\npick\n\n\n[1] \"L2\""
+    "text": "Sampling\nFirst assume that the doors are shuffled randomly\n\n\nCode\ndoors=sample(doors) # Why does this amount to shuffling?\ndoors\n\n\n[1] \"W\"  \"L2\" \"L1\"\n\n\nNow the candidate picks a random door “pick” (hoping that it might be the winning door)\n\n\nCode\npick=sample(doors,1) # Notice the difference between sample(doors) and sample(doors,1)\npick\n\n\n[1] \"L2\""
   },
   {
     "objectID": "qmd/P02_MontyHall_and_scripts.html#a-function",
@@ -340,7 +340,7 @@
     "href": "qmd/P02_MontyHall_and_scripts.html#an-r-script",
     "title": "P02: Sampling; Monty Hall Problem",
     "section": "An R-script",
-    "text": "An R-script\nWe want to execute the commands above repeatedly. To this end the console is not very useful. Therefore we leave the console for a moment, and first collect the individual commands in a file (an Rscript). Thankfully Rstudio also has an editor for such purposes.\nTask: Open (a new and empty) Rscript file. Include the definition of the function “open_door” and save the lines below in a file called MontyHall.R.\nTip: Almost all command lines are already in your history, where you have tested that they are working properly. In the history panel, you can select those lines and send them “To Source”, i.e the newly opened file. This should avoid redundant typing and errors. All you need to do is to wrap the commands into the for loop.\n\n\nCode\n#Comment Line: A small Rscript to simulate the Monty Hall Problem\ndoors=c(\"W\",\"L1\",\"L2\")\nN=10000\nsuccess=0\nfor (i in 1:N){\n  doors = sample(doors)                           # shuffle doors\n  pick  = sample(doors,1)                         # candidate picks one door at random\n  open  = open_door(pick,doors)                   # show master picks one other door (!= pick != win)\n  switch= doors[ doors != pick & doors != open]   # candidate has choice to switch\n  if (switch==\"W\") { success=success+1}           # count if switching strategy is successful (= \"win\")\n}\n\ncat(\"successes with switching= \",success, \"success_rate: \", success/N, \"\\n\")\n\n\nCongratulations! You have just written your first “R script”. Save it with some suitable name. Return to the console and execute the script using the source command\n\n\nCode\nsource(\"MontyHall.R\")\n\n\nsuccesses with switching=  6659 success_rate:  0.6659 \nsuccesses with switching=  6688 success_rate:  0.6688 \n\n\nYou can share the script easily with all people who speak R – especially those who don’t like to switch."
+    "text": "An R-script\nWe want to execute the commands above repeatedly. To this end the console is not very useful. Therefore we leave the console for a moment, and first collect the individual commands in a file (an Rscript). Thankfully Rstudio also has an editor for such purposes.\nTask: Open (a new and empty) Rscript file. Include the definition of the function “open_door” and save the lines below in a file called MontyHall.R.\nTip: Almost all command lines are already in your history, where you have tested that they are working properly. In the history panel, you can select those lines and send them “To Source”, i.e the newly opened file. This should avoid redundant typing and errors. All you need to do is to wrap the commands into the for loop.\n\n\nCode\n#Comment Line: A small Rscript to simulate the Monty Hall Problem\ndoors=c(\"W\",\"L1\",\"L2\")\nN=10000\nsuccess=0\nfor (i in 1:N){\n  doors = sample(doors)                           # shuffle doors\n  pick  = sample(doors,1)                         # candidate picks one door at random\n  open  = open_door(pick,doors)                   # show master picks one other door (!= pick != win)\n  switch= doors[ doors != pick & doors != open]   # candidate has choice to switch\n  if (switch==\"W\") { success=success+1}           # count if switching strategy is successful (= \"win\")\n}\n\ncat(\"successes with switching= \",success, \"success_rate: \", success/N, \"\\n\")\n\n\nCongratulations! You have just written your first “R script”. Save it with some suitable name. Return to the console and execute the script using the source command\n\n\nCode\nsource(\"MontyHall.R\")\n\n\nsuccesses with switching=  6589 success_rate:  0.6589 \nsuccesses with switching=  6689 success_rate:  0.6689 \n\n\nYou can share the script easily with all people who speak R – especially those who don’t like to switch."
   },
   {
     "objectID": "qmd/03_GettingData.html",
@@ -406,6 +406,13 @@
     "text": "Following along\n\nFor each module, please create a separate R script and type in and execute the commands that are to follow along.\nThe code from some slides depends on the previous slides!\nYou can execute each line individually using Command-Enter on Mac, alt-Enter on Workbench."
   },
   {
+    "objectID": "qmd/07_DataImport.html#our-example-dataset",
+    "href": "qmd/07_DataImport.html#our-example-dataset",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Our example dataset",
+    "text": "Our example dataset\nBlackmore S, et al. Influenza infection triggers disease in a genetic model of experimental autoimmune encephalomyelitis.PNAS 2017,114(30):E6107-E6116. PMID: 28696309\nDesign: Gender matched eight week old C57BL/6 mice were inoculated saline or with Influenza A (Puerto Rico/8/34; PR8, 1.0 HAU) by intranasal route and transcriptomic changes in the cerebellum and spinal cord tissues were evaluated by RNA-seq (Hiseq-2500 100bp pe reads) at days 0 (non-infected), 4 and 8.\nAn extract of the data is in https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv (we’ll take a deep look later)\nThe table is a combined table for gene expression (gene counts) and sample metadata, with columns: “gene”,“sample”,“expression”,“organism”,“age”,“sex”,“infection”,“strain”,“time”,“tissue”,“mouse”,“ENTREZID”,“product”,“ensembl_gene_id”,“external_synonym”,“chromosome_name”,“gene_biotype”,“phenotype_description”,“hsapiens_homolog_associated_gene_name”\nBut for this session, we’ll use only: - https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq_counts_wide.csv - https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq_counts_long.csv"
+  },
+  {
     "objectID": "qmd/07_DataImport.html#data-import-in-the-tidyverse",
     "href": "qmd/07_DataImport.html#data-import-in-the-tidyverse",
     "title": "07: Data Import with Tidyverse",
@@ -413,25 +420,11 @@
     "text": "Data Import in the Tidyverse\nThe first step for any analysis is importing the data into a machine-readable format. The tidyverse offers the readr:: and readxl:: packages.\nNote:\n\nmost data can be easy to import when it’s properly formatted in a text format\nMS Excel files can be read and/or write but should be avoided"
   },
   {
-    "objectID": "qmd/07_DataImport.html#formats",
-    "href": "qmd/07_DataImport.html#formats",
+    "objectID": "qmd/07_DataImport.html#table-formats",
+    "href": "qmd/07_DataImport.html#table-formats",
     "title": "07: Data Import with Tidyverse",
-    "section": "Formats",
-    "text": "Formats\nCSV (comma separated values)\nlabel1,label2,label3,\"label num 4\"&lt;NL&gt;\nvalue1,value2,value3,\"value num 4\"&lt;NL&gt;\nsample,sex,age,treatment,response\nA001,M,8,KO,5200\nA002,M,4,WT,4430\nA003,F,4,KO,344\nB001,F,6,WT,2328"
-  },
-  {
-    "objectID": "qmd/07_DataImport.html#formats-1",
-    "href": "qmd/07_DataImport.html#formats-1",
-    "title": "07: Data Import with Tidyverse",
-    "section": "Formats",
-    "text": "Formats\nTSV (tab separated values)\nlabel1&lt;TAB&gt;label2&lt;TAB&gt;label3&lt;TAB&gt;\"label num 4\"&lt;NL&gt;\nvalue1&lt;TAB&gt;value2&lt;TAB&gt;value3&lt;TAB&gt;\"value num 4\"&lt;NL&gt;\nsample\\tsex\\tage\\ttreatment\\tresponse\nA001\\tM\\t8\\tKO\\t5200\nA002\\tM\\t4\\tWT\\t4430\nA003\\tF\\t4\\tKO\\t344\nB001\\tF\\t6t\\tWT\\t2328"
-  },
-  {
-    "objectID": "qmd/07_DataImport.html#formats-2",
-    "href": "qmd/07_DataImport.html#formats-2",
-    "title": "07: Data Import with Tidyverse",
-    "section": "Formats",
-    "text": "Formats\nDELIM (char separated values)\nlabel1;label2;label3;\"label num 4\"$value1;value2;value3;\"value num 4\"//\nsample;sex;age;treatment;response$A001;M;8;KO;5200$A002;M;4;WT;4430$A003;F;4;KO;344$B001;F;6;WT;2328//"
+    "section": "Table formats",
+    "text": "Table formats\nCSV (comma separated values)\nsample,sex,age,treatment,response\nA001,M,8,KO,5200\nA002,M,4,WT,4430\nA003,F,4,KO,344\nB001,F,6,WT,2328\nTSV (tab separated values)\nsample\\tsex\\tage\\ttreatment\\tresponse\nA001\\tM\\t8\\tKO\\t5200\nA002\\tM\\t4\\tWT\\t4430\nA003\\tF\\t4\\tKO\\t344\nB001\\tF\\t6t\\tWT\\t2328"
   },
   {
     "objectID": "qmd/07_DataImport.html#readr",
@@ -445,14 +438,14 @@
     "href": "qmd/07_DataImport.html#readr-in-action",
     "title": "07: Data Import with Tidyverse",
     "section": "readr:: in action",
-    "text": "readr:: in action\n\n# read file in CSV format, file is in working directory\ndat = read_csv(\"file.csv\")\n\n# read file using full path, file is anywhere in the filesystem\ndat = read_csv(\"/full/path/to/file.csv\")\n\n# read file using URL, file is anywhere in the internet\ndat = read_csv(\"https://server.com/region/file.csv\")"
+    "text": "readr:: in action\nExample commands, don’t run\n\n# read file in CSV format, file is in working directory\ndat = read_csv(\"file.csv\")\n\n# read file using full path, file is anywhere in the filesystem\ndat = read_csv(\"/full/path/to/file.csv\")\n\n# read file using URL, file is anywhere in the internet\ndat = read_csv(\"https://server.com/region/file.csv\")"
   },
   {
     "objectID": "qmd/07_DataImport.html#readr-in-action-1",
     "href": "qmd/07_DataImport.html#readr-in-action-1",
     "title": "07: Data Import with Tidyverse",
     "section": "readr:: in action",
-    "text": "readr:: in action\n\nrnaseq_file = \"https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv\"\n\nrna = read_csv(rnaseq_file)\n\nrna \n\n# A tibble: 32,428 x 19\n   gene    sample  expression organism   age sex   infection strain  time tissue\n   &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n 1 Asl     GSM254~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 2 Apod    GSM254~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 3 Cyp2d22 GSM254~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 4 Klk6    GSM254~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 5 Fcrls   GSM254~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 6 Slc2a4  GSM254~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 7 Exd2    GSM254~       1619 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 8 Gjc2    GSM254~        288 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n 9 Plp1    GSM254~      43217 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n10 Gnb4    GSM254~       1071 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n# i 32,418 more rows\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;\n\n\nWhat is this “rna”?"
+    "text": "readr:: in action\nReal data load\n\nrnaseq_file = \"https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq_counts_wide.csv\"\n\nrna = read_csv(rnaseq_file)\n\nrna \n\n# A tibble: 1,474 x 23\n   gene    GSM2545336 GSM2545337 GSM2545338 GSM2545339 GSM2545340 GSM2545341\n   &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n 1 Asl           1170        361        400        586        626        988\n 2 Apod         36194      10347       9173      10620      13021      29594\n 3 Cyp2d22       4060       1616       1603       1901       2171       3349\n 4 Klk6           287        629        641        578        448        195\n 5 Fcrls           85        233        244        237        180         38\n 6 Slc2a4         782        231        248        265        313        786\n 7 Exd2          1619       2288       2235       2513       2366       1359\n 8 Gjc2           288        595        568        551        310        146\n 9 Plp1         43217     101241      96534      58354      53126      27173\n10 Gnb4          1071       1791       1867       1430       1355        798\n# i 1,464 more rows\n# i 16 more variables: GSM2545342 &lt;dbl&gt;, GSM2545343 &lt;dbl&gt;, GSM2545344 &lt;dbl&gt;,\n#   GSM2545345 &lt;dbl&gt;, GSM2545346 &lt;dbl&gt;, GSM2545347 &lt;dbl&gt;, GSM2545348 &lt;dbl&gt;,\n#   GSM2545349 &lt;dbl&gt;, GSM2545350 &lt;dbl&gt;, GSM2545351 &lt;dbl&gt;, GSM2545352 &lt;dbl&gt;,\n#   GSM2545353 &lt;dbl&gt;, GSM2545354 &lt;dbl&gt;, GSM2545362 &lt;dbl&gt;, GSM2545363 &lt;dbl&gt;,\n#   GSM2545380 &lt;dbl&gt;\n\n\nWhat is this “rna”?"
   },
   {
     "objectID": "qmd/07_DataImport.html#what-is-a-tibble",
@@ -462,53 +455,74 @@
     "text": "What is a tibble?\n\nTibbles are like data frames, but more modern, and are built for the Tidyverse\nThe interface is the same, using e.g. $ for columns\nTibbles can contain more complex objects than just strings, numbers, or booleans, like lists or functions\nTibbles can be grouped\nYou can see the types of each column in a tibble"
   },
   {
-    "objectID": "qmd/07_DataImport.html#quick-exercise",
-    "href": "qmd/07_DataImport.html#quick-exercise",
+    "objectID": "qmd/07_DataImport.html#what-is-tidy-data",
+    "href": "qmd/07_DataImport.html#what-is-tidy-data",
     "title": "07: Data Import with Tidyverse",
-    "section": "Quick exercise",
-    "text": "Quick exercise\nExplore the RNAseq data as a tibble.\n\nhead(rna)\n\n# A tibble: 6 x 19\n  gene    sample   expression organism   age sex   infection strain  time tissue\n  &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n1 Asl     GSM2545~       1170 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n2 Apod    GSM2545~      36194 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n3 Cyp2d22 GSM2545~       4060 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n4 Klk6    GSM2545~        287 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n5 Fcrls   GSM2545~         85 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n6 Slc2a4  GSM2545~        782 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+    "section": "What is Tidy Data?",
+    "text": "What is Tidy Data?\n\nIn tidy data, each row is an observation and each column is a different variable (long-format).\nIn wide data, each row contains several observations, and the columns contain values (wide-format).\n\n\n\n## Hands on\n\nGet the basic statistics for each sample in `rna`\n\nWhich sample has the highest mean expression?\n\n## Dplyr in action - `pivot_longer()` {auto-animate=\"true\"}\n\nTo transform the data in a long-format we use `pivot_longer()`, it takes as inputs:\n\n1. the `data` to be transformed;\n2. the `names_to` the new column name we wish to create and populate with the current column names;\n3. the `values_to` the new column name we wish to create and populate with current values;\n4. the names of the columns to be used to populate the `names_to` and `values_to` variables (or to drop with `-`).\n\n## Dplyr in action - `pivot_longer()` {auto-animate=\"true\"}\n\n::: {.cell}\n\n```{.r .cell-code}\nrna_long = pivot_longer(\n                 rna,\n                 names_to = \"sample\",\n                 values_to = \"expression\",\n                 -gene)\n\nrna_long\n\n# A tibble: 32,428 x 3\n   gene  sample     expression\n   &lt;chr&gt; &lt;chr&gt;           &lt;dbl&gt;\n 1 Asl   GSM2545336       1170\n 2 Asl   GSM2545337        361\n 3 Asl   GSM2545338        400\n 4 Asl   GSM2545339        586\n 5 Asl   GSM2545340        626\n 6 Asl   GSM2545341        988\n 7 Asl   GSM2545342        836\n 8 Asl   GSM2545343        535\n 9 Asl   GSM2545344        586\n10 Asl   GSM2545345        597\n# i 32,418 more rows\n\n:::"
   },
   {
-    "objectID": "qmd/07_DataImport.html#quick-exercise-1",
-    "href": "qmd/07_DataImport.html#quick-exercise-1",
+    "objectID": "qmd/07_DataImport.html#dplyr-in-action---pivot_longer",
+    "href": "qmd/07_DataImport.html#dplyr-in-action---pivot_longer",
     "title": "07: Data Import with Tidyverse",
-    "section": "Quick exercise",
-    "text": "Quick exercise\nExplore the RNAseq data as a tibble.\n\ntail(rna)\n\n# A tibble: 6 x 19\n  gene    sample   expression organism   age sex   infection strain  time tissue\n  &lt;chr&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; \n1 Aldh9a1 GSM2545~       1770 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n2 Mgst3   GSM2545~       2151 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n3 Lrrc52  GSM2545~          5 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n4 Rxrg    GSM2545~         49 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n5 Lmx1a   GSM2545~         72 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n6 Pbx1    GSM2545~       4795 Mus mus~     8 Fema~ Influenz~ C57BL~     8 Cereb~\n# i 9 more variables: mouse &lt;dbl&gt;, ENTREZID &lt;dbl&gt;, product &lt;chr&gt;,\n#   ensembl_gene_id &lt;chr&gt;, external_synonym &lt;chr&gt;, chromosome_name &lt;chr&gt;,\n#   gene_biotype &lt;chr&gt;, phenotype_description &lt;chr&gt;,\n#   hsapiens_homolog_associated_gene_name &lt;chr&gt;"
+    "section": "Dplyr in action - pivot_longer()",
+    "text": "Dplyr in action - pivot_longer()"
   },
   {
-    "objectID": "qmd/07_DataImport.html#quick-exercise-2",
-    "href": "qmd/07_DataImport.html#quick-exercise-2",
+    "objectID": "qmd/07_DataImport.html#dplyr-in-action---pivot_longer-1",
+    "href": "qmd/07_DataImport.html#dplyr-in-action---pivot_longer-1",
     "title": "07: Data Import with Tidyverse",
-    "section": "Quick exercise",
-    "text": "Quick exercise\nExplore the RNAseq data as a tibble.\n\ndim(rna)\n\n[1] 32428    19"
+    "section": "Dplyr in action - pivot_longer()",
+    "text": "Dplyr in action - pivot_longer()\nColumn selection can be defined with patterns or ranges\n\nrna_long2 = pivot_longer(\n                 rna,\n                 names_to = \"sample\",\n                 values_to = \"expression\",\n                 cols = starts_with(\"GSM\"))"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#dplyr-in-action---pivot_longer-2",
+    "href": "qmd/07_DataImport.html#dplyr-in-action---pivot_longer-2",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Dplyr in action - pivot_longer()",
+    "text": "Dplyr in action - pivot_longer()\nColumn selection can be also defined with patterns or ranges\n\nrna_long3 = pivot_longer(\n                 rna, \n                 names_to = \"sample\",\n                 values_to = \"expression\",\n                 GSM2545336:GSM2545380)"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#dplyr-in-action---pivot_wider",
+    "href": "qmd/07_DataImport.html#dplyr-in-action---pivot_wider",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Dplyr in action - pivot_wider()",
+    "text": "Dplyr in action - pivot_wider()\nThe inverse operation is pivot_wider() can transform long-format to wide-format.\nIt takes three main arguments:\n\nthe data to be transformed\nthe names_from are the column whose values will become new column names\nthe values_from are the column whose values will fill the new columns"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#dplyr-in-action---pivot_wider-1",
+    "href": "qmd/07_DataImport.html#dplyr-in-action---pivot_wider-1",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Dplyr in action - pivot_wider()",
+    "text": "Dplyr in action - pivot_wider()\n\nrna_wide = pivot_wider(\n                rna_long,\n                names_from = sample,\n                values_from = expression)\n\nrna_wide\n\n# A tibble: 1,474 x 23\n   gene    GSM2545336 GSM2545337 GSM2545338 GSM2545339 GSM2545340 GSM2545341\n   &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n 1 Asl           1170        361        400        586        626        988\n 2 Apod         36194      10347       9173      10620      13021      29594\n 3 Cyp2d22       4060       1616       1603       1901       2171       3349\n 4 Klk6           287        629        641        578        448        195\n 5 Fcrls           85        233        244        237        180         38\n 6 Slc2a4         782        231        248        265        313        786\n 7 Exd2          1619       2288       2235       2513       2366       1359\n 8 Gjc2           288        595        568        551        310        146\n 9 Plp1         43217     101241      96534      58354      53126      27173\n10 Gnb4          1071       1791       1867       1430       1355        798\n# i 1,464 more rows\n# i 16 more variables: GSM2545342 &lt;dbl&gt;, GSM2545343 &lt;dbl&gt;, GSM2545344 &lt;dbl&gt;,\n#   GSM2545345 &lt;dbl&gt;, GSM2545346 &lt;dbl&gt;, GSM2545347 &lt;dbl&gt;, GSM2545348 &lt;dbl&gt;,\n#   GSM2545349 &lt;dbl&gt;, GSM2545350 &lt;dbl&gt;, GSM2545351 &lt;dbl&gt;, GSM2545352 &lt;dbl&gt;,\n#   GSM2545353 &lt;dbl&gt;, GSM2545354 &lt;dbl&gt;, GSM2545362 &lt;dbl&gt;, GSM2545363 &lt;dbl&gt;,\n#   GSM2545380 &lt;dbl&gt;"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#dplyr-in-action---pivot_wider-2",
+    "href": "qmd/07_DataImport.html#dplyr-in-action---pivot_wider-2",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Dplyr in action - pivot_wider()",
+    "text": "Dplyr in action - pivot_wider()"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#dplyr-in-action---pivot_wider-3",
+    "href": "qmd/07_DataImport.html#dplyr-in-action---pivot_wider-3",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Dplyr in action - pivot_wider()",
+    "text": "Dplyr in action - pivot_wider()\nBy default, missing values will be converted to NA, we can change it with values_fill\n\nrna_wide_noNAs = pivot_wider(\n                      rna_long,\n                      names_from = sample,\n                      values_from = expression,\n                      values_fill = 0)\n\nrna_wide_noNAs\n\n# A tibble: 1,474 x 23\n   gene    GSM2545336 GSM2545337 GSM2545338 GSM2545339 GSM2545340 GSM2545341\n   &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n 1 Asl           1170        361        400        586        626        988\n 2 Apod         36194      10347       9173      10620      13021      29594\n 3 Cyp2d22       4060       1616       1603       1901       2171       3349\n 4 Klk6           287        629        641        578        448        195\n 5 Fcrls           85        233        244        237        180         38\n 6 Slc2a4         782        231        248        265        313        786\n 7 Exd2          1619       2288       2235       2513       2366       1359\n 8 Gjc2           288        595        568        551        310        146\n 9 Plp1         43217     101241      96534      58354      53126      27173\n10 Gnb4          1071       1791       1867       1430       1355        798\n# i 1,464 more rows\n# i 16 more variables: GSM2545342 &lt;dbl&gt;, GSM2545343 &lt;dbl&gt;, GSM2545344 &lt;dbl&gt;,\n#   GSM2545345 &lt;dbl&gt;, GSM2545346 &lt;dbl&gt;, GSM2545347 &lt;dbl&gt;, GSM2545348 &lt;dbl&gt;,\n#   GSM2545349 &lt;dbl&gt;, GSM2545350 &lt;dbl&gt;, GSM2545351 &lt;dbl&gt;, GSM2545352 &lt;dbl&gt;,\n#   GSM2545353 &lt;dbl&gt;, GSM2545354 &lt;dbl&gt;, GSM2545362 &lt;dbl&gt;, GSM2545363 &lt;dbl&gt;,\n#   GSM2545380 &lt;dbl&gt;"
+  },
+  {
+    "objectID": "qmd/07_DataImport.html#dplyr-in-action---write_csv",
+    "href": "qmd/07_DataImport.html#dplyr-in-action---write_csv",
+    "title": "07: Data Import with Tidyverse",
+    "section": "Dplyr in action - write_csv",
+    "text": "Dplyr in action - write_csv\nFinally, we could need to save our data as a new file for later use or sharing, we can use write_csv()\n\nwrite_csv(rna_wide_noNAs, file = \"rna_wide.csv\")"
   },
   {
     "objectID": "qmd/07_DataImport.html#readxl",
     "href": "qmd/07_DataImport.html#readxl",
     "title": "07: Data Import with Tidyverse",
     "section": "readxl::",
-    "text": "readxl::\n\nreadxl:: is the Tidyverse library for reading data from Excel formats.\nread_excel(), read_xls() and read_xlsx() are some of the functions provided\nThe excel_sheets() function yields the names of the sheets in the Excel file. These names are passed to the sheet argument for the readxl functions\nThe read_lines() function shows the first few lines of a file in R."
-  },
-  {
-    "objectID": "qmd/07_DataImport.html#readxl-in-action",
-    "href": "qmd/07_DataImport.html#readxl-in-action",
-    "title": "07: Data Import with Tidyverse",
-    "section": "readxl:: in action",
-    "text": "readxl:: in action\n\nlibrary(readxl)\n\nfull_url = \"https://github.com/maxplanck-ie/Rintro/raw/2024.04/qmd/data/2010_bigfive_regents.xls\"\n\ndownload.file(url=full_url, destfile=\"2010_bigfive_regents.xls\")\n\nexcel_sheets(\"2010_bigfive_regents.xls\")\n\n[1] \"Sheet1\" \"Sheet2\" \"Sheet3\"\n\n\nexcel_sheets() lists the sheets in the Excel file"
-  },
-  {
-    "objectID": "qmd/07_DataImport.html#readxl-in-action-1",
-    "href": "qmd/07_DataImport.html#readxl-in-action-1",
-    "title": "07: Data Import with Tidyverse",
-    "section": "readxl:: in action",
-    "text": "readxl:: in action\nLoading the data in “Sheet1”\n\nsheet_one = read_xls(\"2010_bigfive_regents.xls\", sheet = \"Sheet1\")\n\nsheet_one\n\n# A tibble: 104 x 6\n   label     `INTEGRATED ALGEBRA` `GLOBAL HISTORY` `LIVING ENVIRONMENT` ENGLISH\n   &lt;chr&gt;                    &lt;dbl&gt;            &lt;dbl&gt;                &lt;dbl&gt;   &lt;dbl&gt;\n 1 test_year                 2010             2010                 2010    2010\n 2 Scores                  131024           113804               104201  103886\n 3 0                           56               55                   66     165\n 4 1                           NA                8                    3      69\n 5 2                            1                9                    2     237\n 6 3                           NA                3                    1     190\n 7 4                            3               15                    1     109\n 8 5                            2               11                   10     122\n 9 6                            4               29                    3     151\n10 7                            1               37                    2     175\n# i 94 more rows\n# i 1 more variable: `U.S. HISTORY` &lt;dbl&gt;"
-  },
-  {
-    "objectID": "qmd/07_DataImport.html#readxl-1",
-    "href": "qmd/07_DataImport.html#readxl-1",
-    "title": "07: Data Import with Tidyverse",
-    "section": "readxl::",
-    "text": "readxl::\n\nread_xls() is for xls files, read_xlsx for XML-based xlsx files\nyou can use read_excel() if you are unsure of the format"
+    "text": "readxl::\n\nreadxl:: is the Tidyverse library for reading data from Excel formats.\nread_excel(), read_xls() and read_xlsx() are some of the functions provided\nThe excel_sheets() function yields the names of the sheets in the Excel file. These names are passed to the sheet argument for the readxl functions\nThe read_lines() function shows the first few lines of a file in R.\nBut please, don’t use Excel"
   },
   {
     "objectID": "qmd/07_DataImport.html#any-questions",
