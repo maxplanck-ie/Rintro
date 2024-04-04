@@ -51,8 +51,21 @@ jobs:
 
       - name: Inspect .libPaths
         run: |
-          Rscript -e '.libPaths()'     
+          Rscript -e '.libPaths()'
 
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Check Quarto
+        run: |
+          which micromamba 
+          micromamba --version
+          which R
+          R --version
+          which quarto
+          quarto --version
+          ls -alR
+        
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
         with:
