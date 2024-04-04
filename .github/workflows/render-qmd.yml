@@ -29,6 +29,9 @@ jobs:
         uses: mamba-org/setup-micromamba@main
         with:
           environment-file: configs/conda.yml
+          cache-environment: true
+          cache-downloads: true
+          environment-name: Rintro
 
       - name: Activate Environment
         run: micromamba activate Rintro
