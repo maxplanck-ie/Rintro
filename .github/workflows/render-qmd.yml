@@ -10,22 +10,16 @@ jobs:
   build:
     name: Conda Tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     defaults:
        run:
          shell: bash -l {0}
-    container: node:latest
+#    container: node:latest
 
     steps:
-      - name: Print shell information
-        run: |
-          echo "Shell: $SHELL"
-          echo "Shell version: $($SHELL --version)"
-          uname -a || true
-
-      - uses: actions/checkout@v4
-      - name: Check yaml
-        run: |
-          cat configs/conda.yml || true
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
@@ -35,10 +29,6 @@ jobs:
         with:
           environment-file: configs/conda.yml
 
-      - name: List Available Environment
-        shell: bash -l {0}
-        run: micromamba list
-
       - name: Activate Environment
         run: micromamba activate Rintro
 
@@ -47,26 +37,15 @@ jobs:
           echo "after conda activate Rintro: PATH=$PATH;"
           which R || true
           R --version || true
+          which micromamba || true 
+          micromamba --version || true
+          which quarto || true 
+          quarto --version || true
 
       - name: Installation non-conda packages 
         run: |
           Rscript -e 'install.packages(c("KernSmooth"), repos="https://cloud.r-project.org")'
-
-      - name: Inspect .libPaths
-        run: |
-          Rscript -e '.libPaths()'
-
-
-
-      - name: Check Quarto
-        run: |
-          which micromamba 
-          micromamba --version
-          which R
-          R --version
-          which quarto
-          quarto --version
-          ls -alR
+          Rscript -e '.libPaths()' || true
         
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2
