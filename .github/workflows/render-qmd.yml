@@ -21,9 +21,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-
       - name: Install Conda environment with Micromamba
         uses: mamba-org/setup-micromamba@main
         with:
@@ -46,10 +43,39 @@ jobs:
         run: |
           Rscript -e 'install.packages(c("KernSmooth"), repos="https://cloud.r-project.org")'
           Rscript -e '.libPaths()' || true
-        
-      - name: Render and Publish
-        uses: quarto-dev/quarto-actions/publish@v2
+
+      - name: Render quarto
+        #continue-on-error: true # only for error tracking
+        run: |
+          quarto render .
+
+      - name: Show all files in docs
+        run: ls -Ral docs
+
+      - name: Show file contents
+        run: |
+          cat docs/index.html
+
+      - name: Upload
+        uses: actions/upload-pages-artifact@v3
         with:
-          target: gh-pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          path: ./docs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ !env.ACT }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: |
+            ./docs
+
+# the following does not work; micromamba env and installs seem not to be recoginized
+# see also: https://github.com/quarto-dev/quarto-actions/issues/47
+#      - name: Set up Quarto
+#        uses: quarto-dev/quarto-actions/setup@v2
+#      - name: Render and Publish
+#        uses: quarto-dev/quarto-actions/publish@v2
+#        with:
+#          target: gh-pages
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
