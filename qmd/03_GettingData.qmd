@@ -50,7 +50,7 @@ Notice that files do not need to be available locally, but might be provided by 
 
 Be aware that in those cases there might be significant reduced loading speed, depending on your network connections.
 ```{r url, eval=FALSE}
-filename='https://raw.githubusercontent.com/maxplanck-ie/Rintro/2023.03/data/iris.tsv'
+filename='https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/data/iris.tsv'
 d = read.csv(filename, sep='\t')  
 str(d)
 ```
@@ -128,9 +128,9 @@ n = 42
 v = 1:1000
 getwd()                     # make sure you know where you writing to
 
-save.image("my_env.RData")  # default image_name = ".RData"
-rm(list=ls())               # remove everything = sweep global environment
-load("my_env.RData")        # recreate all 
+save.image("output/my_env.RData")  # default image_name = ".RData"
+rm(list=ls())                      # remove everything = sweep global environment
+load("output/my_env.RData")        # recreate all 
 ```
 
 **Notice**: The suffix (.RData) is not strictly necessary, but it is best practice and used consistently by the community.
