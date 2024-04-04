@@ -1,8 +1,8 @@
 ## Lecture material
-This lecture series is written with quarto and is publically available as github repository. 
+This lecture series is written with quarto and is publically available as Github pages and repository. 
 
 
-![Github link. https://github.com/maxplanck-ie/Rintro.git](qmd/images/Rintro_QR.png)
+![Github Pages. https://maxplanck-ie.github.io/Rintro](qmd/images/Rintro_QR.png)
 
 >  Be aware that this course has seen various iterations - selecting the **correct** branch is crucial to avoid mix ups 
 
