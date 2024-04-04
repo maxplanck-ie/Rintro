@@ -39,6 +39,7 @@ str(d)
 There are many different ways to load such data into memory and to customize the loading.
 
 **Tasks:**
+
 - Explore ?read.csv to get a first overview how this function can be customized.
 - How would you read only the first 10 lines?
 - Explore the data object d
@@ -105,7 +106,7 @@ load(fn)          # reload object d from file - and watch global env
 
 ### Task: All objects
 Sometimes we want to save all objects and variable that have accumulated in the "Global Environment" - just to be sure.
-This task test some jargon, familiarity with directory structure and ability to find help.
+This task tests some jargon, familiarity with directory structure and ability to find help.
 Please try it yourself.
 
 - Create a new data object for the iris data set as before *and* additional variables for your favorite numbers and perhaps some favorite strings.
@@ -132,7 +133,7 @@ rm(list=ls())               # remove everything = sweep global environment
 load("my_env.RData")        # recreate all 
 ```
 
-**Notice**: The suffix is not strictly necessary, but it is best practice and used consistently by the community.
+**Notice**: The suffix (.RData) is not strictly necessary, but it is best practice and used consistently by the community.
 
 ***
 
