@@ -13,5 +13,6 @@ qmd/*.csv
 qmd/*.csv.gz
 .DS_Store
 /.quarto/
+/_site/
 **_files
 **_cache
