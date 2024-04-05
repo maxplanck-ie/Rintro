@@ -1,6 +1,9 @@
 ---
 title: "09: Data visualization with ggplot2"
 author: "Juan Caballero"
+categories:
+  - graphs
+  - ggplot2
 format:
   revealjs:
     logo: images/maxplanck-ie.jpg
@@ -20,9 +23,9 @@ format:
 
 -   Plots in **ggplot2** consist of 3 main components:
     -   **Data**: The dataset being summarized
-    -   **Geometry**: The type of plot (scatterplot, boxplot, barplot, histogram, qqplot, smooth density, etc.)
     -   **Aesthetic mapping**: Variables mapped to visual cues, such as x-axis and y-axis values and colors
-
+    -   **Geometry**: The type of plot (scatterplot, boxplot, barplot, histogram, qqplot, smooth density, etc.)
+    
 ```
 ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  <GEOM_FUNCTION>()
 ```
@@ -44,40 +47,137 @@ ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  <GEOM_FUNCTION>()
     -   Labels, Title, Legend
     -   Theme/Style
 
+## Graph components {auto-animate="true"}
+
+![](images/ggplot2_layers.png)
+
+::: footer
+<http://euclid.nmu.edu/~joshthom/Teaching/DAT309/Week1/lecture_2.html>
+:::
+
 ## Our dataset
+
+Expression matrix from the mouse influenza experiment
 
 ```{r}
 #| echo: true
 library(tidyverse)
 
-rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv"
+rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq_counts_wide.csv"
 
 rna = read_csv(rnaseq_file)
 
-rna 
-
+rna
 ```
 
-## ggplot2 in action - `geom_histogram()`  {auto-animate="true"}
+## Our dataset
+
+Let's plot a MA-like plot for `GSM2545336` vs `GSM2545380`, first, we generate the tibble as:
 
 ```{r}
 #| echo: true
 
-ggplot(data = rna, mapping = aes(x = expression)) +
+ma_data = rna %>% 
+          select(gene, GSM2545336, GSM2545380) %>% 
+          mutate(
+              norm_mean = log2(GSM2545336 + 1) + log2(GSM2545380 + 1) / 2,
+              log2fc = log2(GSM2545336 + 1) / log2(GSM2545380 + 1)
+            ) %>% 
+            select(gene, log2fc, norm_mean)
+ma_data
+```
+
+## ggplot2 in action - `geom_point()`  {auto-animate="true"}
+
+`geom_point()` are basic scatter plots
+
+```{r}
+#| echo: true
+
+ggplot(ma_data, aes(x = norm_mean, y = log2fc)) +
+  geom_point()
+```
+
+## ggplot2 in action - `geom_point()`  {auto-animate="true"}
+
+We can modify graphic elements, for `color`
+
+```{r}
+#| echo: true
+
+ggplot(ma_data, aes(x = norm_mean, y = log2fc)) +
+  geom_point(color = 'blue')
+```
+
+## ggplot2 in action - `geom_point()`  {auto-animate="true"}
+
+Overplotting can be fixed using transparency with `alpha`
+
+```{r}
+#| echo: true
+
+ggplot(ma_data, aes(x = norm_mean, y = log2fc)) +
+  geom_point(alpha = 0.1)
+```
+
+## ggplot2 in action - `geom_point()`  {auto-animate="true"}
+
+Point marks can be changed with `shape`, the numbers are predefined forms
+
+```{r}
+#| echo: true
+
+ggplot(ma_data, aes(x = norm_mean, y = log2fc)) +
+  geom_point(shape = 3)
+```
+
+## ggplot2 in action - `geom_point()`  {auto-animate="true"}
+
+`shape` also accept any char
+
+```{r}
+#| echo: true
+
+ggplot(ma_data, aes(x = norm_mean, y = log2fc)) +
+  geom_point(shape = '?')
+```
+
+## ggplot2 in action - `geom_point()`  {auto-animate="true"}
+
+We can overlap new elements, such as an horizontal line `geom_hline()`
+
+```{r}
+#| echo: true
+
+ggplot(ma_data, aes(x = norm_mean, y = log2fc)) +
+  geom_point(color = 'blue', alpha = 0.1) +
+  geom_hline(yintercept = 1, color = 'red')
+```
+
+## Hands on
+
+Generate a similar plot comparing another 2 samples, use red "triangles" as points with a vertical green line in `norm_mean = 5`
+
+## ggplot2 in action - `geom_histogram()`  {auto-animate="true"}
+
+Histogram of expression values for sample `GSM2545336`
+
+```{r}
+#| echo: true
+
+ggplot(rna, aes(x = GSM2545336)) +
   geom_histogram()
-
 ```
-
 
 ## ggplot2 in action - `geom_histogram()`  {auto-animate="true"}
 
-Geoms have their own parameters, example `bins` for `geom_histogram()`
+We can adjust the histogram `bins`
 
 ```{r}
 #| echo: true
 
-ggplot(data = rna, mapping = aes(x = expression)) +
-  geom_histogram(bins = 15)
+ggplot(rna, aes(x = GSM2545336)) +
+  geom_histogram(bins = 50)
 
 ```
 
@@ -89,143 +189,37 @@ We can use a variable to store a template
 #| echo: true
 
 # Assign plot to a variable
-rna_plot = ggplot(data = rna,
-                   mapping = aes(x = expression))
-
+hist_plot = ggplot(rna, aes(x = GSM2545336))
 # Draw the plot
-rna_plot + geom_histogram()
+hist_plot + geom_histogram(bins = 100, color = 'blue')
 
 ```
 
-## ggplot2 in action - `geom_histogram()`  {auto-animate="true"}
+## Hands on
 
-We can combine operations to improve the plotting, let's do a histogram for log2(expression)
+Create a new histogram for another sample values but in log2 scale
 
-```{r}
-#| echo: true
+## New dataset
 
-# Add a new variable for the log2 values
-rna <- rna %>%
-  mutate(expression_log = log2(expression + 1))
-
-# Draw the plot
-
-ggplot(rna, aes(x = expression_log)) + geom_histogram()
-
-```
-
-We can also use axis scale such as `scale_x_log10()`, but could not be ideal 
-
-## ggplot2 in action - `geom_points()`  {auto-animate="true"}
-
-For scatter plots we can use `geom_points()`
-
-Let's plot the log2 fold changes of expression comparing time 8 versus time 0, and time 4 versus time 0.
-To this end, we first need to compute the means of the log-transformed expression values by gene and time,
-then the log fold changes by subtracting the mean log expressions between time 8 and time 0 and between
-time 4 and time 0. Note that we also include here the gene biotype that we will use later on to represent
-the genes
-
-## ggplot2 in action - `geom_points()`  {auto-animate="true"}
-*Note that are we using "escaped" numbers*
-```{r}
-#| echo: true
-
-rna_fc = rna %>% select(gene, time,
-                         gene_biotype, expression_log) %>%
-  group_by(gene, time, gene_biotype) %>%
-  summarize(mean_exp = mean(expression_log)) %>%
-  pivot_wider(names_from = time,
-              values_from = mean_exp) %>%
-  mutate(time_8_vs_0 = `8` - `0`, time_4_vs_0 = `4` - `0`)
-
-rna_fc
-```
-
-## ggplot2 in action - `geom_points()`  {auto-animate="true"}
-
-Now, we can plot 
+`rnaseq.csv` is the long-format for the mouse influenza experiment. Let's add a log2-expression column
 
 ```{r}
 #| echo: true
-
-ggplot(data = rna_fc, mapping = aes(x = time_4_vs_0, y = time_8_vs_0)) +
-  geom_point()
-
-```
-
-## ggplot2 in action - `geom_points()`  {auto-animate="true"}
-
-Too many points ..., let's reduce overplotting with `alpha`
-
-```{r}
-#| echo: true
-
-ggplot(data = rna_fc, mapping = aes(x = time_4_vs_0, y = time_8_vs_0)) +
-  geom_point(alpha = 0.3)
-
-```
-
-## ggplot2 in action - `geom_points()`  {auto-animate="true"}
-
-I would like more colors ...
-
-```{r}
-#| echo: true
-
-ggplot(data = rna_fc, mapping = aes(x = time_4_vs_0, y = time_8_vs_0)) +
-  geom_point(alpha = 0.3, color = "blue")
-
-```
-
-## ggplot2 in action - `geom_points()`  {auto-animate="true"}
-
-Can we color by a categorie (`gene_biotype`)? Sure ...
-
-```{r}
-#| echo: true
-
-ggplot(data = rna_fc, mapping = aes(x = time_4_vs_0, y = time_8_vs_0)) +
-  geom_point(alpha = 0.3, aes(color = gene_biotype))
-
-```
-
-## ggplot2 in action - `geom_points()`  {auto-animate="true"}
-
-Color by categorie can be defined before the `geom` call
-
-```{r}
-#| echo: true
-
-ggplot(data = rna_fc, mapping = aes(x = time_4_vs_0, y = time_8_vs_0,
-                                color = gene_biotype)) +
-  geom_point(alpha = 0.3)
-
-```
-
-## ggplot2 in action - `geom_points()`  {auto-animate="true"}
-
-Adding additional elements, such as a diagonal with `geom_abline()`
-
-```{r}
-#| echo: true
-
-ggplot(data = rna_fc, mapping = aes(x = time_4_vs_0, y = time_8_vs_0,
-                                color = gene_biotype)) +
-  geom_point(alpha = 0.3) +
-  geom_abline(intercept = 0)
-
+rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv"
+rna_data = read_csv(rnaseq_file)
+rna_long = rna_data %>% 
+           mutate(expression_log = log2(expression + 1))
+rna_long
 ```
 
 ## ggplot2 in action - `geom_boxplot()`  {auto-animate="true"}
 
-Boxplots are good to visualize distributions, let's see gene expression over samples
+Boxplots are good to visualize distributions, let's see gene log2-expression over samples
 
 ```{r}
 #| echo: true
 
-ggplot(data = rna,
-         mapping = aes(y = expression_log, x = sample)) +
+ggplot(rna_long, aes(y = expression_log, x = sample)) +
   geom_boxplot()
 
 ```
@@ -237,8 +231,7 @@ We can add the points over the boxplot with `geom_jitter()`
 ```{r}
 #| echo: true
 
-ggplot(data = rna,
-         mapping = aes(y = expression_log, x = sample)) +
+ggplot(rna_long, aes(y = expression_log, x = sample)) +
   geom_jitter(alpha = 0.2, color = "tomato") +
   geom_boxplot(alpha = 0)
 
@@ -247,15 +240,12 @@ ggplot(data = rna,
 
 ## ggplot2 in action - `geom_boxplot()`  {auto-animate="true"}
 
-But I can't read the labels!!
-
-`theme` can be used to modify the axis labels
+I can't read the labels!! `theme` can modify the axis labels
 
 ```{r}
 #| echo: true
 
-ggplot(data = rna,
-         mapping = aes(y = expression_log, x = sample)) +
+ggplot(rna_long, aes(y = expression_log, x = sample)) +
   geom_jitter(alpha = 0.2, color = "tomato") +
   geom_boxplot(alpha = 0) +
   theme(axis.text.x = element_text(angle = 90,  hjust = 0.5, vjust = 0.5))
@@ -270,9 +260,7 @@ Can we color each sample per time point? Sure ...
 #| echo: true
 
 # time as integer
-ggplot(data = rna,
-         mapping = aes(y = expression_log,
-                       x = sample)) +
+ggplot(rna_long, aes(y = expression_log, x = sample)) +
   geom_jitter(alpha = 0.2, aes(color = time)) +
   geom_boxplot(alpha = 0) +
   theme(axis.text.x = element_text(angle = 90,  hjust = 0.5, vjust = 0.5))
@@ -289,97 +277,13 @@ Can we color each sample per time point? Sure ...
 #| echo: true
 
 # time as factor
-ggplot(data = rna,
-         mapping = aes(y = expression_log,
-                       x = sample)) +
+ggplot(rna_long, aes(y = expression_log, x = sample)) +
   geom_jitter(alpha = 0.2, aes(color = as.factor(time))) +
   geom_boxplot(alpha = 0) +
   theme(axis.text.x = element_text(angle = 90,  hjust = 0.5, vjust = 0.5))
 
 ```
 Better ...
-
-
-## ggplot2 in action - `geom_violin()`  {auto-animate="true"}
-
-Same information can be plot in a Violin plot
-
-```{r}
-#| echo: true
-
-ggplot(data = rna,
-         mapping = aes(y = expression_log, x = sample)) +
-  geom_violin(aes(fill = as.factor(time))) +
-  theme(axis.text.x = element_text(angle = 90,  hjust = 0.5, vjust = 0.5))
-
-```
-
-## ggplot2 in action - `geom_violin()`  {auto-animate="true"}
-
-But now I want to see colors by sex ... OK
-
-```{r}
-#| echo: true
-
-ggplot(data = rna,
-         mapping = aes(y = expression_log, x = sample)) +
-  geom_violin(aes(fill = sex)) +
-  theme(axis.text.x = element_text(angle = 90,  hjust = 0.5, vjust = 0.5))
-
-```
-
-## ggplot2 in action - `geom_line()`  {auto-animate="true"}
-
-`geom_line()` can be used to generate "line" plots ... 
-
-Let's generate a dataset of the mean expression per duration of the infection 
-for the 10 genes having the highest log fold changes comparing time 8 versus time 0. 
-
-```{r}
-#| echo: true
-
-rna_fc = rna_fc %>% arrange(desc(time_8_vs_0))
-
-genes_selected = rna_fc$gene[1:10]
-
-sub_rna <- rna %>%
-    filter(gene %in% genes_selected)
-
-mean_exp_by_time <- sub_rna %>%
-  group_by(gene,time) %>%
-    summarize(mean_exp = mean(expression_log))
-
-mean_exp_by_time
-
-```
-
-## ggplot2 in action - `geom_line()`  {auto-animate="true"}
-
-Now, we can plot the patterns
-
-```{r}
-#| echo: true
-
-ggplot(data = mean_exp_by_time,
-       mapping = aes(x = time, y = mean_exp, group = gene)) +
-  geom_line()
-
-```
-Why do we need `group`?
-
-## ggplot2 in action - `geom_line()`  {auto-animate="true"}
-
-Adding colors and gene labels
-
-```{r}
-#| echo: true
-
-ggplot(data = mean_exp_by_time,
-       mapping = aes(x = time, y = mean_exp, color = gene)) +
-  geom_line()
-
-```
-No group because ...
 
 ## ggplot2 in action - `facet_wrap()`  {auto-animate="true"}
 
@@ -388,9 +292,9 @@ We can plot multiple elements in a single plot separately with `facet_wrap()`
 ```{r}
 #| echo: true
 
-ggplot(data = mean_exp_by_time,
-       mapping = aes(x = time, y = mean_exp)) + geom_line() +
-  facet_wrap(~ gene)
+ggplot(rna_long,aes(x = expression_log)) +
+  geom_histogram(bins = 50) +
+  facet_wrap(~ sample)
 
 ```
 
@@ -401,55 +305,22 @@ By default, all scales are the same, to avoid this:
 ```{r}
 #| echo: true
 
-ggplot(data = mean_exp_by_time,
-       mapping = aes(x = time, y = mean_exp)) +
-  geom_line() +
-  facet_wrap(~ gene, scales = "free_y")
+ggplot(rna_long, aes(x = expression_log)) +
+  geom_histogram(bins = 50) +
+  facet_wrap(~ sample, scales = "free_y")
 
 ```
-
-## ggplot2 in action - `facet_wrap()`  {auto-animate="true"}
-
-To plot the same per sex, we need to generate a new dataset
-
-```{r}
-#| echo: true
-
-mean_exp_by_time_sex <- sub_rna %>%
-  group_by(gene, time, sex) %>%
-    summarize(mean_exp = mean(expression_log))
-
-mean_exp_by_time_sex
-
-```
-
-
-## ggplot2 in action - `facet_wrap()`  {auto-animate="true"}
-
-Now we plot ...
-
-```{r}
-#| echo: true
-
-ggplot(data = mean_exp_by_time_sex,
-       mapping = aes(x = time, y = mean_exp, color = sex)) +
-  geom_line() +
-  facet_wrap(~ gene, scales = "free_y")
-
-```
-
 
 ## ggplot2 in action - `theme_bw()`  {auto-animate="true"}
 
-For printing we could want to save ink, `ggplot2` supports themes such as `theme_bw()`
+`ggplot2` supports themes such as `theme_bw()`
 
 ```{r}
 #| echo: true
 
-ggplot(data = mean_exp_by_time_sex,
-       mapping = aes(x = time, y = mean_exp, color = sex)) +
-  geom_line() +
-  facet_wrap(~ gene, scales = "free_y") +
+ggplot(rna_long, aes(x = expression_log)) + 
+  geom_histogram(bins = 50) +
+  facet_wrap(~ sample, scales = "free_y") +
   theme_bw() +
   theme(panel.grid = element_blank())
   
@@ -459,54 +330,24 @@ ggplot(data = mean_exp_by_time_sex,
 <https://ggplot2.tidyverse.org/reference/ggtheme.html>
 :::
 
-## ggplot2 in action - customization  {auto-animate="true"}
-
-Many elements can be configured individually, helping to obtain the exact plot you want
-
-```{r}
-#| echo: true
-
-ggplot(data = mean_exp_by_time_sex,
-       mapping = aes(x = time, y = mean_exp, color = sex)) +
-  geom_line() +
-  facet_wrap(~ gene, scales = "free_y") +
-  theme_bw() +
-  theme(panel.grid = element_blank()) +
-  labs(title = "Mean gene expression by duration of the infection",
-       x = "Duration of the infection (in days)",
-       y = "Mean gene expression")  +
-  theme(text = element_text(size = 16),
-        axis.text.x = element_text(colour = "royalblue4", size = 12),
-        axis.text.y = element_text(colour = "royalblue4", size = 12),
-        panel.grid = element_line(colour="lightsteelblue1"),
-        legend.position = "top")
-  
-```
-
 ## ggplot2 in action - `ggsave()`  {auto-animate="true"}
 
 At the end, we would like to save our gorgeous plot, we can use `ggsave()`.
 
 ```{r}
 #| echo: true
+#| eval: false
 
-my_plot = ggplot(data = mean_exp_by_time_sex,
-       mapping = aes(x = time, y = mean_exp, color = sex)) +
-  geom_line() +
-  facet_wrap(~ gene, scales = "free_y") +
-  labs(title = "Mean gene expression by duration of the infection",
-         x = "Duration of the infection (in days)",
-         y = "Mean gene expression") +
-  guides(color=guide_legend(title="Gender")) +
-  theme_bw() +
-  theme(axis.text.x = element_text(colour = "royalblue4", size = 12),
-        axis.text.y = element_text(colour = "royalblue4", size = 12),
-        text = element_text(size = 16),
-        panel.grid = element_line(colour="lightsteelblue1"),
-        legend.position = "top")
+my_plot = ggplot(rna_long, aes(x = expression_log)) +
+          geom_histogram(bins = 50) +
+          facet_wrap(~ sample, scales = "free_y") +
+          theme_bw() +
+          theme(panel.grid = element_blank())
 
-ggsave("mean_exp_by_time_sex.png", my_plot, width = 15,
-       height = 10)
+ggsave("samples_expr_histograms.png", 
+        my_plot,
+        width = 15,
+        height = 10)
   
 ```
 
@@ -523,4 +364,5 @@ See this handy cheatsheet for lots more!
 
 ## Any questions?
 
-Next, we will learn a bit about tidying data. 
+![](images/complaining-data-science-data-science.jpg)
+

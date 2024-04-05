@@ -1,6 +1,9 @@
 ---
 title: "08: Intro to Data Wrangling with Dplyr"
 author: "Juan Caballero"
+categories:
+  - tibbles
+  - data wrangling
 format:
   revealjs:
     logo: images/maxplanck-ie.jpg
@@ -19,22 +22,13 @@ The six main verbs are:
 -   `mutate()`: creates new columns
 -   `filter()`: filters rows based on criteria
 -   `select()`: selects columns
-
-::: footer
-<https://maxplanck-ie.github.io/Rintro>
-:::
-
-## Introduction to Dplyr {auto-animate="true"}
-
-Dplyr uses a functions that act as verbs to transform data frames in ways to facilitate data analysis.
-
-The six main verbs are:
-
 -   `summarize()`: creates summary statistics
--   `group_by()`: does analysis on subsets of the dataframe based on the contents of a column
+-   `group_by()`: analysis on subsets based on a column
 -   `arrange()`: sorts rows
 
 ## Dplyr in action {auto-animate="true"}
+
+`rnaseq.csv` is the long-format for the mouse influenza experiment. 
 
 ```{r}
 #| echo: true
@@ -43,42 +37,56 @@ library(tidyverse)
 rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv"
 
 rna = read_csv(rnaseq_file)
+```
+## Dplyr in action {auto-animate="true"}
 
-head(rna)
+Contains: gene, sample, expression, organism, age, sex, infection, strain, time, tissue, mouse, 
+ENTREZID, product, ensembl_gene_id, external_synonym, chromosome_name,
+gene_biotype, phenotype_description, hsapiens_homolog_associated_gene_name
+
+```{r}
+#| echo: true
+rna
 ```
 
 ## Dplyr in action - `select()` {auto-animate="true"}
 
+Syntax: `select(data, col1, col2, col3, ...)`
 ```{r}
 #| echo: true
 
-# column selection
 select(rna, gene, sample, tissue, expression)
-
 ```
 
 ## Dplyr in action - `select()` {auto-animate="true"}
 
+Column exclusion can be defined with `-`
 ```{r}
 #| echo: true
 
-# column exclusion
-select(rna, -tissue, -organism)
-
+select(rna, -tissue, -strain, -organism)
 ```
+
+## Hands on
+
+- Select `gene, ensembl_gene_id, hsapiens_homolog_associated_gene_name`
+
+- Select `gene, gene_biotype, phenotype_description`
 
 ## Dplyr in action - `filter()` {auto-animate="true"}
 
+Syntax: `filter(data, filters)`
+
+Comparisons: `== > >= < <=` 
 ```{r}
 #| echo: true
 
-# get data which sex is Male
 filter(rna, sex == "Male")
-
 ```
 
 ## Dplyr in action - `filter()` {auto-animate="true"}
 
+Logical operators: `& | ! xor()`
 ```{r}
 #| echo: true
 
@@ -86,9 +94,26 @@ filter(rna, sex == "Male")
 filter(rna, sex == "Male" & infection == "NonInfected")
 
 ```
+## Dplyr in action - `filter()` {auto-animate="true"}
+
+Multiple filters can be used with `,`
+```{r}
+#| echo: true
+
+# get data which sex is Male AND infection status is NonInfected
+filter(rna, sex == "Male", infection == "NonInfected")
+```
+
+## Hands on {auto-animate="true"}
+
+- Filter data for `females` and `infected`
+
+- Filter data for `Cerebellum` in `time 0`
+
 
 ## Dplyr in action - `filter()` {auto-animate="true"}
 
+It can evaluate missing values with `is.na()`
 ```{r}
 #| echo: true
 
@@ -109,7 +134,9 @@ filter(rna, !is.na(hsapiens_homolog_associated_gene_name))
 
 ## Dplyr in action - Pipes {auto-animate="true"}
 
-What if you want to select and filter?
+What if you want to select and filter? 
+
+For example get `gene, sample, tissue, expression` for `Males`
 
 Option 1. Generate intermediate tables
 
@@ -119,41 +146,38 @@ Option 3. Plumbering with Pipes
 
 ## Dplyr in action - Pipes {auto-animate="true"}
 
-What if you want to select and filter?
-
 Option 1. Generate intermediate tables
 
 ```{r}
 #| echo: true
+#| eval: false
 
 # step 1, filter males
 rna2 = filter(rna, sex == "Male")
 
 # step 2, filter columns
 rna3 = select(rna2, gene, sample, tissue, expression)
-
-rna3
 ```
+Why is this bad?
 
 ## Dplyr in action - Pipes {auto-animate="true"}
-
-What if you want to select and filter?
 
 Option 2. Use nested operations
 
 ```{r}
 #| echo: true
+#| eval: false
 
 rna3 = select(filter(rna, sex == "Male"), gene, sample, tissue, expression)
-
-rna3
 ```
+
+Why is this also bad?
 
 ## Dplyr in action - Pipes {auto-animate="true"}
 
-What if you want to select and filter?
-
 Option 3. Plumbering with Pipes - Yeah!
+
+Is this better?
 
 ```{r}
 #| echo: true
@@ -161,7 +185,6 @@ Option 3. Plumbering with Pipes - Yeah!
 rna3 = rna %>%
         filter(sex == "Male") %>%
         select(gene, sample, tissue, expression)
-
 rna3
 ```
 
@@ -169,12 +192,11 @@ Pipes in R look like `%>%` (made available via the magrittr package) or `|>` (th
 
 ## Hands on {auto-animate="true"}
 
-Using pipes, subset the `rna` data to keep observations in female mice at time 0, where the gene has an expression higher than 50000, and retain only the columns `gene`, `sample`, `time`, `expression` and `age`.
+Using pipes, subset the `rna` data to keep observations in female mice at time 0, where the gene
+has an expression higher than 50000, and retain only the columns `gene`, `sample`, `time`, `expression` and `age`.
 
 
 ## Hands on {auto-animate="true"}
-
-Using pipes, subset the `rna` data to keep observations in female mice at time 0, where the gene has an expression higher than 50000, and retain only the columns `gene`, `sample`, `time`, `expression` and `age`.
 
 Solution
 
@@ -182,11 +204,8 @@ Solution
 #| echo: true
 
 rna %>%
-  filter(expression > 50000,
-         sex == "Female",
-         time == 0 ) %>%
-  select(gene, sample, time, expression, age)
-
+  filter(expression > 50000, sex == "Female", time == 0 ) %>%
+  select(gene, sample, time, expression, sex)
 ```
 
 ## Dplyr in action - `mutate()` {auto-animate="true"}
@@ -219,13 +238,13 @@ rna %>%
 
 ## Hands on {auto-animate="true"}
 
-Create a new data frame from the rna data that meets the following criteria: 
-contains only the gene, chromosome_name, phenotype_description, sample, and 
-expression columns. The expression values should be log-transformed. This data 
-frame must only contain genes located on sex chromosomes, associated with a 
-phenotype_description, and with a log expression higher than 5.
+Create a new data frame from the `rna` data that meets the following criteria: 
+contains only `gene, chromosome_name, phenotype_description, sample, 
+expression`. The expression values should be `log-transformed`. This data 
+ must only contain genes located on `sex chromosomes`, associated with a 
+`phenotype_description`, and with a `log-expression higher than 5`.
 
-Hint: think about how the commands should be ordered to produce this data frame!
+Hint: think about how the commands should be ordered to produce this!
 
 ## Hands on {auto-animate="true"}
 
@@ -235,11 +254,11 @@ Solution:
 #| echo: true
 
 rna %>%
-  mutate(expression = log(expression)) %>%
-  select(gene, chromosome_name, phenotype_description, sample, expression) %>%
   filter(chromosome_name == "X" | chromosome_name == "Y") %>%
   filter(!is.na(phenotype_description)) %>%
-  filter(expression > 5)
+  mutate(expression_log = log(expression)) %>%
+  select(gene, chromosome_name, phenotype_description, sample, expression_log) %>%
+  filter(expression_log > 5)
 
 ```
 
@@ -251,12 +270,12 @@ Data analysis commonly needs to split the data, perfom computations and then com
 #| echo: true
 
 # group data by 'gene'
+# Note the 'Groups: gene [1,474]'
 rna %>%
   group_by(gene)
 
 ```
 
-Note the `Groups: gene [1,474]`
 
 ## Dplyr in action - `group_by()` {auto-animate="true"}
 
@@ -265,15 +284,15 @@ Note the `Groups: gene [1,474]`
 #| echo: true
 
 # group data by 'sample'
+# Note the 'Groups: sample [22]'
 rna %>%
   group_by(sample)
 
 ```
 
-Note the `Groups: sample [22]`
 
 
-## Dplyr in action - `summaryse()` {auto-animate="true"}
+## Dplyr in action - `summarise()` {auto-animate="true"}
 
 After grouping, we can do some computation as `summarise()`
 
@@ -287,7 +306,7 @@ rna %>%
 
 ```
 
-## Dplyr in action - `summaryse()` {auto-animate="true"}
+## Dplyr in action - `summarise()` {auto-animate="true"}
 
 ```{r}
 #| echo: true
@@ -299,7 +318,7 @@ rna %>%
 
 ```
 
-## Dplyr in action - `summaryse()` {auto-animate="true"}
+## Dplyr in action - `summarise()` {auto-animate="true"}
 
 Multiple grouping levels
 
@@ -313,7 +332,7 @@ rna %>%
 
 ```
 
-## Dplyr in action - `summaryse()` {auto-animate="true"}
+## Dplyr in action - `summarse()` {auto-animate="true"}
 
 Multiple summarise levels
 
@@ -334,8 +353,6 @@ Calculate the mean expression level of gene “Dok3” by timepoints.
 
 
 ## Hands on {auto-animate="true"}
-
-Calculate the mean expression level of gene “Dok3” by timepoints.
 
 Solution
 
