@@ -84,9 +84,6 @@ sessionInfo()
 x <- 2*pi # pre-defined constant pi
 x         # see value of object x = show(x) 
 
-x < -2    # Careful: what's going on here?
-x
-
 x = 2  # "=" as in most other languages.  
 x      # x was overwritten
 
@@ -109,16 +106,8 @@ hi
 Vectors illustrate how complex data structures can be built from smaller blocks. 
 Here we learn how to create and inspect vectors.
 ```{r vectors}
-v=c(1,2)            # combine arguments into vector
-v                   # display v
-
-# functions for vectors
-str(v)              # structure of v (especially useful for long and structured objects)
-typeof(v)           # type of v ( ~ storage mode)
-class(v)            # class of v (determines how certain functions will work with v)
-length(v)
-sum(v)
-summary(v)
+v=c(1,2)    # combine arguments into vector
+v           # display v
 ```
 # Accessing Vectors
 Frequently we need to access specific elements from a vector
@@ -153,19 +142,29 @@ v1=1:10-1
 v2=1:(10-1)
 ```
 
+# Functions for vectors
+```{r vectors_funcs}
+str(v)       # structure of v (especially useful for long and structured objects)
+typeof(v)    # type of v ( ~ storage mode)
+class(v)     # class of v (determines how certain functions will work with v)
+length(v)    # length
+rev(v)       # reverse vectors
+sum(v)
+summary(v)
+```
 
 # Vector Operations
-```{r eval=FALSE}
+```{r vector_ops, eval=FALSE}
 v1=1:3      # = c(1,2,3)
 v2=rep(2,3) # = c(2,2,2)
 
-v1+v2      # elementwise addition
-v1*v2      # ... multiplication
+v1 + v2    # elementwise addition
+v1 * v2    # ... multiplication
 v1 > v2    # ... comparisons
 v1 %*% v2  # scalar product
 ```
 
-**Task**: Define your own vectors and explore some numerical operations
+**Task**: Define your own vectors and explore some functions and operations (sort, rank, ...)
 
 # Misc: Concepts and Pecularities
 ```{r misc, eval=FALSE}
@@ -176,16 +175,20 @@ v + c(10,20)             # Recycling
 v + c(10,20,30)          # Warning != Error
 
 #v %*% c(10,20,30)        # Error = Error
+```
+
+
+# Naming of Vectors
+```{r naming, eval=FALSE}
+v=1:4
+names(v)
 
 letters                  # built-in vector. Try LETTERS 
 typeof(letters)          # there is more than numbers
 
 names(v)=letters[1:4]    # naming of vector elements (for convenience)
 v["b"]                   # index by name
-
-rev(v)                   # reverse vectors
 ```
-
 ****
 
 # Learning Curve:
