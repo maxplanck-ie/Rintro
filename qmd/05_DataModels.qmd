@@ -167,17 +167,26 @@ anova(fit)
 Determine residual standard error `sigma` for different fits with various complexity
 
 ```{r model_comp}
-fit=lm(Petal.Width ~ Petal.Length, data=iris)
-paste(sigma(fit), deparse(formula(fit)))
+# A list of formulae
+formula_list = list(
+  Petal.Width ~ Petal.Length,                 # as before (single variable)
+  Petal.Width ~ Petal.Length + Sepal.Length,  # function of more than one variable
+  Petal.Width ~ Species,                      # function of categorical variables
+  Petal.Width ~ .                             # function of all other variable (numerical and categorical)
+)
 
-fit=lm(Petal.Width ~ Petal.Length + Sepal.Length, data=iris)  # function of more than one variable
-paste(sigma(fit), deparse(formula(fit)))
+sig=c()
+for (f in formula_list) {
+  fit = lm(f, data=iris)
+  sig = c(sig, sigma(fit))
+  print(paste(sigma(fit), format(f)))
+}
 
-fit=lm(Petal.Width ~ Species, data=iris)                      # function of categorical variables
-paste(sigma(fit), deparse(formula(fit)))
+# more concise loop using lapply/sapply
+# sig = sapply(lapply(formula_list, lm, data=iris), sigma)
 
-fit=lm(Petal.Width ~ . , data=iris)                           # function of all other variable (numerical and categorical)
-paste(sigma(fit), deparse(formula(fit)))
+par(mar=c(4,20,2,2))
+barplot(sig ~ format(formula_list), horiz=TRUE, las=2, ylab="", xlab="sigma")
 ```
 
 ... more complex models tend to have smaller residual standard error (overfitting?)
