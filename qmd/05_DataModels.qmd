@@ -219,6 +219,6 @@ Linear models $y_i=\theta_0 + \theta_1  x_i + \epsilon_i$ make certain assumptio
 # Review
 * dependencies between variable can often be modeled
 * linear model lm(): fitting, summary and interpretation
-* correlation coefficients can be misleading
+* linear models with numerical and factorial variables
 * linear models may not be appropriate $\to$ example(anscombe)
 
