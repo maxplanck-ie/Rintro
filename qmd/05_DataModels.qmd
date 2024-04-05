@@ -185,8 +185,10 @@ for (f in formula_list) {
 # more concise loop using lapply/sapply
 # sig = sapply(lapply(formula_list, lm, data=iris), sigma)
 
+op=par(no.readonly=TRUE) 
 par(mar=c(4,20,2,2))
 barplot(sig ~ format(formula_list), horiz=TRUE, las=2, ylab="", xlab="sigma")
+par(op)     # reset graphical parameters
 ```
 
 ... more complex models tend to have smaller residual standard error (overfitting?)
