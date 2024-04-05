@@ -18,7 +18,7 @@ categories:
 - selection/unselection of elements `[,-5]`
 - plot() function and arguments
 
-```{r}
+```{r cor_plot}
 # assign species-colors to each observation 
 cols = iris$Species                            # understand how color is defined
 plot(iris[,-5], col=cols, lower.panel=NULL)   # "cols" was defined in task above
@@ -53,9 +53,14 @@ abline(fit, lwd=3, lty=2)                           # add regression line
 
 **Task**: Extract the coefficients of the fitted line.
 
-```{r, echo=FALSE}
+```{r get_coef, echo=FALSE}
 fit$coefficients
-coef(fit)
+coef(fit) 
+```
+
+There are many more methods to access information for the `lm` class
+```{r class_methods}
+methods(class='lm')
 ```
 
 
@@ -70,16 +75,14 @@ This is a good fit as suggested by a
 
 - small residual standard error
 - a large coefficient of variation $R^2$ 
-- a small p-value 
+- large F-statistics $\to$ small p-value 
 - and by visualization
 
+Fraction of variation explained by model:
 $$
 R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{\sum_i(y_i - y(\theta,x_i))^2}{\sum_i(y_i-\bar{y})^2}
 $$
-There are manny more methods to access information for the `lm` class
-```{r class_methods}
-methods(class='lm')
-```
+
 
 
 # Predictions (with confidence intervals)
@@ -107,19 +110,21 @@ polygon(c(rev(xn), xn), c(rev(p[ ,"upr"]), p[ ,"lwr"]), col = rgb(1,0,0,0.5), bo
 # Poor Model
 
 Just replace "Petal" with "Sepal"
-```{r}
+```{r poor_model}
 plot(Sepal.Width ~ Sepal.Length, data=iris, col=cols)  
 fit1=lm(Sepal.Width ~ Sepal.Length, data=iris)     
 abline(fit1, lwd=3, lty=2)    
 confint(fit1)                     # estimated slope is indistinguishable from zero
 summary(fit1)
 ```
-*Interpretation*: slope is not significantly distinct from 0.
-Model does not account for much of the observed variation.
+*Interpretation*: 
+
+- slope is not significantly distinct from 0.
+- model does not account for much of the observed variation.
 
 
 **Task**: Use the above template to make predictions for the new poor model.
-```{r echo=FALSE}
+```{r poor_model_pred, echo=FALSE}
 x=iris$Sepal.Length                       # explanatory variable from fit (here:Sepal.Length)
 xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables
 ndf=data.frame(Sepal.Length=xn)           # put them into data frame
@@ -136,7 +141,7 @@ lines(xn, p[,"upr"] )
 In the iris example the "Species" variable is a factorial (categorical) variable with 3 levels.
 Other typical examples: different experimental conditions or treatments.
 
-```{r}
+```{r model_factorial}
 plot(Petal.Width ~ Species, data=iris)
 fit=lm(Petal.Width ~ Species, data=iris)
 summary(fit)
@@ -161,15 +166,18 @@ anova(fit)
 # More complicated models
 Determine residual standard error `sigma` for different fits with various complexity
 
-```{r}
+```{r model_comp}
 fit=lm(Petal.Width ~ Petal.Length, data=iris)
-paste(toString(fit$call), sigma(fit))
+paste(sigma(fit), deparse(formula(fit)))
+
 fit=lm(Petal.Width ~ Petal.Length + Sepal.Length, data=iris)  # function of more than one variable
-paste(toString(fit$call), sigma(fit))
+paste(sigma(fit), deparse(formula(fit)))
+
 fit=lm(Petal.Width ~ Species, data=iris)                      # function of categorical variables
-paste(toString(fit$call), sigma(fit))
+paste(sigma(fit), deparse(formula(fit)))
+
 fit=lm(Petal.Width ~ . , data=iris)                           # function of all other variable (numerical and categorical)
-paste(toString(fit$call), sigma(fit))
+paste(sigma(fit), deparse(formula(fit)))
 ```
 
 ... more complex models tend to have smaller residual standard error (overfitting?)
@@ -192,8 +200,8 @@ Linear models $y_i=\theta_0 + \theta_1  x_i + \epsilon_i$ make certain assumptio
 
 * residuals $\epsilon_i$ are independent from each other (non-linear patterns?)
 * residuals are normally distributed
-* have equal variance $\sigma^2$ (homoscedascity)
-* are there outliers (large residuals) or observations with strong influence on fit
+* have equal variance $\sigma^2$ ("homoscedasticity")
+* no outliers (large residuals) or observations with strong influence on fit
 
 ***
 
@@ -201,5 +209,5 @@ Linear models $y_i=\theta_0 + \theta_1  x_i + \epsilon_i$ make certain assumptio
 * dependencies between variable can often be modeled
 * linear model lm(): fitting, summary and interpretation
 * correlation coefficients can be misleading
-* linear models may not be appropriate.  >example(anscombe)
+* linear models may not be appropriate $\to$ example(anscombe)
 
