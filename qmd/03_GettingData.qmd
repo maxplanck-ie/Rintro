@@ -86,7 +86,7 @@ write.csv(iris, gzfile("output/iris.csv.gz"))
 - Save only the subset of flowers where Species="setosa" to a file setosa.tsv
 
 ```{r, eval=FALSE, echo=FALSE}
-write.csv(iris[iris$Species=="setosa",], file="setosa.csv", row.names=FALSE, quote=FALSE)
+write.csv(iris[iris$Species=="setosa",], file="output/setosa.csv", row.names=FALSE, quote=FALSE)
 ```
 
 
