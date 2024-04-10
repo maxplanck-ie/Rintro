@@ -154,7 +154,6 @@ In Rstudio they can be created using `File > New File > R script`
   - How many different species are in the new data_frame. Save this number as variable `ns` (hint: there are two useful functions: `unique()` and `length()`)
   - write the new `data_frame d` in comma seperated file `iris_big_sepal.csv`
   - save the whole environment in a file `analysis.RData` 
-  - delete all variables in the environment
 * Save the script and run it (source)
 * Bonus: Delete all whole environment reload it from the image file
 
