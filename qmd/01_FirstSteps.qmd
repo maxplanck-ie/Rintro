@@ -76,6 +76,7 @@ sessionInfo()
 ```
 
 **Query**: Using sessionInfo() determine which R-version you are running.
+
 ****
 
 # Assigning values to objects
