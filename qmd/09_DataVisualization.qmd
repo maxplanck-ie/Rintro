@@ -77,11 +77,13 @@ Let's plot a MA-like plot for `GSM2545336` vs `GSM2545380`, first, we generate t
 ```{r}
 #| echo: true
 
+# log2fc:     M = log2(x/y) = log2(x) - log2(y)
+# norm_mean:  A = 1/2 ( log2(x) + log2(y) )
 ma_data = rna %>% 
           select(gene, GSM2545336, GSM2545380) %>% 
           mutate(
-              norm_mean = log2(GSM2545336 + 1) + log2(GSM2545380 + 1) / 2,
-              log2fc = log2(GSM2545336 + 1) / log2(GSM2545380 + 1)
+              norm_mean = ( log2(GSM2545336 + 1) + log2(GSM2545380 + 1) ) / 2,
+              log2fc = log2(GSM2545336 + 1) - log2(GSM2545380 + 1)
             ) %>% 
             select(gene, log2fc, norm_mean)
 ma_data
