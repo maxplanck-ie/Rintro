@@ -62,7 +62,11 @@ select(rna, gene, sample, tissue, expression)
 ## Dplyr in action - `select()` {auto-animate="true"}
 
 Column exclusion can be defined with `-`
-```{r}#| echo: true
+```{r}
+#| echo: true
+select(rna, gene, -sample, -tissue, -time)
+
+```
 
 
 ## Hands on  {auto-animate="true"}
@@ -84,7 +88,7 @@ select(rna, gene, ensembl_gene_id, hsapiens_homolog_associated_gene_name)
 - Select `gene, gene_biotype, phenotype_description`
 ```{r}
 #| echo: true
-select(rna, gene_biotype, phenotype_description)
+select(rna, gene, gene_biotype, phenotype_description)
 ```
 
 ## Dplyr in action - `filter()` {auto-animate="true"}
@@ -124,6 +128,23 @@ filter(rna, sex == "Male", infection == "NonInfected")
 
 - Filter data for `Cerebellum` in `time 0`
 
+## Hands on {auto-animate="true"}
+
+- Filter data for `females` and `infected`
+
+```{r}
+#| echo: true
+filter(rna, sex == "Female", infection != "NonInfected")
+```
+
+## Hands on {auto-animate="true"}
+
+- Filter data for `Cerebellum` in `time 0`
+```{r}
+#| echo: true
+
+filter(rna, tissue == "Cerebellum", time == 0)
+```
 
 ## Dplyr in action - `filter()` {auto-animate="true"}
 
