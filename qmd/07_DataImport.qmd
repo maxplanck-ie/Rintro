@@ -274,7 +274,7 @@ Finally, we could need to save our data as a new file for later use or sharing, 
 #| echo: true
 #| eval: false
 
-write_csv(rna_wide_noNAs, file = "rna_wide.csv")
+write_csv(rna_wide_noNAs, file = "output/rna_wide.csv")
 
 ```
 

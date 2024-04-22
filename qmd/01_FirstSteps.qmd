@@ -75,6 +75,8 @@ One way to communicate this context is with the output from sessionInfo().
 sessionInfo()
 ```
 
+**Query**: Using sessionInfo() determine which R-version you are running.
+
 ****
 
 # Assigning values to objects

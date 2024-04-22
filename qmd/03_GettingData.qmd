@@ -86,7 +86,7 @@ write.csv(iris, gzfile("output/iris.csv.gz"))
 - Save only the subset of flowers where Species="setosa" to a file setosa.tsv
 
 ```{r, eval=FALSE, echo=FALSE}
-write.csv(iris[iris$Species=="setosa",], file="setosa.csv", row.names=FALSE, quote=FALSE)
+write.csv(iris[iris$Species=="setosa",], file="output/setosa.csv", row.names=FALSE, quote=FALSE)
 ```
 
 
@@ -154,7 +154,6 @@ In Rstudio they can be created using `File > New File > R script`
   - How many different species are in the new data_frame. Save this number as variable `ns` (hint: there are two useful functions: `unique()` and `length()`)
   - write the new `data_frame d` in comma seperated file `iris_big_sepal.csv`
   - save the whole environment in a file `analysis.RData` 
-  - delete all variables in the environment
 * Save the script and run it (source)
 * Bonus: Delete all whole environment reload it from the image file
 
