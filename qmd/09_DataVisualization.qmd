@@ -153,12 +153,23 @@ We can overlap new elements, such as an horizontal line `geom_hline()`
 
 ggplot(ma_data, aes(x = norm_mean, y = log2fc)) +
   geom_point(color = 'blue', alpha = 0.1) +
-  geom_hline(yintercept = 1, color = 'red')
+  geom_hline(yintercept =  1, color = 'red') +
+  geom_hline(yintercept = -1, color = 'red')
 ```
 
-## Hands on
+## Hands on {auto-animate="true"}
 
 Generate a similar plot comparing another 2 samples, use red "triangles" as points with a vertical green line in `norm_mean = 5`
+
+## Hands on {auto-animate="true"}
+```{r}
+#| echo: true
+
+ggplot(ma_data, aes(x = norm_mean, y = log2fc)) +
+  geom_point(color = 'red', shape = 17, alpha = 0.1) +
+  geom_vline(yintercept = 5, color = 'green')
+```
+
 
 ## ggplot2 in action - `geom_histogram()`  {auto-animate="true"}
 
@@ -197,10 +208,18 @@ hist_plot + geom_histogram(bins = 100, color = 'blue')
 
 ```
 
-## Hands on
+## Hands on {auto-animate="true"}
 
 Create a new histogram for another sample values but in log2 scale
 
+## Hands on {auto-animate="true"}
+
+```{r}
+#| echo: true
+hist_plot = ggplot(rna, aes(x = log2(GSM2545336 + 1))
+hist_plot + geom_histogram(bins = 100, color = 'blue')
+
+```
 ## New dataset
 
 `rnaseq.csv` is the long-format for the mouse influenza experiment. Let's add a log2-expression column
