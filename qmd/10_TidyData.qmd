@@ -1,6 +1,9 @@
 ---
 title: "10: Tidy Data"
 author: "Juan Caballero"
+categories:
+  - tables
+  - join
 format:
   revealjs:
     logo: images/maxplanck-ie.jpg
