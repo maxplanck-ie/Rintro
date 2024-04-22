@@ -159,6 +159,12 @@ Get the basic statistics for each sample in `rna`
 
 Which sample has the highest mean expression?
 
+## Hands on {auto-animate="true"}
+
+```{r}
+#| echo: true
+summary(rna)
+```
 
 ## Dplyr in action - `pivot_longer()` {auto-animate="true"}
 
