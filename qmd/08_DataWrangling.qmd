@@ -38,6 +38,7 @@ rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd
 
 rna = read_csv(rnaseq_file)
 ```
+
 ## Dplyr in action {auto-animate="true"}
 
 Contains: gene, sample, expression, organism, age, sex, infection, strain, time, tissue, mouse, 
@@ -61,17 +62,30 @@ select(rna, gene, sample, tissue, expression)
 ## Dplyr in action - `select()` {auto-animate="true"}
 
 Column exclusion can be defined with `-`
-```{r}
-#| echo: true
+```{r}#| echo: true
 
-select(rna, -tissue, -strain, -organism)
-```
 
-## Hands on
+## Hands on  {auto-animate="true"}
 
 - Select `gene, ensembl_gene_id, hsapiens_homolog_associated_gene_name`
 
 - Select `gene, gene_biotype, phenotype_description`
+
+## Hands on  {auto-animate="true"}
+
+- Select `gene, ensembl_gene_id, hsapiens_homolog_associated_gene_name`
+
+```{r}
+#| echo: true
+select(rna, gene, ensembl_gene_id, hsapiens_homolog_associated_gene_name)
+```
+## Hands on  {auto-animate="true"}
+
+- Select `gene, gene_biotype, phenotype_description`
+```{r}
+#| echo: true
+select(rna, gene_biotype, phenotype_description)
+```
 
 ## Dplyr in action - `filter()` {auto-animate="true"}
 
@@ -177,8 +191,9 @@ Why is this also bad?
 
 Option 3. Plumbering with Pipes - Yeah!
 
-Is this better?
+Pipes in R look like `%>%` (made available via the magrittr package) or `|>` (through base R)
 
+Is this better?
 ```{r}
 #| echo: true
 
@@ -187,8 +202,6 @@ rna3 = rna %>%
         select(gene, sample, tissue, expression)
 rna3
 ```
-
-Pipes in R look like `%>%` (made available via the magrittr package) or `|>` (through base R)
 
 ## Hands on {auto-animate="true"}
 
@@ -332,7 +345,7 @@ rna %>%
 
 ```
 
-## Dplyr in action - `summarse()` {auto-animate="true"}
+## Dplyr in action - `summarise()` {auto-animate="true"}
 
 Multiple summarise levels
 
