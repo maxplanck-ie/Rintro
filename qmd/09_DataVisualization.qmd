@@ -216,7 +216,7 @@ Create a new histogram for another sample values but in log2 scale
 
 ```{r}
 #| echo: true
-hist_plot = ggplot(rna, aes(x = log2(GSM2545336 + 1))
+hist_plot = ggplot(rna, aes(x = log2(GSM2545336 + 1)))
 hist_plot + geom_histogram(bins = 100, color = 'blue')
 
 ```
