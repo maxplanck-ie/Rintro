@@ -167,7 +167,7 @@ Generate a similar plot comparing another 2 samples, use red "triangles" as poin
 
 ggplot(ma_data, aes(x = norm_mean, y = log2fc)) +
   geom_point(color = 'red', shape = 17, alpha = 0.1) +
-  geom_vline(yintercept = 5, color = 'green')
+  geom_vline(xintercept = 5, color = 'green')
 ```
 
 
