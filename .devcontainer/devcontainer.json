@@ -3,7 +3,8 @@
 {
 	"name": "R (rocker/r-ver base)",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "ghcr.io/rocker-org/devcontainer/tidyverse:4.3",
+	//"image": "ghcr.io/rocker-org/devcontainer/tidyverse:4.2.3",
+	"image": "mcr.microsoft.com/vscode/devcontainers/ubuntu:22.04",
 	"features": {
 		"ghcr.io/rocker-org/devcontainer-features/miniforge:2": {
 			"version": "latest",
@@ -27,7 +28,9 @@
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "R -q -e 'renv::install()'",
-	"postCreateCommand": "micromamba activate Rintro",
+	//	"postCreateCommand": "micromamba activate Rintro",
+	"postCreateCommand": "conda env create -f configs/conda.yml && conda activate Rintro"
+
 
 	// Configure tool-specific properties.
 	// "customizations": {},
