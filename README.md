@@ -1,4 +1,4 @@
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](URL)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/maxplanck-ie/Rintro/tree/2025.04?quickstart=1)
 
 # Rintro 2025
 

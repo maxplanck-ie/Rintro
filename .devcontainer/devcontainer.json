@@ -1,0 +1,51 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/rocker-org/devcontainer-templates/tree/main/src/r-ver
+{
+	"name": "R (rocker/r-ver base)",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "ghcr.io/rocker-org/devcontainer/tidyverse:4.3",
+	"features": {
+		"ghcr.io/rocker-org/devcontainer-features/miniforge:2": {
+			"version": "latest",
+			"variant": "Miniforge3"
+		},
+		"ghcr.io/mamba-org/devcontainer-features/micromamba:1": {
+			"autoActivate": true,
+			"version": "latest",
+			"channels": "conda-forge",
+			"packages": "",
+			"envFile": "configs/conda.yml",
+			"envName": "Rintro"
+		}
+	},
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "R -q -e 'renv::install()'",
+	"postCreateCommand": "micromamba activate Rintro",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"r.bracketedPaste": true,
+				"editor.formatOnSave": true,
+				"editor.tabSize": 2,
+				"r.sessionWatcher": true
+			},
+			"extensions": [
+				"quarto.quarto",
+				"REditorSupport.r"
+			]
+		}
+	}
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
