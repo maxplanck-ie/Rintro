@@ -29,7 +29,7 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "R -q -e 'renv::install()'",
 	//	"postCreateCommand": "micromamba activate Rintro",
-	"postCreateCommand": "conda env create -f configs/conda.yml && conda activate Rintro"
+	"postCreateCommand": "conda env create -f configs/conda.yml && conda activate Rintro",
 
 
 	// Configure tool-specific properties.
