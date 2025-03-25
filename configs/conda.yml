@@ -2,8 +2,7 @@ name: Rintro
 channels:
   - conda-forge
   - bioconda
-  - R
-  - defaults
+#  - R
 dependencies:
   - quarto=1.4
   - r-base=4.2.3
