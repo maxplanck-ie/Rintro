@@ -13,20 +13,21 @@ categories:
 ```
    
 **Goal**: Ultimately we want to access our own data and write results to file.
-## R markdown & reproducible R
 
-It is important to document your work and workflows.
+## A small detour: R Markdowns
 
-One common solutions is to write a script (e.g. my_script.R) that can run a series of commands.
+It is important to **document** your work and **reproducible** workflows.
+
+1. One common solutions is to write a script (e.g. my_script.R) that can run a series of commands.
 But (apart from brief comments) such scripts often lack proper documentation which are
 crucial to understand the rationale and the motivation for more complex analysis steps.
 
-A modern solution are R/Quarto markdown documents (*rmd/*qmd). 
+2. A modern solution are R/Quarto markdown documents (*rmd/*qmd). 
 These combine scripts with powerful text formatting for data analysis and analysis reporting.
 
 The markdown documents can be run ("rendered", "knit") to yield standardised analysis reports in html format (or pdf)
 
-**Task**:
+#### Task
 In Rstudio, 
 
 - open a new R markdown document with `File > New File > R Markdown...`.
@@ -70,7 +71,7 @@ str(d)
 
 There are many different ways to load such data into memory and to customize the loading.
 
-**Tasks:**
+#### Tasks
 
 - Explore ?read.csv to get a first overview how this function can be customized.
 - How would you read only the first 10 lines?
@@ -112,7 +113,7 @@ write.csv(iris, gzfile("output/iris.csv.gz"))
 ```
 
 
-**Task**: 
+#### Task 
 
 - Change some of the parameters (row.names, quote) and observed their effect on the resulting file
 - Save only the subset of flowers where Species="setosa" to a file setosa.tsv
@@ -136,7 +137,7 @@ load(fn)          # reload object d from file - and watch global env
 ```
 
 
-### Task: All objects
+#### Task: All objects
 Sometimes we want to save all objects and variable that have accumulated in the "Global Environment" - just to be sure.
 This task tests some jargon, familiarity with directory structure and ability to find help.
 Please try it yourself.
@@ -169,34 +170,9 @@ load("output/my_env.RData")        # recreate all
 
 ***
 
-# R Scripts
-
-Typical data analyses involve many successive steps.  
-To record everything that was done - and ultimately to be able to reproduce this - we use scripts.  
-
-Basically these are just lines of code that are collected in a text file.
-
-In Rstudio they can be created using `File > New File > R script` 
-
-**Task** (10 min): 
-
-* Create a new R-script `filter_iris.R` to do the following: 
-  - Starting from the pre-compiled `iris` data, create a new `data_frame d` of all flowers where `Sepal.Length` is greater or equal to 7 cm.
-  - determine the number flower in the new `data_frame`. Save this number as variable `nf`
-  - How many different species are in the new data_frame. Save this number as variable `ns` (hint: there are two useful functions: `unique()` and `length()`)
-  - write the new `data_frame d` in comma seperated file `iris_big_sepal.csv`
-  - save the whole environment in a file `analysis.RData` 
-* Save the script and run it (source)
-* Bonus: Delete all whole environment reload it from the image file
-
-**Query**: After the filtering, how many flowers and how many species are left?
 
 
-
-***
-
-
-# Review
+## Review
 * Many different data sources, formats & structures
   - text files: *.tsv, *.csv, ...
   - compressed files: *.bed.gz

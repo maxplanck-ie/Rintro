@@ -12,7 +12,9 @@ categories:
 
 ## Recap: All-Against-All Correlations
 
-**Task**: Generate all-against-all correlation plot. Understand:
+#### Task
+
+Generate all-against-all correlation plot. Understand:
 
 - `cols`
 - selection/unselection of elements `[,-5]`
@@ -51,7 +53,8 @@ abline(fit, lwd=3, lty=2)                           # add regression line
 
 **Query**: What class is the object `fit`?
 
-**Task**: Extract the coefficients of the fitted line.
+#### Task 
+Extract the coefficients of the fitted line.
 
 ```{r get_coef, echo=FALSE}
 fit$coefficients
@@ -123,7 +126,9 @@ summary(fit1)
 - model does not account for much of the observed variation.
 
 
-**Task**: Use the above template to make predictions for the new poor model.
+#### Task 
+
+Use the above template to make predictions for the new poor model.
 ```{r poor_model_pred, echo=FALSE}
 x=iris$Sepal.Length                       # explanatory variable from fit (here:Sepal.Length)
 xn=seq(min(x), max(x), length.out = 100)  # define range of new explanatory variables

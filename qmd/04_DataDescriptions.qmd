@@ -20,14 +20,18 @@ plot(iris$Petal.Length) # a plot at last. Simple, but many arguments: ?plot
 hist(iris$Petal.Length) # and a histogram
 ```
 
-**Task** hist() can have many arguments. Use help to find out how the histogram can be customized (e.g. number of break points, title, colors). Try some of it.
+#### Task 
+
+hist() can have many arguments. Use help to find out how the histogram can be customized (e.g. number of break points, title, colors). Try some of it.
 
 ## Boxplot: a more condensed summary
 ```{r}
 boxplot(iris$Petal.Length)
 ```
 
-**Task**: The boxplot above is for *all* data. Create a boxplot of petal length for species "setosa" only.
+#### Task 
+
+The boxplot above is for *all* data. Create a boxplot of petal length for species "setosa" only.
 ```{r boxplot, echo=FALSE}
 boxplot(iris$Petal.Length[iris$Species=="setosa"], xlab="setosa", ylab="Petal Length", col="red")
 ```
@@ -58,7 +62,9 @@ Boxplot understands factors in data frames
 boxplot( Petal.Length ~ Species, data = iris)
 ```
 
-**Task**: Use help to add three different colors:
+#### Task 
+
+Use help to add three different colors:
 ```{r colored_boxplot, echo=FALSE}
 # use help to determine how to add colors
 cols=c("red","yellow","blue")
@@ -77,7 +83,10 @@ cor(x,y)                               # a correlation coefficient: which one?
 ```
 
 ## All-Against-All Correlations
-**Task**: remove the Species variable from "iris" and store the result in a new data.frame "niris"
+
+#### Task
+
+remove the Species variable from "iris" and store the result in a new data.frame "niris"
 ```{r niris, echo=FALSE}
 niris=iris[,-5]  # generate new data frame without species variable
 str(niris)

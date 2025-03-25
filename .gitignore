@@ -18,3 +18,5 @@ qmd/*.csv.gz
 **_cache
 _freeze/
 docs/
+rmd/iris.RData
+rmd/heatmap.pdf

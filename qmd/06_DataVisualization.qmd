@@ -10,9 +10,9 @@ categories:
 ```{r, child="_setup.qmd"}
 ```
 
-# Goal 1: Show me all the data
+## Goal 1: Show me all the data
 
-## Scaling 
+### Scaling 
 
 It's good practice to normalize the different variables
 ```{r scaling}
@@ -25,7 +25,7 @@ hist(ds[,"Sepal.Width"], breaks = br, add=TRUE, col="red")    # add histogram to
 legend("topright", c("orig","scaled"), fill=c("white", "red"))
 ```
 
-## Heatmaps
+### Heatmaps
 Heatmaps are color-coded representations of numerical matrices. 
 
 Typically the rows and columns are re-ordered according to some distance measure (default: Euclidean) 
@@ -56,7 +56,7 @@ There is many more parameters for more control - if you have lots of time read "
 
 ***
 
-## Sending plots to files
+### Sending plots to files
 In Rstudio, we can export figures from the "Plots" tab. On the console we can define a pdf file as a new device for all subsequent figures. This is usually done only *after* the image is sufficiently optimized
 ```{r pdf}
 pdf("output/heatmap.pdf")                                        # similar for jpeg, png, ...
@@ -66,14 +66,14 @@ dev.off()                                                 # close device = pdf f
 
 ***
 
-# Goal 2: Show me all the data (in lower dimensions)
+## Goal 2: Show me all the data (in lower dimensions)
 
 ```{r df2mat}
 M=as.matrix(iris[,-5])     # numerical data, some operations below require matrices not data frames (%*%)
 s=iris[,5]                 # species attributes (factor)
 ```
 
-## PCA Goals
+### PCA Goals
 * simplify description of data matrix $M$: data reduction & extract most important information
 * maximal variance: look for direction in which data shows maximal variation
 * minimal error: allow accurate reconstruction of original data 
@@ -81,12 +81,13 @@ s=iris[,5]                 # species attributes (factor)
 ![PCA goal](images/PCA.gif)
 from amoeba @ https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues
 
-## PCA with R
+### PCA with R
 ```{r run_pca}
 pca = prcomp(M, scale=TRUE)
 ```
 
-**Task**: What kind of object is pca?
+#### Task 
+What kind of object is pca?
 
 ```{r pca_obj, echo=FALSE, eval=FALSE}
 class(pca)
@@ -95,7 +96,7 @@ str(pca)
 methods(class="prcomp")
 ```
 
-## Covariance Structure
+### Covariance Structure
 ```{r pca_cov}
 S=pca$x          # score matrix = rotated and scaled data matrix
 
@@ -118,7 +119,7 @@ plot(S[,1:2],pch=21, bg=s)  # score-plot
 
 ***
 
-# Review
+## Review
 * use heatmaps to visualize large matrices
 * data transformation: scale()
 * installing packages: pheatmap
