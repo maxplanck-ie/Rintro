@@ -16,3 +16,5 @@ qmd/*.csv.gz
 /_site/
 **_files
 **_cache
+_freeze/
+docs/

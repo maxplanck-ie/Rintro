@@ -10,7 +10,7 @@ categories:
 ```{r, child="_setup.qmd"}
 ```
 
-# Recap: All-Against-All Correlations
+## Recap: All-Against-All Correlations
 
 **Task**: Generate all-against-all correlation plot. Understand:
 
@@ -26,7 +26,7 @@ plot(iris[,-5], col=cols, lower.panel=NULL)   # "cols" was defined in task above
 
 ***
 
-# From Correlations to Models
+## From Correlations to Models
 
 **Goal:** 
 
@@ -64,7 +64,7 @@ methods(class='lm')
 ```
 
 
-# Reporting the fit (model)
+## Reporting the fit (model)
 ```{r lm_summary}
 summary(fit)        # summary() behaves differently for fit objects
 coefficients(fit)   # more functions for specific elements
@@ -85,7 +85,7 @@ $$
 
 
 
-# Predictions (with confidence intervals)
+## Predictions (with confidence intervals)
 
 Uncertainties in parameters become uncertainties in fits:
 ```{r predictions}
@@ -107,7 +107,7 @@ polygon(c(rev(xn), xn), c(rev(p[ ,"upr"]), p[ ,"lwr"]), col = rgb(1,0,0,0.5), bo
 #g + geom_point() + geom_smooth(method="lm", se=TRUE, color="red") + geom_smooth(method="loess", colour="blue")
 ```
 
-# Poor Model
+## Poor Model
 
 Just replace "Petal" with "Sepal"
 ```{r poor_model}
@@ -137,7 +137,7 @@ lines(xn, p[,"upr"] )
 ```
 
 
-# Factorial variables as predictors
+## Factorial variables as predictors
 In the iris example the "Species" variable is a factorial (categorical) variable with 3 levels.
 Other typical examples: different experimental conditions or treatments.
 
@@ -163,7 +163,7 @@ anova(fit)
 
 ***
 
-# More complicated models
+## More complicated models
 Determine residual standard error `sigma` for different fits with various complexity
 
 ```{r model_comp}
@@ -195,7 +195,7 @@ par(op)     # reset graphical parameters
 
 ***
 
-# Model Checking: Diagnostic Plots
+## Model Checking: Diagnostic Plots
 "fit" is a large object of the lm-class which contains also lots of diagnostic informmation. 
 Notice how the behaviour of "plot" changes.
 ```{r fit_diag}

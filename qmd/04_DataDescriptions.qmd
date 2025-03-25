@@ -11,29 +11,9 @@ categories:
 ```{r, child="_setup.qmd"}
 ```
     
-# R Markdown
-
-R scripts (.R) help to define and run reproducible analysis workflows, but they lack documentation (other than comments).
-
-R Markdown files (*.Rmd) combine scripts with powerful text formatting.
-They can be rendered (="knit") to produce html and pdf.
 
 
-**Task**:
-In Rstudio, 
-
-- open a new R markdown document with `File > New File > R Markdown...`.
-(This will open a template for an Rmd file that can be knit)
-- To convert this file into html press `Knit` - try it out! You may have to save it first as - e.g. "first.Rmd"
-- There is a `YAML` header that contains parameters which will affect the rendering process - customize them
-- The rest of the document are `text blocks` (with simple format instructions) and `code blocks` (with R code)
-- In R studio, the code blocks can also be run individually using the embedded `Play` button - try it out
-- Play time: Modify the yaml header, text blocks or code - or all of it. "knit" the documnt and observe changes. 
-
-
-***
-
-# Descriptive Statistics
+## Descriptive Statistics
 ```{r descriptive}
 summary(iris)
 plot(iris$Petal.Length) # a plot at last. Simple, but many arguments: ?plot 
@@ -42,7 +22,7 @@ hist(iris$Petal.Length) # and a histogram
 
 **Task** hist() can have many arguments. Use help to find out how the histogram can be customized (e.g. number of break points, title, colors). Try some of it.
 
-# Boxplot: a more condensed summary
+## Boxplot: a more condensed summary
 ```{r}
 boxplot(iris$Petal.Length)
 ```
@@ -60,22 +40,22 @@ boxplot(iris)
 **Query**: What does the boxplot for Species mean?
 
 
-# Interlude: Factors = categorical variables
+## Interlude: Factors = categorical variables
 
 Factors denote a special class of R-objects that can be thought of as categories (here: species). They have a given number of *levels* which are internally represented as integers.
 ```{r factors}
 class(iris$Species)
 typeof(iris$Species)
-ts=table(iris$Species)  # returns a contigency table ~> histogram for categorical data
-barplot(ts, col=rainbow(3), ylab="observations", cex.names=0.9)
-pie(ts,col=rainbow(3))  # if you really must
+
+# a contigency table ~> histogram for categorical data
+table(iris$Species)  
 ```
 
 ***
 
 Boxplot understands factors in data frames
 ```{r boxplot_factors}
-boxplot( Petal.Length ~ Species, data = iris, las=2) # what does las=2 do ?
+boxplot( Petal.Length ~ Species, data = iris)
 ```
 
 **Task**: Use help to add three different colors:
@@ -86,7 +66,7 @@ boxplot( Petal.Length ~ Species, data = iris, las=2,col=cols)
 ```
 
 
-# Correlations
+## Correlations
 If a data set has many numerical variables we often want to understand their correlations structure
 ```{r corr}
 x=iris$Petal.Length
@@ -96,7 +76,7 @@ abline(v=mean(x),h=mean(y),col="red")  # add vertical/horizontal lines
 cor(x,y)                               # a correlation coefficient: which one?
 ```
 
-# All-Against-All Correlations
+## All-Against-All Correlations
 **Task**: remove the Species variable from "iris" and store the result in a new data.frame "niris"
 ```{r niris, echo=FALSE}
 niris=iris[,-5]  # generate new data frame without species variable
@@ -114,7 +94,7 @@ plot(niris, col=cols, lower.panel=NULL)   # "cols" was defined in task above
 
 
 ***
-# Review
+## Review
 * R markdown files extend scripts and can be converted to html/pdf
 * summary for descriptive statistics
 * simple plots with simple commands: plot(), hist(), ...

@@ -13,6 +13,38 @@ categories:
 ```
    
 **Goal**: Ultimately we want to access our own data and write results to file.
+## R markdown & reproducible R
+
+It is important to document your work and workflows.
+
+One common solutions is to write a script (e.g. my_script.R) that can run a series of commands.
+But (apart from brief comments) such scripts often lack proper documentation which are
+crucial to understand the rationale and the motivation for more complex analysis steps.
+
+A modern solution are R/Quarto markdown documents (*rmd/*qmd). 
+These combine scripts with powerful text formatting for data analysis and analysis reporting.
+
+The markdown documents can be run ("rendered", "knit") to yield standardised analysis reports in html format (or pdf)
+
+**Task**:
+In Rstudio, 
+
+- open a new R markdown document with `File > New File > R Markdown...`.
+(This will open a template for an Rmd file that can be knit)
+- To convert this file into html press `Knit` - try it out! You may have to save it first as - e.g. "first.Rmd"
+- There is a `YAML` header that contains parameters which will affect the rendering process - customize them
+- The rest of the document are `text blocks` (with simple format instructions) and `code blocks` (with R code)
+- In R studio, the code blocks can also be run individually using the embedded `Play` button - try it out
+- Play time: Modify the yaml header, text blocks or code - or all of it. "knit" the documnt and observe changes. 
+
+
+**Notice**: many modern dvelopment tool (Rstudio, Jupyter, VSCode)
+allow for convenient editing and testing of markdown documents.
+
+> Avoid the console from now on, and work in a markdown document instead.
+
+***
+
 
 ## CSV files
 Comma-separated text files (ASCII) are both human and machine readible.
@@ -185,34 +217,3 @@ In Rstudio they can be created using `File > New File > R script`
   - bring time and patience
 * R scripts: writing and running (source)
 
-***
-<br><br><br>
-
-# Appendix: reality of I/O
-Many external data is badly formatted, leading to much wasted time - before any analysis. 
-
-The code snippets below are not run - but try them out
-```{r trial_and_error, eval=FALSE, error=TRUE}
-file="data/GeneList.tsv"     
-# file="https://raw.githubusercontent.com/maxplanck-ie/Rintro/master/data/GeneList.tsv"  
-read.csv(file)      
-read.csv(file, comment.char = "%")                        # comment lines
-read.csv(file, comment.char = "%", sep="\t")              # separators
-```
-
-
-```{r process_NA, eval=FALSE}
-# use ncol, is.na(), na.omit()
-ic = colSums(is.na(d)) == ncol(d) # columns where all enries are NA
-d1 = d[, !ic]                     # exclude those columns
-
-d1
-na.omit(d) 
-na.omit(d1)
-```
-**Messages:**
-
-- This file is a mess
-- Many data come like this
-- read functions have many parameters for better control
-- there are also other dedicated software packages to help (somewhat)

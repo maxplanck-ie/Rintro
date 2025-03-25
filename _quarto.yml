@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "Rintro 2024"
+  title: "Rintro 2025"
   site-url: "https://maxplanck-ie.github.io/Rintro"
   
   navbar:
@@ -14,12 +14,12 @@ website:
     right:
       - text: "GitHub"
         icon: fa-github
-        href: https://github.com/maxplanck-ie/Rintro/tree/2024.04
+        href: https://github.com/maxplanck-ie/Rintro/tree/2025.04
 
 
   page-footer: 
     left: |
-        Bioinfo Core @ MPI-IE Freiburg (2024) 
+        Bioinfo Core @ MPI-IE Freiburg (2025) 
     right:
       - icon: github
         href: https://github.com/maxplanck-ie
