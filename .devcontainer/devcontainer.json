@@ -1,15 +1,18 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/rocker-org/devcontainer-templates/tree/main/src/r-ver
 {
-	"name": "R (rocker/r-ver base)",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	//"image": "ghcr.io/rocker-org/devcontainer/tidyverse:4.2.3",
-	"image": "mcr.microsoft.com/vscode/devcontainers/ubuntu:22.04",
+	"name": "Rintro",
+	// for github
+	"image": "mcr.microsoft.com/devcontainers/universal:2",
+	// for MAC ARM64
+	// "image": "mcr.microsoft.com/devcontainers/base:debian",
+//	"features": {
+//		"ghcr.io/rocker-org/devcontainer-features/miniforge:2": {
+//			"version": "latest",
+//			"variant": "Miniforge3"
+//		}
+//	},
 	"features": {
-		"ghcr.io/rocker-org/devcontainer-features/miniforge:2": {
-			"version": "latest",
-			"variant": "Miniforge3"
-		},
 		"ghcr.io/mamba-org/devcontainer-features/micromamba:1": {
 			"autoActivate": true,
 			"version": "latest",
@@ -28,8 +31,8 @@
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "R -q -e 'renv::install()'",
-	//	"postCreateCommand": "micromamba activate Rintro",
-	"postCreateCommand": "conda env create -f configs/conda.yml && conda activate Rintro",
+	"postCreateCommand": "micromamba activate Rintro",
+	// "postCreateCommand": "conda env create -f configs/conda.yml && conda activate Rintro",
 
 
 	// Configure tool-specific properties.
