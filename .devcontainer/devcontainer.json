@@ -3,15 +3,10 @@
 {
 	"name": "Rintro",
 	// for github
-	"image": "mcr.microsoft.com/devcontainers/universal:2",
+	//"image": "mcr.microsoft.com/devcontainers/universal:2",
 	// for MAC ARM64
-	// "image": "mcr.microsoft.com/devcontainers/base:debian",
-//	"features": {
-//		"ghcr.io/rocker-org/devcontainer-features/miniforge:2": {
-//			"version": "latest",
-//			"variant": "Miniforge3"
-//		}
-//	},
+	"image": "mcr.microsoft.com/devcontainers/base:debian",
+	// add features more info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/mamba-org/devcontainer-features/micromamba:1": {
 			"autoActivate": true,
@@ -22,21 +17,11 @@
 			"envName": "Rintro"
 		}
 	},
-
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "R -q -e 'renv::install()'",
+	// commands run after the container is created.
 	"postCreateCommand": "micromamba activate Rintro",
-	// "postCreateCommand": "conda env create -f configs/conda.yml && conda activate Rintro",
-
-
 	// Configure tool-specific properties.
-	// "customizations": {},
 	"customizations": {
 		"vscode": {
 			"settings": {
@@ -47,11 +32,10 @@
 			},
 			"extensions": [
 				"quarto.quarto",
-				"REditorSupport.r"
+				"reditorsupport.r"
 			]
 		}
 	}
-
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
 }
