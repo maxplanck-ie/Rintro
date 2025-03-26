@@ -6,6 +6,7 @@ channels:
 dependencies:
   - quarto=1.4
   - r-base=4.2.3
+  - r-languageserver
   - r-tidyverse=2.0.0
   - r-pheatmap=1.0.12
   - r-codetools=0.2.19
