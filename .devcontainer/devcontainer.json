@@ -1,26 +1,19 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/rocker-org/devcontainer-templates/tree/main/src/r-ver
 {
 	"name": "Rintro",
-	// for github
-	//"image": "mcr.microsoft.com/devcontainers/universal:2",
-	// for MAC ARM64
+	// Base image - choose one based on your environment
 	"image": "mcr.microsoft.com/devcontainers/base:debian",
-	// add features more info: https://containers.dev/features.
+	// Use the micromamba feature instead of a specialized image
 	"features": {
 		"ghcr.io/mamba-org/devcontainer-features/micromamba:1": {
 			"autoActivate": true,
 			"version": "latest",
 			"channels": "conda-forge",
-			"packages": "",
-			"envFile": "configs/conda.yml",
+			"envFile": "./configs/conda.yml",
 			"envName": "Rintro"
 		}
 	},
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-	// commands run after the container is created.
-	"postCreateCommand": "micromamba activate Rintro",
+	// This is now simplified as the feature handles environment setup
+	"postCreateCommand": "echo 'Conda environment setup complete'",
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
@@ -36,6 +29,4 @@
 			]
 		}
 	}
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
 }
