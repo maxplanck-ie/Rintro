@@ -1,32 +1,29 @@
 {
 	"name": "Rintro",
-	// Base image - choose one based on your environment
-	"image": "mcr.microsoft.com/devcontainers/base:debian",
-	// Use the micromamba feature instead of a specialized image
+	"image": "ghcr.io/rocker-org/devcontainer/r-ver:4.2",
 	"features": {
-		"ghcr.io/mamba-org/devcontainer-features/micromamba:1": {
-			"autoActivate": true,
-			"version": "latest",
-			"channels": "conda-forge",
-			"envFile": "./configs/conda.yml",
-			"envName": "Rintro"
+//		"ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
+//			"packages": "cli,rlang,tidyverse,pheatmap,codetools,upsetr,ggridges,ggrepel,ggthemes,kernsmooth",
+//			"installSystemRequirements": true
+//		},
+		"ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {
+			"installTinyTex": false,
+			"version": "prerelease" // to fix problem with preview
 		}
 	},
-	// This is now simplified as the feature handles environment setup
-	"postCreateCommand": "echo 'Conda environment setup complete'",
-	// Configure tool-specific properties.
+	"postCreateCommand": "R -e 'install.packages(c(\"tidyverse\", \"pheatmap\", \"codetools\", \"UpSetR\", \"ggridges\", \"ggrepel\", \"ggthemes\", \"KernSmooth\"), repos=\"https://cloud.r-project.org/\")'",
+  
 	"customizations": {
 		"vscode": {
+			"extensions": [
+				"quarto.quarto",
+				"reditorsupport.r"
+			],
 			"settings": {
 				"r.bracketedPaste": true,
 				"editor.formatOnSave": true,
 				"editor.tabSize": 2,
 				"r.sessionWatcher": true
-			},
-			"extensions": [
-				"quarto.quarto",
-				"reditorsupport.r"
-			]
+			  }
 		}
 	}
-}
