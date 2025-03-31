@@ -63,7 +63,7 @@ Expression matrix from the mouse influenza experiment
 #| echo: true
 library(tidyverse)
 
-rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq_counts_wide.csv"
+rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/refs/heads/2025.04/qmd/data/rnaseq_counts_wide.csv"
 
 rna = read_csv(rnaseq_file)
 
@@ -226,7 +226,7 @@ hist_plot + geom_histogram(bins = 100, color = 'blue')
 
 ```{r}
 #| echo: true
-rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv"
+rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/refs/heads/2025.04/qmd/data/rnaseq.csv"
 rna_data = read_csv(rnaseq_file)
 rna_long = rna_data %>% 
            mutate(expression_log = log2(expression + 1))

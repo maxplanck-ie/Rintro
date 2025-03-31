@@ -61,7 +61,7 @@ library(tidyverse)
 Gender matched eight week old C57BL/6 mice were inoculated saline or with Influenza A (Puerto Rico/8/34; PR8, 1.0 HAU) by intranasal route and transcriptomic changes
 in the cerebellum and spinal cord tissues were evaluated by RNA-seq (Hiseq-2500 100bp PE-reads) at days 0 (non-infected), 4 and 8.
 
-But for this session, we'll use `https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq_counts_wide.csv`
+But for this session, we'll use `https://raw.githubusercontent.com/maxplanck-ie/Rintro/refs/heads/2025.04/qmd/data/rnaseq_counts_wide.csv`
 which contains a table for gene expression (1474 genes) per sample (22 samples)
 
 ::: footer
@@ -129,7 +129,7 @@ dat = read_csv("https://server.com/region/file.csv")
 
 ```{r}
 #| echo: true
-rna_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq_counts_wide.csv"
+rna_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/refs/heads/2025.04/qmd/data/rnaseq_counts_wide.csv"
 
 rna = read_csv(rna_file)
 

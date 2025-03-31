@@ -19,7 +19,7 @@ format:
 #| echo: true
 library(tidyverse)
 
-rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/rnaseq.csv"
+rnaseq_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/refs/heads/2025.04/qmd/data/rnaseq.csv"
 
 rna = read_csv(rnaseq_file) 
 
@@ -68,7 +68,7 @@ Load the annotation table
 ```{r}
 #| echo: true
 
-annot_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/2024.04/qmd/data/annot1.csv"
+annot_file = "https://raw.githubusercontent.com/maxplanck-ie/Rintro/refs/heads/2025.04/qmd/data/annot1.csv"
 
 annot = read_csv(annot_file)
 
