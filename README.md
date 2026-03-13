@@ -1,13 +1,13 @@
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/maxplanck-ie/Rintro/tree/2025.04?quickstart=1)
 
-# Rintro 2025
+# Rintro 2026
 
 This repository contains material for our course: Introduction to R-language.
 
 This branch can be downloaded as zip archive (using the `Code` button above) or cloned such:
 
 ```{bash}
-git clone -b 2025.04 git@github.com:maxplanck-ie/Rintro.git
+git clone -b 2026.03 git@github.com:maxplanck-ie/Rintro.git
 ```
 
 # For participants
